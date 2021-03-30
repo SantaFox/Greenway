@@ -45,7 +45,7 @@ class Tab(models.Model):
     Language = models.ForeignKey(Language, on_delete=models.PROTECT)
     Order = models.IntegerField(blank=False)
     Name = models.CharField(max_length=255, blank=False)
-    Text = models.TextField()
+    Text = models.TextField(blank=True)
     TextQuality = models.IntegerField(choices=[
         (0, 'Not tested'),
         (1, 'Low quality'),
