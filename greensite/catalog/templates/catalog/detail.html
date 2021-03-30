@@ -1,3 +1,19 @@
 <h1>{{ product.SKU }}</h1>
 
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<ul>
+    {% for pi in product.productinfo_set.all %}
+        <li>{{ pi.Language.Code }} | {{ pi.Name }}</li>
+    {% endfor %}
+</ul>
+
+<ul>
+    {% for tab in product.tab_set.all %}
+        <li>{{ tab.Order }} | {{ tab.Language.Code }} | {{ tab.Name }}</li>
+    {% endfor %}
+</ul>
+
+<ul>
+    {% for price in product.price_set.all %}
+        <li>{{ price.DateAdded }} | {{ price.Price }} {{ Price.Currency.Code }} | {{ price.PV }}</li>
+    {% endfor %}
+</ul>
