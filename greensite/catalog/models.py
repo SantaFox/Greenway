@@ -3,7 +3,8 @@ from django.db import models
 
 # System classes below
 class Language(models.Model):
-    Code = models.CharField(max_length=3)
+    Code = models.CharField(max_length=3, blank=False)
+    Name = models.CharField(max_length=50, blank=True)
     # ISO = models.IntegerField()
 
     def __str__(self):
@@ -11,7 +12,8 @@ class Language(models.Model):
 
 
 class Currency(models.Model):
-    Code = models.CharField(max_length=3)
+    Code = models.CharField(max_length=3, blank=False)
+    Symbol = models.CharField(max_length=1, blank=True)
     # ISO = models.IntegerField()
 
     def __str__(self):
@@ -57,3 +59,16 @@ class Tab(models.Model):
 
     def __str__(self):
         return f'{self.Product} / {self.Language} / {self.Order} / {self.Name}'
+
+
+class Price(models.Model):
+    Product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
+    DateAdded = models.DateField(blank=True, null=True)
+    Price = models.DecimalField(max_digits=7, decimal_places=2, blank=False)
+    PV = models.DecimalField(max_digits=7, decimal_places=2, blank=True)
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.Product} / {self.Currency} / {self.DateAdded} / {self.Price}'
