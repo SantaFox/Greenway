@@ -33,6 +33,9 @@ class Product(models.Model):
     def __str__(self):
         return self.SKU
 
+    def ordered_price_set(self):
+        return self.price_set.all().order_by('DateAdded')
+
 
 class ProductInfo(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)

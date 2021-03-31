@@ -13,7 +13,7 @@
 </ul>
 
 <ul>
-    {% for price in product.price_set.all %}
+    {% for price in product.ordered_price_set %}
         <li>{{ price.DateAdded }} | {{ price.Price }} {{ Price.Currency.Code }} | {{ price.PV }}</li>
     {% endfor %}
 </ul>
