@@ -1,3 +1,9 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}{{ product.SKU }}{% endblock %}
+
+{% block content %}
+
 <h1>{{ product.SKU }}</h1>
 
 <ul>
@@ -17,3 +23,5 @@
         <li>{{ price.DateAdded }} | {{ price.Price }} {{ Price.Currency.Code }} | {{ price.PV }}</li>
     {% endfor %}
 </ul>
+
+{% endblock %}
