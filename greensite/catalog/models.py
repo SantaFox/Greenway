@@ -20,6 +20,9 @@ class Currency(models.Model):
     def __str__(self):
         return self.Code
 
+    class Meta:
+        verbose_name_plural = "Currencies"
+
 
 # Data classes below
 class Product(models.Model):
@@ -41,6 +44,9 @@ class ProductInfo(models.Model):
 
     def __str__(self):
         return f'{self.Product} / {self.Language} / {self.Name}'
+
+    class Meta:
+        verbose_name_plural = "Products Info"
 
 
 class Tab(models.Model):
