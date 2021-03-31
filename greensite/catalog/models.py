@@ -11,6 +11,11 @@ class Language(models.Model):
     def __str__(self):
         return self.Code
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['Code'], name='unique_Language')
+        ]
+
 
 class Currency(models.Model):
     Code = models.CharField(max_length=3, blank=False)
@@ -22,6 +27,9 @@ class Currency(models.Model):
 
     class Meta:
         verbose_name_plural = "Currencies"
+        constraints = [
+            models.UniqueConstraint(fields=['Code'], name='unique_Currency')
+        ]
 
 
 # Data classes below
@@ -35,6 +43,11 @@ class Product(models.Model):
 
     def ordered_price_set(self):
         return self.price_set.all().order_by('DateAdded')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['SKU'], name='unique_Product')
+        ]
 
 
 class ProductInfo(models.Model):
@@ -50,6 +63,9 @@ class ProductInfo(models.Model):
 
     class Meta:
         verbose_name_plural = "Products Info"
+        constraints = [
+            models.UniqueConstraint(fields=['Product', 'Language'], name='unique_ProductInfo')
+        ]
 
 
 class Tab(models.Model):
@@ -74,6 +90,11 @@ class Tab(models.Model):
     def short_text(self):
         return truncatechars(self.Text, 100)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['Product', 'Language', 'Order'], name='unique_Tab')
+        ]
+
 
 class Price(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
@@ -86,6 +107,12 @@ class Price(models.Model):
 
     def __str__(self):
         return f'{self.Product} / {self.Currency} / {self.DateAdded} / {self.Price}'
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['Product', 'Currency', 'DateAdded'], name='unique_Price')
+        ]
+
 
 class Image(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
