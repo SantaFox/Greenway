@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Currency, Language, Product, ProductInfo, Tab, Price
+from .models import Currency, Language, Product, ProductInfo, Tab, Price, Image
 
 
 class LanguageAdmin(admin.ModelAdmin):
@@ -42,3 +42,4 @@ admin.site.register(Product)
 admin.site.register(ProductInfo, ProductInfoAdmin)
 admin.site.register(Tab, TabAdmin)
 admin.site.register(Price, PriceAdmin)
+admin.site.register(Image)

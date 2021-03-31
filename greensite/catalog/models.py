@@ -86,3 +86,11 @@ class Price(models.Model):
 
     def __str__(self):
         return f'{self.Product} / {self.Currency} / {self.DateAdded} / {self.Price}'
+
+class Image(models.Model):
+    Product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    Image = models.ImageField()
+    IsPrimary = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.Image.name
