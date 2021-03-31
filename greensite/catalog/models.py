@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import truncatechars  # or truncatewords
 
 
 # System classes below
@@ -59,6 +60,10 @@ class Tab(models.Model):
 
     def __str__(self):
         return f'{self.Product} / {self.Language} / {self.Order} / {self.Name}'
+
+    @property
+    def short_text(self):
+        return truncatechars(self.Text, 100)
 
 
 class Price(models.Model):

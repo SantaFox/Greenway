@@ -22,7 +22,7 @@ class TabAdmin(admin.ModelAdmin):
     #     ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
     # ]
     # inlines = [ChoiceInline]
-    list_display = ('Product', 'Language', 'Order', 'Name')
+    list_display = ('Product', 'Language', 'Order', 'Name', 'short_text')
     list_filter = ['Product', 'Language']
     list_editable = ['Order', 'Name']
     ordering = ['Product__SKU', 'Language__Code', 'Order']
