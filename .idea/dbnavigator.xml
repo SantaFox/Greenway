@@ -26,7 +26,7 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="bb070420-173c-4770-9c40-dc4cd0622bcc">
-        <schema name="main" object-types="view, table" />
+        <schema name="main" object-types="table, index, constraint, dataset trigger, view, column" />
       </connection>
     </loaded-nodes>
   </component>
@@ -42,11 +42,13 @@
     <connection id="bb070420-173c-4770-9c40-dc4cd0622bcc" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-actions connection-id="bb070420-173c-4770-9c40-dc4cd0622bcc" dataset="main.catalog_tab" active-filter-id="">
+    <filter-actions connection-id="bb070420-173c-4770-9c40-dc4cd0622bcc" dataset="main.catalog_price" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="bb070420-173c-4770-9c40-dc4cd0622bcc" dataset="main.catalog_tab" active-filter-id="EMPTY_FILTER">
       <filter id="991fbfd2-caf1-4add-bf42-35b40da2ff2b" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
         <condition column="id" operator="=" value="" active="true" />
       </filter>
     </filter-actions>
+    <filter-actions connection-id="bb070420-173c-4770-9c40-dc4cd0622bcc" dataset="main.catalog_productinfo" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
@@ -76,7 +78,7 @@
     <connections>
       <connection id="bb070420-173c-4770-9c40-dc4cd0622bcc" active="true">
         <database>
-          <name value="Connection" />
+          <name value="Django SQLite" />
           <description value="" />
           <database-type value="SQLITE" />
           <config-type value="BASIC" />
@@ -119,7 +121,7 @@
           <session-management value="true" />
           <ddl-file-binding value="true" />
           <database-logging value="false" />
-          <connect-automatically value="true" />
+          <connect-automatically value="false" />
           <restore-workspace value="true" />
           <restore-workspace-deep value="true" />
           <environment-type value="default" />
@@ -533,10 +535,13 @@
     </ddl-file-settings>
     <general-settings>
       <regional-settings>
-        <date-format value="MEDIUM" />
-        <number-format value="UNGROUPED" />
+        <date-format value="SHORT" />
+        <number-format value="GROUPED" />
         <locale value="SYSTEM_DEFAULT" />
-        <use-custom-formats value="false" />
+        <use-custom-formats value="true" />
+        <custom-number-format value="#,##0.##########" />
+        <custom-date-format value="dd/MM/y" />
+        <custom-time-format value="HH:mm" />
       </regional-settings>
       <environment>
         <environment-types>
