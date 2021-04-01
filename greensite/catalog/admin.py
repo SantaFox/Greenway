@@ -1,12 +1,27 @@
 from django.contrib import admin
 
-from .models import Currency, Language, Product, ProductInfo, Tab, Price, Image
+from .models import Currency, Language, Group, GroupInfo, Product, ProductInfo, Tab, Price, Image
 
 
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('Code', 'Name')
     list_editable = ['Name']
     ordering = ['Code']
+
+
+class GroupInfoAdmin(admin.ModelAdmin):
+    list_display = ('Group', 'Language', 'Tagline')
+    list_filter = ['Group', 'Language']
+    list_editable = ['Tagline']
+    ordering = ['Group__Name', 'Language__Code']
+
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('Group', 'SKU')
+    list_display_links = ['SKU']
+    list_filter = ['Group']
+    # list_editable = ['Group']
+    ordering = ['Group']
 
 
 class ProductInfoAdmin(admin.ModelAdmin):
@@ -38,7 +53,9 @@ class PriceAdmin(admin.ModelAdmin):
 
 admin.site.register(Currency)
 admin.site.register(Language, LanguageAdmin)
-admin.site.register(Product)
+admin.site.register(Group)
+admin.site.register(GroupInfo, GroupInfoAdmin)
+admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductInfo, ProductInfoAdmin)
 admin.site.register(Tab, TabAdmin)
 admin.site.register(Price, PriceAdmin)

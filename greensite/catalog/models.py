@@ -33,7 +33,30 @@ class Currency(models.Model):
 
 
 # Data classes below
+class Group(models.Model):
+    Name = models.CharField(max_length=50, blank=False)
+    Order = models.IntegerField(blank=False)
+
+    def __str__(self):
+        return self.Name
+
+class GroupInfo(models.Model):
+    Group = models.ForeignKey(Group, on_delete=models.PROTECT)
+    Language = models.ForeignKey(Language, on_delete=models.PROTECT)
+    Tagline = models.CharField(max_length=255, blank=False)
+
+    def __str__(self):
+        return f'{self.Group} / {self.Language} / {self.Tagline}'
+
+    class Meta:
+        verbose_name_plural = "Groups Info"
+        constraints = [
+            models.UniqueConstraint(fields=['Group', 'Language'], name='unique_GroupInfo')
+        ]
+
+
 class Product(models.Model):
+    Group = models.ForeignKey(Group, on_delete=models.PROTECT)
     SKU = models.CharField(max_length=50, blank=False)
     DateAdded = models.DateField(blank=True, null=True)
     DateRemoved = models.DateField(blank=True, null=True)

@@ -12,6 +12,14 @@
     {% endfor %}
 </ul>
 
+<h2>{{ product.Group.Name }}</h2>
+
+<ul>
+    {% for gi in product.Group.groupinfo_set.all %}
+        <li>{{ gi.Language.Code }} | {{ gi.Tagline }}</li>
+    {% endfor %}
+</ul>
+
 <ul>
     {% for tab in product.tab_set.all %}
         <li>{{ tab.Order }} | {{ tab.Language.Code }} | {{ tab.Name }}</li>
