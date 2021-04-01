@@ -21,6 +21,12 @@
 </ul>
 
 <ul>
+    {% for image in product.image_set.all %}
+        <li>{{ image.IsPrimary }} | {{ image.Image }} | <img src="{{ image.Image.url }}" height="100px"></li>
+    {% endfor %}
+</ul>
+
+<ul>
     {% for tab in product.tab_set.all %}
         <li>{{ tab.Order }} | {{ tab.Language.Code }} | {{ tab.Name }}</li>
     {% endfor %}
