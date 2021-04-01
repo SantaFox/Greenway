@@ -9,6 +9,12 @@ class LanguageAdmin(admin.ModelAdmin):
     ordering = ['Code']
 
 
+class GroupAdmin(admin.ModelAdmin):
+    list_display = ('Name', 'Order')
+    list_editable = ['Order']
+    ordering = ['Order']
+
+
 class GroupInfoAdmin(admin.ModelAdmin):
     list_display = ('Group', 'Language', 'Tagline')
     list_filter = ['Group', 'Language']
@@ -51,12 +57,18 @@ class PriceAdmin(admin.ModelAdmin):
     ordering = ['Product__SKU', 'Currency__Code', 'DateAdded']
 
 
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('Product', 'Image', 'IsPrimary')
+    list_filter = ['Product']
+    ordering = ['Product__SKU', 'Image']
+
+
 admin.site.register(Currency)
 admin.site.register(Language, LanguageAdmin)
-admin.site.register(Group)
+admin.site.register(Group, GroupAdmin)
 admin.site.register(GroupInfo, GroupInfoAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductInfo, ProductInfoAdmin)
 admin.site.register(Tab, TabAdmin)
 admin.site.register(Price, PriceAdmin)
-admin.site.register(Image)
+admin.site.register(Image, ImageAdmin)
