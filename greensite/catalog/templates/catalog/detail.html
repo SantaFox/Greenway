@@ -4,37 +4,46 @@
 
 {% block content %}
 
-<h1>{{ product.SKU }}</h1>
+<div class="row">
+    <div class="col-md">
 
-<ul>
-    {% for pi in product.productinfo_set.all %}
-        <li>{{ pi.Language.Code }} | {{ pi.Name }}</li>
-    {% endfor %}
-</ul>
+    </div>
+    <div class="col-md">
+        <h1>{{ product.SKU }}</h1>
+        <ul>
+            {% for pi in product.productinfo_set.all %}
+            <li>{{ pi.Language.Code }} | {{ pi.Name }}</li>
+            {% endfor %}
 
-<h2>{{ product.Group.Name }}</h2>
+        </ul>
+        <h2>{{ product.Group.Name }}</h2>
+        <ul>
+            {% for gi in product.Group.groupinfo_set.all %}
+            <li>{{ gi.Language.Code }} | {{ gi.Tagline }}</li>
+            {% endfor %}
+        </ul>
 
-<ul>
-    {% for gi in product.Group.groupinfo_set.all %}
-        <li>{{ gi.Language.Code }} | {{ gi.Tagline }}</li>
-    {% endfor %}
-</ul>
-
-<ul>
-    {% for image in product.image_set.all %}
-        <li>{{ image.IsPrimary }} | {{ image.Image }} | <img src="{{ image.Image.url }}" height="100px"></li>
-    {% endfor %}
-</ul>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <ul>
+            {% for image in product.image_set.all %}
+            <li>{{ image.IsPrimary }} | {{ image.Image }} | <img src="{{ image.Image.url }}" height="100px"></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 
 <ul>
     {% for tab in product.tab_set.all %}
-        <li>{{ tab.Order }} | {{ tab.Language.Code }} | {{ tab.Name }}</li>
+    <li>{{ tab.Order }} | {{ tab.Language.Code }} | {{ tab.Name }}</li>
     {% endfor %}
 </ul>
 
 <ul>
     {% for price in product.ordered_price_set %}
-        <li>{{ price.DateAdded }} | {{ price.Price }} {{ Price.Currency.Code }} | {{ price.PV }}</li>
+    <li>{{ price.DateAdded }} | {{ price.Price }} {{ Price.Currency.Code }} | {{ price.PV }}</li>
     {% endfor %}
 </ul>
 
