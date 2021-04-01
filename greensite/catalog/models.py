@@ -7,6 +7,8 @@ class Language(models.Model):
     Code = models.CharField(max_length=3, blank=False)
     Name = models.CharField(max_length=50, blank=True)
     # ISO = models.IntegerField()
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.Code
@@ -21,6 +23,8 @@ class Currency(models.Model):
     Code = models.CharField(max_length=3, blank=False)
     Symbol = models.CharField(max_length=1, blank=True)
     # ISO = models.IntegerField()
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.Code
@@ -36,14 +40,24 @@ class Currency(models.Model):
 class Group(models.Model):
     Name = models.CharField(max_length=50, blank=False)
     Order = models.IntegerField(blank=False)
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.Name
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['Order'], name='unique_Group')
+        ]
+
 
 class GroupInfo(models.Model):
     Group = models.ForeignKey(Group, on_delete=models.PROTECT)
     Language = models.ForeignKey(Language, on_delete=models.PROTECT)
     Tagline = models.CharField(max_length=255, blank=False)
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.Group} / {self.Language} / {self.Tagline}'
@@ -60,6 +74,8 @@ class Product(models.Model):
     SKU = models.CharField(max_length=50, blank=False)
     DateAdded = models.DateField(blank=True, null=True)
     DateRemoved = models.DateField(blank=True, null=True)
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.SKU
@@ -141,6 +157,13 @@ class Image(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
     Image = models.ImageField()
     IsPrimary = models.BooleanField(default=False)
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.Image.name
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['Image'], name='unique_ImageName')
+        ]
