@@ -5,23 +5,20 @@
 {% block content %}
 
 <div class="row">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Products</a></li>
-            <li class="breadcrumb-item"><a href="#">{{ product.Group.Name }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ product.SKU }}</li>
-        </ol>
-    </nav>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
-<img src="{{ image_primary.Image.url }}" width="100%">
+    <div class="col-md-5">
+        <img src="{{ image_primary.Image.url }}" width="100%">
     </div>
-    <div class="col-md-8">
-        <h1>{{ product_info.Name }}</h1>
-        <br />
+    <div class="col-md-7">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Products</a></li>
+                <li class="breadcrumb-item"><a href="#">{{ product.Group.Name }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ product.SKU }}</li>
+            </ol>
+        </nav>
+        <h1>{{ product_info.Name|upper }}</h1>
+        <br/>
+        <p>{{ product_info.Specification|default:"&nbsp;" }}</p>
         <h3>#{{ product.SKU }}</h3>
         <h3>{{ price.Price }} {{ price.Currency.Code }}</h3>
     </div>
@@ -56,14 +53,18 @@
     </div>
 </nav>
 <div class="tab-content" id="nav-tabContent">
-            {% for tab in tabs %}
-        {% if forloop.first %}
-    <div class="tab-pane fade show active" id="nav-tab{{ tab.Order }}" role="tabpanel" aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.Text }}</div>
-            {% else %}
-    <div class="tab-pane fade" id="nav-tab{{ tab.Order }}" role="tabpanel" aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.Text }}</div>
-            {% endif %}
-        {% empty %}
-        {% endfor %}
+    {% for tab in tabs %}
+    {% if forloop.first %}
+    <div class="tab-pane fade show active" id="nav-tab{{ tab.Order }}" role="tabpanel"
+         aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.Text }}
+    </div>
+    {% else %}
+    <div class="tab-pane fade" id="nav-tab{{ tab.Order }}" role="tabpanel" aria-labelledby="nav-tab{{ tab.Order }}-tab">
+        {{ tab.Text }}
+    </div>
+    {% endif %}
+    {% empty %}
+    {% endfor %}
 </div>
 
 {% endblock %}

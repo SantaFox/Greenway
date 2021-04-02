@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 
-from .models import Product, ProductInfo, Tab, Price, Image
+from .models import Language, Product, ProductInfo, Tab, Price, Image
 
 
 # We have to comment it because generic.DetailView cannot process different # identifiers from URL
@@ -26,6 +26,10 @@ def detail(request, productid=None, sku=None):
     elif sku:
         product = get_object_or_404(Product, SKU=sku)
 
+    language = Language.objects.get(Code=detail_lang)
+
+    languages = Language.objects.all().order_by('Code')
+
     product_info = ProductInfo.objects.get(Product=product, Language__Code=detail_lang)
 
     tabs = Tab.objects.filter(Product=product, Language__Code=detail_lang).order_by('Order')
@@ -35,19 +39,30 @@ def detail(request, productid=None, sku=None):
     image_primary = Image.objects.get(Product=product, IsPrimary=True)
 
     response = render(request, 'catalog/detail.html', {
+        'language': language,
+        'languages': languages,
         'product': product,
         'product_info': product_info,
         'tabs': tabs,
         'price': price,
         'image_primary': image_primary,
-        'language': detail_lang,
     })
     if not request.COOKIES.get('lang'):
         response.set_cookie('lang', detail_lang)
 
     return response
 
+
 def change_lang(request):
     if request.method == "POST":
-        pass
-    return HttpResponseRedirect("")
+        form_lang = request.POST['language']
+        print(form_lang)
+        response = HttpResponseRedirect(request.META['HTTP_REFERER'])
+        if form_lang in ('eng', 'gr', 'ru'):
+            response.set_cookie('lang', form_lang)
+        else:
+            response.set_cookie('lang', 'eng')
+    else:
+        response = HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+    return response
