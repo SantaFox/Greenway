@@ -1,4 +1,5 @@
 from django.contrib import admin
+from markdownx.admin import MarkdownxModelAdmin
 
 from .models import Currency, Language, Group, GroupInfo, Product, ProductInfo, Tab, Price, Image
 
@@ -37,7 +38,7 @@ class ProductInfoAdmin(admin.ModelAdmin):
     ordering = ['Product__SKU', 'Language__Code']
 
 
-class TabAdmin(admin.ModelAdmin):
+class TabAdmin(MarkdownxModelAdmin):
     # fieldsets = [
     #     (None,               {'fields': ['question_text']}),
     #     ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
