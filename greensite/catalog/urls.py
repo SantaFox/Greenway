@@ -4,6 +4,8 @@ from . import views
 
 app_name = 'catalog'
 urlpatterns = [
+    # TODO: надо добавить проверку на POST
+    path('change_lang/', views.change_lang, name='change_lang'),
     # ex: /polls/
     # path('', views.IndexView.as_view(), name='index'),
     # ex: /polls/5/
