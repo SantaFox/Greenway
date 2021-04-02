@@ -43,7 +43,10 @@ def detail(request, productid=None, sku=None):
 
     price = Price.objects.filter(Product=product).order_by('-DateAdded')[0]
 
-    image_primary = Image.objects.get(Product=product, IsPrimary=True)
+    try:
+        image_primary = Image.objects.get(Product=product, IsPrimary=True)
+    except (Image.DoesNotExist, Image.MultipleObjectsReturned):
+        image_primary = None
 
     response = render(request, 'catalog/detail.html', {
         'language': language,
