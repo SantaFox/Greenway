@@ -59,7 +59,6 @@
     </symbol>
 </svg>
 
-</svg>
 <div class="container">
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
 
@@ -79,23 +78,34 @@
                 </svg>
                 <span>English</span>
             </a>
-            <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                <li><a class="dropdown-item" href="#">
-                    <svg class="bi me-2" width="30" height="20">
-                        <use xlink:href="#flag_uk"/>
-                    </svg>
-                    English</a></li>
-                <li><a class="dropdown-item" href="#">
-                    <svg class="bi me-2" width="30" height="20">
-                        <use xlink:href="#flag_gr_cy"/>
-                    </svg>
-                    Ελληνικά</a></li>
-                <li><a class="dropdown-item" href="#">
-                    <svg class="bi me-2" width="30" height="20">
-                        <use xlink:href="#flag_ru"/>
-                    </svg>
-                    Русский</a></li>
-            </ul>
+            <form class="dropdown-menu text-small" aria-labelledby="dropdownUser1" action="/catalog/change_lang/" method="post" id="change_lang">{% csrf_token %}
+                <ul>
+                    <li>
+                        <button type="submit" name="language" value="eng" class="dropdown-item">
+                            <svg class="bi me-2" width="30" height="20">
+                                <use xlink:href="#flag_uk"/>
+                            </svg>
+                            English
+                        </button>
+                    </li>
+                    <li>
+                        <button type="submit" name="language" value="gr" class="dropdown-item">
+                            <svg class="bi me-2" width="30" height="20">
+                                <use xlink:href="#flag_gr_cy"/>
+                            </svg>
+                            Ελληνικά
+                        </button>
+                    </li>
+                    <li>
+                        <button type="submit" name="language" value="ru" class="dropdown-item">
+                            <svg class="bi me-2" width="30" height="20">
+                                <use xlink:href="#flag_ru"/>
+                            </svg>
+                            Русский
+                        </button>
+                    </li>
+                </ul>
+            </form>
         </div>
 
         <div class="text-end">

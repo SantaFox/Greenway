@@ -5,24 +5,25 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-md">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Products</a></li>
+            <li class="breadcrumb-item"><a href="#">{{ product.Group.Name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.SKU }}</li>
+        </ol>
+    </nav>
+</div>
 
+<div class="row">
+    <div class="col-md-4">
+<img src="{{ image_primary.Image.url }}" width="100%">
     </div>
-    <div class="col-md">
-        <h1>{{ product.SKU }}</h1>
-        <ul>
-            {% for pi in product.productinfo_set.all %}
-            <li>{{ pi.Language.Code }} | {{ pi.Name }}</li>
-            {% endfor %}
-
-        </ul>
-        <h2>{{ product.Group.Name }}</h2>
-        <ul>
-            {% for gi in product.Group.groupinfo_set.all %}
-            <li>{{ gi.Language.Code }} | {{ gi.Tagline }}</li>
-            {% endfor %}
-        </ul>
-
+    <div class="col-md-8">
+        <h1>{{ product_info.Name }}</h1>
+        <br />
+        <h3>#{{ product.SKU }}</h3>
+        <h3>{{ price.Price }} {{ price.Currency.Code }}</h3>
     </div>
 </div>
 <div class="row">
@@ -30,21 +31,39 @@
         <ul>
             {% for image in product.image_set.all %}
             <li>{{ image.IsPrimary }} | {{ image.Image }} | <img src="{{ image.Image.url }}" height="100px"></li>
+            {% empty %}
+            <li>No images available</li>
             {% endfor %}
         </ul>
     </div>
 </div>
-
-<ul>
-    {% for tab in product.tab_set.all %}
-    <li>{{ tab.Order }} | {{ tab.Language.Code }} | {{ tab.Name }}</li>
-    {% endfor %}
-</ul>
-
-<ul>
-    {% for price in product.ordered_price_set %}
-    <li>{{ price.DateAdded }} | {{ price.Price }} {{ Price.Currency.Code }} | {{ price.PV }}</li>
-    {% endfor %}
-</ul>
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        {% for tab in tabs %}
+        {% if forloop.first %}
+        <button class="nav-link active" id="nav-tab{{ tab.Order }}-tab"
+                data-bs-toggle="tab" data-bs-target="#nav-tab{{ tab.Order }}" type="button" role="tab"
+                aria-controls="nav-tab{{ tab.Order }}" aria-selected="true">{{ tab.Name }}
+        </button>
+        {% else %}
+        <button class="nav-link" id="nav-tab{{ tab.Order }}-tab"
+                data-bs-toggle="tab" data-bs-target="#nav-tab{{ tab.Order }}" type="button" role="tab"
+                aria-controls="nav-tab{{ tab.Order }}" aria-selected="false">{{ tab.Name }}
+        </button>
+        {% endif %}
+        {% empty %}
+        {% endfor %}
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+            {% for tab in tabs %}
+        {% if forloop.first %}
+    <div class="tab-pane fade show active" id="nav-tab{{ tab.Order }}" role="tabpanel" aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.Text }}</div>
+            {% else %}
+    <div class="tab-pane fade" id="nav-tab{{ tab.Order }}" role="tabpanel" aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.Text }}</div>
+            {% endif %}
+        {% empty %}
+        {% endfor %}
+</div>
 
 {% endblock %}
