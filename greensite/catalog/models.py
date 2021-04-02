@@ -5,7 +5,8 @@ from django.template.defaultfilters import truncatechars  # or truncatewords
 # System classes below
 class Language(models.Model):
     Code = models.CharField(max_length=3, blank=False)
-    Name = models.CharField(max_length=50, blank=True)
+    Name = models.CharField(max_length=50, blank=False)
+    Flag = models.CharField(max_length=10, blank=False)
     # ISO = models.IntegerField()
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)

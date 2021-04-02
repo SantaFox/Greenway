@@ -4,8 +4,8 @@ from .models import Currency, Language, Group, GroupInfo, Product, ProductInfo, 
 
 
 class LanguageAdmin(admin.ModelAdmin):
-    list_display = ('Code', 'Name')
-    list_editable = ['Name']
+    list_display = ('Code', 'Name', 'Flag')
+    list_editable = ['Name', 'Flag']
     ordering = ['Code']
 
 
