@@ -4,11 +4,18 @@ from django.shortcuts import get_object_or_404, render
 from .models import Language, Product, ProductInfo, Tab, Price, Image
 
 
+def categories_view(request, name=None):
+    return render(request, 'catalog/categories.html', {})
+
+
+def products_view(request, category=None):
+    products = Product.objects.all().order_by('SKU')
+    return render(request, 'catalog/products.html', {'products': products})
+
 # We have to comment it because generic.DetailView cannot process different # identifiers from URL
 # class DetailView(generic.DetailView):
 #     model = Product
 #     template_name = 'catalog/detail.html'
-
 def detail(request, productid=None, sku=None):
     # Work with selected language
     if not request.COOKIES.get('lang'):
