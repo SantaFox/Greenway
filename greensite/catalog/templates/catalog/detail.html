@@ -1,6 +1,14 @@
 {% extends "catalog/base.html" %}
+{% load static %}
+{% load martortags %}
 
 {% block title %}{{ product.SKU }}{% endblock %}
+
+{% block css %}
+  <link href="{% static 'plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+  <link href="{% static 'martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+{% endblock %}
+
 
 {% block content %}
 
@@ -53,16 +61,16 @@
     </div>
 </nav>
 <div class="row">
-    <div class="tab-content" id="nav-tabContent">
+    <div class="tab-content martor-preview" id="nav-tabContent">
         {% for tab in tabs %}
         {% if forloop.first %}
         <div class="tab-pane fade show active" id="nav-tab{{ tab.Order }}" role="tabpanel"
-             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.formatted_markdown|safe }}
+             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.Text|safe_markdown  }}
         </div>
         {% else %}
         <div class="tab-pane fade" id="nav-tab{{ tab.Order }}" role="tabpanel"
              aria-labelledby="nav-tab{{ tab.Order }}-tab">
-            {{ tab.formatted_markdown|safe }}
+            {{ tab.Text|safe_markdown  }}
         </div>
         {% endif %}
         {% empty %}
@@ -70,4 +78,13 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block js %}
+  <script type="text/javascript" src="{% static 'plugins/js/highlight.min.js' %}"></script>
+  <script>
+    $('.martor-preview pre').each(function(i, block){
+        hljs.highlightBlock(block);
+    });
+  </script>
 {% endblock %}

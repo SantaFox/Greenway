@@ -1,5 +1,7 @@
 from django.contrib import admin
-from markdownx.admin import MarkdownxModelAdmin
+from django.db import models
+
+from martor.widgets import AdminMartorWidget
 
 from .models import Currency, Language, Group, GroupInfo, Product, ProductInfo, Tab, Price, Image
 
@@ -38,11 +40,14 @@ class ProductInfoAdmin(admin.ModelAdmin):
     ordering = ['Product__SKU', 'Language__Code']
 
 
-class TabAdmin(MarkdownxModelAdmin):
+class TabAdmin(admin.ModelAdmin):
     # fieldsets = [
     #     (None,               {'fields': ['question_text']}),
     #     ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
     # ]
+    formfield_overrides = {
+        models.TextField: {'widget': AdminMartorWidget},
+    }
     # inlines = [ChoiceInline]
     list_display = ('Product', 'Language', 'Order', 'Name', 'short_text')
     list_filter = ['Product', 'Language']

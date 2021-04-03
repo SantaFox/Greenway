@@ -1,14 +1,13 @@
 from django.db import models
 from django.template.defaultfilters import truncatechars  # or truncatewords
-from markdownx.models import MarkdownxField
-from markdownx.utils import markdownify
+from martor.models import MartorField
+
 
 # System classes below
 class Language(models.Model):
     Code = models.CharField(max_length=3, blank=False)
     Name = models.CharField(max_length=50, blank=False)
     Flag = models.CharField(max_length=10, blank=False)
-    # ISO = models.IntegerField()
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
@@ -24,7 +23,6 @@ class Language(models.Model):
 class Currency(models.Model):
     Code = models.CharField(max_length=3, blank=False)
     Symbol = models.CharField(max_length=1, blank=True)
-    # ISO = models.IntegerField()
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
@@ -114,7 +112,7 @@ class Tab(models.Model):
     Language = models.ForeignKey(Language, on_delete=models.PROTECT)
     Order = models.IntegerField(blank=False)
     Name = models.CharField(max_length=255, blank=False)
-    Text = MarkdownxField(blank=True)
+    Text = MartorField(blank=True)
     TextQuality = models.IntegerField(choices=[
         (0, 'Not tested'),
         (1, 'Low quality'),
@@ -130,10 +128,6 @@ class Tab(models.Model):
     @property
     def short_text(self):
         return truncatechars(self.Text, 100)
-
-    @property
-    def formatted_markdown(self):
-        return markdownify(self.Text)
 
     class Meta:
         constraints = [
@@ -151,7 +145,7 @@ class Price(models.Model):
     TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.Product} / {self.Currency} / {self.DateAdded} / {self.Price}'
+        return f'{self.Product} / {self.Currency} / {self.DateAdded} / {self.Price} / {self.PV}'
 
     class Meta:
         constraints = [
