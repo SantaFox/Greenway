@@ -1,4 +1,4 @@
-{% extends "catalog/base.html" %}
+{% extends "products/base.html" %}
 
 {% block content %}
 
@@ -8,7 +8,7 @@
     <li>{{ product_group.grouper }}
     <ul>
         {% for product in product_group.list %}
-          <li><a href="/catalog/{{ product.SKU }}">#{{ product.SKU }}</a>&nbsp;
+          <li><a href="/products/{{ product.SKU }}">#{{ product.SKU }}</a>&nbsp;
               {{ product.pi__Name|default:"< Product name not set >" }}&nbsp;
               Photos:&nbsp;{{ product.ImagesCount }}
           </li>

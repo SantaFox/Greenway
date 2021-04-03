@@ -6,7 +6,7 @@ from .models import Language, Product, ProductInfo, Tab, Price, Image
 
 
 def categories_view(request, name=None):
-    return render(request, 'catalog/categories.html', {})
+    return render(request, 'products/categories.html', {})
 
 
 def products_view(request, category=None):
@@ -28,7 +28,7 @@ def products_view(request, category=None):
         .values('SKU', 'Group__Name', 'pi__Name').order_by('Group__Name', 'SKU')\
         .annotate(ImagesCount=Count('image'))
 
-    return render(request, 'catalog/products.html', {
+    return render(request, 'products/products.html', {
         'language': language,
         'languages': languages,
         'products_list': ll,
@@ -77,7 +77,7 @@ def detail(request, productid=None, sku=None):
     except (Image.DoesNotExist, Image.MultipleObjectsReturned):
         image_primary = None
 
-    response = render(request, 'catalog/detail.html', {
+    response = render(request, 'products/detail.html', {
         'language': language,
         'languages': languages,
         'product': product,
