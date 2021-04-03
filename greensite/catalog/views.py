@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.db.models import Count, Q, FilteredRelation
 
 from .models import Language, Product, ProductInfo, Tab, Price, Image
 
@@ -23,7 +24,9 @@ def products_view(request, category=None):
     products = Product.objects.all().order_by('SKU')
     product_infos = ProductInfo.objects.filter(Language__Code=view_lang)
 
-    list = Product.objects.all().order_by('Group__Name', 'SKU').select_related('ProductInfo').filter(Language__Code=view_lang)
+    ll = Product.objects.annotate(pi=FilteredRelation('productinfo', condition=Q(productinfo__Language=language.id)))\
+        .values('SKU', 'Group__Name', 'pi__Name').order_by('Group__Name', 'SKU')\
+        .annotate(ImagesCount=Count('image'))
 
     return render(request, 'catalog/products.html', {'products_list': list})
 
