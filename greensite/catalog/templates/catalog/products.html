@@ -2,10 +2,17 @@
 
 {% block content %}
 
+{% regroup products_list by Group as plist %}
 <ul>
-    {% for product in products %}
-    <li><a href="/catalog/{{ product.SKU }}">#{{ product.SKU }}</a></li>
-    {% endfor %}
+{% for product_group in plist %}
+    <li>{{ product_group.grouper }}
+    <ul>
+        {% for product in product_group.list %}
+          <li><a href="/catalog/{{ product.SKU }}">#{{ product.SKU }}</a></li>
+        {% endfor %}
+    </ul>
+    </li>
+{% endfor %}
 </ul>
 
 {% endblock %}

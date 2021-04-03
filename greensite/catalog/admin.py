@@ -26,11 +26,10 @@ class GroupInfoAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('Group', 'SKU')
-    list_display_links = ['SKU']
+    list_display = ('SKU', 'Group', 'DateAdded', 'DateRemoved')
     list_filter = ['Group']
-    # list_editable = ['Group']
-    ordering = ['Group']
+    list_editable = ['Group', 'DateAdded', 'DateRemoved']
+    ordering = ['SKU']
 
 
 class ProductInfoAdmin(admin.ModelAdmin):

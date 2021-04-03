@@ -9,8 +9,24 @@ def categories_view(request, name=None):
 
 
 def products_view(request, category=None):
+    # Work with selected language
+    if not request.COOKIES.get('lang'):
+        cookie_lang = ''
+    else:
+        cookie_lang = request.COOKIES.get('lang')
+
+    if cookie_lang in ('eng', 'gr', 'ru'):
+        view_lang = cookie_lang
+    else:
+        view_lang = 'eng'
+
     products = Product.objects.all().order_by('SKU')
-    return render(request, 'catalog/products.html', {'products': products})
+    product_infos = ProductInfo.objects.filter(Language__Code=view_lang)
+
+    list = Product.objects.all().order_by('Group__Name', 'SKU').select_related('ProductInfo').filter(Language__Code=view_lang)
+
+    return render(request, 'catalog/products.html', {'products_list': list})
+
 
 # We have to comment it because generic.DetailView cannot process different # identifiers from URL
 # class DetailView(generic.DetailView):
@@ -37,11 +53,18 @@ def detail(request, productid=None, sku=None):
 
     languages = Language.objects.all().order_by('Code')
 
-    product_info = ProductInfo.objects.get(Product=product, Language__Code=detail_lang)
+    try:
+        product_info = ProductInfo.objects.get(Product=product, Language__Code=detail_lang)
+    except (ProductInfo.DoesNotExist, ProductInfo.MultipleObjectsReturned):
+        product_info = None
 
     tabs = Tab.objects.filter(Product=product, Language__Code=detail_lang).order_by('Order')
 
-    price = Price.objects.filter(Product=product).order_by('-DateAdded')[0]
+    price_hist = Price.objects.filter(Product=product).order_by('-DateAdded')
+    if price_hist:
+        price = price_hist[0]
+    else:
+        price = None
 
     try:
         image_primary = Image.objects.get(Product=product, IsPrimary=True)

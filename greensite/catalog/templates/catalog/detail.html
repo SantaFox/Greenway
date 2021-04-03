@@ -24,7 +24,7 @@
                 <li class="breadcrumb-item active" aria-current="page">{{ product.SKU }}</li>
             </ol>
         </nav>
-        <h1>{{ product_info.Name|upper }}</h1>
+        <h1>{{ product_info.Name|upper|default:"No data for this language" }}</h1>
         <br/>
         <p>{{ product_info.Specification|default:"&nbsp;" }}</p>
         <h3>#{{ product.SKU }}</h3>
