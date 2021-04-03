@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'martor',
-    'catalog.apps.CatalogConfig',
+    'products.apps.ProductsConfig',
+    'django_rename_app',
 ]
 
 MIDDLEWARE = [

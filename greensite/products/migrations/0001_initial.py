@@ -47,8 +47,8 @@ class Migration(migrations.Migration):
                 ('TextQuality', models.IntegerField(choices=[(0, 'Not tested'), (1, 'Low quality'), (2, 'Medium quality'), (3, 'Good quality')], default=0)),
                 ('TimestampCreated', models.DateTimeField(auto_now_add=True)),
                 ('TimestampModified', models.DateTimeField(auto_now=True)),
-                ('Language', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='catalog.language')),
-                ('Product', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='catalog.product')),
+                ('Language', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='products.language')),
+                ('Product', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='products.product')),
             ],
         ),
         migrations.CreateModel(
@@ -59,8 +59,8 @@ class Migration(migrations.Migration):
                 ('Specification', models.CharField(max_length=255)),
                 ('TimestampCreated', models.DateTimeField(auto_now_add=True)),
                 ('TimestampModified', models.DateTimeField(auto_now=True)),
-                ('Language', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='catalog.language')),
-                ('Product', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='catalog.product')),
+                ('Language', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='products.language')),
+                ('Product', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='products.product')),
             ],
         ),
     ]

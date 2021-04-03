@@ -7,14 +7,14 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('catalog', '0012_group'),
+        ('products', '0012_group'),
     ]
 
     operations = [
         migrations.AddField(
             model_name='product',
             name='Group',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.PROTECT, to='catalog.group'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.PROTECT, to='products.group'),
             preserve_default=False,
         ),
     ]

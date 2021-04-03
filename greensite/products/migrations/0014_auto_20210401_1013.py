@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('catalog', '0013_product_group'),
+        ('products', '0013_product_group'),
     ]
 
     operations = [
@@ -22,8 +22,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('Tagline', models.CharField(max_length=255)),
-                ('Group', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='catalog.group')),
-                ('Language', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='catalog.language')),
+                ('Group', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='products.group')),
+                ('Language', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='products.language')),
             ],
             options={
                 'verbose_name_plural': 'Groups Info',

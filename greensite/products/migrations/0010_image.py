@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('catalog', '0009_auto_20210331_1637'),
+        ('products', '0009_auto_20210331_1637'),
     ]
 
     operations = [
@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('Image', models.ImageField(upload_to='')),
                 ('IsPrimary', models.BooleanField(default=False)),
-                ('Product', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='catalog.product')),
+                ('Product', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='products.product')),
             ],
         ),
     ]

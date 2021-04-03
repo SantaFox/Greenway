@@ -7,7 +7,7 @@ import martor.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('catalog', '0019_auto_20210402_1459'),
+        ('products', '0019_auto_20210402_1459'),
     ]
 
     operations = [
