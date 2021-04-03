@@ -9,7 +9,7 @@ def categories_view(request, name=None):
     return render(request, 'products/categories.html', {})
 
 
-def products_view(request, category=None):
+def list_all(request):
     # Work with selected language
     if not request.COOKIES.get('lang'):
         cookie_lang = ''
@@ -28,7 +28,7 @@ def products_view(request, category=None):
         .values('SKU', 'Group__Name', 'pi__Name').order_by('Group__Name', 'SKU')\
         .annotate(ImagesCount=Count('image'))
 
-    return render(request, 'products/products.html', {
+    return render(request, 'products/list_all.html', {
         'language': language,
         'languages': languages,
         'products_list': ll,
@@ -39,7 +39,7 @@ def products_view(request, category=None):
 # class DetailView(generic.DetailView):
 #     model = Product
 #     template_name = 'catalog/detail.html'
-def detail(request, productid=None, sku=None):
+def view_product(request, sku=None):
     # Work with selected language
     if not request.COOKIES.get('lang'):
         cookie_lang = ''
@@ -51,10 +51,7 @@ def detail(request, productid=None, sku=None):
     else:
         detail_lang = 'eng'
 
-    if productid:
-        product = get_object_or_404(Product, pk=productid)
-    elif sku:
-        product = get_object_or_404(Product, SKU=sku)
+    product = get_object_or_404(Product, SKU=sku)
 
     language = Language.objects.get(Code=detail_lang)
     languages = Language.objects.all().order_by('Code')
@@ -77,7 +74,7 @@ def detail(request, productid=None, sku=None):
     except (Image.DoesNotExist, Image.MultipleObjectsReturned):
         image_primary = None
 
-    response = render(request, 'products/detail.html', {
+    response = render(request, 'products/view_product.html', {
         'language': language,
         'languages': languages,
         'product': product,

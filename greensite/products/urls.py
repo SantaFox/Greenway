@@ -6,13 +6,6 @@ app_name = 'products'
 urlpatterns = [
     # TODO: надо добавить проверку на POST
     path('change_lang/', views.change_lang, name='change_lang'),
-    path('', views.products_view, name='products'),
-    # ex: /polls/
-    # path('', views.IndexView.as_view(), name='index'),
-    # ex: /polls/5/
-    path('<str:sku>/', views.detail, name='detail'),
-    # ex: /polls/5/results/
-    # path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
-    # ex: /polls/5/vote/
-    # path('<int:question_id>/vote/', views.vote, name='vote'),
+    path('', views.list_all, name='list_all'),
+    path('<str:sku>/', views.view_product, name='product'),
 ]
