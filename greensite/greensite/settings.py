@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'martor',
     'products.apps.ProductsConfig',
-    'django_rename_app',
 ]
 
 MIDDLEWARE = [
