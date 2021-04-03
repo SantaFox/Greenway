@@ -3,7 +3,7 @@ from django.db import models
 
 from martor.widgets import AdminMartorWidget
 
-from .models import Currency, Language, Group, GroupInfo, Product, ProductInfo, Tab, Price, Image
+from .models import Currency, Language, Category, CategoryInfo, Product, ProductInfo, Tab, Price, Image
 
 
 class LanguageAdmin(admin.ModelAdmin):
@@ -12,23 +12,23 @@ class LanguageAdmin(admin.ModelAdmin):
     ordering = ['Code']
 
 
-class GroupAdmin(admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin):
     list_display = ('Name', 'Order')
     list_editable = ['Order']
     ordering = ['Order']
 
 
-class GroupInfoAdmin(admin.ModelAdmin):
-    list_display = ('Group', 'Language', 'Tagline')
-    list_filter = ['Group', 'Language']
+class CategoryInfoAdmin(admin.ModelAdmin):
+    list_display = ('Category', 'Language', 'Tagline')
+    list_filter = ['Category', 'Language']
     list_editable = ['Tagline']
-    ordering = ['Group__Name', 'Language__Code']
+    ordering = ['Category__Name', 'Language__Code']
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('SKU', 'Group', 'DateAdded', 'DateRemoved')
-    list_filter = ['Group']
-    list_editable = ['Group', 'DateAdded', 'DateRemoved']
+    list_display = ('SKU', 'Category', 'DateAdded', 'DateRemoved')
+    list_filter = ['Category']
+    list_editable = ['Category', 'DateAdded', 'DateRemoved']
     ordering = ['SKU']
 
 
@@ -70,8 +70,8 @@ class ImageAdmin(admin.ModelAdmin):
 
 admin.site.register(Currency)
 admin.site.register(Language, LanguageAdmin)
-admin.site.register(Group, GroupAdmin)
-admin.site.register(GroupInfo, GroupInfoAdmin)
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(CategoryInfo, CategoryInfoAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductInfo, ProductInfoAdmin)
 admin.site.register(Tab, TabAdmin)

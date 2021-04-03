@@ -25,7 +25,7 @@ def list_all(request):
     languages = Language.objects.all().order_by('Code')
 
     ll = Product.objects.annotate(pi=FilteredRelation('productinfo', condition=Q(productinfo__Language=language.id)))\
-        .values('SKU', 'Group__Name', 'pi__Name').order_by('Group__Name', 'SKU')\
+        .values('SKU', 'Category__Name', 'pi__Name').order_by('Category__Name', 'SKU')\
         .annotate(ImagesCount=Count('image'))
 
     return render(request, 'products/list_all.html', {

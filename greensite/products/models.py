@@ -37,7 +37,7 @@ class Currency(models.Model):
 
 
 # Data classes below
-class Group(models.Model):
+class Category(models.Model):
     Name = models.CharField(max_length=50, blank=False)
     Order = models.IntegerField(blank=False)
     TimestampCreated = models.DateTimeField(auto_now_add=True)
@@ -48,29 +48,29 @@ class Group(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['Order'], name='unique_Group')
+            models.UniqueConstraint(fields=['Order'], name='unique_Category')
         ]
 
 
-class GroupInfo(models.Model):
-    Group = models.ForeignKey(Group, on_delete=models.PROTECT)
+class CategoryInfo(models.Model):
+    Category = models.ForeignKey(Category, on_delete=models.PROTECT)
     Language = models.ForeignKey(Language, on_delete=models.PROTECT)
     Tagline = models.CharField(max_length=255, blank=False)
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.Group} / {self.Language} / {self.Tagline}'
+        return f'{self.Category} / {self.Language} / {self.Tagline}'
 
     class Meta:
         verbose_name_plural = "Groups Info"
         constraints = [
-            models.UniqueConstraint(fields=['Group', 'Language'], name='unique_GroupInfo')
+            models.UniqueConstraint(fields=['Category', 'Language'], name='unique_CategoryInfo')
         ]
 
 
 class Product(models.Model):
-    Group = models.ForeignKey(Group, on_delete=models.PROTECT)
+    Category = models.ForeignKey(Category, on_delete=models.PROTECT)
     SKU = models.CharField(max_length=50, blank=False)
     DateAdded = models.DateField(blank=True, null=True)
     DateRemoved = models.DateField(blank=True, null=True)
