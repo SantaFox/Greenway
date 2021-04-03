@@ -21,14 +21,18 @@ def products_view(request, category=None):
     else:
         view_lang = 'eng'
 
-    products = Product.objects.all().order_by('SKU')
-    product_infos = ProductInfo.objects.filter(Language__Code=view_lang)
+    language = Language.objects.get(Code=view_lang)
+    languages = Language.objects.all().order_by('Code')
 
     ll = Product.objects.annotate(pi=FilteredRelation('productinfo', condition=Q(productinfo__Language=language.id)))\
         .values('SKU', 'Group__Name', 'pi__Name').order_by('Group__Name', 'SKU')\
         .annotate(ImagesCount=Count('image'))
 
-    return render(request, 'catalog/products.html', {'products_list': list})
+    return render(request, 'catalog/products.html', {
+        'language': language,
+        'languages': languages,
+        'products_list': ll,
+    })
 
 
 # We have to comment it because generic.DetailView cannot process different # identifiers from URL
@@ -53,7 +57,6 @@ def detail(request, productid=None, sku=None):
         product = get_object_or_404(Product, SKU=sku)
 
     language = Language.objects.get(Code=detail_lang)
-
     languages = Language.objects.all().order_by('Code')
 
     try:
