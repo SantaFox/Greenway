@@ -64,10 +64,25 @@ class PriceAdmin(admin.ModelAdmin):
 
 
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ('Product', 'Image', 'IsPrimary')
+    list_display = ('Product', 'Image', 'IsPrimary', 'admin_thumbnail')
     list_filter = ['Product']
     ordering = ['Product__SKU', 'Image']
-    # admin_thumbnail = AdminThumbnail(image_field='Image')
+
+    admin_thumbnail = AdminThumbnail(image_field='ImageAdminThumbnail')
+    admin_thumbnail.short_description = 'Image'
+
+
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'Slug')
+    list_editable = ['Slug']
+    ordering = ['Slug']
+
+
+class TagInfoAdmin(admin.ModelAdmin):
+    list_display = ('Tag', 'Language', 'Name')
+    list_filter = ['Tag', 'Language']
+    list_editable = ['Name']
+    ordering = ['Tag__Slug', 'Language__Code']
 
 
 admin.site.register(Currency)
@@ -79,5 +94,5 @@ admin.site.register(ProductInfo, ProductInfoAdmin)
 admin.site.register(Tab, TabAdmin)
 admin.site.register(Price, PriceAdmin)
 admin.site.register(Image, ImageAdmin)
-admin.site.register(Tag)
-admin.site.register(TagInfo)
+admin.site.register(Tag, TagAdmin)
+admin.site.register(TagInfo, TagInfoAdmin)

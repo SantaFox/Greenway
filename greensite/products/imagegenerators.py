@@ -15,7 +15,7 @@ class ProductBigThumbnailSpec(ImageSpec):
 
 
 class AdminThumbnailSpec(ImageSpec):
-    processors = [ResizeToFill(320, 240)]
+    processors = [ResizeToFill(90, 60)]
     format = 'JPEG'
     options = {'quality': 60}
 

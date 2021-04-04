@@ -1,7 +1,9 @@
 from django.db import models
 from django.template.defaultfilters import truncatechars  # or truncatewords
 from martor.models import MartorField
+from imagekit.models import ImageSpecField
 
+from .imagegenerators import AdminThumbnailSpec
 
 # System classes below
 class Language(models.Model):
@@ -159,6 +161,7 @@ class Image(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
     Image = models.ImageField()
     IsPrimary = models.BooleanField(default=False)
+    ImageAdminThumbnail = ImageSpecField(source='Image', spec=AdminThumbnailSpec)
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
@@ -173,11 +176,12 @@ class Image(models.Model):
 
 class Tag(models.Model):
     Product = models.ManyToManyField(Product, blank=True)
+    Slug = models.SlugField(blank=False)
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.pk} / {len(self.Product.all())}'
+        return f'{self.Slug} / {len(self.Product.all())} product(s)'
 
 
 class TagInfo(models.Model):
