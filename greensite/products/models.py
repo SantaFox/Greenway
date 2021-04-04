@@ -48,6 +48,7 @@ class Category(models.Model):
         return self.Name
 
     class Meta:
+        verbose_name_plural = "Categories"
         constraints = [
             models.UniqueConstraint(fields=['Order'], name='unique_Category')
         ]
@@ -64,7 +65,7 @@ class CategoryInfo(models.Model):
         return f'{self.Category} / {self.Language} / {self.Tagline}'
 
     class Meta:
-        verbose_name_plural = "Groups Info"
+        verbose_name_plural = "Categories Info"
         constraints = [
             models.UniqueConstraint(fields=['Category', 'Language'], name='unique_CategoryInfo')
         ]

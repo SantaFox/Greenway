@@ -4,12 +4,12 @@
 
 {% block content %}
 
-{% regroup products_list by Group__Name as plist %}
+{% regroup products_list by Category__Name as plist %}
 <ul>
-{% for product_group in plist %}
-    <li>{{ product_group.grouper }}
+{% for product_category in plist %}
+    <li>{{ product_category.grouper }}
     <ul>
-        {% for product in product_group.list %}
+        {% for product in product_category.list %}
           <li><a href="/products/{{ product.SKU }}">#{{ product.SKU }}</a>&nbsp;
               {{ product.pi__Name|default:"< Product name not set >" }}&nbsp;
               Photos:&nbsp;{{ product.ImagesCount }}
