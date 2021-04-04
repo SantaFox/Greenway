@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.db import models
 
 from martor.widgets import AdminMartorWidget
+from imagekit.admin import AdminThumbnail
 
 from .models import Currency, Language, Category, CategoryInfo, Product, ProductInfo, Tab, Price, Image
 
@@ -66,6 +67,7 @@ class ImageAdmin(admin.ModelAdmin):
     list_display = ('Product', 'Image', 'IsPrimary')
     list_filter = ['Product']
     ordering = ['Product__SKU', 'Image']
+    # admin_thumbnail = AdminThumbnail(image_field='Image')
 
 
 admin.site.register(Currency)
