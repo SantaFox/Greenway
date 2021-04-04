@@ -169,3 +169,29 @@ class Image(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['Image'], name='unique_ImageName')
         ]
+
+
+class Tag(models.Model):
+    Product = models.ManyToManyField(Product, blank=True)
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.pk} / {len(self.Product.all())}'
+
+
+class TagInfo(models.Model):
+    Tag = models.ForeignKey(Tag, on_delete=models.PROTECT)
+    Language = models.ForeignKey(Language, on_delete=models.PROTECT)
+    Name = models.CharField(max_length=255, blank=False)
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.Tag} / {self.Language} / {self.Name}'
+
+    class Meta:
+        verbose_name_plural = "Tags Info"
+        constraints = [
+            models.UniqueConstraint(fields=['Tag', 'Language'], name='unique_TagInfo')
+        ]

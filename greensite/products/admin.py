@@ -4,7 +4,7 @@ from django.db import models
 from martor.widgets import AdminMartorWidget
 from imagekit.admin import AdminThumbnail
 
-from .models import Currency, Language, Category, CategoryInfo, Product, ProductInfo, Tab, Price, Image
+from .models import Currency, Language, Category, CategoryInfo, Product, ProductInfo, Tab, Price, Image, Tag, TagInfo
 
 
 class LanguageAdmin(admin.ModelAdmin):
@@ -79,3 +79,5 @@ admin.site.register(ProductInfo, ProductInfoAdmin)
 admin.site.register(Tab, TabAdmin)
 admin.site.register(Price, PriceAdmin)
 admin.site.register(Image, ImageAdmin)
+admin.site.register(Tag)
+admin.site.register(TagInfo)

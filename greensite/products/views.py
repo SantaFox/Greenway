@@ -74,6 +74,9 @@ def view_product(request, sku=None):
     except (Image.DoesNotExist, Image.MultipleObjectsReturned):
         image_primary = None
 
+    tags = product.tag_set.all().annotate(tagname=FilteredRelation('taginfo', condition=Q(taginfo__Language=language.id)))\
+        .values('tagname__Name').order_by('tagname__Name')
+
     response = render(request, 'products/view_product.html', {
         'language': language,
         'languages': languages,
@@ -82,6 +85,7 @@ def view_product(request, sku=None):
         'tabs': tabs,
         'price': price,
         'image_primary': image_primary,
+        'tags': tags,
     })
     if not request.COOKIES.get('lang'):
         response.set_cookie('lang', detail_lang)
