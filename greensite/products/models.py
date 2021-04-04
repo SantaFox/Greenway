@@ -39,6 +39,7 @@ class Currency(models.Model):
 # Data classes below
 class Category(models.Model):
     Name = models.CharField(max_length=50, blank=False)
+    Slug = models.SlugField(blank=False)
     Order = models.IntegerField(blank=False)
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)

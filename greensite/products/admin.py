@@ -13,8 +13,8 @@ class LanguageAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('Name', 'Order')
-    list_editable = ['Order']
+    list_display = ('Name', 'Order', 'Slug')
+    list_editable = ['Order', 'Slug']
     ordering = ['Order']
 
 
