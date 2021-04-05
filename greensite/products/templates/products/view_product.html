@@ -10,13 +10,14 @@
 <link href="{% static 'martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet"/>
 {% endblock %}
 
-
 {% block content %}
 
 <div class="row">
     <div class="col-md-5">
-        <!-- <img src="{{ image_primary.Image.url }}" width="100%"> -->
-        {% generateimage 'products:product_big_thumbnail' source=image_primary.Image -- width="100%" %}
+        {% if image_primary %}
+            {% generateimage 'products:product_big_thumbnail' source=image_primary.Image -- width="100%" %}
+        {% else %}
+        {% endif %}
     </div>
     <div class="col-md-7">
         <nav aria-label="breadcrumb">
