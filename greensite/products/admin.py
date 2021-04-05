@@ -38,6 +38,7 @@ class ProductInfoAdmin(admin.ModelAdmin):
     list_filter = ['Product__Category', 'Product', 'Language']
     list_editable = ['Name', 'Specification']
     ordering = ['Product__SKU', 'Language__Code']
+    search_fields = ['Name', 'Specification']
 
 
 class TabAdmin(admin.ModelAdmin):
