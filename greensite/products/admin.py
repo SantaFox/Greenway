@@ -35,7 +35,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 class ProductInfoAdmin(admin.ModelAdmin):
     list_display = ('Product', 'Language', 'Name', 'Specification')
-    list_filter = ['Product', 'Language']
+    list_filter = ['Product__Category', 'Product', 'Language']
     list_editable = ['Name', 'Specification']
     ordering = ['Product__SKU', 'Language__Code']
 
