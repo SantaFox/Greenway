@@ -12,7 +12,8 @@
         {% for product in product_category.list %}
           <li><a href="/products/{{ product.SKU }}">#{{ product.SKU }}</a>&nbsp;
               {{ product.pi__Name|default:"< Product name not set >" }}&nbsp;
-              Photos:&nbsp;{{ product.ImagesCount }}
+              Photos:&nbsp;{{ product.ImagesCount }}&nbsp;
+              Tabs:&nbsp;{{ product.TabsCount }}
           </li>
         {% endfor %}
     </ul>
