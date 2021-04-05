@@ -24,8 +24,8 @@ def list_all(request):
     language = Language.objects.get(Code=view_lang)
     languages = Language.objects.all().order_by('Code')
 
-    ll = Product.objects.annotate(pi=FilteredRelation('productinfo', condition=Q(productinfo__Language=language.id)))\
-        .values('SKU', 'Category__Name', 'pi__Name').order_by('Category__Name', 'SKU')\
+    ll = Product.objects.annotate(pi=FilteredRelation('productinfo', condition=Q(productinfo__Language=language.id))) \
+        .values('SKU', 'Category__Name', 'pi__Name').order_by('Category__Name', 'SKU') \
         .annotate(ImagesCount=Count('image'))
 
     return render(request, 'products/list_all.html', {
@@ -35,10 +35,6 @@ def list_all(request):
     })
 
 
-# We have to comment it because generic.DetailView cannot process different # identifiers from URL
-# class DetailView(generic.DetailView):
-#     model = Product
-#     template_name = 'catalog/detail.html'
 def view_product(request, sku=None):
     # Work with selected language
     if not request.COOKIES.get('lang'):
@@ -74,7 +70,8 @@ def view_product(request, sku=None):
     except (Image.DoesNotExist, Image.MultipleObjectsReturned):
         image_primary = None
 
-    tags = product.tag_set.all().annotate(tagname=FilteredRelation('taginfo', condition=Q(taginfo__Language=language.id)))\
+    tags = product.tag_set.all().annotate(
+        tagname=FilteredRelation('taginfo', condition=Q(taginfo__Language=language.id))) \
         .values('tagname__Name').order_by('tagname__Name')
 
     response = render(request, 'products/view_product.html', {

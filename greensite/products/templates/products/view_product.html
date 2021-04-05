@@ -55,17 +55,17 @@
 <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
         {% for tab in tabs %}
-        {% if forloop.first %}
-        <button class="nav-link active" id="nav-tab{{ tab.Order }}-tab"
-                data-bs-toggle="tab" data-bs-target="#nav-tab{{ tab.Order }}" type="button" role="tab"
-                aria-controls="nav-tab{{ tab.Order }}" aria-selected="true">{{ tab.Name }}
-        </button>
-        {% else %}
-        <button class="nav-link" id="nav-tab{{ tab.Order }}-tab"
-                data-bs-toggle="tab" data-bs-target="#nav-tab{{ tab.Order }}" type="button" role="tab"
-                aria-controls="nav-tab{{ tab.Order }}" aria-selected="false">{{ tab.Name }}
-        </button>
-        {% endif %}
+            {% if forloop.first %}
+            <button class="nav-link active" id="nav-tab{{ tab.Order }}-tab"
+                    data-bs-toggle="tab" data-bs-target="#nav-tab{{ tab.Order }}" type="button" role="tab"
+                    aria-controls="nav-tab{{ tab.Order }}" aria-selected="true">{{ tab.Name }}
+            </button>
+            {% else %}
+            <button class="nav-link" id="nav-tab{{ tab.Order }}-tab"
+                    data-bs-toggle="tab" data-bs-target="#nav-tab{{ tab.Order }}" type="button" role="tab"
+                    aria-controls="nav-tab{{ tab.Order }}" aria-selected="false">{{ tab.Name }}
+            </button>
+            {% endif %}
         {% empty %}
         {% endfor %}
     </div>
