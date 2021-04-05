@@ -21,7 +21,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class CategoryInfoAdmin(admin.ModelAdmin):
     list_display = ('Category', 'Language', 'Tagline')
-    list_filter = ['Category', 'Language']
+    list_filter = ['Language', 'Category']
     list_editable = ['Tagline']
     ordering = ['Category__Name', 'Language__Code']
 
@@ -35,7 +35,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 class ProductInfoAdmin(admin.ModelAdmin):
     list_display = ('Product', 'Language', 'Name', 'Specification')
-    list_filter = ['Product__Category', 'Product', 'Language']
+    list_filter = ['Language', 'Product__Category', 'Product']
     list_editable = ['Name', 'Specification']
     ordering = ['Product__SKU', 'Language__Code']
     search_fields = ['Name', 'Specification']
@@ -50,16 +50,16 @@ class TabAdmin(admin.ModelAdmin):
         models.TextField: {'widget': AdminMartorWidget},
     }
     # inlines = [ChoiceInline]
-    list_display = ('Product', 'Language', 'Order', 'Name', 'short_text')
-    list_filter = ['Product', 'Language']
-    list_editable = ['Order', 'Name']
+    list_display = ('Product', 'Language', 'Order', 'Name', 'short_text', 'TextQuality')
+    list_filter = ['Language', 'Product']
+    list_editable = ['Order', 'Name', 'TextQuality']
     ordering = ['Product__SKU', 'Language__Code', 'Order']
     # search_fields = ['question_text']
 
 
 class PriceAdmin(admin.ModelAdmin):
     list_display = ('Product', 'Currency', 'DateAdded', 'Price', 'PV')
-    list_filter = ['Product', 'Currency']
+    list_filter = ['Currency', 'Product']
     list_editable = ['DateAdded', 'Price', 'PV']
     ordering = ['Product__SKU', 'Currency__Code', 'DateAdded']
 
@@ -81,7 +81,7 @@ class TagAdmin(admin.ModelAdmin):
 
 class TagInfoAdmin(admin.ModelAdmin):
     list_display = ('Tag', 'Language', 'Name')
-    list_filter = ['Tag', 'Language']
+    list_filter = ['Language', 'Tag']
     list_editable = ['Name']
     ordering = ['Tag__Slug', 'Language__Code']
 
