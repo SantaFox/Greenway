@@ -10,7 +10,7 @@
     <li>{{ product_category.grouper }}
     <ul>
         {% for product in product_category.list %}
-          <li><a href="/products/{{ product.SKU }}">#{{ product.SKU }}</a>&nbsp;
+          <li><a href="/products/{{ product.SKU }}/">#{{ product.SKU }}</a>&nbsp;
               {{ product.pi__Name|default:"< Product name not set >" }}&nbsp;
               (Photos:&nbsp;{{ product.ImagesCount }},
               Tabs:&nbsp;{{ product.TabsCount }})
