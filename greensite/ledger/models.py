@@ -19,9 +19,32 @@ class Account(models.Model):
         ]
 
 
+class Counterparty(models.Model):
+    User = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    Name = models.CharField(max_length=50, blank=False)
+    Phone = models.CharField(max_length=50, blank=True)
+    Email = models.CharField(max_length=50, blank=True)
+    Telegram = models.CharField(max_length=50, blank=True)
+    Facebook = models.CharField(max_length=50, blank=True)
+    Memo = models.TextField(blank=True)
+    IsSupplier = models.BooleanField(default=False)
+    IsCustomer = models.BooleanField(default=False)
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.User} / {self.Name}'
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['User', 'Name'], name='unique_Counterparty')
+        ]
+
+
 class Order(models.Model):
     User = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     Date = models.DateField(auto_now=True, blank=False)
+    Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT)
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
