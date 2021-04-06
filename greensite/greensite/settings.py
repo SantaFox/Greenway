@@ -40,11 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'users.apps.UsersConfig',
     'products.apps.ProductsConfig',
 
     # third-party apps
     'imagekit',
-    'martor'
+    'martor',
 ]
 
 MIDDLEWARE = [
@@ -88,6 +89,8 @@ DATABASES = {
     }
 }
 
+
+AUTH_USER_MODEL = 'users.GreenwayUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
