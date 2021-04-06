@@ -36,6 +36,7 @@ class Counterparty(models.Model):
         return f'{self.User} / {self.Name}'
 
     class Meta:
+        verbose_name_plural = "Counterparties"
         constraints = [
             models.UniqueConstraint(fields=['User', 'Name'], name='unique_Counterparty')
         ]
