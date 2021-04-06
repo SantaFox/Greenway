@@ -62,7 +62,7 @@ ROOT_URLCONF = 'greensite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'greensite', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -139,7 +139,7 @@ MARTOR_THEME = 'bootstrap'
 # Input: string boolean, `true/false`
 MARTOR_ENABLE_CONFIGS = {
     'emoji': 'false',       # to enable/disable emoji icons.
-    'imgur': 'false',       # to enable/disable imgur/custom uploader.
+    'imgur': 'true',       # to enable/disable imgur/custom uploader.
     'mention': 'false',     # to enable/disable mention
     'jquery': 'true',       # to include/revoke jquery (require for admin default django)
     'living': 'false',      # to enable/disable live updates in preview
@@ -151,8 +151,8 @@ MARTOR_ENABLE_CONFIGS = {
 MARTOR_TOOLBAR_BUTTONS = [
     'bold', 'italic', 'horizontal', 'heading', 'pre-code',
     'blockquote', 'unordered-list', 'ordered-list',
-    'link', 'image-link', 'image-upload', # 'emoji',
-    'direct-mention', 'toggle-maximize', 'help'
+    'link', 'image-link', 'image-upload', # 'emoji', 'direct-mention',
+    'toggle-maximize', 'help'
 ]
 
 # To setup the martor editor with title label or not (default is False)
@@ -176,7 +176,7 @@ MARTOR_MARKDOWN_EXTENSIONS = [
     # Custom markdown extensions.
     'martor.extensions.urlize',
     'martor.extensions.del_ins',      # ~~strikethrough~~ and ++underscores++
-    'martor.extensions.mention',      # to parse markdown mention
+    # 'martor.extensions.mention',      # to parse markdown mention
     # 'martor.extensions.emoji',        # to parse markdown emoji
     'martor.extensions.mdx_video',    # to parse embed/iframe video
     'martor.extensions.escape_html',  # to handle the XSS vulnerabilities
