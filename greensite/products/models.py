@@ -5,6 +5,7 @@ from imagekit.models import ImageSpecField
 
 from .imagegenerators import AdminThumbnailSpec
 
+
 # System classes below
 class Language(models.Model):
     Code = models.CharField(max_length=3, blank=False)
