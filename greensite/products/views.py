@@ -1,15 +1,15 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
 from django.db.models import Count, Q, FilteredRelation
 
-from .models import Language, Product, ProductInfo, Tab, Price, Image
+from .models import Language, Category, Product, ProductInfo, Tab, Price, Image, Tag
 
 
 def categories_view(request, name=None):
     return render(request, 'products/categories.html', {})
 
 
-def list_all(request):
+def list_all(request, category=None, tag=None):
     # Work with selected language
     if not request.COOKIES.get('lang'):
         cookie_lang = ''
@@ -28,6 +28,12 @@ def list_all(request):
         .values('SKU', 'Category__Name', 'pi__Name').order_by('Category__Name', 'SKU') \
         .annotate(ImagesCount=Count('image', distinct=True)) \
         .annotate(TabsCount=Count('tab', distinct=True))
+
+    if category:
+        ll = ll.filter(Category=category)
+
+    if tag:
+        ll = ll.filter(tag=tag)
 
     return render(request, 'products/list_all.html', {
         'language': language,
@@ -89,6 +95,32 @@ def view_product(request, sku=None):
         response.set_cookie('lang', detail_lang)
 
     return response
+
+
+def product_dispatch(request, blackbox=None):
+    # Now we are trying to realize what is "blackbox" were passed
+    try:
+        category = Category.objects.get(Slug=blackbox)
+        return list_all(request, category=category)
+    except (Category.DoesNotExist, Category.MultipleObjectsReturned):
+        category = None     # Just in case
+
+    try:
+        tag = Tag.objects.get(Slug=blackbox)
+        return list_all(request, tag=tag)
+    except (Tag.DoesNotExist, Tag.MultipleObjectsReturned):
+        tag = None          # Just in case
+
+    try:
+        product = Product.objects.get(SKU=blackbox)
+        # TODO: Decide should it be replaced to passing a product object
+        return view_product(request, sku=blackbox)
+    except (Product.DoesNotExist, Product.MultipleObjectsReturned):
+        product = None  # Just in case
+
+    raise Http404()
+
+    return
 
 
 def change_lang(request):

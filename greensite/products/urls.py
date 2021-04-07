@@ -7,5 +7,5 @@ urlpatterns = [
     # TODO: надо добавить проверку на POST
     path('change_lang/', views.change_lang, name='change_lang'),
     path('', views.list_all, name='list_all'),
-    path('<str:sku>/', views.view_product, name='product'),
+    path('<str:blackbox>/', views.product_dispatch, name='product'),
 ]
