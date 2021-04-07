@@ -79,6 +79,7 @@ class Product(models.Model):
     SKU = models.CharField(max_length=50, blank=False)
     DateAdded = models.DateField(blank=True, null=True)
     DateRemoved = models.DateField(blank=True, null=True)
+    SetProducts = models.ManyToManyField("self", blank=True)
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
