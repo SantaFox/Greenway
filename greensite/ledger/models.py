@@ -57,6 +57,7 @@ class Operation(models.Model):
         (6, _('Received Goods')),
         (7, _('Deposited Money')),
         (8, _('Withdrawn money')),
+        (9, _('Break set to items')),
     ], blank=False, null=True)
     Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT)
 
@@ -80,6 +81,15 @@ class OperationPosition(models.Model):
     Quantity = models.PositiveIntegerField(blank=False)
     Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
+    CustomerOrderStatus = models.IntegerField(choices=[
+        # Stock control table columns: In Stock | Reserved | To be Ordered | Incoming | Final
+        (1, _('In stock / prepared for delivery')),         # Existing item is reserved
+        (2, _('In stock / should be ordered')),             # Item exists and not reserved, but decided to be ordered
+        (3, _('Not in stock / need to be ordered')),        # Missing item shows as TO BE ORDERED
+        (4, _('Not in stock / waiting for incoming')),      # Missing item shows as INCOMING
+        (5, _('Not in stock / no delivery control')),       # Missing item is... ?
+        (6, _('Delivered to customer')),
+    ], blank=False, null=True)
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
