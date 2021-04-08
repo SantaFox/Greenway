@@ -13,42 +13,39 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-5 border">
         {% if image_primary %}
             {% generateimage 'products:product_big_thumbnail' source=image_primary.Image -- width="100%" %}
         {% else %}
         {% endif %}
     </div>
-    <div class="col-md-7">
+    <div class="col-md-7 border">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/products/">Products</a></li>
                 <li class="breadcrumb-item"><a href="/products/{{ product.Category.Slug }}">
                     {{ product.Category.Name }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ product.SKU }}</li>
+                <li class="breadcrumb-item active" aria-current="page">#{{ product.SKU }}</li>
             </ol>
         </nav>
         <h3>{{ product_info.Name|default:"No data for this language" }}</h3>
-        <br/>
-        <p>{{ product_info.Specification|default:"&nbsp;" }}</p>
-        <h3>#{{ product.SKU }}</h3>
-        <h3>{{ price.Price }} {{ price.Currency.Code }}</h3>
+        <p>{{ product_info.Specification|default:"No specification" }}</p>
+        <p>{{ price.Price }} {{ price.Currency.Code }}</p>
 
-        <div class="row justify-content-lg-left">
+<!--        <div class="row border">-->
+            {% for tag in tags %}
+            <span class="badge bg-primary">{{ tag.tagname__Name }}</span>
+            <a href="#" class="badge bg-success text-decoration: none">{{ tag.tagname__Name }}</a>
+            {% endfor %}
+<!--        </div>-->
+
+        <div class="row justify-content-lg-left border">
             {% for image in product.image_set.all %}
             <!-- <li>{{ image.IsPrimary }} | {{ image.Image }} | <img src="{{ image.Image.url }}" height="100px"></li> -->
-            <div class="col-lg-auto">{% generateimage 'products:product_small_thumbnail' source=image.Image %}</div>
+            <div class="col-lg-auto">{% generateimage 'products:product_small_thumbnail' source=image.Image -- class="img-thumbnail" %}</div>
             {% empty %}
             <div class="col">No images available</div>
             {% endfor %}
-        </div>
-
-        <div class="row">
-            <ul>
-                {% for tag in tags %}
-                <li>{{ tag.tagname__Name }}</li>
-                {% endfor %}
-            </ul>
         </div>
     </div>
 </div>
