@@ -1,6 +1,8 @@
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
 from django.db.models import Count, Q, FilteredRelation
+from django.conf import settings
+from django.utils import translation
 
 from .models import Language, Category, Product, ProductInfo, Tab, Price, Image, Tag
 
@@ -11,17 +13,14 @@ def categories_view(request, name=None):
 
 def list_all(request, category=None, tag=None):
     # Work with selected language
-    if not request.COOKIES.get('lang'):
-        cookie_lang = ''
-    else:
-        cookie_lang = request.COOKIES.get('lang')
+    cookie_lang = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, settings.LANGUAGE_CODE)
 
-    if cookie_lang in ('eng', 'gr', 'ru'):
-        view_lang = cookie_lang
+    if cookie_lang in ('en', 'el', 'ru'):
+        detail_lang = cookie_lang
     else:
-        view_lang = 'eng'
+        detail_lang = settings.LANGUAGE_CODE
 
-    language = Language.objects.get(Code=view_lang)
+    language = Language.objects.get(Code=detail_lang)
     languages = Language.objects.all().order_by('Code')
 
     ll = Product.objects.annotate(pi=FilteredRelation('productinfo', condition=Q(productinfo__Language=language.id))) \
@@ -44,17 +43,14 @@ def list_all(request, category=None, tag=None):
 
 def list_products(request, category=None):
     # Work with selected language
-    if not request.COOKIES.get('lang'):
-        cookie_lang = ''
-    else:
-        cookie_lang = request.COOKIES.get('lang')
+    cookie_lang = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, settings.LANGUAGE_CODE)
 
-    if cookie_lang in ('eng', 'gr', 'ru'):
-        view_lang = cookie_lang
+    if cookie_lang in ('en', 'el', 'ru'):
+        detail_lang = cookie_lang
     else:
-        view_lang = 'eng'
+        detail_lang = settings.LANGUAGE_CODE
 
-    language = Language.objects.get(Code=view_lang)
+    language = Language.objects.get(Code=detail_lang)
     languages = Language.objects.all().order_by('Code')
 
     products = Product.objects.filter(Category=category).order_by('SKU')
@@ -76,20 +72,17 @@ def list_products(request, category=None):
 
 def view_product(request, sku=None):
     # Work with selected language
-    if not request.COOKIES.get('lang'):
-        cookie_lang = ''
-    else:
-        cookie_lang = request.COOKIES.get('lang')
+    cookie_lang = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, settings.LANGUAGE_CODE)
 
-    if cookie_lang in ('eng', 'gr', 'ru'):
+    if cookie_lang in ('en', 'el', 'ru'):
         detail_lang = cookie_lang
     else:
-        detail_lang = 'eng'
-
-    product = get_object_or_404(Product, SKU=sku)
+        detail_lang = settings.LANGUAGE_CODE
 
     language = Language.objects.get(Code=detail_lang)
     languages = Language.objects.all().order_by('Code')
+
+    product = get_object_or_404(Product, SKU=sku)
 
     try:
         product_info = ProductInfo.objects.get(Product=product, Language__Code=detail_lang)
@@ -157,13 +150,14 @@ def product_dispatch(request, blackbox=None):
 
 def change_lang(request):
     if request.method == "POST":
-        form_lang = request.POST['language']
+        form_lang = request.POST.get('language', settings.LANGUAGE_CODE)
         print(form_lang)
         response = HttpResponseRedirect(request.META['HTTP_REFERER'])
-        if form_lang in ('eng', 'gr', 'ru'):
-            response.set_cookie('lang', form_lang)
+        if form_lang in ('en', 'el', 'ru'):
+            translation.activate(form_lang)
+            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, form_lang)
         else:
-            response.set_cookie('lang', 'eng')
+            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, settings.LANGUAGE_CODE)
     else:
         response = HttpResponseRedirect(request.META['HTTP_REFERER'])
 
