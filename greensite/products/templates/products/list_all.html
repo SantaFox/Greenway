@@ -1,13 +1,13 @@
 {% extends "greensite/base.html" %}
 
-{% block title %}Full Greenway products list{% endblock %}
+{% block title %} Greenway products list{% endblock %}
 
 {% block content %}
 
 {% regroup products_list by Category__Name as plist %}
 <ul>
 {% for product_category in plist %}
-    <li>{{ product_category.grouper }}
+    <li><a href="/products/{{ product_category.list.0.Category__Slug }}/">{{ product_category.grouper }}</a>
     <ul>
         {% for product in product_category.list %}
           <li><a href="/products/{{ product.SKU }}/">#{{ product.SKU }}</a>&nbsp;
