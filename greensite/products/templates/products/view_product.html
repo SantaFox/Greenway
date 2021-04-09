@@ -33,10 +33,10 @@
         <p>{{ price.Price }} {{ price.Currency.Code }}</p>
 
 <!--        <div class="row border">-->
-            {% for tag in tags %}
-            <span class="badge bg-primary">{{ tag.tagname__Name }}</span>
-            <a href="#" class="badge bg-success text-decoration: none">{{ tag.tagname__Name }}</a>
-            {% endfor %}
+        {% for tag in tags %}
+        <span class="badge bg-primary">{{ tag.tagname__Name }}</span>
+        <a href="#" class="badge bg-success text-decoration: none">{{ tag.tagname__Name }}</a>
+        {% endfor %}
 <!--        </div>-->
 
         <div class="row justify-content-lg-left border">
