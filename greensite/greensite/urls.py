@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    path('', views.IndexView.as_view(), name='index'),
+    path('', views.view_index, name='index'),
     path('products/', include('products.urls')),
     path('martor/', include('martor.urls')),
     path('users/', include('django.contrib.auth.urls')),
