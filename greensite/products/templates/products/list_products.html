@@ -1,21 +1,24 @@
-{% extends "products/base.html" %}
+{% extends "greensite/base.html" %}
+{% load static %}
+{% load imagekit %}
 
 {% block content %}
 
-{% regroup products_list by Group__Name as plist %}
-<ul>
-{% for product_group in plist %}
-    <li>{{ product_group.grouper }}
-    <ul>
-        {% for product in product_group.list %}
-          <li><a href="/products/{{ product.SKU }}">#{{ product.SKU }}</a>&nbsp;
-              {{ product.pi__Name|default:"< Product name not set >" }}&nbsp;
-              Photos:&nbsp;{{ product.ImagesCount }}
-          </li>
-        {% endfor %}
-    </ul>
-    </li>
-{% endfor %}
-</ul>
+<div class="row">
+    {% for product in products_list %}
+    <div class="card" style="width: 18rem;">
+        <img src="/media/{{ product.im__Image }}" class="card-img-top" alt="{{ product.pi__Name }}">
+<!--        { generateimage 'products:product_big_thumbnail' source=product.im__Image }-->
+        <div class="card-body">
+            <h6 class="card-title text-center">{{ product.pi__Name|upper }}</h6>
+            <p class="card-text d-flex justify-content-between" style="background:url({% static 'products/dot.png' %}) repeat-x center;">
+                <span class="bg-white">Артикул:</span>
+                <span class="bg-white">#{{ product.SKU }}</span>
+            </p>
+            <a href="/products/{{ product.SKU }}" class="btn btn-primary">Open</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
 {% endblock %}

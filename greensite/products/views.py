@@ -42,6 +42,34 @@ def list_all(request, category=None, tag=None):
     })
 
 
+def list_products(request, category=None):
+    # Work with selected language
+    if not request.COOKIES.get('lang'):
+        cookie_lang = ''
+    else:
+        cookie_lang = request.COOKIES.get('lang')
+
+    if cookie_lang in ('eng', 'gr', 'ru'):
+        view_lang = cookie_lang
+    else:
+        view_lang = 'eng'
+
+    language = Language.objects.get(Code=view_lang)
+    languages = Language.objects.all().order_by('Code')
+
+    ll = Product.objects \
+        .annotate(pi=FilteredRelation('productinfo', condition=Q(productinfo__Language=language.id))) \
+        .annotate(im=FilteredRelation('image', condition=Q(image__IsPrimary=True))) \
+        .values('SKU', 'Category__Name', 'pi__Name', 'im__Image').order_by('SKU') \
+        .filter(Category=category)
+
+    return render(request, 'products/list_products.html', {
+        'language': language,
+        'languages': languages,
+        'products_list': ll,
+    })
+
+
 def view_product(request, sku=None):
     # Work with selected language
     if not request.COOKIES.get('lang'):
@@ -101,7 +129,7 @@ def product_dispatch(request, blackbox=None):
     # Now we are trying to realize what is "blackbox" were passed
     try:
         category = Category.objects.get(Slug=blackbox)
-        return list_all(request, category=category)
+        return list_products(request, category=category)
     except (Category.DoesNotExist, Category.MultipleObjectsReturned):
         category = None     # Just in case
 
