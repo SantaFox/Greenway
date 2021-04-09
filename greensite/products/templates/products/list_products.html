@@ -1,4 +1,5 @@
 {% extends "greensite/base.html" %}
+{% load i18n %}
 {% load static %}
 {% load imagekit %}
 
@@ -13,7 +14,7 @@
             <h6 class="card-title text-center">{{ p.product_info.Name|upper }}</h6>
             <p class="card-text d-flex justify-content-between"
                style="background:url({% static 'products/dot.png' %}) repeat-x center;">
-                <span class="bg-white">Артикул:</span>
+                <span class="bg-white">{% translate "SKU:" context "category list view" %}</span>
                 <span class="bg-white">#{{ p.product.SKU }}</span>
             </p>
             <a href="/products/{{ p.product.SKU }}/" class="btn btn-primary">Open</a>
