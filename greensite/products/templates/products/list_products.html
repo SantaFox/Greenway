@@ -3,22 +3,22 @@
 {% load imagekit %}
 
 {% block content %}
-
 <div class="row">
-    {% for product in products_list %}
+    {% for p in products_list %}
     <div class="card" style="width: 18rem;">
-        <img src="/media/{{ product.im__Image }}" class="card-img-top" alt="{{ product.pi__Name }}">
-<!--        { generateimage 'products:product_big_thumbnail' source=product.im__Image }-->
+        {% if p.image %}
+        {% generateimage 'products:product_medium_thumbnail' source=p.image.Image -- class="card-img-top" %}
+        {% endif %}
         <div class="card-body">
-            <h6 class="card-title text-center">{{ product.pi__Name|upper }}</h6>
-            <p class="card-text d-flex justify-content-between" style="background:url({% static 'products/dot.png' %}) repeat-x center;">
+            <h6 class="card-title text-center">{{ p.product_info.Name|upper }}</h6>
+            <p class="card-text d-flex justify-content-between"
+               style="background:url({% static 'products/dot.png' %}) repeat-x center;">
                 <span class="bg-white">Артикул:</span>
-                <span class="bg-white">#{{ product.SKU }}</span>
+                <span class="bg-white">#{{ p.product.SKU }}</span>
             </p>
-            <a href="/products/{{ product.SKU }}" class="btn btn-primary">Open</a>
+            <a href="/products/{{ p.product.SKU }}/" class="btn btn-primary">Open</a>
         </div>
     </div>
     {% endfor %}
 </div>
-
 {% endblock %}

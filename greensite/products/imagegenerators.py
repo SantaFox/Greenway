@@ -8,6 +8,12 @@ class ProductSmallThumbnailSpec(ImageSpec):
     options = {'quality': 60}
 
 
+class ProductMediumThumbnailSpec(ImageSpec):
+    processors = [ResizeToFill(300, 200)]
+    format = 'JPEG'
+    options = {'quality': 60}
+
+
 class ProductBigThumbnailSpec(ImageSpec):
     processors = [ResizeToFill(450, 300)]
     format = 'JPEG'
@@ -21,4 +27,5 @@ class AdminThumbnailSpec(ImageSpec):
 
 
 register.generator('products:product_big_thumbnail', ProductBigThumbnailSpec)
+register.generator('products:product_medium_thumbnail', ProductMediumThumbnailSpec)
 register.generator('products:product_small_thumbnail', ProductSmallThumbnailSpec)

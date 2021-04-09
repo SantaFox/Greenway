@@ -57,16 +57,20 @@ def list_products(request, category=None):
     language = Language.objects.get(Code=view_lang)
     languages = Language.objects.all().order_by('Code')
 
-    ll = Product.objects \
-        .annotate(pi=FilteredRelation('productinfo', condition=Q(productinfo__Language=language.id))) \
-        .annotate(im=FilteredRelation('image', condition=Q(image__IsPrimary=True))) \
-        .values('SKU', 'Category__Name', 'pi__Name', 'im__Image').order_by('SKU') \
-        .filter(Category=category)
+    products = Product.objects.filter(Category=category).order_by('SKU')
+    dict_product_infos = {pi.Product: pi for pi in
+                          ProductInfo.objects.filter(Product__Category=category, Language=language.id)}
+    dict_images = {im.Product: im for im in Image.objects.filter(Product__Category=category, IsPrimary=True)}
+
+    final_set = []  # list?
+    for product in products:
+        final_set.append(
+            dict(product=product, product_info=dict_product_infos.get(product), image=dict_images.get(product)))
 
     return render(request, 'products/list_products.html', {
         'language': language,
         'languages': languages,
-        'products_list': ll,
+        'products_list': final_set,
     })
 
 
@@ -131,13 +135,13 @@ def product_dispatch(request, blackbox=None):
         category = Category.objects.get(Slug=blackbox)
         return list_products(request, category=category)
     except (Category.DoesNotExist, Category.MultipleObjectsReturned):
-        category = None     # Just in case
+        category = None  # Just in case
 
     try:
         tag = Tag.objects.get(Slug=blackbox)
         return list_all(request, tag=tag)
     except (Tag.DoesNotExist, Tag.MultipleObjectsReturned):
-        tag = None          # Just in case
+        tag = None  # Just in case
 
     try:
         product = Product.objects.get(SKU=blackbox)
