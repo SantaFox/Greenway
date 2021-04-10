@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-10 16:35+0300\n"
+"POT-Creation-Date: 2021-04-10 16:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,66 +16,63 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
-"%100>=11 && n%100<=14)? 2 : 3);\n"
-
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 #: .\ledger\models.py:52
 msgid "Customer Order"
-msgstr "Заказ покупателя"
+msgstr ""
 
 #: .\ledger\models.py:53
 msgid "Supply Order"
-msgstr "Заказ поставщику"
+msgstr ""
 
 #: .\ledger\models.py:54
 msgid "Received Payment"
-msgstr "Полученный платеж"
+msgstr ""
 
 #: .\ledger\models.py:55
 msgid "Sent Payment"
-msgstr "Отправленный платеж"
+msgstr ""
 
 #: .\ledger\models.py:56
 msgid "Delivered Goods"
-msgstr "Доставленные товары"
+msgstr ""
 
 #: .\ledger\models.py:57
 msgid "Received Goods"
-msgstr "Полученные товары"
+msgstr ""
 
 #: .\ledger\models.py:58
 msgid "Deposited Money"
-msgstr "Вложить деньги"
+msgstr ""
 
 #: .\ledger\models.py:59
 msgid "Withdrawn money"
-msgstr "Вывести деньги"
+msgstr ""
 
 #: .\ledger\models.py:60
 msgid "Break set to items"
-msgstr "Разбить набор на товары"
+msgstr ""
 
 #: .\ledger\models.py:86
 msgid "In stock / prepared for delivery"
-msgstr "В наличии / приготовлен к отправке"
+msgstr ""
 
 #: .\ledger\models.py:87
 msgid "In stock / should be ordered"
-msgstr "В наличии / требуется заказать"
+msgstr ""
 
 #: .\ledger\models.py:88
 msgid "Not in stock / need to be ordered"
-msgstr "Нет в наличии / требуется заказать"
+msgstr ""
 
 #: .\ledger\models.py:89
 msgid "Not in stock / waiting for incoming"
-msgstr "Нет в наличии / ожидаем поставки"
+msgstr ""
 
 #: .\ledger\models.py:90
 msgid "Not in stock / no delivery control"
-msgstr "Нет в наличии / не контролировать"
+msgstr ""
 
 #: .\ledger\models.py:91
 msgid "Delivered to customer"
-msgstr "Доставлен заказчику"
+msgstr ""
