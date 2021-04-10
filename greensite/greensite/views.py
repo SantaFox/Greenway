@@ -1,19 +1,18 @@
 from django.shortcuts import render
+from django.conf import settings
 
 from products.views import Language
 
 
 def view_index(request):
     # Work with selected language
-    if not request.COOKIES.get('lang'):
-        cookie_lang = ''
-    else:
-        cookie_lang = request.COOKIES.get('lang')
+    # Work with selected language
+    cookie_lang = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, settings.LANGUAGE_CODE)
 
-    if cookie_lang in ('eng', 'gr', 'ru'):
+    if cookie_lang in ('en', 'el', 'ru'):
         detail_lang = cookie_lang
     else:
-        detail_lang = 'eng'
+        detail_lang = settings.LANGUAGE_CODE
 
     language = Language.objects.get(Code=detail_lang)
     languages = Language.objects.all().order_by('Code')
@@ -22,8 +21,5 @@ def view_index(request):
         'language': language,
         'languages': languages,
     })
-
-    if not request.COOKIES.get('lang'):
-        response.set_cookie('lang', detail_lang)
 
     return response

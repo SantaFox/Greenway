@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -62,9 +64,9 @@
 <div class="container bg-light">
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
-            <li><a href="#" class="nav-link px-2 link-dark">News</a></li>
-            <li><a href="/products/" class="nav-link px-2 link-dark">Products</a></li>
+            <li><a href="/" class="nav-link px-2 link-secondary">{% translate "Home" context "main menu" %}</a></li>
+            <li><a href="#" class="nav-link px-2 link-dark">{% translate "News" context "main menu" %}</a></li>
+            <li><a href="/products/" class="nav-link px-2 link-dark">{% translate "Products" context "main menu" %}</a></li>
         </ul>
         {% if language %}
         <div class="dropdown col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
@@ -98,7 +100,7 @@
             {% if user.is_authenticated %}
                 <span>{{ user.first_name }}</span>
             {% else %}
-                <a href="/users/login" class="btn btn-outline-primary me-2">Login</a>
+                <a href="/users/login" class="btn btn-outline-primary me-2">{% translate "Login" context "main menu" %}</a>
             {% endif %}
         </div>
 
