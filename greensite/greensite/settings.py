@@ -117,7 +117,9 @@ LANGUAGES = [
     ('el', _('Greek')),
     ('ru', _('Russian')),
 ]
-
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'greensite', 'locale'),
+)
 
 TIME_ZONE = 'Asia/Nicosia'
 USE_TZ = True
