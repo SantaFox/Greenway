@@ -41,7 +41,6 @@
 
         <div class="row justify-content-lg-left border">
             {% for image in product.image_set.all %}
-            <!-- <li>{{ image.IsPrimary }} | {{ image.Image }} | <img src="{{ image.Image.url }}" height="100px"></li> -->
             <div class="col-lg-auto">{% generateimage 'products:product_small_thumbnail' source=image.Image -- class="img-thumbnail" %}</div>
             {% empty %}
             <div class="col">No images available</div>
@@ -77,8 +76,7 @@
         </div>
         {% else %}
         <div class="tab-pane fade" id="nav-tab{{ tab.Order }}" role="tabpanel"
-             aria-labelledby="nav-tab{{ tab.Order }}-tab">
-            {{ tab.Text|safe_markdown }}
+             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.Text|safe_markdown }}
         </div>
         {% endif %}
         {% empty %}
