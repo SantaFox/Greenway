@@ -50,7 +50,7 @@ class Operation(models.Model):
     DateOperation = models.DateField(blank=False)
     Type = models.IntegerField(choices=[
         (1, _('Customer Order')),
-        (2, _('Supply Order')),
+        (2, _('Supplier Order')),
         (3, _('Received Payment')),
         (4, _('Sent Payment')),
         (5, _('Delivered Goods')),
@@ -59,7 +59,7 @@ class Operation(models.Model):
         (8, _('Withdrawn money')),
         (9, _('Break set to items')),
     ], blank=False, null=True)
-    Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT)
+    Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True)
 
     # Delivery-related block
     DatePlaced = models.DateField(blank=True, null=True)            # Date placed with supplier /
@@ -80,6 +80,8 @@ class OperationPosition(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
     Quantity = models.PositiveIntegerField(blank=False)
     Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
+    Discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    DiscountReason = models.CharField(max_length=50, blank=True)
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
     CustomerOrderStatus = models.IntegerField(choices=[
         # Stock control table columns: In Stock | Reserved | To be Ordered | Incoming | Final
@@ -89,14 +91,15 @@ class OperationPosition(models.Model):
         (4, _('Not in stock / waiting for incoming')),      # Missing item shows as INCOMING
         (5, _('Not in stock / no delivery control')),       # Missing item is... ?
         (6, _('Delivered to customer')),
-    ], blank=False, null=True)
+    ], blank=True, null=True)
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.Operation} / {self.Product} / {self.Quantity} / {self.Price} / {self.Currency}'
 
-    # class Meta:
+    class Meta:
+        verbose_name_plural = "Operation Positions"
     #     constraints = [
     #         models.UniqueConstraint(fields=['Code'], name='unique_Order')
     #     ]
@@ -109,3 +112,6 @@ class OperationAtom(models.Model):
 
     def __str__(self):
         return str(self.pk)
+
+    class Meta:
+        verbose_name_plural = "Operation Atoms"
