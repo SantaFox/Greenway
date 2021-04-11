@@ -3,4 +3,4 @@ from django.db import models
 
 
 class GreenwayUser(AbstractUser):
-    pass
+    ManagingPartner = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True)
