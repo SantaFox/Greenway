@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Account, Counterparty, Operation, OperationPosition
+from .models import Account, Counterparty, Operation, OperationPosition, OperationAtom
 
 
 class CounterpartyAdmin(admin.ModelAdmin):
@@ -9,6 +9,19 @@ class CounterpartyAdmin(admin.ModelAdmin):
     list_editable = ['Name', 'Phone', 'IsSupplier', 'IsCustomer']
     ordering = ['User', 'Name']
     search_fields = ['Name']
+
+
+class OperationPositionInline(admin.TabularInline):
+    model = OperationPosition
+
+
+class OperationAdmin(admin.ModelAdmin):
+    list_display = ('User', 'DateOperation', 'Type', 'Counterparty')
+    list_filter = ['User', 'Type', 'Counterparty']
+    ordering = ['User', 'DateOperation', 'Type', 'Counterparty__Name']
+    inlines = [
+        OperationPositionInline,
+    ]
 
 
 class OperationPositionAdmin(admin.ModelAdmin):
@@ -20,5 +33,6 @@ class OperationPositionAdmin(admin.ModelAdmin):
 
 admin.site.register(Account)
 admin.site.register(Counterparty, CounterpartyAdmin)
-admin.site.register(Operation)
+admin.site.register(Operation, OperationAdmin)
 admin.site.register(OperationPosition, OperationPositionAdmin)
+admin.site.register(OperationAtom)
