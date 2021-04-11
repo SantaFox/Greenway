@@ -5,6 +5,11 @@
 
 {% block content %}
 <div class="row">
+    <div class="col">
+        <h2>{{ category.Name }}</h2>
+    </div>
+</div>
+<div class="row">
     {% for p in products_list %}
     <div class="card" style="width: 18rem;">
         {% if p.image %}

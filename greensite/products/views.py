@@ -66,6 +66,7 @@ def list_products(request, category=None):
     return render(request, 'products/list_products.html', {
         'language': language,
         'languages': languages,
+        'category': category,
         'products_list': final_set,
     })
 
