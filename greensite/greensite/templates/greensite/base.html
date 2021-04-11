@@ -61,9 +61,12 @@
 <div class="container bg-light">
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="/" class="nav-link px-2 fw-bold link-secondary">{% translate "Home" context "main menu" %}</a></li>
-            <li><a href="#" class="nav-link px-2 fw-bold link-dark">{% translate "News" context "main menu" %}</a></li>
-            <li><a href="/products/" class="nav-link px-2 fw-bold link-dark">{% translate "Products" context "main menu" %}</a></li>
+            <li><a href="/" class="nav-link px-2 fw-bold link-secondary">{% translate "Home" context "Main Menu" %}</a></li>
+            <li><a href="#" class="nav-link px-2 fw-bold link-dark">{% translate "News" context "Main Menu" %}</a></li>
+            <li><a href="/products/" class="nav-link px-2 fw-bold link-dark">{% translate "Products" context "Main Menu" %}</a></li>
+            {% if user.is_staff %}
+            <li><a href="/admin/" class="nav-link px-2 fw-bold link-dark">{% translate "Admin" context "Main Menu" %}</a></li>
+            {% endif %}
         </ul>
         {% if language %}
         <div class="dropdown col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
