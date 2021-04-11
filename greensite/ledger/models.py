@@ -107,6 +107,29 @@ class OperationPosition(models.Model):
 
 class OperationAtom(models.Model):
     Operation = models.ForeignKey(Operation, on_delete=models.PROTECT)
+    DateAtom = models.DateField(blank=False)        # Date when the real atom operation passed
+    Type = models.CharField(choices=[
+        ('D', _('Debit')),
+        ('C', _('Credit')),
+    ], max_length=1, blank=False)
+
+    # Cash-specific field
+    Account = models.ForeignKey(Account, on_delete=models.PROTECT, blank=True, null=True)
+
+    # Product-specific fields
+    Product = models.ForeignKey(Product, on_delete=models.PROTECT, blank=True, null=True)
+    State = models.IntegerField(choices=[
+        # Stock control table columns: In Stock | Reserved | To be Ordered | Incoming | Final
+        (1, _('Actual')),
+        (2, _('Reserved')),
+        (3, _('Ordered')),
+    ], blank=True, null=True)
+    Quantity = models.PositiveIntegerField(blank=True, null=True)
+
+    # Common fields
+    Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True)
+
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
