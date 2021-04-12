@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     # third-party apps
     'imagekit',
     'martor',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
