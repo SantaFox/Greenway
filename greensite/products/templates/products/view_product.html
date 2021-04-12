@@ -15,7 +15,7 @@
 <div class="row">
     <div class="col-md-5 border">
         {% if image_primary %}
-            {% generateimage 'products:product_big_thumbnail' source=image_primary.Image -- width="100%" %}
+        {% generateimage 'products:product_big_thumbnail' source=image_primary.Image -- width="100%" %}
         {% else %}
         {% endif %}
     </div>
@@ -32,16 +32,18 @@
         <p>{{ product_info.Specification|default:"No specification" }}</p>
         <p>{{ price.Price }} {{ price.Currency.Code }}</p>
 
-<!--        <div class="row border">-->
+        <!--        <div class="row border">-->
         {% for tag in tags %}
         <span class="badge bg-primary">{{ tag.tagname__Name }}</span>
         <a href="#" class="badge bg-success text-decoration: none">{{ tag.tagname__Name }}</a>
         {% endfor %}
-<!--        </div>-->
+        <!--        </div>-->
 
         <div class="row justify-content-lg-left border">
             {% for image in product.image_set.all %}
-            <div class="col-lg-auto">{% generateimage 'products:product_small_thumbnail' source=image.Image -- class="img-thumbnail" %}</div>
+            <div class="col-lg-auto">
+                {% generateimage 'products:product_small_thumbnail' source=image.Image -- class="img-thumbnail" %}
+            </div>
             {% empty %}
             <div class="col">No images available</div>
             {% endfor %}
@@ -52,17 +54,17 @@
 <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
         {% for tab in tabs %}
-            {% if forloop.first %}
-            <button class="nav-link active" id="nav-tab{{ tab.Order }}-tab"
-                    data-bs-toggle="tab" data-bs-target="#nav-tab{{ tab.Order }}" type="button" role="tab"
-                    aria-controls="nav-tab{{ tab.Order }}" aria-selected="true">{{ tab.Name }}
-            </button>
-            {% else %}
-            <button class="nav-link" id="nav-tab{{ tab.Order }}-tab"
-                    data-bs-toggle="tab" data-bs-target="#nav-tab{{ tab.Order }}" type="button" role="tab"
-                    aria-controls="nav-tab{{ tab.Order }}" aria-selected="false">{{ tab.Name }}
-            </button>
-            {% endif %}
+        {% if forloop.first %}
+        <button class="nav-item nav-link active" id="nav-tab{{ tab.Order }}-tab"
+                data-toggle="tab" data-target="#nav-tab{{ tab.Order }}" type="button" role="tab"
+                aria-controls="nav-tab{{ tab.Order }}" aria-selected="true">{{ tab.Name }}
+        </button>
+        {% else %}
+        <button class="nav-item nav-link" id="nav-tab{{ tab.Order }}-tab"
+                data-toggle="tab" data-target="#nav-tab{{ tab.Order }}" type="button" role="tab"
+                aria-controls="nav-tab{{ tab.Order }}" aria-selected="false">{{ tab.Name }}
+        </button>
+        {% endif %}
         {% empty %}
         {% endfor %}
     </div>
@@ -92,5 +94,6 @@
     $('.martor-preview pre').each(function(i, block){
         hljs.highlightBlock(block);
     });
+
 </script>
 {% endblock %}

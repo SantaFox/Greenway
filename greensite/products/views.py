@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils import translation
 
 from .models import Language, Category, Product, ProductInfo, Tab, Price, Image, Tag
-from .forms import ProductForm
+from .forms import ProductForm, ProductInfoForm, TabForm, TabsFormset
 
 
 def categories_view(request, name=None):
@@ -172,7 +172,25 @@ def change_lang(request):
 @permission_required('products.change_product', raise_exception=True)
 def edit_product(request, blackbox=None):
     """View function for renewing a specific Product"""
+    # Work with selected language
+    cookie_lang = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, settings.LANGUAGE_CODE)
+
+    if cookie_lang in ('en', 'el', 'ru'):
+        detail_lang = cookie_lang
+    else:
+        detail_lang = settings.LANGUAGE_CODE
+
+    language = Language.objects.get(Code=detail_lang)
+    languages = Language.objects.all().order_by('Code')
+
     product_instance = get_object_or_404(Product, SKU=blackbox)
+
+    try:
+        product_info_instance = ProductInfo.objects.get(Product=product_instance, Language=language)
+    except (ProductInfo.DoesNotExist, ProductInfo.MultipleObjectsReturned):
+        product_info_instance = None
+
+    tabs_set = Tab.objects.filter(Product=product_instance, Language=language).order_by('Order')
 
     # If this is a POST request then process the Form data
     if request.method == 'POST':
@@ -187,15 +205,23 @@ def edit_product(request, blackbox=None):
             product_instance.save()
 
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('product') )
+            return HttpResponseRedirect(reverse('product'))
 
     # If this is a GET (or any other method) create the default form.
     else:
         #proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
-        form = ProductForm(initial={})          # 'renewal_date': proposed_renewal_date
+        form_product = ProductForm(instance=product_instance)          # 'renewal_date': proposed_renewal_date
+        form_product_info = ProductInfoForm(instance=product_info_instance)
+        form_tabs = TabsFormset(instance=product_instance, queryset=tabs_set)
+        form_tab = TabForm(instance=tabs_set[0])
 
     context = {
-        'form': form,
+        'language': language,
+        'languages': languages,
+        'form_product': form_product,
+        'form_product_info': form_product_info,
+        'form_tabs': form_tabs,
+        'form_tab': form_tab,
         'product_instance': product_instance,
     }
 
