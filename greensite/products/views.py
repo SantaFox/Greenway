@@ -1,10 +1,13 @@
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
 from django.db.models import Count, Q, FilteredRelation
 from django.conf import settings
+from django.urls import reverse
 from django.utils import translation
 
 from .models import Language, Category, Product, ProductInfo, Tab, Price, Image, Tag
+from .forms import ProductForm
 
 
 def categories_view(request, name=None):
@@ -163,3 +166,37 @@ def change_lang(request):
         response = HttpResponseRedirect(request.META['HTTP_REFERER'])
 
     return response
+
+
+@login_required
+@permission_required('products.change_product', raise_exception=True)
+def edit_product(request, blackbox=None):
+    """View function for renewing a specific Product"""
+    product_instance = get_object_or_404(Product, SKU=blackbox)
+
+    # If this is a POST request then process the Form data
+    if request.method == 'POST':
+
+        # Create a form instance and populate it with data from the request (binding):
+        form = ProductForm(request.POST)
+
+        # Check if the form is valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
+            # book_instance.due_back = form.cleaned_data['renewal_date']
+            product_instance.save()
+
+            # redirect to a new URL:
+            return HttpResponseRedirect(reverse('product') )
+
+    # If this is a GET (or any other method) create the default form.
+    else:
+        #proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
+        form = ProductForm(initial={})          # 'renewal_date': proposed_renewal_date
+
+    context = {
+        'form': form,
+        'product_instance': product_instance,
+    }
+
+    return render(request, 'products/edit_product.html', context)
