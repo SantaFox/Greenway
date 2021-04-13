@@ -1,5 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import truncatechars  # or truncatewords
+from django.utils.translation import gettext_lazy as _
+
 from martor.models import MartorField
 from imagekit.models import ImageSpecField
 
@@ -98,8 +100,8 @@ class Product(models.Model):
 class ProductInfo(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
     Language = models.ForeignKey(Language, on_delete=models.PROTECT)
-    Name = models.CharField(max_length=255, blank=False)
-    Specification = models.CharField(max_length=255, blank=True)
+    Name = models.CharField(max_length=255, blank=False, verbose_name=_('Product Name'), help_text=_('Full product name with Series before name. No Category should be included.'))
+    Specification = models.CharField(max_length=255, blank=True, verbose_name=_('Specification'), help_text=_('Specification for product: size, weight etc.'))
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 

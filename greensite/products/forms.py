@@ -1,5 +1,6 @@
-from django.db import models
 from django.forms import ModelForm, inlineformset_factory
+from django.utils.translation import gettext_lazy as _
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Field, Layout
 
@@ -17,6 +18,8 @@ class ProductForm(ModelForm):
                 Field('DateRemoved', wrapper_class='col-md-4'),
                 css_class='form-row')
         )
+        self.helper.form_tag = False        # We will use a common form
+        self.helper.disable_csrf = True
 
     class Meta:
         model = Product
@@ -24,12 +27,40 @@ class ProductForm(ModelForm):
 
 
 class ProductInfoForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Div(
+                Field('Name', wrapper_class='col-md-8'),
+                Field('Specification', wrapper_class='col-md-4'),
+                css_class='form-row')
+        )
+        self.helper.form_tag = False        # We will use a common form
+        self.helper.disable_csrf = True
+
     class Meta:
         model = ProductInfo
         fields = ['Name', 'Specification']
 
 
 class TabForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        # self.helper.layout = Layout(
+        #     Div(
+        #         Field('Order', wrapper_class='col-md-4'),
+        #         Field('Name', wrapper_class='col-md-4'),
+        #         Field('TextQuality', wrapper_class='col-md-4'),
+        #         css_class='form-row'),
+        #     Div(
+        #         Field('Text'),
+        #     )
+        # )
+        self.helper.form_tag = False        # We will use a common form
+        self.helper.disable_csrf = True
+
     class Meta:
         model = Tab
         fields = ['Order', 'Name', 'Text', 'TextQuality']
