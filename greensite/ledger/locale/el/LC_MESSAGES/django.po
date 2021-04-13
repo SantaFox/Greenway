@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-10 16:36+0300\n"
+"POT-Creation-Date: 2021-04-13 10:43+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: .\ledger\models.py:52
 msgid "Customer Order"
 msgstr ""
 
 #: .\ledger\models.py:53
-msgid "Supply Order"
+msgid "Supplier Order"
 msgstr ""
 
 #: .\ledger\models.py:54
@@ -53,26 +54,46 @@ msgstr ""
 msgid "Break set to items"
 msgstr ""
 
-#: .\ledger\models.py:86
+#: .\ledger\models.py:88
 msgid "In stock / prepared for delivery"
 msgstr ""
 
-#: .\ledger\models.py:87
+#: .\ledger\models.py:89
 msgid "In stock / should be ordered"
 msgstr ""
 
-#: .\ledger\models.py:88
+#: .\ledger\models.py:90
 msgid "Not in stock / need to be ordered"
 msgstr ""
 
-#: .\ledger\models.py:89
+#: .\ledger\models.py:91
 msgid "Not in stock / waiting for incoming"
 msgstr ""
 
-#: .\ledger\models.py:90
+#: .\ledger\models.py:92
 msgid "Not in stock / no delivery control"
 msgstr ""
 
-#: .\ledger\models.py:91
+#: .\ledger\models.py:93
 msgid "Delivered to customer"
+msgstr ""
+
+#: .\ledger\models.py:112
+msgid "Debit"
+msgstr ""
+
+#: .\ledger\models.py:113
+msgid "Credit"
+msgstr ""
+
+#: .\ledger\models.py:123
+msgid "Actual"
+msgstr ""
+
+#: .\ledger\models.py:124
+msgid "Reserved"
+msgstr ""
+
+#: .\ledger\models.py:125
+msgid "Ordered"
 msgstr ""

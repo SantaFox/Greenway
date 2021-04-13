@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-10 16:35+0300\n"
+"POT-Creation-Date: 2021-04-13 10:43+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,34 +20,49 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: .\greensite\settings.py:116
+#: .\greensite\settings.py:117
 msgid "English"
 msgstr "Английский"
 
-#: .\greensite\settings.py:117
+#: .\greensite\settings.py:118
 msgid "Greek"
 msgstr "Греческий"
 
-#: .\greensite\settings.py:118
+#: .\greensite\settings.py:119
 msgid "Russian"
 msgstr "Русский"
 
-#: .\greensite\templates\greensite\base.html:67
-msgctxt "main menu"
+#: .\greensite\templates\greensite\base.html:108
+msgctxt "Main Menu"
 msgid "Home"
 msgstr "Главная"
 
-#: .\greensite\templates\greensite\base.html:68
-msgctxt "main menu"
+#: .\greensite\templates\greensite\base.html:111
+msgctxt "Main Menu"
 msgid "News"
 msgstr "Новости"
 
-#: .\greensite\templates\greensite\base.html:69
-msgctxt "main menu"
+#: .\greensite\templates\greensite\base.html:115
+msgctxt "Main Menu"
 msgid "Products"
 msgstr "Продукты"
 
-#: .\greensite\templates\greensite\base.html:103
-msgctxt "main menu"
+#: .\greensite\templates\greensite\base.html:154
+msgctxt "Main Menu"
+msgid "Profile"
+msgstr "Профиль"
+
+#: .\greensite\templates\greensite\base.html:156
+msgctxt "Main Menu"
+msgid "Admin"
+msgstr "Админ"
+
+#: .\greensite\templates\greensite\base.html:160
+msgctxt "Main Menu"
+msgid "Log Out"
+msgstr "Выход"
+
+#: .\greensite\templates\greensite\base.html:167
+msgctxt "Main menu"
 msgid "Login"
 msgstr "Вход"
