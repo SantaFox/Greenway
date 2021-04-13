@@ -114,11 +114,6 @@
                     <a href="/products/"
                        class="nav-link px-2"><span>{% translate "Products" context "Main Menu" %}</span></a>
                 </li>
-                {% if user.is_staff %}
-                <li class="nav-item">
-                    <a href="/admin/" class="nav-link px-2"><span>{% translate "Admin" context "Main Menu" %}</span></a>
-                </li>
-                {% endif %}
             </ul>
 
             <ul class="navbar-nav">
@@ -156,7 +151,10 @@
                         <span>{{ user.first_name }}</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarLanguage">
-                        <a class="dropdown-item" href="#">Profile</a>
+                        <a class="dropdown-item" href="#">{% translate "Profile" context "Main Menu" %}</a>
+                        {% if user.is_staff %}
+                        <a class="dropdown-item" href="/admin/"><span>{% translate "Admin" context "Main Menu" %}</span></a>
+                        {% endif %}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'logout' %}">
                             {% translate "Log Out" context "Main Menu" %}
@@ -166,7 +164,7 @@
                 {% else %}
                 <li class="nav-item">
                     <a href="{% url 'login' %}" class="btn btn-outline-primary">
-                        {% translate "Login" context "main menu" %}
+                        {% translate "Login" context "Main menu" %}
                     </a>
                 </li>
                 {% endif %}
