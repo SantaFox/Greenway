@@ -209,7 +209,6 @@ def edit_product(request, blackbox=None):
 
     # If this is a GET (or any other method) create the default form.
     else:
-        #proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
         form_product = ProductForm(instance=product_instance)          # 'renewal_date': proposed_renewal_date
         form_product_info = ProductInfoForm(instance=product_info_instance)
         form_tabs = TabsFormset(instance=product_instance, queryset=tabs_set)
