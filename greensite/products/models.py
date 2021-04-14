@@ -3,6 +3,8 @@ from django.template.defaultfilters import truncatechars  # or truncatewords
 from django.utils.translation import gettext_lazy as _
 
 from imagekit.models import ImageSpecField
+from markdownx.models import MarkdownxField
+from markdownx.utils import markdownify
 
 from .imagegenerators import AdminThumbnailSpec
 
@@ -124,7 +126,7 @@ class Tab(models.Model):
     Language = models.ForeignKey(Language, on_delete=models.PROTECT)
     Order = models.IntegerField(blank=False)
     Name = models.CharField(max_length=255, blank=False)
-    Text = models.TextField(blank=True)
+    Text = MarkdownxField(blank=True)
     TextQuality = models.IntegerField(choices=[
         (0, 'Not tested'),
         (1, 'Low quality'),
@@ -140,6 +142,10 @@ class Tab(models.Model):
     @property
     def short_text(self):
         return truncatechars(self.Text, 100)
+
+    @property
+    def formatted_markdown(self):
+        return markdownify(self.Text)
 
     class Meta:
         constraints = [

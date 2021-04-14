@@ -38,8 +38,7 @@ INSTALLED_APPS = [
     # third-party apps
     'imagekit',
     'crispy_forms',
-    'pagedown',
-    'markdownify',
+    'markdownx',
 ]
 
 MIDDLEWARE = [

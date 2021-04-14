@@ -4,8 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Field, Layout
 
-from pagedown.widgets import PagedownWidget
-
 from .models import Product, ProductInfo, Tab
 
 
@@ -62,14 +60,11 @@ class TabForm(ModelForm):
         )
         self.helper.form_tag = False        # We will use a common form
         self.helper.disable_csrf = True
-        self.helper.include_media = False
+        # self.helper.include_media = False
 
     class Meta:
         model = Tab
         fields = ['Order', 'Name', 'Text', 'TextQuality']
-        widgets = {
-            'Text': PagedownWidget,
-        }
 
 
 TabsFormset = inlineformset_factory(Product, Tab, TabForm, extra=1)

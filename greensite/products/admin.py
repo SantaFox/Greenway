@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.db import models
 
-from pagedown.widgets import AdminPagedownWidget
 from imagekit.admin import AdminThumbnail
+from markdownx.admin import MarkdownxModelAdmin
 
 from .models import Currency, Language, Category, CategoryInfo, Product, ProductInfo, Tab, Price, Image, Tag, TagInfo
 
@@ -41,14 +41,14 @@ class ProductInfoAdmin(admin.ModelAdmin):
     search_fields = ['Name', 'Specification']
 
 
-class TabAdmin(admin.ModelAdmin):
+class TabAdmin(MarkdownxModelAdmin):
     # fieldsets = [
     #     (None,               {'fields': ['question_text']}),
     #     ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
     # ]
-    formfield_overrides = {
-        models.TextField: {'widget': AdminPagedownWidget},
-    }
+    # formfield_overrides = {
+    #     models.TextField: {'widget': AdminPagedownWidget},
+    # }
     # inlines = [ChoiceInline]
     list_display = ('Product', 'Language', 'Order', 'Name', 'short_text', 'TextQuality')
     list_filter = ['Language', 'Product']

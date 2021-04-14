@@ -1,17 +1,12 @@
 {% extends "greensite/base.html" %}
 {% load static %}
 {% load imagekit %}
-{% load markdownify %}
 
 {% block title %}{{ product.SKU }}{% endblock %}
 
-{% block css %}
-<link href="{% static 'plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet"/>
-<link href="{% static 'martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet"/>
-{% endblock %}
+{% block css %}{% endblock %}
 
 {% block content %}
-
 <div class="row">
     <div class="col-md-5 border">
         {% if image_primary %}
@@ -74,11 +69,11 @@
         {% for tab in tabs %}
         {% if forloop.first %}
         <div class="tab-pane fade show active" id="nav-tab{{ tab.Order }}" role="tabpanel"
-             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.Text|markdownify }}
+             aria-labelledby="nav-tab{{ tab.Order }}-tab"><p>{{ tab.formatted_markdown|safe }}</p>
         </div>
         {% else %}
         <div class="tab-pane fade" id="nav-tab{{ tab.Order }}" role="tabpanel"
-             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.Text|markdownify }}
+             aria-labelledby="nav-tab{{ tab.Order }}-tab"><p>{{ tab.formatted_markdown|safe }}</p>
         </div>
         {% endif %}
         {% empty %}
