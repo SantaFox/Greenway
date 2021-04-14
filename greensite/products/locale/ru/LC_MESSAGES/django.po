@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-13 22:15+0300\n"
+"POT-Creation-Date: 2021-04-14 23:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,36 +20,46 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
+#: .\products\models.py:81
+msgid "Category"
+msgstr "Категория"
+
 #: .\products\models.py:82
+msgid "Category to which this product belongs"
+msgstr "Категория, к которой относится продукт"
+
+#: .\products\models.py:84
 msgid "Date Added"
 msgstr "Дата появления"
 
-#: .\products\models.py:83
+#: .\products\models.py:85
 msgid "Date when this product became available to public"
 msgstr "Дата, когда продукт стал впервые доступен для заказа"
 
-#: .\products\models.py:84
+#: .\products\models.py:86
 msgid "Date Removed"
 msgstr "Дата окончания"
 
-#: .\products\models.py:85
+#: .\products\models.py:87
 msgid "Date when this product became unavailable to order"
 msgstr "Дата, когда продукт стал недоступен для заказа"
 
-#: .\products\models.py:105
+#: .\products\models.py:107
 msgid "Product Name"
 msgstr "Наименование продукта"
 
-#: .\products\models.py:106
+#: .\products\models.py:108
 msgid ""
 "Full product name with Series before name. No Category should be included."
-msgstr "Полное наименование продукта, с серией перед наименованием. Категорию не включать."
+msgstr ""
+"Полное наименование продукта, с серией перед наименованием. Указывать "
+"категорию не следует."
 
-#: .\products\models.py:107
+#: .\products\models.py:109
 msgid "Specification"
 msgstr "Спецификация"
 
-#: .\products\models.py:108
+#: .\products\models.py:110
 msgid "Specification for product: size, weight etc."
 msgstr "Спецификация продукта - размер, вес и т.д."
 
