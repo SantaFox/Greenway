@@ -196,23 +196,24 @@ def edit_product(request, blackbox=None):
     if request.method == 'POST':
 
         # Create a form instance and populate it with data from the request (binding):
-        form = ProductForm(request.POST)
+        form_product = ProductForm(request.POST, prefix='fp', instance=product_instance)
+        form_product_info = ProductInfoForm(request.POST, prefix='fpi')
+        form_tab = TabForm(request.POST, prefix='ft')
 
         # Check if the form is valid:
-        if form.is_valid():
+        if form_product.is_valid():
             # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
-            # book_instance.due_back = form.cleaned_data['renewal_date']
-            product_instance.save()
+            form_product.save()
 
             # redirect to a new URL:
             return HttpResponseRedirect(reverse('product'))
 
     # If this is a GET (or any other method) create the default form.
     else:
-        form_product = ProductForm(instance=product_instance)          # 'renewal_date': proposed_renewal_date
-        form_product_info = ProductInfoForm(instance=product_info_instance)
-        form_tabs = TabsFormset(instance=product_instance, queryset=tabs_set)
-        form_tab = TabForm(instance=tabs_set[0])
+        form_product = ProductForm(prefix='fp', instance=product_instance)
+        form_product_info = ProductInfoForm(prefix='fpi', instance=product_info_instance)
+        form_tabs = TabsFormset(prefix='fts', instance=product_instance, queryset=tabs_set)
+        form_tab = TabForm(prefix='ft', instance=tabs_set[0])
 
     context = {
         'language': language,
