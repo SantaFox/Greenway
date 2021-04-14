@@ -8,8 +8,7 @@ from . import views
 urlpatterns = [
     path('', views.view_index, name='index'),
     path('products/', include('products.urls')),
-    path('martor/', include('martor.urls')),
-    path('users/', include('django.contrib.auth.urls')),
+    path('user/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
 ]
 

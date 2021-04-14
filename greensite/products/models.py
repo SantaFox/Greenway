@@ -2,7 +2,6 @@ from django.db import models
 from django.template.defaultfilters import truncatechars  # or truncatewords
 from django.utils.translation import gettext_lazy as _
 
-from martor.models import MartorField
 from imagekit.models import ImageSpecField
 
 from .imagegenerators import AdminThumbnailSpec
@@ -77,10 +76,13 @@ class CategoryInfo(models.Model):
 
 
 class Product(models.Model):
-    Category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    Category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name=_('Category'),
+                                 help_text=_('Category to which this product belongs'))
     SKU = models.CharField(max_length=50, blank=False)
-    DateAdded = models.DateField(blank=True, null=True)
-    DateRemoved = models.DateField(blank=True, null=True)
+    DateAdded = models.DateField(blank=True, null=True, verbose_name=_('Date Added'),
+                                 help_text=_('Date when this product became available to public'))
+    DateRemoved = models.DateField(blank=True, null=True, verbose_name=_('Date Removed'),
+                                   help_text=_('Date when this product became unavailable to order'))
     SetProducts = models.ManyToManyField("self", blank=True)
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
@@ -100,8 +102,10 @@ class Product(models.Model):
 class ProductInfo(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
     Language = models.ForeignKey(Language, on_delete=models.PROTECT)
-    Name = models.CharField(max_length=255, blank=False, verbose_name=_('Product Name'), help_text=_('Full product name with Series before name. No Category should be included.'))
-    Specification = models.CharField(max_length=255, blank=True, verbose_name=_('Specification'), help_text=_('Specification for product: size, weight etc.'))
+    Name = models.CharField(max_length=255, blank=False, verbose_name=_('Product Name'),
+                            help_text=_('Full product name with Series before name. No Category should be included.'))
+    Specification = models.CharField(max_length=255, blank=True, verbose_name=_('Specification'),
+                                     help_text=_('Specification for product: size, weight etc.'))
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
@@ -120,7 +124,7 @@ class Tab(models.Model):
     Language = models.ForeignKey(Language, on_delete=models.PROTECT)
     Order = models.IntegerField(blank=False)
     Name = models.CharField(max_length=255, blank=False)
-    Text = MartorField(blank=True)
+    Text = models.TextField(blank=True)
     TextQuality = models.IntegerField(choices=[
         (0, 'Not tested'),
         (1, 'Low quality'),

@@ -1,7 +1,7 @@
 {% extends "greensite/base.html" %}
 {% load static %}
-{% load martortags %}
 {% load imagekit %}
+{% load markdownify %}
 
 {% block title %}{{ product.SKU }}{% endblock %}
 
@@ -74,26 +74,17 @@
         {% for tab in tabs %}
         {% if forloop.first %}
         <div class="tab-pane fade show active" id="nav-tab{{ tab.Order }}" role="tabpanel"
-             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.Text|safe_markdown }}
+             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.Text|markdownify }}
         </div>
         {% else %}
         <div class="tab-pane fade" id="nav-tab{{ tab.Order }}" role="tabpanel"
-             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.Text|safe_markdown }}
+             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.Text|markdownify }}
         </div>
         {% endif %}
         {% empty %}
         {% endfor %}
     </div>
 </div>
-
 {% endblock %}
 
-{% block js %}
-<script type="text/javascript" src="{% static 'plugins/js/highlight.min.js' %}"></script>
-<script>
-    $('.martor-preview pre').each(function(i, block){
-        hljs.highlightBlock(block);
-    });
-
-</script>
-{% endblock %}
+{% block js %}{% endblock %}

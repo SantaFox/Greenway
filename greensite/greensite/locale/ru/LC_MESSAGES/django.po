@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-13 10:43+0300\n"
+"POT-Creation-Date: 2021-04-13 22:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,15 +20,15 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: .\greensite\settings.py:117
+#: .\greensite\settings.py:118
 msgid "English"
 msgstr "Английский"
 
-#: .\greensite\settings.py:118
+#: .\greensite\settings.py:119
 msgid "Greek"
 msgstr "Греческий"
 
-#: .\greensite\settings.py:119
+#: .\greensite\settings.py:120
 msgid "Russian"
 msgstr "Русский"
 

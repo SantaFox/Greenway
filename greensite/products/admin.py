@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db import models
 
-from martor.widgets import AdminMartorWidget
+from pagedown.widgets import AdminPagedownWidget
 from imagekit.admin import AdminThumbnail
 
 from .models import Currency, Language, Category, CategoryInfo, Product, ProductInfo, Tab, Price, Image, Tag, TagInfo
@@ -47,7 +47,7 @@ class TabAdmin(admin.ModelAdmin):
     #     ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
     # ]
     formfield_overrides = {
-        models.TextField: {'widget': AdminMartorWidget},
+        models.TextField: {'widget': AdminPagedownWidget},
     }
     # inlines = [ChoiceInline]
     list_display = ('Product', 'Language', 'Order', 'Name', 'short_text', 'TextQuality')
