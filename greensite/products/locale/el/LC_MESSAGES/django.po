@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-13 10:43+0300\n"
+"POT-Creation-Date: 2021-04-15 12:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,47 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\products\models.py:81
+msgid "Category"
+msgstr "Κατηγορία"
+
+#: .\products\models.py:82
+msgid "Category to which this product belongs"
+msgstr "Κατηγορία στην οποία ανήκει αυτό το προϊόν"
+
+#: .\products\models.py:84
+msgid "Date Added"
+msgstr ""
+
+#: .\products\models.py:85
+msgid "Date when this product became available to public"
+msgstr ""
+
+#: .\products\models.py:86
+msgid "Date Removed"
+msgstr ""
+
+#: .\products\models.py:87
+msgid "Date when this product became unavailable to order"
+msgstr ""
+
+#: .\products\models.py:107
+msgid "Product Name"
+msgstr "Ονομασία προϊόντος"
+
+#: .\products\models.py:108
+msgid ""
+"Full product name with Series before name. No Category should be included."
+msgstr ""
+
+#: .\products\models.py:109
+msgid "Specification"
+msgstr "Προσδιορισμός"
+
+#: .\products\models.py:110
+msgid "Specification for product: size, weight etc."
+msgstr ""
 
 #: .\products\templates\products\list_products.html:22
 msgctxt "category list view"
