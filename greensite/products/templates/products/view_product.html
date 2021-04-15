@@ -86,11 +86,11 @@
         {% for tab in tabs %}
         {% if forloop.first %}
         <div class="tab-pane fade show active" id="nav-tab{{ tab.Order }}" role="tabpanel"
-             aria-labelledby="nav-tab{{ tab.Order }}-tab"><p>{{ tab.formatted_markdown|safe }}</p>
+             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.formatted_markdown|safe }}
         </div>
         {% else %}
         <div class="tab-pane fade" id="nav-tab{{ tab.Order }}" role="tabpanel"
-             aria-labelledby="nav-tab{{ tab.Order }}-tab"><p>{{ tab.formatted_markdown|safe }}</p>
+             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.formatted_markdown|safe }}
         </div>
         {% endif %}
         {% empty %}
