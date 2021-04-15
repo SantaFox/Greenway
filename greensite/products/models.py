@@ -110,7 +110,7 @@ class ProductInfo(models.Model):
     Name = models.CharField(max_length=255, blank=False, verbose_name=_('Product Name'),
                             help_text=_('Full product name with Series before name. No Category should be included.'))
     Tagline = models.CharField(max_length=255, blank=True, verbose_name=_('Tagline'),
-                                     help_text=_('A catchphrase or slogan that can make the product remembered.'))
+                               help_text=_('A catchphrase or slogan that can make the product remembered.'))
     Specification = models.CharField(max_length=255, blank=True, verbose_name=_('Specification'),
                                      help_text=_('Specification for product: size, weight etc.'))
     TimestampCreated = models.DateTimeField(auto_now_add=True)
@@ -133,10 +133,10 @@ class Tab(models.Model):
     Name = models.CharField(max_length=255, blank=False)
     Text = MarkdownxField(blank=True)
     TextQuality = models.IntegerField(choices=[
-        (0, 'Not tested'),
-        (1, 'Low quality'),
-        (2, 'Medium quality'),
-        (3, 'Good quality'),
+        (0, _('Not tested')),
+        (1, _('Low quality')),
+        (2, _('Medium quality')),
+        (3, _('Good quality')),
     ], default=0)
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
