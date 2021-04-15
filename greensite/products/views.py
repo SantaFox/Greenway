@@ -87,6 +87,9 @@ def view_product(request, sku=None):
     languages = Language.objects.all().order_by('Code')
 
     product = get_object_or_404(Product, SKU=sku)
+    product_category = product.Category
+    product_prev = Product.objects.filter(Category=product_category, SKU__lt=sku).order_by('-SKU').first()
+    product_next = Product.objects.filter(Category=product_category, SKU__gt=sku).order_by('SKU').first()
 
     try:
         product_info = ProductInfo.objects.get(Product=product, Language__Code=detail_lang)
@@ -114,6 +117,8 @@ def view_product(request, sku=None):
         'language': language,
         'languages': languages,
         'product': product,
+        'prev': product_prev,
+        'next': product_next,
         'product_info': product_info,
         'tabs': tabs,
         'price': price,
