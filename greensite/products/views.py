@@ -228,10 +228,9 @@ def edit_product(request, blackbox=None):
         if len(tabs_set) > 0:
             form_tab = TabForm(prefix='ft', instance=tabs_set[0])
         else:
-
             form_tab = TabForm(prefix='ft')
-            form_tab.fields['Order'] = 1
-            form_tab.fields['Name'] = translation.pgettext('Description', 'Default Tab name')
+            form_tab.fields['Order'].initial = 1
+            form_tab.fields['Name'].initial = translation.pgettext('Default Tab name', 'Description')
 
     context = {
         'language': language,
