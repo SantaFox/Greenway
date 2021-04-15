@@ -172,6 +172,7 @@ def change_lang(request):
 @permission_required('products.change_product', raise_exception=True)
 def edit_product(request, blackbox=None):
     """View function for renewing a specific Product"""
+
     # Work with selected language
     cookie_lang = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, settings.LANGUAGE_CODE)
 
@@ -184,29 +185,32 @@ def edit_product(request, blackbox=None):
     languages = Language.objects.all().order_by('Code')
 
     product_instance = get_object_or_404(Product, SKU=blackbox)
-
+    # related ProductInfo for this Product and Language may be absent
     try:
         product_info_instance = ProductInfo.objects.get(Product=product_instance, Language=language)
     except (ProductInfo.DoesNotExist, ProductInfo.MultipleObjectsReturned):
         product_info_instance = None
-
+    # TODO: no ideas what to do here if there will be no tabs
     tabs_set = Tab.objects.filter(Product=product_instance, Language=language).order_by('Order')
 
     # If this is a POST request then process the Form data
     if request.method == 'POST':
-
-        # Create a form instance and populate it with data from the request (binding):
         form_product = ProductForm(request.POST, prefix='fp', instance=product_instance)
-        form_product_info = ProductInfoForm(request.POST, prefix='fpi')
-        form_tab = TabForm(request.POST, prefix='ft')
+        form_product_info = ProductInfoForm(request.POST, instance=product_info_instance, prefix='fpi')
+        form_tab = TabForm(request.POST, instance=tabs_set[0], prefix='ft')
 
-        # Check if the form is valid:
-        if form_product.is_valid():
-            # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
-            form_product.save()
+        # In theory, any of these three forms may be changed or not, but all three have to be valid
+        if form_product.is_valid() and form_product_info.is_valid() and form_tab.is_valid():
+            if form_product.has_changed():
+                form_product.save()
+            if form_product_info.has_changed():
+                form_product_info.save()
+            if form_tab.has_changed():
+                form_tab.save()
 
-            # redirect to a new URL:
-            return HttpResponseRedirect(reverse('product'))
+            # redirect to a main product view
+            # TODO: add some kind of information about it
+            return HttpResponseRedirect(reverse('products:product', args=(blackbox,)))
 
     # If this is a GET (or any other method) create the default form.
     else:
