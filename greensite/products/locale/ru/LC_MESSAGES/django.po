@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-14 23:15+0300\n"
+"POT-Creation-Date: 2021-04-15 22:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,42 +28,71 @@ msgstr "Категория"
 msgid "Category to which this product belongs"
 msgstr "Категория, к которой относится продукт"
 
-#: .\products\models.py:84
+#: .\products\models.py:85
 msgid "Date Added"
 msgstr "Дата появления"
 
-#: .\products\models.py:85
+#: .\products\models.py:86
 msgid "Date when this product became available to public"
 msgstr "Дата, когда продукт стал впервые доступен для заказа"
 
-#: .\products\models.py:86
+#: .\products\models.py:87
 msgid "Date Removed"
 msgstr "Дата окончания"
 
-#: .\products\models.py:87
+#: .\products\models.py:88
 msgid "Date when this product became unavailable to order"
 msgstr "Дата, когда продукт стал недоступен для заказа"
 
-#: .\products\models.py:107
+#: .\products\models.py:110
 msgid "Product Name"
 msgstr "Наименование продукта"
 
-#: .\products\models.py:108
+#: .\products\models.py:111
 msgid ""
 "Full product name with Series before name. No Category should be included."
 msgstr ""
 "Полное наименование продукта, с серией перед наименованием. Указывать "
 "категорию не следует."
 
-#: .\products\models.py:109
+#: .\products\models.py:112
+msgid "Tagline"
+msgstr "Привлекательное описание"
+
+#: .\products\models.py:113
+msgid "A catchphrase or slogan that can make the product remembered."
+msgstr "Короткое описание, раскрывающее суть продукта"
+
+#: .\products\models.py:114
 msgid "Specification"
 msgstr "Спецификация"
 
-#: .\products\models.py:110
+#: .\products\models.py:115
 msgid "Specification for product: size, weight etc."
 msgstr "Спецификация продукта - размер, вес и т.д."
+
+#: .\products\models.py:136
+msgid "Not tested"
+msgstr "Не проверялся"
+
+#: .\products\models.py:137
+msgid "Low quality"
+msgstr "Низкое качество"
+
+#: .\products\models.py:138
+msgid "Medium quality"
+msgstr "Среднее качество"
+
+#: .\products\models.py:139
+msgid "Good quality"
+msgstr "Хорошее качество"
 
 #: .\products\templates\products\list_products.html:22
 msgctxt "category list view"
 msgid "SKU:"
 msgstr "Артикул:"
+
+#: .\products\views.py:233
+msgctxt "Default Tab name"
+msgid "Description"
+msgstr "Описание"
