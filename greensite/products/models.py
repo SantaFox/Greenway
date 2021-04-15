@@ -81,11 +81,14 @@ class Product(models.Model):
     Category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name=_('Category'),
                                  help_text=_('Category to which this product belongs'))
     SKU = models.CharField(max_length=50, blank=False)
+
     DateAdded = models.DateField(blank=True, null=True, verbose_name=_('Date Added'),
                                  help_text=_('Date when this product became available to public'))
     DateRemoved = models.DateField(blank=True, null=True, verbose_name=_('Date Removed'),
                                    help_text=_('Date when this product became unavailable to order'))
+
     SetProducts = models.ManyToManyField("self", blank=True)
+
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 

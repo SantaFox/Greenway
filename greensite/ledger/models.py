@@ -8,6 +8,7 @@ from products.models import Currency, Product
 class Account(models.Model):
     User = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     Name = models.CharField(max_length=50, blank=False)
+
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
     # Accounts intended to be multi-currency
@@ -24,14 +25,17 @@ class Account(models.Model):
 class Counterparty(models.Model):
     User = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     Name = models.CharField(max_length=50, blank=False)
+
     Phone = models.CharField(max_length=50, blank=True)
     Email = models.CharField(max_length=50, blank=True)
     Telegram = models.CharField(max_length=50, blank=True)
     Facebook = models.CharField(max_length=50, blank=True)
     Address = models.CharField(max_length=255, blank=True)
     Memo = models.TextField(blank=True)
+
     IsSupplier = models.BooleanField(default=False)
     IsCustomer = models.BooleanField(default=False)
+
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
@@ -60,12 +64,30 @@ class Operation(models.Model):
         (9, _('Break set to items')),
     ], blank=False, null=True)
     Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True)
+    RelatedOperation = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True)
 
     # Delivery-related block
     DatePlaced = models.DateField(blank=True, null=True)            # Date placed with supplier /
     DateDispatched = models.DateField(blank=True, null=True)        # Date dispatched by supplier / to customer
     DateDelivered = models.DateField(blank=True, null=True)         # Date received from supplier / by customer
     TrackingNumber = models.CharField(max_length=50, blank=True)
+
+    # Cash-related field
+    Account = models.ForeignKey(Account, on_delete=models.PROTECT, blank=True, null=True)
+
+    # Product-related fields
+    Product = models.ForeignKey(Product, on_delete=models.PROTECT, blank=True, null=True)
+    State = models.IntegerField(choices=[
+        # Stock control table columns: In Stock | Reserved | To be Ordered | Incoming | Final
+        (1, _('Actual')),
+        (2, _('Reserved')),
+        (3, _('Ordered')),
+    ], blank=True, null=True)
+    Quantity = models.PositiveIntegerField(blank=True, null=True)
+
+    # Common fields
+    Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True)
 
     # System block
     TimestampCreated = models.DateTimeField(auto_now_add=True)
@@ -77,12 +99,14 @@ class Operation(models.Model):
 
 class OperationPosition(models.Model):
     Operation = models.ForeignKey(Operation, on_delete=models.PROTECT)
+
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
     Quantity = models.PositiveIntegerField(blank=False)
     Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     Discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     DiscountReason = models.CharField(max_length=50, blank=True)
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
+
     CustomerOrderStatus = models.IntegerField(choices=[
         # Stock control table columns: In Stock | Reserved | To be Ordered | Incoming | Final
         (1, _('In stock / prepared for delivery')),         # Existing item is reserved
@@ -92,6 +116,7 @@ class OperationPosition(models.Model):
         (5, _('Not in stock / no delivery control')),       # Missing item is... ?
         (6, _('Delivered to customer')),
     ], blank=True, null=True)
+
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
