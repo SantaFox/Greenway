@@ -160,7 +160,6 @@ def product_dispatch(request, blackbox=None):
 def change_lang(request):
     if request.method == "POST":
         form_lang = request.POST.get('language', settings.LANGUAGE_CODE)
-        print(form_lang)
         response = HttpResponseRedirect(request.META['HTTP_REFERER'])
         if form_lang in ('en', 'el', 'ru'):
             translation.activate(form_lang)
