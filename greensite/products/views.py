@@ -196,8 +196,12 @@ def edit_product(request, blackbox=None):
     # If this is a POST request then process the Form data
     if request.method == 'POST':
         form_product = ProductForm(request.POST, prefix='fp', instance=product_instance)
-        form_product_info = ProductInfoForm(request.POST, instance=product_info_instance, prefix='fpi')
-        form_tab = TabForm(request.POST, instance=tabs_set[0], prefix='ft')
+        form_product_info = ProductInfoForm(request.POST, prefix='fpi', instance=product_info_instance)
+        if len(tabs_set) > 0:
+            form_tab = TabForm(request.POST, prefix='ft', instance=tabs_set[0])
+        else:
+            new_tab = Tab(Product=product_instance, Language=language)
+            form_tab = TabForm(request.POST, prefix='ft', instance=new_tab)
 
         # In theory, any of these three forms may be changed or not, but all three have to be valid
         if form_product.is_valid() and form_product_info.is_valid() and form_tab.is_valid():
@@ -217,7 +221,13 @@ def edit_product(request, blackbox=None):
         form_product = ProductForm(prefix='fp', instance=product_instance)
         form_product_info = ProductInfoForm(prefix='fpi', instance=product_info_instance)
         form_tabs = TabsFormset(prefix='fts', instance=product_instance, queryset=tabs_set)
-        form_tab = TabForm(prefix='ft', instance=tabs_set[0])
+        if len(tabs_set) > 0:
+            form_tab = TabForm(prefix='ft', instance=tabs_set[0])
+        else:
+
+            form_tab = TabForm(prefix='ft')
+            form_tab.fields['Order'] = 1
+            form_tab.fields['Name'] = translation.pgettext('Description', 'Default Tab name')
 
     context = {
         'language': language,
