@@ -200,7 +200,13 @@ def edit_product(request, blackbox=None):
     # If this is a POST request then process the Form data
     if request.method == 'POST':
         form_product = ProductForm(request.POST, prefix='fp', instance=product_instance)
-        form_product_info = ProductInfoForm(request.POST, prefix='fpi', instance=product_info_instance)
+
+        if product_info_instance:
+            form_product_info = ProductInfoForm(request.POST, prefix='fpi', instance=product_info_instance)
+        else:
+            new_product_info = ProductInfo(Product=product_instance, Language=language)
+            form_product_info = ProductInfoForm(request.POST, prefix='fpi', instance=new_product_info)
+
         if len(tabs_set) > 0:
             form_tab = TabForm(request.POST, prefix='ft', instance=tabs_set[0])
         else:
