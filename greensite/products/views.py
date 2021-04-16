@@ -29,7 +29,8 @@ def list_all(request, category=None, tag=None):
     ll = Product.objects.annotate(pi=FilteredRelation('productinfo', condition=Q(productinfo__Language=language.id))) \
         .values('SKU', 'Category__Name', 'Category__Slug', 'pi__Name').order_by('Category__Name', 'SKU') \
         .annotate(ImagesCount=Count('image', distinct=True)) \
-        .annotate(TabsCount=Count('tab', distinct=True))
+        .annotate(TabsCount=Count('tab', distinct=True)) \
+        .annotate(PricesCount=Count('price', distinct=True))
 
     if category:
         ll = ll.filter(Category=category)
