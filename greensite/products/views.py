@@ -61,6 +61,9 @@ def list_products(request, category=None):
     dict_product_infos = {pi.Product: pi for pi in
                           ProductInfo.objects.filter(Product__Category=category, Language=language.id)}
     dict_images = {im.Product: im for im in Image.objects.filter(Product__Category=category, IsPrimary=True)}
+    # Нелогично. Цен может быть от 0 до много, надо вытащить самую "близкую" или NONE, и дальше собрать в словаре
+    dict_prices = {prc.Product: prc for prc in Price.objects.filter(Product__Category=category)}
+
 
     final_set = []  # list?
     for product in products:
@@ -118,8 +121,8 @@ def view_product(request, sku=None):
         'language': language,
         'languages': languages,
         'product': product,
-        'prev': product_prev,
-        'next': product_next,
+        'product_prev': product_prev,
+        'product_next': product_next,
         'product_info': product_info,
         'tabs': tabs,
         'price': price,

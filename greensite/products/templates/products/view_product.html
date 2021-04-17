@@ -25,13 +25,13 @@
                 <li class="breadcrumb-item active" aria-current="page">#{{ product.SKU }}</li>
             </ol>
             <ol>
-                {% if prev %}
-                <a href="/products/{{ prev.SKU }}/" class="btn btn-sm btn-info"><i class="bi bi-arrow-left-square"></i>&nbsp;Prev</a>
+                {% if product_prev %}
+                <a href="/products/{{ product_prev.SKU }}/" class="btn btn-sm btn-info"><i class="bi bi-arrow-left-square"></i>&nbsp;Prev</a>
                 {% else %}
                 <button class="btn btn-sm btn-light"><i class="bi bi-arrow-left-square"></i>&nbsp;Prev</button>
                 {% endif %}
-                {% if next %}
-                <a href="/products/{{ next.SKU }}/" class="btn btn-sm btn-info"><i class="bi bi-arrow-right-square"></i>&nbsp;Next</a>
+                {% if product_next %}
+                <a href="/products/{{ product_next.SKU }}/" class="btn btn-sm btn-info"><i class="bi bi-arrow-right-square"></i>&nbsp;Next</a>
                 {% else %}
                 <button class="btn btn-sm btn-light"><i class="bi bi-arrow-right-square"></i>&nbsp;Next</button>
                 {% endif %}
@@ -40,8 +40,8 @@
                 {% endif %}
             </ol>
         </nav>
-        <h3>{{ product_info.Name|default:"No data for this language" }}</h3>
-        <p>{{ product_info.Specification|default:"No specification" }}</p>
+        <h4>{{ product_info.Name|default:_("No product name in this language") }}</h4>
+        <p>{{ product_info.Specification|default:_("No specification") }}</p>
         <p>{{ price.Price }} {{ price.Currency.Code }}</p>
 
         <!--        <div class="row border">-->
