@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-18 00:04+0300\n"
+"POT-Creation-Date: 2021-04-18 01:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -88,23 +88,24 @@ msgid "Good quality"
 msgstr "Хорошее качество"
 
 #: .\products\templates\markdownx\widget.html:7
-msgid "Edit"
-msgstr "Редактор"
+msgid "Edit Markdown"
+msgstr "Редактирование"
 
 #: .\products\templates\markdownx\widget.html:11
 msgid "Preview"
 msgstr "Предпросмотр"
 
 #: .\products\templates\products\list_products.html:24
+#: .\products\templates\products\view_product.html:46
 msgctxt "Category List"
 msgid "Price"
 msgstr "Цена"
 
-#: .\products\templates\products\view_product.html:43
+#: .\products\templates\products\view_product.html:44
 msgid "No product name in this language"
 msgstr "Для этого языка не задано наименование"
 
-#: .\products\templates\products\view_product.html:44
+#: .\products\templates\products\view_product.html:45
 msgid "No specification in this language"
 msgstr "Для этого языка не задана спецификация"
 

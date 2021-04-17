@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-15 12:53+0300\n"
+"POT-Creation-Date: 2021-04-18 01:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,40 +26,86 @@ msgstr "Κατηγορία"
 msgid "Category to which this product belongs"
 msgstr "Κατηγορία στην οποία ανήκει αυτό το προϊόν"
 
-#: .\products\models.py:84
+#: .\products\models.py:85
 msgid "Date Added"
 msgstr ""
 
-#: .\products\models.py:85
+#: .\products\models.py:86
 msgid "Date when this product became available to public"
 msgstr ""
 
-#: .\products\models.py:86
+#: .\products\models.py:87
 msgid "Date Removed"
 msgstr ""
 
-#: .\products\models.py:87
+#: .\products\models.py:88
 msgid "Date when this product became unavailable to order"
 msgstr ""
 
-#: .\products\models.py:107
+#: .\products\models.py:110
 msgid "Product Name"
 msgstr "Ονομασία προϊόντος"
 
-#: .\products\models.py:108
+#: .\products\models.py:111
 msgid ""
 "Full product name with Series before name. No Category should be included."
 msgstr ""
 
-#: .\products\models.py:109
+#: .\products\models.py:112
+msgid "Tagline"
+msgstr ""
+
+#: .\products\models.py:113
+msgid "A catchphrase or slogan that can make the product remembered."
+msgstr ""
+
+#: .\products\models.py:114
 msgid "Specification"
 msgstr "Προσδιορισμός"
 
-#: .\products\models.py:110
+#: .\products\models.py:115
 msgid "Specification for product: size, weight etc."
 msgstr ""
 
-#: .\products\templates\products\list_products.html:22
-msgctxt "category list view"
-msgid "SKU:"
+#: .\products\models.py:136
+msgid "Not tested"
+msgstr ""
+
+#: .\products\models.py:137
+msgid "Low quality"
+msgstr ""
+
+#: .\products\models.py:138
+msgid "Medium quality"
+msgstr ""
+
+#: .\products\models.py:139
+msgid "Good quality"
+msgstr ""
+
+#: .\products\templates\markdownx\widget.html:7
+msgid "Edit Markdown"
+msgstr ""
+
+#: .\products\templates\markdownx\widget.html:11
+msgid "Preview"
+msgstr ""
+
+#: .\products\templates\products\list_products.html:24
+#: .\products\templates\products\view_product.html:46
+msgctxt "Category List"
+msgid "Price"
+msgstr ""
+
+#: .\products\templates\products\view_product.html:44
+msgid "No product name in this language"
+msgstr ""
+
+#: .\products\templates\products\view_product.html:45
+msgid "No specification in this language"
+msgstr ""
+
+#: .\products\views.py:263
+msgctxt "Default Tab name"
+msgid "Description"
 msgstr ""

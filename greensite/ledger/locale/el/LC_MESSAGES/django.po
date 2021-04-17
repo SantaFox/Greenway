@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-15 12:53+0300\n"
+"POT-Creation-Date: 2021-04-18 01:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,82 +18,82 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\ledger\models.py:52
+#: .\ledger\models.py:56
 msgid "Customer Order"
 msgstr ""
 
-#: .\ledger\models.py:53
+#: .\ledger\models.py:57
 msgid "Supplier Order"
 msgstr ""
 
-#: .\ledger\models.py:54
+#: .\ledger\models.py:58
 msgid "Received Payment"
 msgstr ""
 
-#: .\ledger\models.py:55
+#: .\ledger\models.py:59
 msgid "Sent Payment"
 msgstr ""
 
-#: .\ledger\models.py:56
+#: .\ledger\models.py:60
 msgid "Delivered Goods"
 msgstr ""
 
-#: .\ledger\models.py:57
+#: .\ledger\models.py:61
 msgid "Received Goods"
 msgstr ""
 
-#: .\ledger\models.py:58
+#: .\ledger\models.py:62
 msgid "Deposited Money"
 msgstr ""
 
-#: .\ledger\models.py:59
+#: .\ledger\models.py:63
 msgid "Withdrawn money"
 msgstr ""
 
-#: .\ledger\models.py:60
+#: .\ledger\models.py:64
 msgid "Break set to items"
 msgstr ""
 
-#: .\ledger\models.py:88
-msgid "In stock / prepared for delivery"
-msgstr ""
-
-#: .\ledger\models.py:89
-msgid "In stock / should be ordered"
-msgstr ""
-
-#: .\ledger\models.py:90
-msgid "Not in stock / need to be ordered"
-msgstr ""
-
-#: .\ledger\models.py:91
-msgid "Not in stock / waiting for incoming"
-msgstr ""
-
-#: .\ledger\models.py:92
-msgid "Not in stock / no delivery control"
-msgstr ""
-
-#: .\ledger\models.py:93
-msgid "Delivered to customer"
-msgstr ""
-
-#: .\ledger\models.py:112
-msgid "Debit"
-msgstr ""
-
-#: .\ledger\models.py:113
-msgid "Credit"
-msgstr ""
-
-#: .\ledger\models.py:123
+#: .\ledger\models.py:82 .\ledger\models.py:148
 msgid "Actual"
 msgstr ""
 
-#: .\ledger\models.py:124
+#: .\ledger\models.py:83 .\ledger\models.py:149
 msgid "Reserved"
 msgstr ""
 
-#: .\ledger\models.py:125
+#: .\ledger\models.py:84 .\ledger\models.py:150
 msgid "Ordered"
+msgstr ""
+
+#: .\ledger\models.py:112
+msgid "In stock / prepared for delivery"
+msgstr ""
+
+#: .\ledger\models.py:113
+msgid "In stock / should be ordered"
+msgstr ""
+
+#: .\ledger\models.py:114
+msgid "Not in stock / need to be ordered"
+msgstr ""
+
+#: .\ledger\models.py:115
+msgid "Not in stock / waiting for incoming"
+msgstr ""
+
+#: .\ledger\models.py:116
+msgid "Not in stock / no delivery control"
+msgstr ""
+
+#: .\ledger\models.py:117
+msgid "Delivered to customer"
+msgstr ""
+
+#: .\ledger\models.py:137
+msgid "Debit"
+msgstr ""
+
+#: .\ledger\models.py:138
+msgid "Credit"
 msgstr ""
