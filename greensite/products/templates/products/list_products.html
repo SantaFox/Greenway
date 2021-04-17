@@ -21,8 +21,8 @@
             <p class="card-title text-center"><a href="/products/{{ p.product.SKU }}/" class="text-success">{{ p.product_info.Name|upper }}</a></p>
             <p class="card-text d-flex justify-content-between"
                                                style="background:url({% static 'products/dot.png' %}) repeat-x center;">
-                    <span class="bg-white">{% translate "SKU:" context "category list view" %}</span>
-                    <span class="bg-white">#{{ p.product.SKU }}</span>
+                    <span class="bg-white">{% translate "Price" context "Category List" %}</span>
+                    <span class="bg-white">{{ p.price.Price }}&nbsp;{{ p.price.Currency.Symbol }}</span>
                 </p>
         </div>
     </div>

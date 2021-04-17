@@ -1,7 +1,9 @@
+import datetime
+
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
-from django.db.models import Count, Q, FilteredRelation
+from django.db.models import Count, Max, Q, FilteredRelation
 from django.conf import settings
 from django.urls import reverse
 from django.utils import translation
@@ -58,17 +60,39 @@ def list_products(request, category=None):
     languages = Language.objects.all().order_by('Code')
 
     products = Product.objects.filter(Category=category).order_by('SKU')
+
     dict_product_infos = {pi.Product: pi for pi in
                           ProductInfo.objects.filter(Product__Category=category, Language=language.id)}
-    dict_images = {im.Product: im for im in Image.objects.filter(Product__Category=category, IsPrimary=True)}
-    # Нелогично. Цен может быть от 0 до много, надо вытащить самую "близкую" или NONE, и дальше собрать в словаре
-    dict_prices = {prc.Product: prc for prc in Price.objects.filter(Product__Category=category)}
 
+    dict_images = {im.Product: im for im in Image.objects.filter(Product__Category=category, IsPrimary=True)}
+
+    # Цен может быть от 0 до много, надо вытащить самую "близкую" или NONE, и дальше собрать в словаре
+    # Самое красивое решение - здаесь: https://stackoverflow.com/questions/59893756/django-group-by-one-field-only-take-the-latest-max-of-each-group-and-get-bac
+    # Но к сожалению SQLite backend не поддерживает команду DISTINCT ON (fields), поэтому делаем менее красивое решение
+    # Важно: уникальный ключ - продукт + дата цены + **ВАЛЮТА**
+    dict_price_distinct = Price.objects \
+        .filter(Product__Category=category) \
+        .values('Product_id', 'Currency_id') \
+        .annotate(max_date=Max('DateAdded')) \
+        .order_by()
+    dict_price_list = list(dict_price_distinct)
+
+    dict_prices = {prc.Product: prc for prc in Price.objects.filter(Product__Category=category) if
+                   # Creating main unique index
+                   {'Product_id': prc.Product_id,
+                    'Currency_id': prc.Currency_id,
+                    'max_date': prc.DateAdded
+                    } in dict_price_list}
 
     final_set = []  # list?
     for product in products:
         final_set.append(
-            dict(product=product, product_info=dict_product_infos.get(product), image=dict_images.get(product)))
+            dict(product=product,
+                 product_info=dict_product_infos.get(product),
+                 image=dict_images.get(product),
+                 price=dict_prices.get(product)
+                 )
+        )
 
     return render(request, 'products/list_products.html', {
         'language': language,
