@@ -10,7 +10,6 @@
     </div>
 </div>
 <div class="row">
-    <!--    <div class="col mb-4">-->
     {% for p in products_list %}
     <div class="card m-2" style="width: 18rem;">
         <h5 class="card-header text-center">#{{ p.product.SKU }}</h5>
@@ -18,15 +17,21 @@
         {% generateimage 'products:product_medium_thumbnail' source=p.image.Image -- class="card-img-top" %}
         {% endif %}
         <div class="card-body">
-            <p class="card-title text-center"><a href="/products/{{ p.product.SKU }}/" class="text-success">{{ p.product_info.Name|upper }}</a></p>
-            <p class="card-text d-flex justify-content-between"
-                                               style="background:url({% static 'products/dot.png' %}) repeat-x center;">
-                    <span class="bg-white">{% translate "Price" context "Category List" %}</span>
-                    <span class="bg-white">{{ p.price.Price }}&nbsp;{{ p.price.Currency.Symbol }}</span>
-                </p>
+            <p class="card-title text-center"><a href="/products/{{ p.product.SKU }}/" class="text-success">
+                {{ p.product_info.Name|default:_("< Product name not set >") }}</a></p>
+        </div>
+        <div class="card-footer text-muted">
+            <div class="d-flex justify-content-between">
+                <span>{% translate "Price" context "Category List" %}</span>
+                <span>{{ p.price.Price }}&nbsp;{{ p.price.Currency.Symbol }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span>{% translate "PV" context "Category List" %}</span>
+                <span>{{ p.price.PV }}</span>
+            </div>
+
         </div>
     </div>
     {% endfor %}
-    <!--    </div>-->
 </div>
 {% endblock %}
