@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
-from django.db.models import Count, Q, FilteredRelation
+from django.db.models import Count, Max, Q, FilteredRelation
 from django.conf import settings
 from django.urls import reverse
 from django.utils import translation
@@ -61,9 +61,15 @@ def list_products(request, category=None):
     dict_product_infos = {pi.Product: pi for pi in
                           ProductInfo.objects.filter(Product__Category=category, Language=language.id)}
     dict_images = {im.Product: im for im in Image.objects.filter(Product__Category=category, IsPrimary=True)}
-    # Нелогично. Цен может быть от 0 до много, надо вытащить самую "близкую" или NONE, и дальше собрать в словаре
-    dict_prices = {prc.Product: prc for prc in Price.objects.filter(Product__Category=category)}
 
+    # Цен может быть от 0 до много, надо вытащить самую "близкую" или NONE, и дальше собрать в словаре
+    # Самое красивое решение - здаесь: https://stackoverflow.com/questions/59893756/django-group-by-one-field-only-take-the-latest-max-of-each-group-and-get-bac
+    # Но к сожалению SQLite backend не поддерживает команду DISTINCT ON (fields), поэтому делаем менее красивое решение
+    # Важно: уникальный ключ - продукт + дата цены + **ВАЛЮТА**
+    dict_price_distinct = Price.objects.filter(Product__Category=category).values('Product_id', 'Currency_id').annotate(max_date=Max('DateAdded')).order_by()
+
+
+    dict_prices = {prc.Product: prc for prc in Price.objects.filter(Product__Category=category)}
 
     final_set = []  # list?
     for product in products:
@@ -102,11 +108,7 @@ def view_product(request, sku=None):
 
     tabs = Tab.objects.filter(Product=product, Language__Code=detail_lang).order_by('Order')
 
-    price_hist = Price.objects.filter(Product=product).order_by('-DateAdded')
-    if price_hist:
-        price = price_hist[0]
-    else:
-        price = None
+    price = Price.objects.filter(Product=product).order_by('-DateAdded').first()    # First or None
 
     try:
         image_primary = Image.objects.get(Product=product, IsPrimary=True)
