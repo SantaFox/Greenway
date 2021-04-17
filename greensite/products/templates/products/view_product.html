@@ -1,4 +1,5 @@
 {% extends "greensite/base.html" %}
+{% load i18n %}
 {% load static %}
 {% load imagekit %}
 
@@ -41,8 +42,12 @@
             </ol>
         </nav>
         <h4>{{ product_info.Name|default:_("No product name in this language") }}</h4>
-        <p>{{ product_info.Specification|default:_("No specification") }}</p>
-        <p>{{ price.Price }} {{ price.Currency.Code }}</p>
+        <p>{{ product_info.Specification|default:_("No specification in this language") }}</p>
+        <p>{% translate "Price" context "Category List" %}
+            {{ price.Price }}
+            {{ price.Currency.Symbol }}
+            <span class="font-weight-light">(действительна с {{ price.DateAdded|date:"j E Y"}})</span>
+        </p>
 
         <!--        <div class="row border">-->
         {% for tag in tags %}
