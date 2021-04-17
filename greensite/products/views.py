@@ -126,11 +126,7 @@ def view_product(request, sku=None):
 
     tabs = Tab.objects.filter(Product=product, Language__Code=detail_lang).order_by('Order')
 
-    price_hist = Price.objects.filter(Product=product).order_by('-DateAdded')
-    if price_hist:
-        price = price_hist[0]
-    else:
-        price = None
+    price = Price.objects.filter(Product=product).order_by('-DateAdded').first()  # First or None
 
     try:
         image_primary = Image.objects.get(Product=product, IsPrimary=True)
