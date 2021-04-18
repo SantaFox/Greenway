@@ -255,6 +255,8 @@ def edit_product(request, blackbox=None):
         form_product = ProductForm(prefix='fp', instance=product_instance)
         form_product_info = ProductInfoForm(prefix='fpi', instance=product_info_instance)
         form_tabs = TabsFormset(prefix='fts', instance=product_instance, queryset=tabs_set)
+        form_tags = TagForm(prefix='ftg', instance=product_instance)
+
         if len(tabs_set) > 0:
             form_tab = TabForm(prefix='ft', instance=tabs_set[0])
         else:
@@ -269,6 +271,7 @@ def edit_product(request, blackbox=None):
         'form_product_info': form_product_info,
         'form_tabs': form_tabs,
         'form_tab': form_tab,
+        'form_tags': form_tags,
         'product_instance': product_instance,
     }
 

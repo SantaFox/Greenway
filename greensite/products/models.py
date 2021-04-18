@@ -196,8 +196,9 @@ class Image(models.Model):
 
 
 class Tag(models.Model):
-    Product = models.ManyToManyField(Product, blank=True)
+    Product = models.ManyToManyField(Product, related_name='tags_of_product', blank=True)
     Slug = models.SlugField(blank=False)
+
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
@@ -209,6 +210,7 @@ class TagInfo(models.Model):
     Tag = models.ForeignKey(Tag, on_delete=models.PROTECT)
     Language = models.ForeignKey(Language, on_delete=models.PROTECT)
     Name = models.CharField(max_length=255, blank=False)
+
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 

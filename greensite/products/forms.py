@@ -1,4 +1,4 @@
-from django.forms import ModelForm, inlineformset_factory
+from django.forms import ModelForm, ModelMultipleChoiceField, CheckboxSelectMultiple, inlineformset_factory
 from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.helper import FormHelper
@@ -69,6 +69,15 @@ class TabForm(ModelForm):
 
 class TagForm(ModelForm):
     def __init__(self, *args, **kwargs):
+
+        # Populating "other" M2M field
+        if kwargs.get('instance'):
+            tags_ids = [t.pk for t in kwargs['instance'].tags_of_product.all()]
+
+            kwargs['initial'] = {
+                'tags': tags_ids,
+            }
+
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         # self.helper.layout = Layout(
@@ -86,7 +95,13 @@ class TagForm(ModelForm):
 
     class Meta:
         model = Product
-        fields = ['Tag_set']
+        fields = ('tags',)
+
+    tags = ModelMultipleChoiceField(
+        queryset=Tag.objects.all(),
+        widget=CheckboxSelectMultiple,
+        required=False
+    )
 
 
 TabsFormset = inlineformset_factory(Product, Tab, TabForm, extra=1)
