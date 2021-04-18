@@ -27,12 +27,14 @@
             </ol>
             <ol>
                 {% if product_prev %}
-                <a href="/products/{{ product_prev.SKU }}/" class="btn btn-sm btn-info"><i class="bi bi-arrow-left-square"></i>&nbsp;Prev</a>
+                <a href="/products/{{ product_prev.SKU }}/" class="btn btn-sm btn-info"><i
+                        class="bi bi-arrow-left-square"></i>&nbsp;Prev</a>
                 {% else %}
                 <button class="btn btn-sm btn-light"><i class="bi bi-arrow-left-square"></i>&nbsp;Prev</button>
                 {% endif %}
                 {% if product_next %}
-                <a href="/products/{{ product_next.SKU }}/" class="btn btn-sm btn-info"><i class="bi bi-arrow-right-square"></i>&nbsp;Next</a>
+                <a href="/products/{{ product_next.SKU }}/" class="btn btn-sm btn-info"><i
+                        class="bi bi-arrow-right-square"></i>&nbsp;Next</a>
                 {% else %}
                 <button class="btn btn-sm btn-light"><i class="bi bi-arrow-right-square"></i>&nbsp;Next</button>
                 {% endif %}
@@ -43,18 +45,19 @@
         </nav>
         <h4>{{ product_info.Name|default:_("No product name in this language") }}</h4>
         <p>{{ product_info.Specification|default:_("No specification in this language") }}</p>
-        <p>{% translate "Price" context "Category List" %}
-            {{ price.Price }}
-            {{ price.Currency.Symbol }}
-            <span class="font-weight-light">(действительна с {{ price.DateAdded|date:"j E Y"}})</span>
+        <p class="m-0">{% translate "Price" %}
+            {{ price.Price }}&nbsp;{{ price.Currency.Symbol }}
+            <span class="font-weight-light">({% translate "actual since" %} {{ price.DateAdded|date:"j E Y"}})</span>
+        </p>
+        <p class="m-0">{% translate "Volume" %}
+            {{ price.PV }}&nbsp;PV
         </p>
 
-        <!--        <div class="row border">-->
-        {% for tag in tags %}
-        <span class="badge bg-primary">{{ tag.tagname__Name }}</span>
-        <a href="#" class="badge bg-success text-decoration: none">{{ tag.tagname__Name }}</a>
-        {% endfor %}
-        <!--        </div>-->
+        <h5>
+            {% for tag in tags %}
+            <a href="#" class="badge bg-warning text-decoration: none">{{ tag.tagname__Name }}</a>
+            {% endfor %}
+        </h5>
 
         <div class="row justify-content-lg-left border">
             {% for image in product.image_set.all %}
