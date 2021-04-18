@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.utils import translation
 
 from .models import Language, Category, Product, ProductInfo, Tab, Price, Image, Tag
-from .forms import ProductForm, ProductInfoForm, TabForm, TabsFormset
+from .forms import ProductForm, ProductInfoForm, TabForm, TagForm, TabsFormset
 
 
 def categories_view(request, name=None):

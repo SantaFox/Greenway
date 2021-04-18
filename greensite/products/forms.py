@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Field, Layout
 
-from .models import Product, ProductInfo, Tab
+from .models import Product, ProductInfo, Tab, Tag
 
 
 class ProductForm(ModelForm):
@@ -65,6 +65,28 @@ class TabForm(ModelForm):
     class Meta:
         model = Tab
         fields = ['Order', 'Name', 'Text', 'TextQuality']
+
+
+class TagForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        # self.helper.layout = Layout(
+        #     Div(
+        #         Field('Order', wrapper_class='col-md-4'),
+        #         Field('Name', wrapper_class='col-md-4'),
+        #         Field('TextQuality', wrapper_class='col-md-4'),
+        #         css_class='form-row'),
+        #     Div(
+        #         Field('Text'),
+        #     )
+        # )
+        self.helper.form_tag = False        # We will use a common form
+        self.helper.disable_csrf = True
+
+    class Meta:
+        model = Product
+        fields = ['Tag_set']
 
 
 TabsFormset = inlineformset_factory(Product, Tab, TabForm, extra=1)
