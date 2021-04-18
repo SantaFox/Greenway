@@ -11,7 +11,7 @@
 </div>
 <div class="row">
     {% for p in products_list %}
-    <div class="card m-2" style="width: 18rem;">
+    <div class="card m-2" style="width: 19rem;">
         <h5 class="card-header text-center">#{{ p.product.SKU }}</h5>
         {% if p.image %}
         {% generateimage 'products:product_medium_thumbnail' source=p.image.Image -- class="card-img-top" %}
