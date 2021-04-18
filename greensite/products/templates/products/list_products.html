@@ -22,12 +22,12 @@
         </div>
         <div class="card-footer text-muted">
             <div class="d-flex justify-content-between">
-                <span>{% translate "Price" context "Category List" %}</span>
+                <span>{% translate "Price" %}</span>
                 <span>{{ p.price.Price }}&nbsp;{{ p.price.Currency.Symbol }}</span>
             </div>
             <div class="d-flex justify-content-between">
-                <span>{% translate "PV" context "Category List" %}</span>
-                <span>{{ p.price.PV }}</span>
+                <span>{% translate "Volume" %}</span>
+                <span>{{ p.price.PV }}&nbsp;PV</span>
             </div>
 
         </div>
