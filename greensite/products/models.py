@@ -63,7 +63,9 @@ class Category(models.Model):
 class CategoryInfo(models.Model):
     Category = models.ForeignKey(Category, on_delete=models.PROTECT)
     Language = models.ForeignKey(Language, on_delete=models.PROTECT)
-    Tagline = models.CharField(max_length=255, blank=False)
+    ShortDesc = models.CharField(max_length=100, blank=False)
+    LongDesc = models.CharField(max_length=100, blank=True)
+    Tagline = models.CharField(max_length=255, blank=True)
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 

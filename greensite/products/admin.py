@@ -20,9 +20,9 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class CategoryInfoAdmin(admin.ModelAdmin):
-    list_display = ('Category', 'Language', 'Tagline')
+    list_display = ('Category', 'Language', 'ShortDesc', 'Tagline')
     list_filter = ['Language', 'Category']
-    list_editable = ['Tagline']
+    list_editable = ['ShortDesc', 'Tagline']
     ordering = ['Category__Name', 'Language__Code']
 
 
