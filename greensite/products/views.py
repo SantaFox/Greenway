@@ -133,7 +133,7 @@ def view_product(request, sku=None):
     except (Image.DoesNotExist, Image.MultipleObjectsReturned):
         image_primary = None
 
-    tags = product.tag_set.all().annotate(
+    tags = product.tags_of_product.all().annotate(
         tagname=FilteredRelation('taginfo', condition=Q(taginfo__Language=language.id))) \
         .values('tagname__Name').order_by('tagname__Name')
 
@@ -237,14 +237,18 @@ def edit_product(request, blackbox=None):
             new_tab = Tab(Product=product_instance, Language=language)
             form_tab = TabForm(request.POST, prefix='ft', instance=new_tab)
 
+        form_tags = TagForm(request.POST, prefix='ftg', instance=product_instance)
+
         # In theory, any of these three forms may be changed or not, but all three have to be valid
-        if form_product.is_valid() and form_product_info.is_valid() and form_tab.is_valid():
+        if form_product.is_valid() and form_product_info.is_valid() and form_tab.is_valid() and form_tags.is_valid():
             if form_product.has_changed():
                 form_product.save()
             if form_product_info.has_changed():
                 form_product_info.save()
             if form_tab.has_changed():
                 form_tab.save()
+            if form_tags.has_changed():
+                form_tags.save()
 
             # redirect to a main product view
             # TODO: add some kind of information about it
