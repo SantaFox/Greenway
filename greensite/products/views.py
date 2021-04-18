@@ -8,7 +8,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils import translation
 
-from .models import Language, Category, Product, ProductInfo, Tab, Price, Image, Tag
+from .models import Language, Category, Product, ProductInfo, Tab, Price, Image, Tag, TagInfo
 from .forms import ProductForm, ProductInfoForm, TabForm, TagForm, TabsFormset
 
 
@@ -38,7 +38,7 @@ def list_all(request, category=None, tag=None):
         ll = ll.filter(Category=category)
 
     if tag:
-        ll = ll.filter(tag=tag)
+        ll = ll.filter(tags_of_product=tag)
 
     return render(request, 'products/list_all.html', {
         'language': language,
@@ -133,9 +133,21 @@ def view_product(request, sku=None):
     except (Image.DoesNotExist, Image.MultipleObjectsReturned):
         image_primary = None
 
-    tags = product.tags_of_product.all().annotate(
-        tagname=FilteredRelation('taginfo', condition=Q(taginfo__Language=language.id))) \
-        .values('tagname__Name').order_by('tagname__Name')
+    # We expect here a queryset from empty to many. The problem is that the classic FilteredRelation with condition
+    # will product a values queryset while we prefer an instance queryset
+    # tags = product.tags_of_product.all().annotate(
+    #     tagname=FilteredRelation('taginfo', condition=Q(taginfo__Language=language.id))) \
+    #     .values('tagname__Name').order_by('tagname__Name')
+    tags = Tag.objects.filter(Product=product)
+    dict_tags_info = {ti.Tag: ti for ti in TagInfo.objects.filter(Tag__Product=product, Language=language.id)}
+
+    tags_final_set = []
+    for tag in tags:
+        tags_final_set.append(
+            dict(tag=tag,
+                 tag_info=dict_tags_info.get(tag),
+                 )
+        )
 
     response = render(request, 'products/view_product.html', {
         'language': language,
@@ -147,7 +159,7 @@ def view_product(request, sku=None):
         'tabs': tabs,
         'price': price,
         'image_primary': image_primary,
-        'tags': tags,
+        'tags': tags_final_set,
     })
     if not request.COOKIES.get('lang'):
         response.set_cookie('lang', detail_lang)

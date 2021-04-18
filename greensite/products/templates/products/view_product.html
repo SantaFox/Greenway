@@ -53,11 +53,13 @@
             {{ price.PV }}&nbsp;PV
         </p>
 
+       {% if tags %}
         <h5>
             {% for tag in tags %}
-            <a href="#" class="badge bg-warning text-decoration: none">{{ tag.tagname__Name }}</a>
+            <a href="/products/{{ tag.tag.Slug }}/" class="badge bg-warning text-decoration: none">{{ tag.tag_info.Name }}</a>
             {% endfor %}
         </h5>
+        {% endif %}
 
         <div class="row justify-content-lg-left border">
             {% for image in product.image_set.all %}
