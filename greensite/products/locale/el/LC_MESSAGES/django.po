@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-18 01:10+0300\n"
+"POT-Creation-Date: 2021-04-18 12:48+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,68 +18,68 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\products\models.py:81
+#: .\products\models.py:83
 msgid "Category"
 msgstr "Κατηγορία"
 
-#: .\products\models.py:82
+#: .\products\models.py:84
 msgid "Category to which this product belongs"
 msgstr "Κατηγορία στην οποία ανήκει αυτό το προϊόν"
 
-#: .\products\models.py:85
+#: .\products\models.py:87
 msgid "Date Added"
 msgstr ""
 
-#: .\products\models.py:86
+#: .\products\models.py:88
 msgid "Date when this product became available to public"
 msgstr ""
 
-#: .\products\models.py:87
+#: .\products\models.py:89
 msgid "Date Removed"
 msgstr ""
 
-#: .\products\models.py:88
+#: .\products\models.py:90
 msgid "Date when this product became unavailable to order"
 msgstr ""
 
-#: .\products\models.py:110
+#: .\products\models.py:112
 msgid "Product Name"
 msgstr "Ονομασία προϊόντος"
 
-#: .\products\models.py:111
+#: .\products\models.py:113
 msgid ""
 "Full product name with Series before name. No Category should be included."
 msgstr ""
 
-#: .\products\models.py:112
+#: .\products\models.py:114
 msgid "Tagline"
 msgstr ""
 
-#: .\products\models.py:113
+#: .\products\models.py:115
 msgid "A catchphrase or slogan that can make the product remembered."
 msgstr ""
 
-#: .\products\models.py:114
+#: .\products\models.py:116
 msgid "Specification"
 msgstr "Προσδιορισμός"
 
-#: .\products\models.py:115
+#: .\products\models.py:117
 msgid "Specification for product: size, weight etc."
 msgstr ""
 
-#: .\products\models.py:136
+#: .\products\models.py:138
 msgid "Not tested"
 msgstr ""
 
-#: .\products\models.py:137
+#: .\products\models.py:139
 msgid "Low quality"
 msgstr ""
 
-#: .\products\models.py:138
+#: .\products\models.py:140
 msgid "Medium quality"
 msgstr ""
 
-#: .\products\models.py:139
+#: .\products\models.py:141
 msgid "Good quality"
 msgstr ""
 
@@ -91,10 +91,20 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-#: .\products\templates\products\list_products.html:24
+#: .\products\templates\products\list_all.html:14
+#: .\products\templates\products\list_products.html:21
+#, fuzzy
+#| msgid "Product Name"
+msgid "< Product name not set >"
+msgstr "Ονομασία προϊόντος"
+
+#: .\products\templates\products\list_products.html:25
 #: .\products\templates\products\view_product.html:46
-msgctxt "Category List"
 msgid "Price"
+msgstr ""
+
+#: .\products\templates\products\list_products.html:29
+msgid "PV"
 msgstr ""
 
 #: .\products\templates\products\view_product.html:44
@@ -103,6 +113,10 @@ msgstr ""
 
 #: .\products\templates\products\view_product.html:45
 msgid "No specification in this language"
+msgstr ""
+
+#: .\products\templates\products\view_product.html:49
+msgid "actual since"
 msgstr ""
 
 #: .\products\views.py:263

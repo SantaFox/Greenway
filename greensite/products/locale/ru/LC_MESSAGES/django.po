@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-18 01:09+0300\n"
+"POT-Creation-Date: 2021-04-18 12:51+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,70 +20,70 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: .\products\models.py:81
+#: .\products\models.py:83
 msgid "Category"
 msgstr "Категория"
 
-#: .\products\models.py:82
+#: .\products\models.py:84
 msgid "Category to which this product belongs"
 msgstr "Категория, к которой относится продукт"
 
-#: .\products\models.py:85
+#: .\products\models.py:87
 msgid "Date Added"
 msgstr "Дата появления"
 
-#: .\products\models.py:86
+#: .\products\models.py:88
 msgid "Date when this product became available to public"
 msgstr "Дата, когда продукт стал впервые доступен для заказа"
 
-#: .\products\models.py:87
+#: .\products\models.py:89
 msgid "Date Removed"
 msgstr "Дата окончания"
 
-#: .\products\models.py:88
+#: .\products\models.py:90
 msgid "Date when this product became unavailable to order"
 msgstr "Дата, когда продукт стал недоступен для заказа"
 
-#: .\products\models.py:110
+#: .\products\models.py:112
 msgid "Product Name"
 msgstr "Наименование продукта"
 
-#: .\products\models.py:111
+#: .\products\models.py:113
 msgid ""
 "Full product name with Series before name. No Category should be included."
 msgstr ""
 "Полное наименование продукта, с серией перед наименованием. Указывать "
 "категорию не следует."
 
-#: .\products\models.py:112
+#: .\products\models.py:114
 msgid "Tagline"
 msgstr "Привлекательное описание"
 
-#: .\products\models.py:113
+#: .\products\models.py:115
 msgid "A catchphrase or slogan that can make the product remembered."
 msgstr "Короткое описание, раскрывающее суть продукта"
 
-#: .\products\models.py:114
+#: .\products\models.py:116
 msgid "Specification"
 msgstr "Спецификация"
 
-#: .\products\models.py:115
+#: .\products\models.py:117
 msgid "Specification for product: size, weight etc."
 msgstr "Спецификация продукта - размер, вес и т.д."
 
-#: .\products\models.py:136
+#: .\products\models.py:138
 msgid "Not tested"
 msgstr "Не проверялся"
 
-#: .\products\models.py:137
+#: .\products\models.py:139
 msgid "Low quality"
 msgstr "Низкое качество"
 
-#: .\products\models.py:138
+#: .\products\models.py:140
 msgid "Medium quality"
 msgstr "Среднее качество"
 
-#: .\products\models.py:139
+#: .\products\models.py:141
 msgid "Good quality"
 msgstr "Хорошее качество"
 
@@ -95,11 +95,19 @@ msgstr "Редактирование"
 msgid "Preview"
 msgstr "Предпросмотр"
 
-#: .\products\templates\products\list_products.html:24
+#: .\products\templates\products\list_all.html:14
+#: .\products\templates\products\list_products.html:21
+msgid "< Product name not set >"
+msgstr "< Наименование не задано >"
+
+#: .\products\templates\products\list_products.html:25
 #: .\products\templates\products\view_product.html:46
-msgctxt "Category List"
 msgid "Price"
 msgstr "Цена"
+
+#: .\products\templates\products\list_products.html:29
+msgid "Volume"
+msgstr "Объём"
 
 #: .\products\templates\products\view_product.html:44
 msgid "No product name in this language"
@@ -108,6 +116,10 @@ msgstr "Для этого языка не задано наименование"
 #: .\products\templates\products\view_product.html:45
 msgid "No specification in this language"
 msgstr "Для этого языка не задана спецификация"
+
+#: .\products\templates\products\view_product.html:49
+msgid "actual since"
+msgstr "действительна с"
 
 #: .\products\views.py:263
 msgctxt "Default Tab name"
