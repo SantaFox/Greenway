@@ -257,7 +257,7 @@ def edit_product(request, blackbox=None):
                 form_product.save()
             if form_product_info.has_changed():
                 form_product_info.save()
-            if form_tab.has_changed():
+            if form_tab.has_changed() and form_tab.cleaned_data['Text'] != '':
                 form_tab.save()
             if form_tags.has_changed():
                 form_tags.save()
