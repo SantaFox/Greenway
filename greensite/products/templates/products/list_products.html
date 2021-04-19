@@ -9,7 +9,7 @@
         <h2>{{ category.Name }}</h2>
     </div>
 </div>
-<div class="row">
+<div class="row d-flex justify-content-center">
     {% for p in products_list %}
     <div class="card m-2" style="width: 19rem;">
         <h5 class="card-header text-center">#{{ p.product.SKU }}</h5>
