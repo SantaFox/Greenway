@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'imagekit',
     'crispy_forms',
     'markdownx',
+    'django_tables2',
     # 'debug_toolbar',
 ]
 
@@ -146,3 +147,5 @@ MEDIA_URL = '/media/'
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
