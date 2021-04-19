@@ -25,18 +25,16 @@ msgid "Customer Order"
 msgstr "Заказ покупателя"
 
 #: .\ledger\models.py:57
-#, fuzzy
-#| msgid "Supply Order"
 msgid "Supplier Order"
 msgstr "Заказ поставщику"
 
 #: .\ledger\models.py:58
 msgid "Received Payment"
-msgstr "Полученный платеж"
+msgstr "Платёж от покупателя"
 
 #: .\ledger\models.py:59
 msgid "Sent Payment"
-msgstr "Отправленный платеж"
+msgstr "Оплата поставщику"
 
 #: .\ledger\models.py:60
 msgid "Delivered Goods"
