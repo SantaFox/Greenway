@@ -53,7 +53,7 @@
             {{ price.PV }}&nbsp;PV
         </p>
 
-       {% if tags %}
+        {% if tags %}
         <h5>
             {% for tag in tags %}
             <a href="/products/{{ tag.tag.Slug }}/" class="badge bg-warning text-decoration: none">{{ tag.tag_info.Name }}</a>
