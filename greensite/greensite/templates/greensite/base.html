@@ -114,6 +114,25 @@
                     <a href="/products/"
                        class="nav-link px-2"><span>{% translate "Products" context "Main Menu" %}</span></a>
                 </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link px-2 dropdown-toggle" href="#" id="navbarLedger" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span>{% translate "Ledger" context "Main Menu" %}</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarLedger">
+                        <a class="dropdown-item" href="#">{% translate "Current Stock" context "Ledger Menu" %}</a>
+                        <a class="dropdown-item" href="#">{% translate "Customer Orders" context "Ledger Menu" %}</a>
+                        <a class="dropdown-item" href="#">{% translate "Supplier Orders" context "Ledger Menu" %}</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">{% translate "Finance" context "Ledger Menu" %}</a>
+                        <a class="dropdown-item" href="#">{% translate "Payments" context "Ledger Menu" %}</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">{% translate "Customers" context "Ledger Menu" %}</a>
+                        <a class="dropdown-item" href="#">{% translate "Accounts" context "Ledger Menu" %}</a>
+                    </div>
+                </li>
+                {% endif %}
             </ul>
 
             <ul class="navbar-nav">
@@ -126,7 +145,7 @@
                         </svg>
                         <span>{{ language.Name }}</span>
                     </a>
-                    <form aria-labelledby="dropdownUser1"
+                    <form aria-labelledby="navbarLanguage"
                           action="/products/change_lang/"
                           method="post" id="change_lang">{% csrf_token %}
                         <div class="dropdown-menu" aria-labelledby="navbarLanguage">
@@ -153,7 +172,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarLanguage">
                         <a class="dropdown-item" href="#">{% translate "Profile" context "Main Menu" %}</a>
                         {% if user.is_staff %}
-                        <a class="dropdown-item" href="/admin/"><span>{% translate "Admin" context "Main Menu" %}</span></a>
+                        <a class="dropdown-item" href="/admin/">{% translate "Admin" context "Main Menu" %}</a>
                         {% endif %}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'logout' %}?next={{ request.path }}">
@@ -173,22 +192,20 @@
     </div>
 </nav>
 
-<div class="ui container main-container">
-    <div class="main-content">
-        {% block messages %}
-        {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}">
-                {{ message }}
-            </div>
-            {% endfor %}
+<div class="ui container main-container border">
+    {% block messages %}
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}">
+            {{ message }}
         </div>
-        {% endif %}
-        {% endblock %}
-
-        {% block content %}{% endblock %}
+        {% endfor %}
     </div>
+    {% endif %}
+    {% endblock %}
+
+    {% block content %}{% endblock %}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>

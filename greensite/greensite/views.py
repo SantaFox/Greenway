@@ -1,11 +1,10 @@
 from django.shortcuts import render
 from django.conf import settings
 
-from products.views import Language
+from products.models import Language
 
 
 def view_index(request):
-    # Work with selected language
     # Work with selected language
     cookie_lang = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, settings.LANGUAGE_CODE)
 
