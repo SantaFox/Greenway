@@ -82,15 +82,32 @@ def list_products(request, category=None):
                    {'Product_id': prc.Product_id,
                     'Currency_id': prc.Currency_id,
                     'max_date': prc.DateAdded
-                    } in dict_price_list}
+                    } in dict_price_list
+                   }
 
-    final_set = []  # list?
+    # And final step, we need tags for each product. It may be None or one or several Tags
+    # We also need translations, as instances if possible
+    tags_distinct = Tag.objects.filter(Product__Category=category).distinct()
+
+    dict_tag_infos = {ti.Tag: ti for ti in TagInfo.objects.filter(Language=language.id)}
+
+    dict_tags = {}
+    for t in tags_distinct:
+        new_tag_instance = {'tag': t, 'tag_info': dict_tag_infos[t]}
+        for p in t.Product.filter(Category=category):
+            if dict_tags.get(p):
+                dict_tags[p].append(new_tag_instance)
+            else:
+                dict_tags[p] = [new_tag_instance, ]
+
+    final_set = []
     for product in products:
         final_set.append(
             dict(product=product,
                  product_info=dict_product_infos.get(product),
                  image=dict_images.get(product),
-                 price=dict_prices.get(product)
+                 price=dict_prices.get(product),
+                 tags=dict_tags.get(product),
                  )
         )
 
