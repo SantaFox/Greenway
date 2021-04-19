@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.conf import settings
 
+from django_tables2 import RequestConfig
+
 from products.models import Language
 from .models import Counterparty
 from .tables import CounterpartyTable
@@ -39,6 +41,7 @@ def table_counterparty(request):
     languages = Language.objects.all().order_by('Code')
 
     table = CounterpartyTable(Counterparty.objects.all())
+    RequestConfig(request).configure(table)
 
     return render (request, 'ledger/table_counterparties.html', {
         'language': language,
