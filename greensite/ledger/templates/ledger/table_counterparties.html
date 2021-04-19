@@ -1,0 +1,12 @@
+{% extends "greensite/base.html" %}
+{% load render_table from django_tables2 %}
+
+{% block title %}Counterparties{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block content %}
+{% render_table table %}
+{% endblock %}

@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.conf import settings
 
 from products.models import Language
+from .models import Counterparty
+from .tables import CounterpartyTable
 
 
 def view_index(request):
@@ -22,3 +24,24 @@ def view_index(request):
     })
 
     return response
+
+
+def table_counterparty(request):
+    # Work with selected language
+    cookie_lang = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, settings.LANGUAGE_CODE)
+
+    if cookie_lang in ('en', 'el', 'ru'):
+        detail_lang = cookie_lang
+    else:
+        detail_lang = settings.LANGUAGE_CODE
+
+    language = Language.objects.get(Code=detail_lang)
+    languages = Language.objects.all().order_by('Code')
+
+    table = CounterpartyTable(Counterparty.objects.all())
+
+    return render (request, 'ledger/table_counterparties.html', {
+        'language': language,
+        'languages': languages,
+        'table': table,
+    })
