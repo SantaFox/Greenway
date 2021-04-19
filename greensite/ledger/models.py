@@ -103,10 +103,14 @@ class OperationPosition(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
     Quantity = models.PositiveIntegerField(blank=False)
     Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
-    Discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    DiscountReason = models.CharField(max_length=50, blank=True)
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
+    Discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)      # Applied on Total
+    DiscountReason = models.CharField(max_length=50, blank=True)
 
+    # Supplier Order area
+    PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+
+    # Customer Order area
     CustomerOrderStatus = models.IntegerField(choices=[
         # Stock control table columns: In Stock | Reserved | To be Ordered | Incoming | Final
         (1, _('In stock / prepared for delivery')),         # Existing item is reserved
