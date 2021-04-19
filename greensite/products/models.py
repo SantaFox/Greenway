@@ -164,8 +164,8 @@ class Price(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
     DateAdded = models.DateField(blank=True, null=True)
-    Price = models.DecimalField(max_digits=7, decimal_places=2, blank=False)
-    PV = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True)
+    Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
+    PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
