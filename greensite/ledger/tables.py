@@ -1,16 +1,16 @@
 from django.utils.safestring import mark_safe
 
-import django_tables2 as tables
+from django_tables2 import A, BooleanColumn, LinkColumn, Table
 from django_tables2.utils import AttributeDict
 
 from .models import Account, Counterparty, Operation
 
 
-class BootstrapBooleanColumn(tables.BooleanColumn):
+class BootstrapBooleanColumn(BooleanColumn):
     def __init__(self, null=False, **kwargs):
         if null:
             kwargs["empty_values"] = ()
-        super(tables.BooleanColumn, self).__init__(**kwargs)
+        super(BooleanColumn, self).__init__(**kwargs)
 
     def render(self, value):
         value = bool(value)
@@ -26,14 +26,19 @@ class BootstrapBooleanColumn(tables.BooleanColumn):
         return mark_safe(html % (AttributeDict(attrs).as_html()))
 
 
-class AccountsTable(tables.Table):
+class AccountsTable(Table):
+    # WARNING!!! AUTHOR SAYS THAT LINKCOLUMN IS DEPRECATED!!! USE ANOTHER TYPE!!!
+
+    # delete = LinkColumn('ledger:accounts', text=lambda record: record.id, args=[A('pk')], attrs={
+    #     'a': {'class': 'btn'}
+    # })
 
     class Meta:
         model = Account
-        fields = ('Name', )
+        fields = ('Name', 'delete', )
 
 
-class CounterpartyTable(tables.Table):
+class CounterpartyTable(Table):
     IsSupplier = BootstrapBooleanColumn()
     IsCustomer = BootstrapBooleanColumn()
 
@@ -43,7 +48,7 @@ class CounterpartyTable(tables.Table):
         # attrs = {'class': 'table-sm'}
 
 
-class CustomerOrdersTable(tables.Table):
+class CustomerOrdersTable(Table):
 
     class Meta:
         model = Operation
