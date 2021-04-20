@@ -1,0 +1,8 @@
+{% extends "greensite/base.html" %}
+{% load render_table from django_tables2 %}
+
+{% block title %}Accounts{% endblock %}
+
+{% block content %}
+{% render_table table %}
+{% endblock %}
