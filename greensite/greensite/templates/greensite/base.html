@@ -123,7 +123,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarLedger">
                         <a class="dropdown-item" href="#">{% translate "Current Stock" context "Ledger Menu" %}</a>
-                        <a class="dropdown-item" href="#">{% translate "Customer Orders" context "Ledger Menu" %}</a>
+                        <a class="dropdown-item" href="{% url 'ledger:customer_orders' %}">{% translate "Customer Orders" context "Ledger Menu" %}</a>
                         <a class="dropdown-item" href="#">{% translate "Supplier Orders" context "Ledger Menu" %}</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">{% translate "Finance" context "Ledger Menu" %}</a>

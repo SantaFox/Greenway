@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 import django_tables2 as tables
 from django_tables2.utils import AttributeDict
 
-from .models import Account, Counterparty
+from .models import Account, Counterparty, Operation
 
 
 class BootstrapBooleanColumn(tables.BooleanColumn):
@@ -26,6 +26,13 @@ class BootstrapBooleanColumn(tables.BooleanColumn):
         return mark_safe(html % (AttributeDict(attrs).as_html()))
 
 
+class AccountsTable(tables.Table):
+
+    class Meta:
+        model = Account
+        fields = ('Name', )
+
+
 class CounterpartyTable(tables.Table):
     IsSupplier = BootstrapBooleanColumn()
     IsCustomer = BootstrapBooleanColumn()
@@ -36,8 +43,8 @@ class CounterpartyTable(tables.Table):
         # attrs = {'class': 'table-sm'}
 
 
-class AccountsTable(tables.Table):
+class CustomerOrdersTable(tables.Table):
 
     class Meta:
-        model = Account
-        fields = ('Name', )
+        model = Operation
+        fields = ('DateOperation', 'Counterparty')
