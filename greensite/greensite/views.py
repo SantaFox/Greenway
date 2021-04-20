@@ -1,24 +1,8 @@
-from django.shortcuts import render
-from django.conf import settings
+from django.template.response import TemplateResponse
 
-from products.models import Language
+from greensite.decorators import prepare_languages
 
 
+@prepare_languages
 def view_index(request):
-    # Work with selected language
-    cookie_lang = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, settings.LANGUAGE_CODE)
-
-    if cookie_lang in ('en', 'el', 'ru'):
-        detail_lang = cookie_lang
-    else:
-        detail_lang = settings.LANGUAGE_CODE
-
-    language = Language.objects.get(Code=detail_lang)
-    languages = Language.objects.all().order_by('Code')
-
-    response = render(request, 'greensite/index.html', {
-        'language': language,
-        'languages': languages,
-    })
-
-    return response
+    return TemplateResponse(request, 'greensite/index.html')

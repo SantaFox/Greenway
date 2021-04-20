@@ -1,12 +1,13 @@
-import datetime
-
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect, Http404
+from django.template.response import TemplateResponse
 from django.shortcuts import get_object_or_404, render
 from django.db.models import Count, Max, Q, FilteredRelation
 from django.conf import settings
 from django.urls import reverse
 from django.utils import translation
+
+from greensite.decorators import prepare_languages
 
 from .models import Language, Category, Product, ProductInfo, Tab, Price, Image, Tag, TagInfo
 from .forms import ProductForm, ProductInfoForm, TabForm, TagForm, TabsFormset
@@ -16,19 +17,10 @@ def categories_view(request, name=None):
     return render(request, 'products/categories.html', {})
 
 
+@prepare_languages
 def list_all(request, category=None, tag=None):
-    # Work with selected language
-    cookie_lang = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, settings.LANGUAGE_CODE)
-
-    if cookie_lang in ('en', 'el', 'ru'):
-        detail_lang = cookie_lang
-    else:
-        detail_lang = settings.LANGUAGE_CODE
-
-    language = Language.objects.get(Code=detail_lang)
-    languages = Language.objects.all().order_by('Code')
-
-    ll = Product.objects.annotate(pi=FilteredRelation('productinfo', condition=Q(productinfo__Language=language.id))) \
+    ll = Product.objects \
+        .annotate(pi=FilteredRelation('productinfo', condition=Q(productinfo__Language=request.language_instance))) \
         .values('SKU', 'Category__Name', 'Category__Slug', 'pi__Name').order_by('Category__Name', 'SKU') \
         .annotate(ImagesCount=Count('image', distinct=True)) \
         .annotate(TabsCount=Count('tab', distinct=True)) \
@@ -40,29 +32,17 @@ def list_all(request, category=None, tag=None):
     if tag:
         ll = ll.filter(tags_of_product=tag)
 
-    return render(request, 'products/list_all.html', {
-        'language': language,
-        'languages': languages,
+    return TemplateResponse(request, 'products/list_all.html', {
         'products_list': ll,
     })
 
 
+@prepare_languages
 def list_products(request, category=None):
-    # Work with selected language
-    cookie_lang = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, settings.LANGUAGE_CODE)
-
-    if cookie_lang in ('en', 'el', 'ru'):
-        detail_lang = cookie_lang
-    else:
-        detail_lang = settings.LANGUAGE_CODE
-
-    language = Language.objects.get(Code=detail_lang)
-    languages = Language.objects.all().order_by('Code')
-
     products = Product.objects.filter(Category=category).order_by('SKU')
 
     dict_product_infos = {pi.Product: pi for pi in
-                          ProductInfo.objects.filter(Product__Category=category, Language=language.id)}
+                          ProductInfo.objects.filter(Product__Category=category, Language=request.language_instance)}
 
     dict_images = {im.Product: im for im in Image.objects.filter(Product__Category=category, IsPrimary=True)}
 
@@ -89,7 +69,7 @@ def list_products(request, category=None):
     # We also need translations, as instances if possible
     tags_distinct = Tag.objects.filter(Product__Category=category).distinct()
 
-    dict_tag_infos = {ti.Tag: ti for ti in TagInfo.objects.filter(Language=language.id)}
+    dict_tag_infos = {ti.Tag: ti for ti in TagInfo.objects.filter(Language=request.language_instance)}
 
     dict_tags = {}
     for t in tags_distinct:
@@ -111,37 +91,25 @@ def list_products(request, category=None):
                  )
         )
 
-    return render(request, 'products/list_products.html', {
-        'language': language,
-        'languages': languages,
+    return TemplateResponse(request, 'products/list_products.html', {
         'category': category,
         'products_list': final_set,
     })
 
 
+@prepare_languages
 def view_product(request, sku=None):
-    # Work with selected language
-    cookie_lang = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, settings.LANGUAGE_CODE)
-
-    if cookie_lang in ('en', 'el', 'ru'):
-        detail_lang = cookie_lang
-    else:
-        detail_lang = settings.LANGUAGE_CODE
-
-    language = Language.objects.get(Code=detail_lang)
-    languages = Language.objects.all().order_by('Code')
-
     product = get_object_or_404(Product, SKU=sku)
     product_category = product.Category
     product_prev = Product.objects.filter(Category=product_category, SKU__lt=sku).order_by('-SKU').first()
     product_next = Product.objects.filter(Category=product_category, SKU__gt=sku).order_by('SKU').first()
 
     try:
-        product_info = ProductInfo.objects.get(Product=product, Language__Code=detail_lang)
+        product_info = ProductInfo.objects.get(Product=product, Language=request.language_instance)
     except (ProductInfo.DoesNotExist, ProductInfo.MultipleObjectsReturned):
         product_info = None
 
-    tabs = Tab.objects.filter(Product=product, Language__Code=detail_lang).order_by('Order')
+    tabs = Tab.objects.filter(Product=product, Language=request.language_instance).order_by('Order')
 
     price = Price.objects.filter(Product=product).order_by('-DateAdded').first()  # First or None
 
@@ -156,7 +124,7 @@ def view_product(request, sku=None):
     #     tagname=FilteredRelation('taginfo', condition=Q(taginfo__Language=language.id))) \
     #     .values('tagname__Name').order_by('tagname__Name')
     tags = Tag.objects.filter(Product=product)
-    dict_tags_info = {ti.Tag: ti for ti in TagInfo.objects.filter(Tag__Product=product, Language=language.id)}
+    dict_tags_info = {ti.Tag: ti for ti in TagInfo.objects.filter(Tag__Product=product, Language=request.language_instance)}
 
     tags_final_set = []
     for tag in tags:
@@ -166,9 +134,7 @@ def view_product(request, sku=None):
                  )
         )
 
-    response = render(request, 'products/view_product.html', {
-        'language': language,
-        'languages': languages,
+    return TemplateResponse(request, 'products/view_product.html', {
         'product': product,
         'product_prev': product_prev,
         'product_next': product_next,
@@ -178,10 +144,6 @@ def view_product(request, sku=None):
         'image_primary': image_primary,
         'tags': tags_final_set,
     })
-    if not request.COOKIES.get('lang'):
-        response.set_cookie('lang', detail_lang)
-
-    return response
 
 
 def product_dispatch(request, blackbox=None):
@@ -227,28 +189,16 @@ def change_lang(request):
 
 @login_required
 @permission_required('products.change_product', raise_exception=True)
+@prepare_languages
 def edit_product(request, blackbox=None):
-    """View function for renewing a specific Product"""
-
-    # Work with selected language
-    cookie_lang = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, settings.LANGUAGE_CODE)
-
-    if cookie_lang in ('en', 'el', 'ru'):
-        detail_lang = cookie_lang
-    else:
-        detail_lang = settings.LANGUAGE_CODE
-
-    language = Language.objects.get(Code=detail_lang)
-    languages = Language.objects.all().order_by('Code')
-
     product_instance = get_object_or_404(Product, SKU=blackbox)
     # related ProductInfo for this Product and Language may be absent
     try:
-        product_info_instance = ProductInfo.objects.get(Product=product_instance, Language=language)
+        product_info_instance = ProductInfo.objects.get(Product=product_instance, Language=request.language_instance)
     except (ProductInfo.DoesNotExist, ProductInfo.MultipleObjectsReturned):
         product_info_instance = None
     # TODO: no ideas what to do here if there will be no tabs
-    tabs_set = Tab.objects.filter(Product=product_instance, Language=language).order_by('Order')
+    tabs_set = Tab.objects.filter(Product=product_instance, Language=request.language_instance).order_by('Order')
 
     # If this is a POST request then process the Form data
     if request.method == 'POST':
@@ -257,13 +207,13 @@ def edit_product(request, blackbox=None):
         if product_info_instance:
             form_product_info = ProductInfoForm(request.POST, prefix='fpi', instance=product_info_instance)
         else:
-            new_product_info = ProductInfo(Product=product_instance, Language=language)
+            new_product_info = ProductInfo(Product=product_instance, Language=request.language_instance)
             form_product_info = ProductInfoForm(request.POST, prefix='fpi', instance=new_product_info)
 
         if len(tabs_set) > 0:
             form_tab = TabForm(request.POST, prefix='ft', instance=tabs_set[0])
         else:
-            new_tab = Tab(Product=product_instance, Language=language)
+            new_tab = Tab(Product=product_instance, Language=request.language_instance)
             form_tab = TabForm(request.POST, prefix='ft', instance=new_tab)
 
         form_tags = TagForm(request.POST, prefix='ftg', instance=product_instance)
@@ -297,15 +247,11 @@ def edit_product(request, blackbox=None):
             form_tab.fields['Order'].initial = 1
             form_tab.fields['Name'].initial = translation.pgettext('Default Tab name', 'Description')
 
-    context = {
-        'language': language,
-        'languages': languages,
+    return TemplateResponse(request, 'products/edit_product.html', {
         'form_product': form_product,
         'form_product_info': form_product_info,
         'form_tabs': form_tabs,
         'form_tab': form_tab,
         'form_tags': form_tags,
         'product_instance': product_instance,
-    }
-
-    return render(request, 'products/edit_product.html', context)
+    })
