@@ -7,7 +7,8 @@ from products.models import Currency, Product
 
 class Account(models.Model):
     User = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    Name = models.CharField(max_length=50, blank=False)
+    Name = models.CharField(max_length=50, blank=False, verbose_name=_('Account Name'),
+                                     help_text=_('Account name that is easy to use and remember'))
 
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
