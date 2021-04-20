@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-18 15:40+0300\n"
+"POT-Creation-Date: 2021-04-20 10:51+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,46 +56,46 @@ msgstr "Вывести деньги"
 msgid "Break set to items"
 msgstr "Разбить набор на товары"
 
-#: .\ledger\models.py:82 .\ledger\models.py:148
+#: .\ledger\models.py:82 .\ledger\models.py:152
 msgid "Actual"
 msgstr ""
 
-#: .\ledger\models.py:83 .\ledger\models.py:149
+#: .\ledger\models.py:83 .\ledger\models.py:153
 msgid "Reserved"
 msgstr ""
 
-#: .\ledger\models.py:84 .\ledger\models.py:150
+#: .\ledger\models.py:84 .\ledger\models.py:154
 msgid "Ordered"
 msgstr ""
 
-#: .\ledger\models.py:112
+#: .\ledger\models.py:116
 msgid "In stock / prepared for delivery"
 msgstr "В наличии / приготовлен к отправке"
 
-#: .\ledger\models.py:113
+#: .\ledger\models.py:117
 msgid "In stock / should be ordered"
 msgstr "В наличии / требуется заказать"
 
-#: .\ledger\models.py:114
+#: .\ledger\models.py:118
 msgid "Not in stock / need to be ordered"
 msgstr "Нет в наличии / требуется заказать"
 
-#: .\ledger\models.py:115
+#: .\ledger\models.py:119
 msgid "Not in stock / waiting for incoming"
 msgstr "Нет в наличии / ожидаем поставки"
 
-#: .\ledger\models.py:116
+#: .\ledger\models.py:120
 msgid "Not in stock / no delivery control"
 msgstr "Нет в наличии / не контролировать"
 
-#: .\ledger\models.py:117
+#: .\ledger\models.py:121
 msgid "Delivered to customer"
 msgstr "Доставлен заказчику"
 
-#: .\ledger\models.py:137
+#: .\ledger\models.py:141
 msgid "Debit"
 msgstr ""
 
-#: .\ledger\models.py:138
+#: .\ledger\models.py:142
 msgid "Credit"
 msgstr ""

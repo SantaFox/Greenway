@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-18 15:40+0300\n"
+"POT-Creation-Date: 2021-04-20 10:51+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,33 +100,45 @@ msgstr "Предпросмотр"
 msgid "< Product name not set >"
 msgstr "< Наименование не задано >"
 
-#: .\products\templates\products\list_products.html:25
-#: .\products\templates\products\view_product.html:48
+#: .\products\templates\products\list_products.html:34
+#: .\products\templates\products\view_product.html:44
 msgid "Price"
 msgstr "Цена"
 
-#: .\products\templates\products\list_products.html:29
-#: .\products\templates\products\view_product.html:52
+#: .\products\templates\products\list_products.html:39
+#: .\products\templates\products\view_product.html:48
 msgid "Volume"
 msgstr "Объём"
 
-#: .\products\templates\products\view_product.html:23
+#: .\products\templates\products\view_product.html:19
 msgid "Products"
 msgstr "Продукты"
 
-#: .\products\templates\products\view_product.html:46
+#: .\products\templates\products\view_product.html:29
+msgid "Prev"
+msgstr "Пред."
+
+#: .\products\templates\products\view_product.html:35
+msgid "Next"
+msgstr "След."
+
+#: .\products\templates\products\view_product.html:38
+msgid "Edit"
+msgstr "Правка"
+
+#: .\products\templates\products\view_product.html:42
 msgid "No product name in this language"
 msgstr "Для этого языка не задано наименование"
 
-#: .\products\templates\products\view_product.html:47
+#: .\products\templates\products\view_product.html:43
 msgid "No specification in this language"
 msgstr "Для этого языка не задана спецификация"
 
-#: .\products\templates\products\view_product.html:50
+#: .\products\templates\products\view_product.html:46
 msgid "actual since"
 msgstr "действительна с"
 
-#: .\products\views.py:263
+#: .\products\views.py:298
 msgctxt "Default Tab name"
 msgid "Description"
 msgstr "Описание"
