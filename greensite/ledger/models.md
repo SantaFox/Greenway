@@ -1,25 +1,25 @@
-**Explanation how the ledger models should work**
+#Explanation how the ledger models should work
 
-# Customer Order
+## Customer Order
 
 For Customer order, we may use delivery block from Operation, and full information
 in Positions.
 
-# Supplier Order
+## Supplier Order
 
 For Supplier order, we use a delivery block in Operation, and Positions without 
 States field
 
-# Received Payment on Order
+## Received Payment on Order
 
 For Received payment, we use cash-related fields in Operation only
 
-# Sent Payment on Order
+## Sent Payment on Order
 
 For Sent payment, we use cash-related fields in Operation only
 
-# Deposited Money
+## Deposited Money
 
 
-# Withdrawn money
-# Break set to items
+## Withdrawn money
+## Break set to items
