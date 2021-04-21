@@ -56,6 +56,28 @@
         <p class="m-0">{% translate "Price" %}
             {{ price.Price }}&nbsp;{{ price.Currency.Symbol }}
             <span class="font-weight-light">({% translate "actual since" %} {{ price.DateAdded|date:"j E Y"}})</span>
+            {% if user.is_authenticated and user.is_staff %}
+            <button class="btn btn-sm btn-info" data-toggle="popover" data-html="true" title="Price History" data-content="Table data">History</button>
+            <div id="price-history-table" class="d-none">
+                <table>
+                    <tr>
+                        <th>Date</th>
+                        <th>Price</th>
+                        <th>Volume</th>
+                    </tr>
+                    <tr>
+                        <td>01.01.80</td>
+                        <td>12.45 EUR</td>
+                        <td>7 PV</td>
+                    </tr>
+                    <tr>
+                        <td>01.01.80</td>
+                        <td>12.45 EUR</td>
+                        <td>7.3 V</td>
+                    </tr>
+                </table>
+            </div>
+            {% endif %}
         </p>
         <p class="m-0">{% translate "Volume" %}
             {{ price.PV }}&nbsp;PV
@@ -117,4 +139,18 @@
 </div>
 {% endblock %}
 
-{% block js %}{% endblock %}
+{% block js-before %}
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+{% endblock %}
+{% block js %}
+<script>
+$(document).ready(function(){
+  $('[data-toggle="popover"]').popover({
+    html: true,
+    content: function() {
+        return $('#price-history-table').html();
+    }
+  });
+});
+</script>
+{% endblock %}
