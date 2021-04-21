@@ -58,14 +58,17 @@ def table_accounts(request):
 @permission_required('ledger.edit_account', raise_exception=True)
 @prepare_languages
 def edit_account(request, pk):
-    return TemplateResponse(request, 'ledger/edit_account.html', )
+    account_instance = get_object_or_404(Account, pk=pk)
+    return TemplateResponse(request, 'ledger/edit_account.html', {
+        'account': account_instance,
+    })
 
 
 @login_required
 @permission_required('ledger.delete_account', raise_exception=True)
 @prepare_languages
 def confirm_delete_account(request, pk):
-    account_instance = get_object_or_404(Account, pk)
+    account_instance = get_object_or_404(Account, pk=pk)
     return TemplateResponse(request, 'ledger/delete_account.html', {
         'account': account_instance,
     })

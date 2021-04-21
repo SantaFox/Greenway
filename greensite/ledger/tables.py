@@ -33,9 +33,12 @@ class AccountsTable(Table):
     )
 
     def render_actions(self, value):
-        urlEdit = reverse('ledger:edit_account', args=[value])
-        urlDelete = reverse('ledger:delete_account', args=[value])
-        return mark_safe(f'<a href="{urlEdit}"><i class="bi bi-pencil-square"></i></a>&nbsp;<a href="{urlDelete}"><i class="bi bi-trash"></i></a>')
+        url_edit = reverse('ledger:edit_account', args=[value])
+        url_delete = reverse('ledger:delete_account', args=[value])
+        html = (f'<a href="{url_edit}" class="mr-2"><i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
+                f'<a href="{url_delete}"><i class="bi bi-trash text-danger mr-1"></i>Delete</a>'
+                )
+        return mark_safe(html)
 
     class Meta:
         model = Account

@@ -1,0 +1,10 @@
+{% extends "greensite/base.html" %}
+{% load i18n %}
+
+{% block title %}Delete account{% endblock %}
+
+{% block content %}
+<h4>{% translate "Please confirm that you want to delete this object. This operation cannot be undone." %}</h4>
+
+{{ account|pprint }}
+{% endblock %}
