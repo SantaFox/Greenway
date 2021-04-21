@@ -148,9 +148,11 @@
 $(document).ready(function(){
   $('[data-toggle="popover"]').popover({
     html: true,
-    content: function() {
-        return $('#price-history-table').html();
-    }
+    sanitize: false
+<!--    content: function() {-->
+<!--        var poppercontent = $('#price-history-table');-->
+<!--        return $(poppercontent).html();-->
+<!--    }-->
   });
 });
 </script>
