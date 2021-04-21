@@ -1,4 +1,5 @@
 {% extends "greensite/base.html" %}
+{% load i18n %}
 {% load static %}
 {% load crispy_forms_tags %}
 
@@ -35,7 +36,9 @@
         <input type="hidden" name="next" value="{{ next }}"/>
         <div class="row">
             <div class="col-md-6">
-                <button type="submit" class="btn btn-outline-success btn-form"><i class="bi bi-box-arrow-in-right"></i>&nbsp;Login
+                <button type="submit" class="btn btn-outline-success btn-form">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    {% translate "Login" %}
                 </button>
             </div>
             <div class="col-md-6">

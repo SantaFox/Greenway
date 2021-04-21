@@ -177,14 +177,14 @@
                         {% endif %}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'logout' %}?next={{ request.path }}">
-                            {% translate "Logout" context "Main Menu" %}
+                            {% translate "Logout" %}
                         </a>
                     </div>
                 </li>
                 {% else %}
                 <li class="nav-item">
                     <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-outline-primary">
-                        {% translate "Login" context "Main menu" %}
+                        {% translate "Login" %}
                     </a>
                 </li>
                 {% endif %}
