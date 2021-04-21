@@ -111,7 +111,8 @@ def view_product(request, sku=None):
 
     tabs = Tab.objects.filter(Product=product, Language=request.language_instance).order_by('Order')
 
-    price = Price.objects.filter(Product=product).order_by('-DateAdded').first()  # First or None
+    prices = Price.objects.filter(Product=product).order_by('-DateAdded')
+    price = prices.first()  # First or None
 
     try:
         image_primary = Image.objects.get(Product=product, IsPrimary=True)
@@ -141,6 +142,7 @@ def view_product(request, sku=None):
         'product_info': product_info,
         'tabs': tabs,
         'price': price,
+        'prices': prices,
         'image_primary': image_primary,
         'tags': tags_final_set,
     })

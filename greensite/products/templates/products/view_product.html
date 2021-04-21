@@ -55,30 +55,38 @@
         <p>{{ product_info.Specification|default:_("No specification in this language") }}</p>
         <p class="m-0">{% translate "Price" %}
             {{ price.Price }}&nbsp;{{ price.Currency.Symbol }}
-            <span class="font-weight-light">({% translate "actual since" %} {{ price.DateAdded|date:"j E Y"}})</span>
+            <span class="font-weight-light">
+                ({% translate "actual since" %} {{ price.DateAdded|date:"j E Y" }})
+            </span>
             {% if user.is_authenticated and user.is_staff %}
-            <button class="btn btn-sm btn-info" data-toggle="popover" data-html="true" title="Price History" data-content="Table data">History</button>
-            <div id="price-history-table" class="d-none">
-                <table>
-                    <tr>
-                        <th>Date</th>
-                        <th>Price</th>
-                        <th>Volume</th>
-                    </tr>
-                    <tr>
-                        <td>01.01.80</td>
-                        <td>12.45 EUR</td>
-                        <td>7 PV</td>
-                    </tr>
-                    <tr>
-                        <td>01.01.80</td>
-                        <td>12.45 EUR</td>
-                        <td>7.3 V</td>
-                    </tr>
-                </table>
-            </div>
+            <a tabindex="0" role="button" class="btn btn-sm btn-info ml-2" data-toggle="popover" data-trigger="focus"
+               title="{% translate 'Price History' %}">
+                {% translate "History" context "Price History" %}
+            </a>
             {% endif %}
         </p>
+        {% if user.is_authenticated and user.is_staff %}
+        <div id="price-history-table" class="d-none">
+            <table class="table table-bordered table-sm">
+                <thead>
+                <tr class="text-center">
+                    <th>{% translate "Date" %}</th>
+                    <th>{% translate "Price" %}</th>
+                    <th>{% translate "Volume" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for p in prices %}
+                <tr>
+                    <td>{{ p.DateAdded|date:"d.m.y" }}</td>
+                    <td class="text-right">{{ p.Price|floatformat:2 }}&nbsp;{{ p.Currency.Code }}</td>
+                    <td class="text-right">{{ p.PV|floatformat:1 }}&nbsp;PV</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
         <p class="m-0">{% translate "Volume" %}
             {{ price.PV }}&nbsp;PV
         </p>
@@ -86,7 +94,9 @@
         {% if tags %}
         <h5>
             {% for tag in tags %}
-            <a href="/products/{{ tag.tag.Slug }}/" class="badge bg-warning text-decoration: none">{{ tag.tag_info.Name }}</a>
+            <a href="/products/{{ tag.tag.Slug }}/" class="badge bg-warning text-decoration: none">
+                {{ tag.tag_info.Name }}
+            </a>
             {% endfor %}
         </h5>
         {% endif %}
@@ -142,18 +152,23 @@
 {% block js-before %}
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 {% endblock %}
+{% if user.is_authenticated and user.is_staff %}
 {% block js %}
 <script>
 <!--http://jsfiddle.net/z824fn6b/320/-->
 $(document).ready(function(){
   $('[data-toggle="popover"]').popover({
     html: true,
-    sanitize: false
-<!--    content: function() {-->
-<!--        var poppercontent = $('#price-history-table');-->
-<!--        return $(poppercontent).html();-->
-<!--    }-->
+    sanitize: false,
+    content: function() {
+        return $('#price-history-table').html();
+    },
   });
 });
+
+
+
+
 </script>
 {% endblock %}
+{% endif %}
