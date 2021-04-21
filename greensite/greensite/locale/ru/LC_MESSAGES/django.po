@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-20 10:51+0300\n"
+"POT-Creation-Date: 2021-04-21 09:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,11 +98,10 @@ msgid "Admin"
 msgstr "Админ"
 
 #: .\greensite\templates\greensite\base.html:180
-msgctxt "Main Menu"
 msgid "Logout"
 msgstr "Выход"
 
 #: .\greensite\templates\greensite\base.html:187
-msgctxt "Main menu"
+#: .\greensite\templates\registration\login.html:41
 msgid "Login"
 msgstr "Вход"

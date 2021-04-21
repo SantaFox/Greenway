@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-18 15:40+0300\n"
+"POT-Creation-Date: 2021-04-21 09:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,33 +96,47 @@ msgstr "Προεπισκόπηση"
 msgid "< Product name not set >"
 msgstr "< .. >"
 
-#: .\products\templates\products\list_products.html:25
-#: .\products\templates\products\view_product.html:48
+#: .\products\templates\products\list_products.html:34
+#: .\products\templates\products\view_product.html:44
 msgid "Price"
 msgstr "Τιμή"
 
-#: .\products\templates\products\list_products.html:29
-#: .\products\templates\products\view_product.html:52
+#: .\products\templates\products\list_products.html:39
+#: .\products\templates\products\view_product.html:48
 msgid "Volume"
 msgstr "Όγκος"
 
-#: .\products\templates\products\view_product.html:23
+#: .\products\templates\products\view_product.html:19
 msgid "Products"
 msgstr "Προϊόντα"
 
-#: .\products\templates\products\view_product.html:46
+#: .\products\templates\products\view_product.html:29
+#, fuzzy
+#| msgid "Preview"
+msgid "Prev"
+msgstr "Προεπισκόπηση"
+
+#: .\products\templates\products\view_product.html:35
+msgid "Next"
+msgstr ""
+
+#: .\products\templates\products\view_product.html:38
+msgid "Edit"
+msgstr ""
+
+#: .\products\templates\products\view_product.html:42
 msgid "No product name in this language"
 msgstr ""
 
-#: .\products\templates\products\view_product.html:47
+#: .\products\templates\products\view_product.html:43
 msgid "No specification in this language"
 msgstr ""
 
-#: .\products\templates\products\view_product.html:50
+#: .\products\templates\products\view_product.html:46
 msgid "actual since"
 msgstr "πραγματική από τότε"
 
-#: .\products\views.py:263
+#: .\products\views.py:248
 msgctxt "Default Tab name"
 msgid "Description"
 msgstr "Περιγραφή"
