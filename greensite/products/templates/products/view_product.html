@@ -23,19 +23,31 @@
             </ol>
             <ol>
                 {% if product_prev %}
-                <a href="/products/{{ product_prev.SKU }}/" class="btn btn-sm btn-info"><i
-                        class="bi bi-arrow-left-square"></i>&nbsp;Prev</a>
+                <a href="/products/{{ product_prev.SKU }}/" class="btn btn-sm btn-primary">
+                    <i class="bi bi-arrow-left-square mr-1"></i>
+                    {% translate "Prev" %}
+                </a>
                 {% else %}
-                <button class="btn btn-sm btn-light"><i class="bi bi-arrow-left-square"></i>&nbsp;{% translate "Prev" %}</button>
+                <button class="btn btn-sm btn-light">
+                    <i class="bi bi-arrow-left-square mr-1"></i>
+                    {% translate "Prev" %}
+                </button>
                 {% endif %}
                 {% if product_next %}
-                <a href="/products/{{ product_next.SKU }}/" class="btn btn-sm btn-info"><i
-                        class="bi bi-arrow-right-square"></i>&nbsp;Next</a>
+                <a href="/products/{{ product_next.SKU }}/" class="btn btn-sm btn-primary">
+                    <i class="bi bi-arrow-right-square mr-1"></i>
+                    {% translate "Next" %}
+                </a>
                 {% else %}
-                <button class="btn btn-sm btn-light"><i class="bi bi-arrow-right-square"></i>&nbsp;{% translate "Next" %}</button>
+                <button class="btn btn-sm btn-light"><i class="bi bi-arrow-right-square mr-1"></i>
+                    {% translate "Next" %}
+                </button>
                 {% endif %}
                 {% if user.is_authenticated and user.is_staff %}
-                <a href="edit/" class="btn btn-sm btn-danger"><i class="bi bi-pencil-square"></i>&nbsp;{% translate "Edit" %}</a>
+                <a href="edit/" class="btn btn-sm btn-danger">
+                    <i class="bi bi-pencil-square mr-1"></i>
+                    {% translate "Edit" %}
+                </a>
                 {% endif %}
             </ol>
         </nav>
@@ -88,7 +100,7 @@
     </div>
 </nav>
 <div class="row">
-    <div class="tab-content martor-preview" id="nav-tabContent">
+    <div class="tab-content" id="nav-tabContent">
         {% for tab in tabs %}
         {% if forloop.first %}
         <div class="tab-pane fade show active" id="nav-tab{{ tab.Order }}" role="tabpanel"
