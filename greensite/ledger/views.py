@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, Http404
 from django.template.response import TemplateResponse
@@ -78,6 +79,11 @@ def account_action(request):
             account_instance = get_object_or_404(Account, id=request_id)
             account_instance.Name = request.POST.get('account_name')
             # if account_instance.is_valid() and account_instance.has_changed():
+            try:
+                account_instance.full_clean()
+            except ValidationError as e:
+                return JsonResponse({'status': 'error', 'errors': e.error_dict})
+
             account_instance.save()
             return JsonResponse({'status': 'success'})
         else:
