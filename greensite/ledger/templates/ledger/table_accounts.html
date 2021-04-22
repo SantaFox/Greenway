@@ -3,6 +3,186 @@
 
 {% block title %}Accounts{% endblock %}
 
+{% block css %}
+<style>
+    table.table tr th:first-child {
+	    width: 60px;
+    }
+    table.table tr th:last-child {
+	    width: 150px;
+    }
+
+
+</style>
+{% endblock %}
 {% block content %}
-{% render_table table %}
+<div class="table-wrapper">
+    <div class="table-title mb-2">
+        <div class="row text-white py-3" style="background: #435d7d;">
+            <div class="col-sm-6">
+                <h2 class="mb-0">Manage <b>Accounts</b></h2>
+            </div>
+            <div class="col-sm-6 d-flex align-items-center justify-content-end">
+                <a href="#addAccountModal" class="btn btn-sm btn-success" data-toggle="modal">
+                    <i class="bi bi-plus-circle mr-2"></i>Add New Account</a>
+                <a href="#deleteAccountModal" class="btn btn-sm btn-danger ml-2" data-toggle="modal">
+                    <i class="bi bi-dash-circle mr-2"></i>Delete Selected</a>
+            </div>
+        </div>
+    </div>
+    {% render_table table %}
+</div>
+<!-- Add Modal HTML -->
+<div id="addAccountModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Account</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-success" value="Add">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal HTML -->
+<div id="editAccountModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/ledger/accounts/action/">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Account</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Account Name</label>
+                        <input type="text" class="form-control" required name="account_name">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="account_id">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-info" value="Save">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Delete Modal HTML -->
+<div id="deleteAccountModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Employee</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete these Records?</p>
+                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-danger" value="Delete">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    $(document).ready(function(){
+        // Activate tooltip
+        // $('[data-toggle="tooltip"]').tooltip();
+
+        // Select/Deselect checkboxes
+        var checkbox = $('table tbody input[type="checkbox"]');
+        $("#selectAll").click(function(){
+            if(this.checked){
+                checkbox.each(function(){
+                    this.checked = true;
+                });
+            } else{
+                checkbox.each(function(){
+                    this.checked = false;
+                });
+            }
+        });
+        checkbox.click(function(){
+            if(!this.checked){
+                $("#selectAll").prop("checked", false);
+            }
+        });
+    });
+
+    $('#editAccountModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var accountId = button.data('id') // Extract info from data-* attributes
+        var modal = $(this)
+        $.ajax({
+                    url:'/ledger/accounts/action/',
+                    type:'GET',
+                    data: {id: accountId},
+                    dataType: 'json',
+                    success:function(response){
+                        modal.find('.modal-footer input[name="account_id"]').val(response.id);
+                        modal.find('.modal-body input[name="account_name"]').val(response.Name);
+                    },
+                    error:function(){
+                        console.log('something went wrong here');
+                    },
+                });
+    })
+
+    $('.modal form').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: $(this).attr('action'),
+            type:'POST',
+            data: $(this).serialize(),  // $(this).serializeObject(),
+            beforeSend: function(request) {
+                request.setRequestHeader("X-CSRFToken", csrfcookie());
+            },
+            success:function(response){
+                console.log(response);
+                $('.modal').each(function(){
+                    $(this).modal('hide');
+                });
+                location.reload();
+            },
+            error:function(){
+                console.log('something went wrong here');
+            },
+        });
+    });
+
+var csrfcookie = function() {
+    var cookieValue = null,
+        name = 'csrftoken';
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+};
+</script>
 {% endblock %}

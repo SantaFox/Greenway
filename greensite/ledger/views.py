@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse, Http404
 from django.template.response import TemplateResponse
+from django.forms.models import model_to_dict
 
 from django_tables2 import RequestConfig
 
@@ -62,6 +64,27 @@ def edit_account(request, pk):
     return TemplateResponse(request, 'ledger/edit_account.html', {
         'account': account_instance,
     })
+
+
+def account_action(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            request_id = request.GET.get('id')
+            account_instance = get_object_or_404(Account, id=request_id)
+            account_dict = model_to_dict(account_instance, fields=['id', 'Name',])
+            return JsonResponse(account_dict)
+        elif request.method == 'POST':
+            request_id = request.POST.get('account_id')
+            account_instance = get_object_or_404(Account, id=request_id)
+            account_instance.Name = request.POST.get('account_name')
+            # if account_instance.is_valid() and account_instance.has_changed():
+            account_instance.save()
+            return JsonResponse({'status': 'success'})
+        else:
+            raise Http404
+    else:
+        raise Http404
+
 
 
 @login_required
