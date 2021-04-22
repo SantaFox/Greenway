@@ -1,5 +1,6 @@
 {% extends "greensite/base.html" %}
 {% load i18n %}
+{% load static %}
 {% load render_table from django_tables2 %}
 
 {% block title %}Accounts{% endblock %}
@@ -36,7 +37,7 @@
 <div id="addAccountModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form>
+            <form action="/ledger/accounts/action/">
                 <div class="modal-header">
                     <h4 class="modal-title">Add Account</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -44,10 +45,11 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Account Name</label>
-                        <input type="text" class="form-control" required>
+                        <input type="text" class="form-control" name="account_name" required>
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <input type="hidden" name="action" value="add">
                     <input type="button" class="btn btn-default" data-dismiss="modal" value="{% translate "Cancel" context "Form button" %}">
                     <input type="submit" class="btn btn-success" value="{% translate "Add" context "Form button" %}">
                 </div>
@@ -67,11 +69,12 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Account Name</label>
-                        <input type="text" class="form-control" required name="account_name">
+                        <input type="text" class="form-control" name="account_name" required>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="account_id">
+                    <input type="hidden" name="action" value="edit">
                     <input type="button" class="btn btn-default" data-dismiss="modal" value="{% translate "Cancel" context "Form button" %}">
                     <input type="submit" class="btn btn-info" value="{% translate "Save" context "Form button" %}">
                 </div>
@@ -147,42 +150,6 @@
                 });
     })
 
-    $('.modal form').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: $(this).attr('action'),
-            type:'POST',
-            data: $(this).serialize(),  // $(this).serializeObject(),
-            beforeSend: function(request) {
-                request.setRequestHeader("X-CSRFToken", csrfcookie());
-            },
-            success:function(response){
-                console.log(response);
-                $('.modal').each(function(){
-                    $(this).modal('hide');
-                });
-                location.reload();
-            },
-            error:function(){
-                console.log('something went wrong here');
-            },
-        });
-    });
-
-var csrfcookie = function() {
-    var cookieValue = null,
-        name = 'csrftoken';
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-};
 </script>
+<script type="text/javascript" src="{% static '/ledger/crud.js' %}"></script>
 {% endblock %}
