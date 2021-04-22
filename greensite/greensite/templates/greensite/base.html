@@ -1,12 +1,13 @@
 {% load i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ language.Code|default:"en" }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="{{ language.Code|default:"en" }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% block title %}Greenway Cyprus{% endblock title %}</title>
-Cha    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varela+Round">
     <style>
@@ -149,7 +150,7 @@ Cha    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarLanguage" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <svg class="bi me-2" width="45" height="30">
+                        <svg class="bi me-2" width="30" height="20">
                             <use xlink:href="#{{ language.Flag }}"/>
                         </svg>
                         <span>{{ language.Name }}</span>
