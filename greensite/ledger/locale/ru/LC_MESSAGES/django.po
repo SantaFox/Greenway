@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-21 09:58+0300\n"
+"POT-Creation-Date: 2021-04-22 10:05+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,11 +22,11 @@ msgstr ""
 
 #: .\ledger\models.py:10
 msgid "Account Name"
-msgstr ""
+msgstr "Наименование счёта"
 
 #: .\ledger\models.py:11
 msgid "Account name that is easy to use and remember"
-msgstr ""
+msgstr "Наименование счёта, простое и удобное для использования"
 
 #: .\ledger\models.py:57
 msgid "Customer Order"
@@ -107,3 +107,31 @@ msgstr ""
 #: .\ledger\models.py:143
 msgid "Credit"
 msgstr ""
+
+#: .\ledger\templates\ledger\delete_account.html:7
+msgid ""
+"Please confirm that you want to delete this object. This operation cannot be "
+"undone."
+msgstr ""
+
+#: .\ledger\templates\ledger\table_accounts.html:51
+#: .\ledger\templates\ledger\table_accounts.html:75
+#: .\ledger\templates\ledger\table_accounts.html:96
+msgctxt "Form button"
+msgid "Cancel"
+msgstr "Отмена"
+
+#: .\ledger\templates\ledger\table_accounts.html:52
+msgctxt "Form button"
+msgid "Add"
+msgstr "Добавить"
+
+#: .\ledger\templates\ledger\table_accounts.html:76
+msgctxt "Form button"
+msgid "Save"
+msgstr "Сохранить"
+
+#: .\ledger\templates\ledger\table_accounts.html:97
+msgctxt "Form button"
+msgid "Delete"
+msgstr "Удалить"
