@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, Http404, HttpResponseBadRequest
@@ -27,7 +28,9 @@ def view_index(request):
 @prepare_languages
 def table_counterparties(request):
     table = CounterpartyTable(Counterparty.objects.filter(User=request.user))
-    RequestConfig(request).configure(table)
+    RequestConfig(request,
+                  paginate={"per_page": 10})\
+        .configure(table)
 
     return TemplateResponse(request, 'ledger/table_counterparties.html', {
         'table': table,
@@ -86,8 +89,7 @@ def counterparty_action(request):
                                      'message': {
                                          'text': f'Account <strong>{counterparty_instance.Name}</strong> updated successfully',
                                          'moment': datetime.now(),
-                                     },
-                                     })
+                                     }, })
             elif action == 'delete':
                 pass
             else:
