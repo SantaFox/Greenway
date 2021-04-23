@@ -43,7 +43,7 @@ class Counterparty(models.Model):
     TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.Name}'
+        return f'{self.User} / {self.Name}'
 
     class Meta:
         verbose_name_plural = "Counterparties"
