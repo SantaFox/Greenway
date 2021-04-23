@@ -4,9 +4,9 @@ from .models import Account, Counterparty, Operation, OperationPosition, Operati
 
 
 class CounterpartyAdmin(admin.ModelAdmin):
-    list_display = ('User', 'Name', 'Phone', 'IsSupplier', 'IsCustomer')
+    list_display = ('User', 'Name', 'Phone', 'City', 'IsSupplier', 'IsCustomer')
     # list_filter = ['Language', 'Product__Category', 'Product']
-    list_editable = ['Name', 'Phone', 'IsSupplier', 'IsCustomer']
+    list_editable = ['Name', 'Phone', 'City', 'IsSupplier', 'IsCustomer']
     ordering = ['User', 'Name']
     search_fields = ['Name']
 

@@ -30,8 +30,10 @@ class Counterparty(models.Model):
     Phone = models.CharField(max_length=50, blank=True)
     Email = models.CharField(max_length=50, blank=True)
     Telegram = models.CharField(max_length=50, blank=True)
+    Instagram = models.CharField(max_length=50, blank=True)
     Facebook = models.CharField(max_length=50, blank=True)
     Address = models.CharField(max_length=255, blank=True)
+    City = models.CharField(max_length=50, blank=True)
     Memo = models.TextField(blank=True)
 
     IsSupplier = models.BooleanField(default=False)
