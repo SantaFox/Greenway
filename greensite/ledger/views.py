@@ -38,7 +38,10 @@ def counterparty_action(request):
         if request.method == 'GET':
             request_id = request.GET.get('id')
             counterparty_instance = get_object_or_404(Counterparty, id=request_id)
-            counterparty_dict = model_to_dict(counterparty_instance, fields=['id', 'Name', 'Phone', 'Email', 'Telegram', 'Facebook', 'Address', 'Memo', 'IsSupplier', 'IsCustomer',])
+            counterparty_dict = model_to_dict(counterparty_instance,
+                                              fields=['id', 'Name', 'Phone', 'Email', 'Instagram', 'Telegram',
+                                                      'Facebook', 'City', 'Address', 'Memo',
+                                                      'IsSupplier', 'IsCustomer', ])
             return JsonResponse(counterparty_dict)
         elif request.method == 'POST':
             action = request.POST.get('action')
@@ -55,7 +58,7 @@ def counterparty_action(request):
                                      'message': {
                                          'text': f'Account <strong>{counterparty_instance.Name}</strong> added successfully',
                                          'moment': datetime.now(),
-                                         },
+                                     },
                                      })
             elif action == 'edit':
                 request_id = request.POST.get('id')
@@ -70,7 +73,7 @@ def counterparty_action(request):
                                      'message': {
                                          'text': f'Account <strong>{counterparty_instance.Name}</strong> updated successfully',
                                          'moment': datetime.now(),
-                                         },
+                                     },
                                      })
             elif action == 'delete':
                 pass
@@ -116,7 +119,7 @@ def account_action(request):
                                      'message': {
                                          'text': f'Account <strong>{account_instance.Name}</strong> added successfully',
                                          'moment': datetime.now(),
-                                         },
+                                     },
                                      })
             elif action == 'edit':
                 request_id = request.POST.get('account_id')
@@ -131,7 +134,7 @@ def account_action(request):
                                      'message': {
                                          'text': f'Account <strong>{account_instance.Name}</strong> updated successfully',
                                          'moment': datetime.now(),
-                                         },
+                                     },
                                      })
             elif action == 'delete':
                 pass
