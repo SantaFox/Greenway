@@ -13,6 +13,7 @@ from greensite.decorators import prepare_languages
 
 from .models import Account, Counterparty, Operation
 from .tables import AccountsTable, CounterpartyTable, CustomerOrdersTable
+from .forms import CounterpartyForm
 
 
 @login_required
@@ -63,12 +64,24 @@ def counterparty_action(request):
             elif action == 'edit':
                 request_id = request.POST.get('id')
                 counterparty_instance = get_object_or_404(Counterparty, id=request_id)
-                counterparty_instance.Name = request.POST.get('account_name')
-                try:
-                    counterparty_instance.full_clean()
-                except ValidationError as e:
-                    return JsonResponse({'status': 'error', 'errors': e.error_dict})
-                counterparty_instance.save()
+                counterparty_form = CounterpartyForm(request.POST, instance=counterparty_instance)
+                if not counterparty_form.has_changed():
+                    messages.info(request,
+                                     f'Account <strong>{counterparty_instance.Name}</strong> was not changed')
+                    return JsonResponse({'status': 'success',
+                                         'message': {
+                                             'text': f'Counterparty <strong>{counterparty_instance.Name}</strong> was not changed',
+                                             'moment': datetime.now(),
+                                         }, })
+                if not counterparty_form.is_valid():
+                    return JsonResponse({'status': 'success',
+                                         'message': {
+                                             'text': f'Counterparty <strong>{counterparty_instance.Name}</strong> was not saved',
+                                             'moment': datetime.now(),
+                                         },
+                                         'errors': counterparty_form.errors})
+                counterparty_form.save()
+                messages.success(request, f'Account <strong>{counterparty_instance.Name}</strong> updated successfully')
                 return JsonResponse({'status': 'success',
                                      'message': {
                                          'text': f'Account <strong>{counterparty_instance.Name}</strong> updated successfully',
