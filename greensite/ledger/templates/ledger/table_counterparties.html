@@ -1,8 +1,235 @@
 {% extends "greensite/base.html" %}
+{% load i18n %}
+{% load static %}
 {% load render_table from django_tables2 %}
 
-{% block title %}Counterparties{% endblock %}
+{% block title %}Manage Counterparties{% endblock %}
+
+{% block css %}
+<style>
+    table.table tr th:first-child {
+	    width: 60px;
+    }
+    table.table tr th:last-child {
+	    width: 150px;
+    }
+
+
+
+
+
+</style>
+{% endblock %}
 
 {% block content %}
-{% render_table table %}
+<div class="table-wrapper">
+    <div class="table-title mb-2">
+        <div class="row text-white py-3" style="background: #435d7d;">
+            <div class="col-sm-6">
+                <h2 class="mb-0">Manage <b>Counterparties</b></h2>
+            </div>
+            <div class="col-sm-6 d-flex align-items-center justify-content-end">
+                <a href="#addAccountModal" class="btn btn-sm btn-success" data-toggle="modal">
+                    <i class="bi bi-plus-circle mr-2"></i>Add New Counterparty</a>
+                {% comment %}
+                <a href="#deleteAccountModal" class="btn btn-sm btn-danger ml-2" data-toggle="modal">
+                    <i class="bi bi-dash-circle mr-2"></i>{% translate "Delete Selected" %}</a>
+                {% endcomment %}
+            </div>
+        </div>
+    </div>
+    {% render_table table %}
+</div>
+<!-- Add Modal HTML -->
+<div id="addModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/ledger/counterparties/action/">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Counterparty</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Account Name</label>
+                        <input type="text" class="form-control" name="account_name" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="action" value="add">
+                    <input type="button" class="btn btn-default" data-dismiss="modal"
+                           value="{% translate 'Cancel' context 'Form button' %}">
+                    <input type="submit" class="btn btn-success"
+                           value="{% translate 'Add' context 'Form button' %}">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal HTML -->
+<div id="editModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/ledger/counterparties/action/">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Counterparty</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Customer Name</label>
+                                <input type="text" class="form-control" name="Name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Contact Phone</label>
+                                <input type="text" class="form-control" name="Phone">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="text" class="form-control" name="Email">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Telegram</label>
+                                <input type="text" class="form-control" name="Telegram">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Facebook</label>
+                                <input type="text" class="form-control" name="Facebook">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" class="form-control" name="Address">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Memo</label>
+                        <input type="text" class="form-control" name="Memo">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Act as Supplier</label>
+                                <input type="checkbox" class="form-control" name="IsSupplier">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Act as Customer</label>
+                                <input type="checkbox" class="form-control" name="IsCustomer">
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="id">
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="action" value="edit">
+                    <input type="button" class="btn btn-default" data-dismiss="modal"
+                           value="{% translate 'Cancel' context 'Form button' %}">
+                    <input type="submit" class="btn btn-info"
+                           value="{% translate 'Save' context 'Form button' %}">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Delete Modal HTML -->
+<div id="deleteModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Counterparty</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete these Records?</p>
+                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal"
+                           value="{% translate 'Cancel' context 'Form button' %}">
+                    <input type="submit" class="btn btn-danger"
+                           value="{% translate 'Delete' context 'Form button' %}">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    $(document).ready(function(){
+        // Activate tooltip
+        // $('[data-toggle="tooltip"]').tooltip();
+
+        // Select/Deselect checkboxes
+        var checkbox = $('table tbody input[type="checkbox"]');
+        $("#selectAll").click(function(){
+            if(this.checked){
+                checkbox.each(function(){
+                    this.checked = true;
+                });
+            } else{
+                checkbox.each(function(){
+                    this.checked = false;
+                });
+            }
+        });
+        checkbox.click(function(){
+            if(!this.checked){
+                $("#selectAll").prop("checked", false);
+            }
+        });
+    });
+
+    $('#editModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var accountId = button.data('id') // Extract info from data-* attributes
+        var modal = $(this)
+        $.ajax({
+                    url:'/ledger/counterparties/action/',
+                    type:'GET',
+                    data: {id: accountId},
+                    dataType: 'json',
+                    success:function(response){
+                         for (var i in response) {
+                            formElement = $(modal).find('.modal-body input[name="' + i + '"]');
+                            if (formElement.attr('type') == 'checkbox'){
+                                formElement.prop('checked', response[i]);
+                            } else {
+                                formElement.val(response[i]);
+                            }
+                        }
+                    },
+                    error:function(){
+                        console.log('something went wrong here');
+                    },
+                });
+    })
+
+
+
+
+
+
+</script>
+<script type="text/javascript" src="{% static '/ledger/crud.js' %}"></script>
 {% endblock %}

@@ -26,15 +26,17 @@
             <div class="col-sm-6 d-flex align-items-center justify-content-end">
                 <a href="#addAccountModal" class="btn btn-sm btn-success" data-toggle="modal">
                     <i class="bi bi-plus-circle mr-2"></i>Add New Account</a>
+                {% comment %}
                 <a href="#deleteAccountModal" class="btn btn-sm btn-danger ml-2" data-toggle="modal">
                     <i class="bi bi-dash-circle mr-2"></i>{% translate "Delete Selected" %}</a>
+                {% endcomment %}
             </div>
         </div>
     </div>
     {% render_table table %}
 </div>
 <!-- Add Modal HTML -->
-<div id="addAccountModal" class="modal fade" data-backdrop="static">
+<div id="addModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <form action="/ledger/accounts/action/">
@@ -58,7 +60,7 @@
     </div>
 </div>
 <!-- Edit Modal HTML -->
-<div id="editAccountModal" class="modal fade" data-backdrop="static">
+<div id="editModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <form action="/ledger/accounts/action/">
@@ -83,7 +85,7 @@
     </div>
 </div>
 <!-- Delete Modal HTML -->
-<div id="deleteAccountModal" class="modal fade" data-backdrop="static">
+<div id="deleteModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <form>
@@ -131,7 +133,7 @@
         });
     });
 
-    $('#editAccountModal').on('show.bs.modal', function (event) {
+    $('#editModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var accountId = button.data('id') // Extract info from data-* attributes
         var modal = $(this)

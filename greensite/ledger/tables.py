@@ -61,10 +61,10 @@ class AccountsTable(Table):
     )
 
     def render_actions(self, value):
-        url_edit = reverse('ledger:edit_account', args=[value])
-        url_delete = reverse('ledger:delete_account', args=[value])
-        html = (f'<a href="#editAccountModal" class="mr-2" data-toggle="modal" data-id="{value}"><i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
-                f'<a href="#deleteAccountModal" data-toggle="modal" data-id="{value}"><i class="bi bi-trash text-danger mr-1"></i>Delete</a>'
+        # url_edit = reverse('ledger:edit_account', args=[value])
+        # url_delete = reverse('ledger:delete_account', args=[value])
+        html = (f'<a href="#editModal" class="mr-2" data-toggle="modal" data-id="{value}"><i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
+                f'<a href="#deleteModal" data-toggle="modal" data-id="{value}"><i class="bi bi-trash text-danger mr-1"></i>Delete</a>'
                 )
         return mark_safe(html)
 
@@ -76,15 +76,29 @@ class AccountsTable(Table):
 
 
 class CounterpartyTable(Table):
-    Email = EmailColumn()
+    id = PrimaryKeyCheckboxColumn()
+
+    # Email = EmailColumn()
     IsSupplier = BootstrapBooleanColumn()
     IsCustomer = BootstrapBooleanColumn()
-    Action = Column()
+
+    actions = Column(
+        accessor='pk',
+        orderable=False,
+    )
+
+    def render_actions(self, value):
+        # url_edit = reverse('ledger:edit_account', args=[value])
+        # url_delete = reverse('ledger:delete_account', args=[value])
+        html = (f'<a href="#editModal" class="mr-2" data-toggle="modal" data-id="{value}"><i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
+                f'<a href="#deleteModal" data-toggle="modal" data-id="{value}"><i class="bi bi-trash text-danger mr-1"></i>Delete</a>'
+                )
+        return mark_safe(html)
 
     class Meta:
         model = Counterparty
-        fields = ('Name', 'Phone', 'Email', 'Telegram', 'Memo', 'IsSupplier', 'IsCustomer', 'Action',)
-        # attrs = {'class': 'table-sm'}
+        fields = ('id', 'Name', 'Phone',  'Memo', 'IsSupplier', 'IsCustomer', 'actions',)
+        attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
 
 
 class CustomerOrdersTable(Table):

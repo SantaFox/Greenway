@@ -33,18 +33,53 @@ def table_counterparties(request):
     })
 
 
-@login_required
-@permission_required('ledger.edit_account', raise_exception=True)
-@prepare_languages
-def edit_counterparty(request):
-    return TemplateResponse(request, 'ledger/edit_counterparty.html', )
-
-
-@login_required
-@permission_required('ledger.delete_account', raise_exception=True)
-@prepare_languages
-def confirm_delete_counterparty(request):
-    return TemplateResponse(request, 'ledger/delete_counterparty.html', )
+def counterparty_action(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            request_id = request.GET.get('id')
+            counterparty_instance = get_object_or_404(Counterparty, id=request_id)
+            counterparty_dict = model_to_dict(counterparty_instance, fields=['id', 'Name', 'Phone', 'Email', 'Telegram', 'Facebook', 'Address', 'Memo', 'IsSupplier', 'IsCustomer',])
+            return JsonResponse(counterparty_dict)
+        elif request.method == 'POST':
+            action = request.POST.get('action')
+            if action == 'add':
+                counterparty_instance = Counterparty()
+                counterparty_instance.User = request.user
+                counterparty_instance.Name = request.POST.get('account_name')
+                try:
+                    counterparty_instance.full_clean()
+                except ValidationError as e:
+                    return JsonResponse({'status': 'error', 'errors': e.message_dict})
+                counterparty_instance.save()
+                return JsonResponse({'status': 'success',
+                                     'message': {
+                                         'text': f'Account <strong>{counterparty_instance.Name}</strong> added successfully',
+                                         'moment': datetime.now(),
+                                         },
+                                     })
+            elif action == 'edit':
+                request_id = request.POST.get('id')
+                counterparty_instance = get_object_or_404(Counterparty, id=request_id)
+                counterparty_instance.Name = request.POST.get('account_name')
+                try:
+                    counterparty_instance.full_clean()
+                except ValidationError as e:
+                    return JsonResponse({'status': 'error', 'errors': e.error_dict})
+                counterparty_instance.save()
+                return JsonResponse({'status': 'success',
+                                     'message': {
+                                         'text': f'Account <strong>{counterparty_instance.Name}</strong> updated successfully',
+                                         'moment': datetime.now(),
+                                         },
+                                     })
+            elif action == 'delete':
+                pass
+            else:
+                return HttpResponseBadRequest()
+        else:
+            raise Http404
+    else:
+        raise Http404
 
 
 @login_required
@@ -56,16 +91,6 @@ def table_accounts(request):
 
     return TemplateResponse(request, 'ledger/table_accounts.html', {
         'table': table,
-    })
-
-
-@login_required
-@permission_required('ledger.edit_account', raise_exception=True)
-@prepare_languages
-def edit_account(request, pk):
-    account_instance = get_object_or_404(Account, pk=pk)
-    return TemplateResponse(request, 'ledger/edit_account.html', {
-        'account': account_instance,
     })
 
 
@@ -116,16 +141,6 @@ def account_action(request):
             raise Http404
     else:
         raise Http404
-
-
-@login_required
-@permission_required('ledger.delete_account', raise_exception=True)
-@prepare_languages
-def confirm_delete_account(request, pk):
-    account_instance = get_object_or_404(Account, pk=pk)
-    return TemplateResponse(request, 'ledger/delete_account.html', {
-        'account': account_instance,
-    })
 
 
 @login_required
