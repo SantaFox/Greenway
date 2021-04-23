@@ -1,7 +1,7 @@
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 
-from django_tables2 import A, BooleanColumn, CheckBoxColumn, Column, DateColumn, EmailColumn, LinkColumn, Table
+from django_tables2 import A, BooleanColumn, CheckBoxColumn, Column, DateColumn, TemplateColumn, Table
 from django_tables2.utils import AttributeDict
 
 from .models import Account, Counterparty, Operation
@@ -78,7 +78,9 @@ class AccountsTable(Table):
 class CounterpartyTable(Table):
     id = PrimaryKeyCheckboxColumn()
 
-    # Email = EmailColumn()
+    # TODO: Need improval
+    Memo = TemplateColumn('<span data-toggle="tooltip" title="{{value}}">{{value|truncatechars:20}}</span>')
+
     IsSupplier = BootstrapBooleanColumn()
     IsCustomer = BootstrapBooleanColumn()
 
@@ -90,6 +92,7 @@ class CounterpartyTable(Table):
     def render_actions(self, value):
         # url_edit = reverse('ledger:edit_account', args=[value])
         # url_delete = reverse('ledger:delete_account', args=[value])
+        # TODO: Change to TemplateColumn?
         html = (f'<a href="#editModal" class="mr-2" data-toggle="modal" data-id="{value}"><i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
                 f'<a href="#deleteModal" data-toggle="modal" data-id="{value}"><i class="bi bi-trash text-danger mr-1"></i>Delete</a>'
                 )
@@ -97,8 +100,15 @@ class CounterpartyTable(Table):
 
     class Meta:
         model = Counterparty
-        fields = ('id', 'Name', 'Phone',  'Memo', 'IsSupplier', 'IsCustomer', 'actions',)
+        fields = ('id', 'Name', 'Phone', 'City', 'Memo', 'IsSupplier', 'IsCustomer', 'actions',)
         attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
+
+
+#
+#
+# comment = tables.TemplateColumn('<data-toggle="tooltip" title="{{record.comment}}">{{record.comment|truncatewords:5}}')
+#
+#
 
 
 class CustomerOrdersTable(Table):
