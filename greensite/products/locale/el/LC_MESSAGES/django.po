@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-21 09:58+0300\n"
+"POT-Creation-Date: 2021-04-22 18:39+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,12 +97,14 @@ msgid "< Product name not set >"
 msgstr "< .. >"
 
 #: .\products\templates\products\list_products.html:34
-#: .\products\templates\products\view_product.html:44
+#: .\products\templates\products\view_product.html:56
+#: .\products\templates\products\view_product.html:74
 msgid "Price"
 msgstr "Τιμή"
 
 #: .\products\templates\products\list_products.html:39
-#: .\products\templates\products\view_product.html:48
+#: .\products\templates\products\view_product.html:75
+#: .\products\templates\products\view_product.html:90
 msgid "Volume"
 msgstr "Όγκος"
 
@@ -110,33 +112,48 @@ msgstr "Όγκος"
 msgid "Products"
 msgstr "Προϊόντα"
 
-#: .\products\templates\products\view_product.html:29
+#: .\products\templates\products\view_product.html:28
+#: .\products\templates\products\view_product.html:33
 #, fuzzy
 #| msgid "Preview"
 msgid "Prev"
 msgstr "Προεπισκόπηση"
 
-#: .\products\templates\products\view_product.html:35
+#: .\products\templates\products\view_product.html:39
+#: .\products\templates\products\view_product.html:43
 msgid "Next"
 msgstr ""
 
-#: .\products\templates\products\view_product.html:38
+#: .\products\templates\products\view_product.html:49
 msgid "Edit"
 msgstr ""
 
-#: .\products\templates\products\view_product.html:42
+#: .\products\templates\products\view_product.html:54
 msgid "No product name in this language"
 msgstr ""
 
-#: .\products\templates\products\view_product.html:43
+#: .\products\templates\products\view_product.html:55
 msgid "No specification in this language"
 msgstr ""
 
-#: .\products\templates\products\view_product.html:46
+#: .\products\templates\products\view_product.html:59
 msgid "actual since"
 msgstr "πραγματική από τότε"
 
-#: .\products\views.py:248
+#: .\products\templates\products\view_product.html:63
+msgid "Price History"
+msgstr ""
+
+#: .\products\templates\products\view_product.html:64
+msgctxt "Price History"
+msgid "History"
+msgstr ""
+
+#: .\products\templates\products\view_product.html:73
+msgid "Date"
+msgstr ""
+
+#: .\products\views.py:250
 msgctxt "Default Tab name"
 msgid "Description"
 msgstr "Περιγραφή"

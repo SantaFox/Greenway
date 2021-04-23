@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-21 09:58+0300\n"
+"POT-Creation-Date: 2021-04-22 18:39+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,76 +30,76 @@ msgstr ""
 msgid "Russian"
 msgstr ""
 
-#: .\greensite\templates\greensite\base.html:109
+#: .\greensite\templates\greensite\base.html:118
 msgctxt "Main Menu"
 msgid "Home"
 msgstr ""
 
-#: .\greensite\templates\greensite\base.html:112
+#: .\greensite\templates\greensite\base.html:121
 msgctxt "Main Menu"
 msgid "News"
 msgstr "Νέα"
 
-#: .\greensite\templates\greensite\base.html:116
+#: .\greensite\templates\greensite\base.html:125
 msgctxt "Main Menu"
 msgid "Products"
 msgstr "Προϊόντα"
 
-#: .\greensite\templates\greensite\base.html:122
+#: .\greensite\templates\greensite\base.html:131
 msgctxt "Main Menu"
 msgid "Ledger"
 msgstr ""
 
-#: .\greensite\templates\greensite\base.html:125
+#: .\greensite\templates\greensite\base.html:134
 msgctxt "Ledger Menu"
 msgid "Current Stock"
 msgstr ""
 
-#: .\greensite\templates\greensite\base.html:126
+#: .\greensite\templates\greensite\base.html:135
 msgctxt "Ledger Menu"
 msgid "Customer Orders"
 msgstr ""
 
-#: .\greensite\templates\greensite\base.html:127
+#: .\greensite\templates\greensite\base.html:136
 msgctxt "Ledger Menu"
 msgid "Supplier Orders"
 msgstr ""
 
-#: .\greensite\templates\greensite\base.html:129
+#: .\greensite\templates\greensite\base.html:138
 msgctxt "Ledger Menu"
 msgid "Finance"
 msgstr ""
 
-#: .\greensite\templates\greensite\base.html:130
+#: .\greensite\templates\greensite\base.html:139
 msgctxt "Ledger Menu"
 msgid "Payments"
 msgstr ""
 
-#: .\greensite\templates\greensite\base.html:132
+#: .\greensite\templates\greensite\base.html:141
 msgctxt "Ledger Menu"
 msgid "Counterparties"
 msgstr ""
 
-#: .\greensite\templates\greensite\base.html:133
+#: .\greensite\templates\greensite\base.html:142
 msgctxt "Ledger Menu"
 msgid "Accounts"
 msgstr ""
 
-#: .\greensite\templates\greensite\base.html:174
+#: .\greensite\templates\greensite\base.html:183
 msgctxt "Main Menu"
 msgid "Profile"
 msgstr ""
 
-#: .\greensite\templates\greensite\base.html:176
+#: .\greensite\templates\greensite\base.html:185
 msgctxt "Main Menu"
 msgid "Admin"
 msgstr ""
 
-#: .\greensite\templates\greensite\base.html:180
+#: .\greensite\templates\greensite\base.html:189
 msgid "Logout"
 msgstr "Αποσύνδεση"
 
-#: .\greensite\templates\greensite\base.html:187
+#: .\greensite\templates\greensite\base.html:196
 #: .\greensite\templates\registration\login.html:41
 msgid "Login"
 msgstr "Σύνδεση"

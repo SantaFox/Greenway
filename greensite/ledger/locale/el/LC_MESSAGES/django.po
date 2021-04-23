@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-21 09:58+0300\n"
+"POT-Creation-Date: 2021-04-22 18:39+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,4 +104,36 @@ msgstr ""
 
 #: .\ledger\models.py:143
 msgid "Credit"
+msgstr ""
+
+#: .\ledger\templates\ledger\delete_account.html:7
+msgid ""
+"Please confirm that you want to delete this object. This operation cannot be "
+"undone."
+msgstr ""
+
+#: .\ledger\templates\ledger\table_accounts.html:30
+msgid "Delete Selected"
+msgstr ""
+
+#: .\ledger\templates\ledger\table_accounts.html:53
+#: .\ledger\templates\ledger\table_accounts.html:78
+#: .\ledger\templates\ledger\table_accounts.html:99
+msgctxt "Form button"
+msgid "Cancel"
+msgstr ""
+
+#: .\ledger\templates\ledger\table_accounts.html:54
+msgctxt "Form button"
+msgid "Add"
+msgstr ""
+
+#: .\ledger\templates\ledger\table_accounts.html:79
+msgctxt "Form button"
+msgid "Save"
+msgstr ""
+
+#: .\ledger\templates\ledger\table_accounts.html:100
+msgctxt "Form button"
+msgid "Delete"
 msgstr ""

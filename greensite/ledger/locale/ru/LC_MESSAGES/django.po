@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-22 10:05+0300\n"
+"POT-Creation-Date: 2021-04-22 18:39+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -114,24 +114,28 @@ msgid ""
 "undone."
 msgstr ""
 
-#: .\ledger\templates\ledger\table_accounts.html:51
-#: .\ledger\templates\ledger\table_accounts.html:75
-#: .\ledger\templates\ledger\table_accounts.html:96
+#: .\ledger\templates\ledger\table_accounts.html:30
+msgid "Delete Selected"
+msgstr "Удалить выбранное"
+
+#: .\ledger\templates\ledger\table_accounts.html:53
+#: .\ledger\templates\ledger\table_accounts.html:78
+#: .\ledger\templates\ledger\table_accounts.html:99
 msgctxt "Form button"
 msgid "Cancel"
 msgstr "Отмена"
 
-#: .\ledger\templates\ledger\table_accounts.html:52
+#: .\ledger\templates\ledger\table_accounts.html:54
 msgctxt "Form button"
 msgid "Add"
 msgstr "Добавить"
 
-#: .\ledger\templates\ledger\table_accounts.html:76
+#: .\ledger\templates\ledger\table_accounts.html:79
 msgctxt "Form button"
 msgid "Save"
 msgstr "Сохранить"
 
-#: .\ledger\templates\ledger\table_accounts.html:97
+#: .\ledger\templates\ledger\table_accounts.html:100
 msgctxt "Form button"
 msgid "Delete"
 msgstr "Удалить"
