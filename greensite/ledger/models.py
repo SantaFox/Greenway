@@ -72,6 +72,7 @@ class Operation(models.Model):
     ], blank=False, null=True)
     Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True)
     RelatedOperation = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True)
+    DetailedDelivery = models.BooleanField(default=False)
 
     # Delivery-related block
     DatePlaced = models.DateField(blank=True, null=True)            # Date placed with supplier /
