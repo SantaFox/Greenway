@@ -91,6 +91,7 @@ class Operation(models.Model):
         (3, _('Ordered')),
     ], blank=True, null=True)
     Quantity = models.PositiveIntegerField(blank=True, null=True)
+    PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
     # Common fields
     Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
