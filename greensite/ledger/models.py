@@ -128,6 +128,7 @@ class OperationPosition(models.Model):
         (5, _('Not in stock / no delivery control')),       # Missing item is... ?
         (6, _('Delivered to customer')),
     ], blank=True, null=True)
+    DateDelivered = models.DateField(blank=True, null=True)  # Date received from supplier / by customer
 
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
