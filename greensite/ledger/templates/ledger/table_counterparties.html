@@ -24,10 +24,10 @@
                 <h2 class="mb-0">Manage <b>Counterparties</b></h2>
             </div>
             <div class="col-sm-6 d-flex align-items-center justify-content-end">
-                <a href="#addAccountModal" class="btn btn-sm btn-success" data-toggle="modal">
+                <a href="#editModal" class="btn btn-sm btn-success" data-toggle="modal">
                     <i class="bi bi-plus-circle mr-2"></i>Add New Counterparty</a>
                 {% comment %}
-                <a href="#deleteAccountModal" class="btn btn-sm btn-danger ml-2" data-toggle="modal">
+                <a href="#deleteModal" class="btn btn-sm btn-danger ml-2" data-toggle="modal">
                     <i class="bi bi-dash-circle mr-2"></i>{% translate "Delete Selected" %}</a>
                 {% endcomment %}
             </div>
@@ -35,33 +35,7 @@
     </div>
     {% render_table table %}
 </div>
-<!-- Add Modal HTML -->
-<div id="addModal" class="modal fade" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="/ledger/counterparties/action/">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Counterparty</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Account Name</label>
-                        <input type="text" class="form-control" name="account_name" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <input type="hidden" name="action" value="add">
-                    <input type="button" class="btn btn-default" data-dismiss="modal"
-                           value="{% translate 'Cancel' context 'Form button' %}">
-                    <input type="submit" class="btn btn-success"
-                           value="{% translate 'Add' context 'Form button' %}">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- Edit Modal HTML -->
+<!-- Add/Edit Modal HTML -->
 <div id="editModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -201,27 +175,33 @@
 
     $('#editModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
-        var accountId = button.data('id') // Extract info from data-* attributes
         var modal = $(this)
-        $.ajax({
-                    url:'/ledger/counterparties/action/',
-                    type:'GET',
-                    data: {id: accountId},
-                    dataType: 'json',
-                    success:function(response){
-                         for (var i in response) {
-                            formElement = $(modal).find('.modal-body input[name="' + i + '"]');
-                            if (formElement.attr('type') == 'checkbox'){
-                                formElement.prop('checked', response[i]);
-                            } else {
-                                formElement.val(response[i]);
-                            }
+        if (typeof button.data('id') !== 'undefined') {
+            $(modal).find('.modal-footer input[name="action"]').val('edit');
+            var accountId = button.data('id') // Extract info from data-* attributes
+            $.ajax({
+                url:'/ledger/counterparties/action/',
+                type: 'GET',
+                data: {id: accountId},
+                dataType: 'json',
+                success: function(response) {
+                    for (var i in response) {
+                        formElement = $(modal).find('.modal-body input[name="' + i + '"]');
+                        if (formElement.attr('type') == 'checkbox'){
+                            formElement.prop('checked', response[i]);
+                        } else {
+                            formElement.val(response[i]);
                         }
-                    },
-                    error:function(){
-                        console.log('something went wrong here');
-                    },
-                });
+                    }
+                },
+                error: function() {
+                    console.log('something went wrong here');
+                },
+            });
+        } else {
+            $(modal).find('.modal-footer input[name="action"]').val('add');
+            $(modal).find('.modal-body input[type="text"]').val('');
+        };
     })
 </script>
 <script type="text/javascript" src="{% static '/ledger/crud.js' %}"></script>
