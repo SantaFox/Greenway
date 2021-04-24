@@ -50,20 +50,20 @@ def counterparty_action(request):
         elif request.method == 'POST':
             action = request.POST.get('action')
             if action == 'add':
-                counterparty_instance = Counterparty()
+                counterparty_form = CounterpartyForm(request.POST)
+                if not counterparty_form.is_valid():
+                    return JsonResponse({'status': 'not_valid',
+                                         'message': {
+                                             'text': f'Counterparty <strong>{counterparty_form.cleaned_data["Name"]}</strong> was not saved',
+                                             'moment': datetime.now(),
+                                         },
+                                         'errors': counterparty_form.errors})
+                counterparty_instance = counterparty_form.save(commit=False)
                 counterparty_instance.User = request.user
-                counterparty_instance.Name = request.POST.get('account_name')
-                try:
-                    counterparty_instance.full_clean()
-                except ValidationError as e:
-                    return JsonResponse({'status': 'error', 'errors': e.message_dict})
                 counterparty_instance.save()
-                return JsonResponse({'status': 'success',
-                                     'message': {
-                                         'text': f'Account <strong>{counterparty_instance.Name}</strong> added successfully',
-                                         'moment': datetime.now(),
-                                     },
-                                     })
+                messages.success(request,
+                                 f'Account <strong>{counterparty_instance.Name}</strong> added successfully')
+                return JsonResponse({'status': 'success'})
             elif action == 'edit':
                 request_id = request.POST.get('id')
                 counterparty_instance = get_object_or_404(Counterparty, id=request_id)
