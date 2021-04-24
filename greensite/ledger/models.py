@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from products.models import Currency, Product
@@ -8,7 +9,7 @@ from products.models import Currency, Product
 class Account(models.Model):
     User = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     Name = models.CharField(max_length=50, blank=False, verbose_name=_('Account Name'),
-                                     help_text=_('Account name that is easy to use and remember'))
+                            help_text=_('Account name that is easy to use and remember'))
 
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
@@ -75,9 +76,9 @@ class Operation(models.Model):
     DetailedDelivery = models.BooleanField(default=False)
 
     # Delivery-related block
-    DatePlaced = models.DateField(blank=True, null=True)            # Date placed with supplier /
-    DateDispatched = models.DateField(blank=True, null=True)        # Date dispatched by supplier / to customer
-    DateDelivered = models.DateField(blank=True, null=True)         # Date received from supplier / by customer
+    DatePlaced = models.DateField(blank=True, null=True)  # Date placed with supplier /
+    DateDispatched = models.DateField(blank=True, null=True)  # Date dispatched by supplier / to customer
+    DateDelivered = models.DateField(blank=True, null=True)  # Date received from supplier / by customer
     TrackingNumber = models.CharField(max_length=50, blank=True)
     CourierService = models.CharField(choices=[
         ('DHL', 'DHL Express'),
@@ -107,7 +108,7 @@ class Operation(models.Model):
     TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.User} / {self.DateOperation } / {self.Counterparty} / {self.get_Type_display()}'
+        return f'{self.User} / {self.DateOperation} / {self.Counterparty} / {self.get_Type_display()}'
 
 
 class OperationPosition(models.Model):
@@ -117,7 +118,7 @@ class OperationPosition(models.Model):
     Quantity = models.PositiveIntegerField(blank=False)
     Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
-    Discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)      # Applied on Total
+    Discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)  # Applied on Total
     DiscountReason = models.CharField(max_length=50, blank=True)
 
     # Supplier Order area
@@ -126,11 +127,11 @@ class OperationPosition(models.Model):
     # Customer Order area
     CustomerOrderStatus = models.IntegerField(choices=[
         # Stock control table columns: In Stock | Reserved | To be Ordered | Incoming | Final
-        (1, _('In stock / prepared for delivery')),         # Existing item is reserved
-        (2, _('In stock / should be ordered')),             # Item exists and not reserved, but decided to be ordered
-        (3, _('Not in stock / need to be ordered')),        # Missing item shows as TO BE ORDERED
-        (4, _('Not in stock / waiting for incoming')),      # Missing item shows as INCOMING
-        (5, _('Not in stock / no delivery control')),       # Missing item is... ?
+        (1, _('In stock / prepared for delivery')),  # Existing item is reserved
+        (2, _('In stock / should be ordered')),  # Item exists and not reserved, but decided to be ordered
+        (3, _('Not in stock / need to be ordered')),  # Missing item shows as TO BE ORDERED
+        (4, _('Not in stock / waiting for incoming')),  # Missing item shows as INCOMING
+        (5, _('Not in stock / no delivery control')),  # Missing item is... ?
         (6, _('Delivered to customer')),
     ], blank=True, null=True)
     DateDelivered = models.DateField(blank=True, null=True)  # Date received from supplier / by customer
@@ -143,14 +144,21 @@ class OperationPosition(models.Model):
 
     class Meta:
         verbose_name_plural = "Operation Positions"
-    #     constraints = [
-    #         models.UniqueConstraint(fields=['Code'], name='unique_Order')
-    #     ]
+        constraints = [
+            # models.CheckConstraint(
+            #     check=Q(Operation__Type=1) & Q(Operation__DetailedDelivery=True) & Q(CustomerOrderStatus=6) & Q(DateDelivery__isnull=True),
+            #     name='check_CustomerOrder_DetailedDate_Missed'
+            # ),
+            # models.CheckConstraint(
+            #     check=Q(Operation__Type=1) & Q(Operation__DetailedDelivery=False) & Q(DateDelivery__isnull=False),
+            #     name='check_CustomerOrder_DetailedDate_Set_For_Not_Detailed_Order'
+            # ),
+        ]
 
 
 class OperationAtom(models.Model):
     Operation = models.ForeignKey(Operation, on_delete=models.PROTECT)
-    DateAtom = models.DateField(blank=False)        # Date when the real atom operation passed
+    DateAtom = models.DateField(blank=False)  # Date when the real atom operation passed
     Type = models.CharField(choices=[
         ('D', _('Debit')),
         ('C', _('Credit')),
