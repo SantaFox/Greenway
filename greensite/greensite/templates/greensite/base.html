@@ -152,18 +152,29 @@
                         <span>{% translate "Ledger" context "Main Menu" %}</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarLedger">
-                        <a class="dropdown-item" href="#">{% translate "Current Stock" context "Ledger Menu" %}</a>
-                        <a class="dropdown-item" href="{% url 'ledger:customer_orders' %}">{% translate "Customer
-                            Orders" context "Ledger Menu" %}</a>
-                        <a class="dropdown-item" href="#">{% translate "Supplier Orders" context "Ledger Menu" %}</a>
+                        <a class="dropdown-item" href="#">
+                            {% translate "Current Stock" context "Ledger Menu" %}
+                        </a>
+                        <a class="dropdown-item" href="{% url 'ledger:customer_orders' %}">
+                            {% translate "Customer Orders" context "Ledger Menu" %}
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            {% translate "Supplier Orders" context "Ledger Menu" %}
+                        </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">{% translate "Finance" context "Ledger Menu" %}</a>
-                        <a class="dropdown-item" href="#">{% translate "Payments" context "Ledger Menu" %}</a>
+                        <a class="dropdown-item" href="#">
+                            {% translate "Finance" context "Ledger Menu" %}
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            {% translate "Payments" context "Ledger Menu" %}
+                        </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{% url 'ledger:counterparties' %}">{% translate "Counterparties"
-                            context "Ledger Menu" %}</a>
-                        <a class="dropdown-item" href="{% url 'ledger:accounts' %}">{% translate "Accounts" context
-                            "Ledger Menu" %}</a>
+                        <a class="dropdown-item" href="{% url 'ledger:counterparties' %}">
+                            {% translate "Counterparties" context "Ledger Menu" %}
+                        </a>
+                        <a class="dropdown-item" href="{% url 'ledger:accounts' %}">
+                            {% translate "Accounts" context "Ledger Menu" %}
+                        </a>
                     </div>
                 </li>
                 {% endif %}
