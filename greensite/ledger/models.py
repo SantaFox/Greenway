@@ -79,6 +79,10 @@ class Operation(models.Model):
     DateDispatched = models.DateField(blank=True, null=True)        # Date dispatched by supplier / to customer
     DateDelivered = models.DateField(blank=True, null=True)         # Date received from supplier / by customer
     TrackingNumber = models.CharField(max_length=50, blank=True)
+    CourierService = models.CharField(choices=[
+        ('DHL', 'DHL Express'),
+        ('Post', 'Ordinary Post'),
+    ], max_length=10, blank=True, null=True)
 
     # Cash-related field
     Account = models.ForeignKey(Account, on_delete=models.PROTECT, blank=True, null=True)
