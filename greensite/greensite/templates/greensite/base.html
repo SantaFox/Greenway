@@ -245,14 +245,14 @@
         <li>
             {% if message.tags %}
             <div class="alert alert-{{ message.tags }} alert-dismissible msg fade show" role="alert">
-                {{ message }}
+                {{ message|safe }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             {% else %}
             <div class="alert alert-info alert-dismissible msg fade show" role="alert">
-                {{ message }}
+                {{ message|safe }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -277,7 +277,7 @@
             var i = alerts.length;
             for (let elem of alerts) {
                 i--;
-                time = 3250+(1000*i);
+                time = 5000+(1000*i);
                 setTimeout(function() {
                     $(elem).fadeOut("slow");
                 }, time);
@@ -286,7 +286,7 @@
 
     // call fade out after DOMContentLoaded
     $(document).ready(function(){
-        // fade_alerts();
+        fade_alerts();
     });
 
 </script>

@@ -29,7 +29,7 @@ def view_index(request):
 def table_counterparties(request):
     table = CounterpartyTable(Counterparty.objects.filter(User=request.user))
     RequestConfig(request,
-                  paginate={"per_page": 10})\
+                  paginate={"per_page": 10}) \
         .configure(table)
 
     return TemplateResponse(request, 'ledger/table_counterparties.html', {
@@ -70,26 +70,19 @@ def counterparty_action(request):
                 counterparty_form = CounterpartyForm(request.POST, instance=counterparty_instance)
                 if not counterparty_form.has_changed():
                     messages.info(request,
-                                     f'Account <strong>{counterparty_instance.Name}</strong> was not changed')
-                    return JsonResponse({'status': 'success',
-                                         'message': {
-                                             'text': f'Counterparty <strong>{counterparty_instance.Name}</strong> was not changed',
-                                             'moment': datetime.now(),
-                                         }, })
+                                  f'Account <strong>{counterparty_instance.Name}</strong> was not changed')
+                    return JsonResponse({'status': 'not_changed'})
                 if not counterparty_form.is_valid():
-                    return JsonResponse({'status': 'success',
+                    return JsonResponse({'status': 'not_valid',
                                          'message': {
                                              'text': f'Counterparty <strong>{counterparty_instance.Name}</strong> was not saved',
                                              'moment': datetime.now(),
                                          },
                                          'errors': counterparty_form.errors})
                 counterparty_form.save()
-                messages.success(request, f'Account <strong>{counterparty_instance.Name}</strong> updated successfully')
-                return JsonResponse({'status': 'success',
-                                     'message': {
-                                         'text': f'Account <strong>{counterparty_instance.Name}</strong> updated successfully',
-                                         'moment': datetime.now(),
-                                     }, })
+                messages.success(request,
+                                 f'Account <strong>{counterparty_instance.Name}</strong> updated successfully')
+                return JsonResponse({'status': 'success'})
             elif action == 'delete':
                 pass
             else:
