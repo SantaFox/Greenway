@@ -16,8 +16,9 @@ class OperationPositionInline(admin.TabularInline):
 
 
 class OperationAdmin(admin.ModelAdmin):
-    list_display = ('User', 'DateOperation', 'Type', 'Counterparty')
+    list_display = ('User', 'DateOperation', 'Type', 'Counterparty', 'Amount', 'Currency')
     list_filter = ['User', 'Type', 'Counterparty']
+    list_editable = ['DateOperation', 'Type', 'Counterparty', 'Amount', 'Currency']
     ordering = ['User', 'DateOperation', 'Type', 'Counterparty__Name']
     inlines = [
         OperationPositionInline,
