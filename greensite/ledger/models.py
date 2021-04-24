@@ -48,7 +48,11 @@ class Counterparty(models.Model):
     class Meta:
         verbose_name_plural = "Counterparties"
         constraints = [
-            models.UniqueConstraint(fields=['User', 'Name'], name='unique_Counterparty')
+            models.UniqueConstraint(fields=['User', 'Name'], name='unique_Counterparty'),
+            models.CheckConstraint(
+                check=Q(IsSupplier=True) | Q(IsCustomer=True),
+                name='check_Counterparty_Supplier_or_Customer_is_Set'
+            )
         ]
 
 
