@@ -71,9 +71,17 @@ class Operation(models.Model):
         (8, _('Withdrawn money')),
         (9, _('Break set to items')),
     ], blank=False, null=True)
+
+    # System block
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.User} / {self.DateOperation} / {self.get_Type_display()}'
+
+
+class SupplierOrder(Operation):
     Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True)
-    RelatedOperation = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True)
-    DetailedDelivery = models.BooleanField(default=False)
 
     # Delivery-related block
     DatePlaced = models.DateField(blank=True, null=True)  # Date placed with supplier /
@@ -85,30 +93,53 @@ class Operation(models.Model):
         ('Post', 'Ordinary Post'),
     ], max_length=10, blank=True, null=True)
 
-    # Cash-related field
-    Account = models.ForeignKey(Account, on_delete=models.PROTECT, blank=True, null=True)
-
-    # Product-related fields
-    Product = models.ForeignKey(Product, on_delete=models.PROTECT, blank=True, null=True)
-    State = models.IntegerField(choices=[
-        # Stock control table columns: In Stock | Reserved | To be Ordered | Incoming | Final
-        (1, _('Actual')),
-        (2, _('Reserved')),
-        (3, _('Ordered')),
-    ], blank=True, null=True)
-    Quantity = models.PositiveIntegerField(blank=True, null=True)
-    PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-
     # Common fields
     Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True)
-
-    # System block
-    TimestampCreated = models.DateTimeField(auto_now_add=True)
-    TimestampModified = models.DateTimeField(auto_now=True)
+    GFT = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.User} / {self.DateOperation} / {self.Counterparty} / {self.get_Type_display()}'
+        return f'{self.User} / {self.DateOperation} / {self.Counterparty}'
+
+    class Meta:
+        verbose_name_plural = "Supplier Orders"
+
+
+class CustomerOrder(Operation):
+    Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True)
+
+    # Delivery-related block
+    DatePlaced = models.DateField(blank=True, null=True)  # Date placed with supplier /
+    DateDispatched = models.DateField(blank=True, null=True)  # Date dispatched by supplier / to customer
+    DateDelivered = models.DateField(blank=True, null=True)  # Date received from supplier / by customer
+    TrackingNumber = models.CharField(max_length=50, blank=True)
+    CourierService = models.CharField(choices=[
+        ('DHL', 'DHL Express'),
+        ('Post', 'Ordinary Post'),
+    ], max_length=10, blank=True, null=True)
+    DetailedDelivery = models.BooleanField(default=False)
+
+    Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.User} / {self.DateOperation} / {self.Counterparty}'
+
+    class Meta:
+        verbose_name_plural = "Customer Orders"
+
+
+class ItemSetBreakdown(Operation):
+    Product = models.ForeignKey(Product, on_delete=models.PROTECT, blank=True, null=True)
+    Quantity = models.PositiveIntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.User} / {self.DateOperation} / {self.Product} / {self.Quantity}'
+
+    class Meta:
+        verbose_name_plural = "Item Set Breakdowns"
+
 
 
 class OperationPosition(models.Model):
@@ -116,15 +147,38 @@ class OperationPosition(models.Model):
 
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
     Quantity = models.PositiveIntegerField(blank=False)
+
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.Operation} / {self.Product} / {self.Quantity}'
+
+    class Meta:
+        verbose_name_plural = "Operation Positions"
+
+
+class SupplierOrderPosition(OperationPosition):
+    Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
+    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
+    Discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)  # Applied on Total
+    DiscountReason = models.CharField(max_length=50, blank=True)
+    GFT = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.Operation} / {self.Product} / {self.Quantity} / {self.Price} / {self.Currency}'
+
+    class Meta:
+        verbose_name_plural = "Supplier Order Positions"
+
+
+class CustomerOrderPosition(OperationPosition):
     Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
     Discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)  # Applied on Total
     DiscountReason = models.CharField(max_length=50, blank=True)
 
-    # Supplier Order area
-    PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-
-    # Customer Order area
     CustomerOrderStatus = models.IntegerField(choices=[
         # Stock control table columns: In Stock | Reserved | To be Ordered | Incoming | Final
         (1, _('In stock / prepared for delivery')),  # Existing item is reserved
@@ -136,56 +190,17 @@ class OperationPosition(models.Model):
     ], blank=True, null=True)
     DateDelivered = models.DateField(blank=True, null=True)  # Date received from supplier / by customer
 
-    TimestampCreated = models.DateTimeField(auto_now_add=True)
-    TimestampModified = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         return f'{self.Operation} / {self.Product} / {self.Quantity} / {self.Price} / {self.Currency}'
 
     class Meta:
-        verbose_name_plural = "Operation Positions"
-        constraints = [
-            # models.CheckConstraint(
-            #     check=Q(Operation__Type=1) & Q(Operation__DetailedDelivery=True) & Q(CustomerOrderStatus=6) & Q(DateDelivery__isnull=True),
-            #     name='check_CustomerOrder_DetailedDate_Missed'
-            # ),
-            # models.CheckConstraint(
-            #     check=Q(Operation__Type=1) & Q(Operation__DetailedDelivery=False) & Q(DateDelivery__isnull=False),
-            #     name='check_CustomerOrder_DetailedDate_Set_For_Not_Detailed_Order'
-            # ),
-        ]
+        verbose_name_plural = "Customer Order Positions"
 
 
-class OperationAtom(models.Model):
-    Operation = models.ForeignKey(Operation, on_delete=models.PROTECT)
-    DateAtom = models.DateField(blank=False)  # Date when the real atom operation passed
-    Type = models.CharField(choices=[
-        ('D', _('Debit')),
-        ('C', _('Credit')),
-    ], max_length=1, blank=False)
-
-    # Cash-specific field
-    Account = models.ForeignKey(Account, on_delete=models.PROTECT, blank=True, null=True)
-
-    # Product-specific fields
-    Product = models.ForeignKey(Product, on_delete=models.PROTECT, blank=True, null=True)
-    State = models.IntegerField(choices=[
-        # Stock control table columns: In Stock | Reserved | To be Ordered | Incoming | Final
-        (1, _('Actual')),
-        (2, _('Reserved')),
-        (3, _('Ordered')),
-    ], blank=True, null=True)
-    Quantity = models.PositiveIntegerField(blank=True, null=True)
-
-    # Common fields
-    Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True)
-
-    TimestampCreated = models.DateTimeField(auto_now_add=True)
-    TimestampModified = models.DateTimeField(auto_now=True)
+class ItemSetBreakdownPosition(OperationPosition):
 
     def __str__(self):
-        return str(self.pk)
+        return f'{self.Operation} / {self.Product}'
 
     class Meta:
-        verbose_name_plural = "Operation Atoms"
+        verbose_name_plural = "Item Set Breakdown Positions"

@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Account, Counterparty, Operation, OperationPosition, OperationAtom
+from .models import Account, Counterparty, SupplierOrder, SupplierOrderPosition, CustomerOrder, CustomerOrderPosition, \
+    ItemSetBreakdown, ItemSetBreakdownPosition
 
 
 class CounterpartyAdmin(admin.ModelAdmin):
@@ -11,29 +12,50 @@ class CounterpartyAdmin(admin.ModelAdmin):
     search_fields = ['Name']
 
 
-class OperationPositionInline(admin.TabularInline):
-    model = OperationPosition
+class SupplierOrderPositionInline(admin.TabularInline):
+    model = SupplierOrderPosition
 
 
-class OperationAdmin(admin.ModelAdmin):
-    list_display = ('User', 'DateOperation', 'Type', 'Counterparty', 'Amount', 'Currency')
-    list_filter = ['User', 'Type', 'Counterparty']
-    list_editable = ['DateOperation', 'Type', 'Counterparty', 'Amount', 'Currency']
-    ordering = ['User', 'DateOperation', 'Type', 'Counterparty__Name']
+class SupplierOrderAdmin(admin.ModelAdmin):
+    list_display = ('User', 'DateOperation', 'Counterparty', 'Amount', 'Currency', 'GFT', 'PV')
+    list_filter = ['User', 'Counterparty']
+    list_editable = ['DateOperation', 'Counterparty', 'Amount', 'Currency', 'GFT', 'PV']
+    ordering = ['User', 'DateOperation', 'Counterparty__Name']
     inlines = [
-        OperationPositionInline,
+        SupplierOrderPositionInline,
     ]
 
 
-class OperationPositionAdmin(admin.ModelAdmin):
-    list_display = ('Operation', 'Product', 'Quantity', 'Price', 'Currency')
-    list_filter = ['Operation']
-    list_editable = ['Product', 'Quantity', 'Price', 'Currency']
-    ordering = ['Operation__DateOperation', 'Operation']
+class CustomerOrderPositionInline(admin.TabularInline):
+    model = CustomerOrderPosition
+
+
+class CustomerOrderAdmin(admin.ModelAdmin):
+    list_display = ('User', 'DateOperation', 'Counterparty', 'Amount', 'Currency')
+    list_filter = ['User', 'Counterparty']
+    list_editable = ['DateOperation', 'Counterparty', 'Amount', 'Currency']
+    ordering = ['User', 'DateOperation', 'Counterparty__Name']
+    inlines = [
+        CustomerOrderPositionInline,
+    ]
+
+
+class ItemSetBreakdownPositionInline(admin.TabularInline):
+    model = ItemSetBreakdownPosition
+
+
+class ItemSetBreakdownAdmin(admin.ModelAdmin):
+    list_display = ('User', 'DateOperation', 'Product', 'Quantity')
+    list_filter = ['User', 'Product']
+    list_editable = ['DateOperation', 'Product', 'Quantity']
+    ordering = ['User', 'DateOperation', 'Product__SKU']
+    inlines = [
+        ItemSetBreakdownPositionInline,
+    ]
 
 
 admin.site.register(Account)
 admin.site.register(Counterparty, CounterpartyAdmin)
-admin.site.register(Operation, OperationAdmin)
-admin.site.register(OperationPosition, OperationPositionAdmin)
-admin.site.register(OperationAtom)
+admin.site.register(SupplierOrder, SupplierOrderAdmin)
+admin.site.register(CustomerOrder, CustomerOrderAdmin)
+admin.site.register(ItemSetBreakdown, ItemSetBreakdownAdmin)
