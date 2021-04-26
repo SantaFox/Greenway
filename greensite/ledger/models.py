@@ -83,6 +83,8 @@ class Operation(models.Model):
 class SupplierOrder(Operation):
     Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True)
 
+    GreenwayOrderNum = models.CharField(max_length=10, blank=True)
+
     # Delivery-related block
     DatePlaced = models.DateField(blank=True, null=True)  # Date placed with supplier /
     DateDispatched = models.DateField(blank=True, null=True)  # Date dispatched by supplier / to customer
@@ -93,7 +95,6 @@ class SupplierOrder(Operation):
         ('Post', 'Ordinary Post'),
     ], max_length=10, blank=True, null=True)
 
-    # Common fields
     Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True)
     GFT = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
