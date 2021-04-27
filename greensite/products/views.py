@@ -53,13 +53,13 @@ def list_products(request, category=None):
     # Но к сожалению SQLite backend не поддерживает команду DISTINCT ON (fields), поэтому делаем менее красивое решение
     # Важно: уникальный ключ - продукт + дата цены + **ВАЛЮТА**
     dict_price_distinct = Price.objects \
-        .filter(Product__Category=category) \
+        .filter(Product__Category=category, DateAdded__lte=datetime.now()) \
         .values('Product_id', 'Currency_id') \
         .annotate(max_date=Max('DateAdded')) \
         .order_by()
     dict_price_list = list(dict_price_distinct)
 
-    dict_prices = {prc.Product: prc for prc in Price.objects.filter(Product__Category=category) if
+    dict_prices = {prc.Product: prc for prc in Price.objects.filter(Product__Category=category, DateAdded__lte=datetime.now()) if
                    # Creating main unique index
                    {'Product_id': prc.Product_id,
                     'Currency_id': prc.Currency_id,
