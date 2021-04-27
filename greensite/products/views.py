@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect, Http404
 from django.template.response import TemplateResponse
@@ -111,7 +113,7 @@ def view_product(request, sku=None):
 
     tabs = Tab.objects.filter(Product=product, Language=request.language_instance).order_by('Order')
 
-    prices = Price.objects.filter(Product=product).order_by('-DateAdded')
+    prices = Price.objects.filter(Product=product, DateAdded__lte=datetime.now()).order_by('-DateAdded')
     price = prices.first()  # First or None
 
     try:
