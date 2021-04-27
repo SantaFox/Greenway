@@ -8,20 +8,96 @@
 {% block css %}
     <link rel="stylesheet" href="{% static '/products/drift-basic.min.css' %}">
     <link rel="stylesheet" href="{% static '/products/lightgallery.min.css' %}">
+<style>
+ .product-gallery {
+    display:flex}
+ .product-gallery-thumblist {
+    margin-left:-.5rem}
+ .product-gallery-thumblist-item {
+    display:block;
+    position:relative;
+    width:5rem;
+    height:3.5rem;
+    margin:.625rem;
+    transition:border-color 0.2s ease-in-out;
+    border:1px solid #e3e9ef;
+    border-radius:.3125rem;
+    text-decoration:none !important;
+    overflow:hidden}
+ .product-gallery-thumblist-item > img {
+    display:block;
+    width:100%;
+    transition:opacity .2s ease-in-out;
+    opacity:.6}
+ .product-gallery-thumblist-item .product-gallery-thumblist-item-text {
+    position:absolute;
+    top:50%;
+    width:100%;
+    padding:.25rem;
+    transform: translateY(-50%);
+    color:#4b566b;
+    font-size:.875rem;
+    text-align:center}
+ .product-gallery-thumblist-item .product-gallery-thumblist-item-text > i {
+    display:block;
+    margin-bottom:.25rem;
+    font-size:1.5em}
+ .product-gallery-thumblist-item:hover {
+    border-color:#c9d5e0}
+ .product-gallery-thumblist-item:hover > img {
+    opacity:1}
+ .product-gallery-thumblist-item.active {
+    border-color:#fe696a}
+ .product-gallery-thumblist-item.active > img {
+    opacity:1}
+ .product-gallery-preview {
+    position:relative;
+    width:100%;
+    margin-top:.625rem}
+ .product-gallery-preview-item {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    transition:opacity 0.3s ease-in-out;
+    opacity:0;
+    z-index:1}
+ .product-gallery-preview-item > img {
+    display:block;
+    width:100%}
+ .product-gallery-preview-item.active {
+    position:relative;
+    opacity:1;
+    z-index:10}
+ .product-gallery-preview-item:hover {
+    cursor:crosshair}
+ .drift-zoom-pane {
+    z-index:1030}
+ </style>
 {% endblock css %}
 
-<!--https://github.com/imgix/drift/tree/main/dist-->
-<!--https://github.com/sachinchoolur/lightgallery.js/blob/master/demo/index.html-->
+<!--https://github.com/imgix/drift/-->
+<!--https://github.com/sachinchoolur/lightgallery.js-->
 
 {% block content %}
-<div class="row">
-    <div class="col-md-5 border">
-        {% if image_primary %}
-        {% generateimage 'products:product_big_thumbnail' source=image_primary.Image -- width="100%" %}
-        {% else %}
-        {% endif %}
+<div class="row product-gallery">
+    <div class="col-md-5">
+        {% for image in product.image_set.all %}
+            {% if image_primary == image %}
+            <div class="product-gallery-preview-item active" id="id{{ image.id }}">
+            {% else %}
+            <div class="product-gallery-preview-item" id="id{{ image.id }}">
+            {% endif %}
+            {% generateimage 'products:product_big_thumbnail' source=image.Image as img %}
+            <img class="image-zoom" src="{{ img.url }}" data-zoom="{{ image.Image.url }}" width="100%">
+            <div class="image-zoom-pane"></div>
+            </div>
+        {% empty %}
+            <div class="col">No images available</div>
+        {% endfor %}
     </div>
-    <div class="col-md-7 border">
+    <div class="col-md-7">
         <nav aria-label="breadcrumb" class="d-flex justify-content-between align-items-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/products/">{% translate "Products" %}</a></li>
@@ -109,10 +185,16 @@
         </h5>
         {% endif %}
 
-        <div class="row justify-content-lg-left border">
+        <div class="row justify-content-lg-left">
             {% for image in product.image_set.all %}
             <div class="col-lg-auto">
+                {% if image_primary == image %}
+                <a class="product-gallery-thumblist-item active" href="#id{{ image.id }}">
+                {% else %}
+                <a class="product-gallery-thumblist-item" href="#id{{ image.id }}">
+                {% endif %}
                 {% generateimage 'products:product_small_thumbnail' source=image.Image -- class="img-thumbnail" %}
+                </a>
             </div>
             {% empty %}
             <div class="col">No images available</div>
@@ -162,6 +244,54 @@
 {% endblock %}
 
 {% block js %}
+<script>
+$(document).ready(function() {
+    var galleries = document.querySelectorAll(".product-gallery");
+    if (galleries.length)
+        for (var e = 0; e < galleries.length; e++)
+            ! function(r) {
+                for (var anchors = galleries[r].querySelectorAll(".product-gallery-thumblist-item:not(.video-item)"),
+                         images = galleries[r].querySelectorAll(".product-gallery-preview-item"),
+                         videos = galleries[r].querySelectorAll(".product-gallery-thumblist-item.video-item"),
+                     t = 0; t < anchors.length; t++)
+                    anchors[t].addEventListener("click", o);
+
+                function o(e) {
+                    e.preventDefault();
+                    for (var t = 0; t < anchors.length; t++)
+                        images[t].classList.remove("active"),
+                        anchors[t].classList.remove("active");
+                    this.classList.add("active"),
+                    galleries[r].querySelector(this.getAttribute("href")).classList.add("active")
+                }
+
+                for (var l = 0; l < videos.length; l++)
+                    lightGallery(videos[l], {
+                        selector: "this",
+                        download: !1,
+                        videojs: !0,
+                        youtubePlayerParams: {
+                            modestbranding: 1,
+                            showinfo: 0,
+                            rel: 0,
+                            controls: 0
+                        },
+                        vimeoPlayerParams: {
+                            byline: 0,
+                            portrait: 0,
+                            color: "fe696a"
+                        }
+                    })
+            }(e)
+});
+
+    $(document).ready(function() {
+        for (var e = document.querySelectorAll(".image-zoom"), t = 0; t < e.length; t++)
+            new Drift(e[t],{
+                paneContainer: e[t].parentElement.querySelector(".image-zoom-pane")
+            })
+    });
+</script>
 {% if user.is_authenticated and user.is_staff %}
     <script>
     <!--http://jsfiddle.net/z824fn6b/320/-->
