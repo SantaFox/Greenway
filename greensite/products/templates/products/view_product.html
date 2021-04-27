@@ -72,8 +72,10 @@
     z-index:10}
  .product-gallery-preview-item:hover {
     cursor:crosshair}
- .drift-zoom-pane {
-    z-index:1030}
+
+ .popover{
+    max-width: 100%; // Max Width of the popover (depending on the container!)
+}
  </style>
 {% endblock css %}
 
@@ -158,6 +160,7 @@
                     <th>{% translate "Date" %}</th>
                     <th>{% translate "Price" %}</th>
                     <th>{% translate "Volume" %}</th>
+                    <th>{% translate "Comment" %}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -166,6 +169,7 @@
                     <td>{{ p.DateAdded|date:"d.m.y" }}</td>
                     <td class="text-right">{{ p.Price|floatformat:2 }}&nbsp;{{ p.Currency.Code }}</td>
                     <td class="text-right">{{ p.PV|floatformat:1 }}&nbsp;PV</td>
+                    <td>{{ p.Comment }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
@@ -188,7 +192,7 @@
         {% endif %}
 
         <div class="row">
-            {% for image in product.image_set.all %}
+            {% for image in product.image_set.all|dictsortreversed:'IsPrimary' %}
             <div class="col-lg-auto p-2">
                 {% if image_primary == image %}
                 <a class="product-gallery-thumblist-item active" href="#id{{ image.id }}">
@@ -300,6 +304,7 @@ $(document).ready(function() {
       $('[data-toggle="popover"]').popover({
         html: true,
         sanitize: false,
+        container: 'body',
         content: function() {
             return $('#price-history-table').html();
         },
