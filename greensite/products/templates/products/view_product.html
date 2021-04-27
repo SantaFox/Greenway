@@ -16,9 +16,9 @@
  .product-gallery-thumblist-item {
     display:block;
     position:relative;
-    width:5rem;
+/*    width:5rem;
     height:3.5rem;
-    margin:.625rem;
+    margin:.625rem; */
     transition:border-color 0.2s ease-in-out;
     border:1px solid #e3e9ef;
     border-radius:.3125rem;
@@ -81,7 +81,7 @@
 <!--https://github.com/sachinchoolur/lightgallery.js-->
 
 {% block content %}
-<div class="row product-gallery">
+<div class="row product-gallery mb-3">
     <div class="col-md-5">
         {% for image in product.image_set.all %}
             {% if image_primary == image %}
@@ -99,7 +99,7 @@
     </div>
     <div class="col-md-7">
         <nav aria-label="breadcrumb" class="d-flex justify-content-between align-items-center">
-            <ol class="breadcrumb">
+            <ol class="breadcrumb bg-white">
                 <li class="breadcrumb-item"><a href="/products/">{% translate "Products" %}</a></li>
                 <li class="breadcrumb-item"><a href="/products/{{ product.Category.Slug }}/">
                     {{ product.Category.Name }}</a></li>
@@ -136,12 +136,13 @@
             </ol>
         </nav>
         <h4>{{ product_info.Name|default:_("No product name in this language") }}</h4>
-        <p>{{ product_info.Specification|default:_("No specification in this language") }}</p>
-        <p class="m-0">{% translate "Price" %}
-            {{ price.Price }}&nbsp;{{ price.Currency.Symbol }}
-            <span class="font-weight-light">
-                ({% translate "actual since" %} {{ price.DateAdded|date:"j E Y" }})
-            </span>
+        {% if product_info.Specification %}
+        <p>{{ product_info.Specification }}</p>
+        {% endif %}
+        <p class="m-0">
+            <span>{% translate "Price" %}</span>
+            <span>{{ price.Price }}&nbsp;{{ price.Currency.Symbol }}</span>
+            <span class="font-weight-light">({% translate "actual since" %} {{ price.DateAdded|date:"j E Y" }})</span>
             {% if user.is_authenticated and user.is_staff %}
             <a tabindex="0" role="button" class="btn btn-sm btn-info ml-2" data-toggle="popover" data-trigger="focus"
                title="{% translate 'Price History' %}">
@@ -171,8 +172,9 @@
             </table>
         </div>
         {% endif %}
-        <p class="m-0">{% translate "Volume" %}
-            {{ price.PV }}&nbsp;PV
+        <p class="m-0">
+            <span>{% translate "Volume" %}</span>
+            <span>{{ price.PV }}&nbsp;PV</span>
         </p>
 
         {% if tags %}
@@ -185,9 +187,9 @@
         </h5>
         {% endif %}
 
-        <div class="row justify-content-lg-left">
+        <div class="row">
             {% for image in product.image_set.all %}
-            <div class="col-lg-auto">
+            <div class="col-lg-auto p-2">
                 {% if image_primary == image %}
                 <a class="product-gallery-thumblist-item active" href="#id{{ image.id }}">
                 {% else %}
@@ -204,38 +206,37 @@
 </div>
 
 <nav>
-    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
         {% for tab in tabs %}
-        {% if forloop.first %}
-        <button class="nav-item nav-link active" id="nav-tab{{ tab.Order }}-tab"
-                data-toggle="tab" data-target="#nav-tab{{ tab.Order }}" type="button" role="tab"
+            {% if forloop.first %}
+            <a class="nav-link active" id="nav-tab{{ tab.Order }}-tab"
+                data-toggle="tab" href="#nav-tab{{ tab.Order }}" role="tab"
                 aria-controls="nav-tab{{ tab.Order }}" aria-selected="true">{{ tab.Name }}
-        </button>
-        {% else %}
-        <button class="nav-item nav-link" id="nav-tab{{ tab.Order }}-tab"
-                data-toggle="tab" data-target="#nav-tab{{ tab.Order }}" type="button" role="tab"
+            </a>
+            {% else %}
+            <a class="nav-link" id="nav-tab{{ tab.Order }}-tab"
+                data-toggle="tab" href="#nav-tab{{ tab.Order }}" role="tab"
                 aria-controls="nav-tab{{ tab.Order }}" aria-selected="false">{{ tab.Name }}
-        </button>
-        {% endif %}
+            </a>
+            {% endif %}
         {% empty %}
         {% endfor %}
     </div>
 </nav>
-<div class="row">
-    <div class="tab-content" id="nav-tabContent">
-        {% for tab in tabs %}
-        {% if forloop.first %}
-        <div class="tab-pane fade show active" id="nav-tab{{ tab.Order }}" role="tabpanel"
-             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.formatted_markdown|safe }}
-        </div>
-        {% else %}
-        <div class="tab-pane fade" id="nav-tab{{ tab.Order }}" role="tabpanel"
-             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.formatted_markdown|safe }}
-        </div>
-        {% endif %}
-        {% empty %}
-        {% endfor %}
+
+<div class="tab-content" id="nav-tabContent">
+    {% for tab in tabs %}
+    {% if forloop.first %}
+    <div class="tab-pane fade show active" id="nav-tab{{ tab.Order }}" role="tabpanel"
+         aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.formatted_markdown|safe }}
     </div>
+    {% else %}
+    <div class="tab-pane fade" id="nav-tab{{ tab.Order }}" role="tabpanel"
+         aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.formatted_markdown|safe }}
+    </div>
+    {% endif %}
+    {% empty %}
+    {% endfor %}
 </div>
 {% endblock %}
 
