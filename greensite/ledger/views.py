@@ -15,7 +15,7 @@ from greensite.decorators import prepare_languages
 
 from .models import Account, Counterparty, CustomerOrder, SupplierOrder
 from .tables import AccountsTable, CounterpartyTable, CustomerOrdersTable
-from .forms import CounterpartyForm
+from .forms import CounterpartyForm, AccountForm
 
 
 @login_required
@@ -108,7 +108,8 @@ def counterparty_delete(request):
             request_id = request.GET.get('id')
             counterparty_instance = get_object_or_404(Counterparty, id=request_id)
             related = counterparty_instance.is_deletable()
-            related_dict = {rel.model._meta.verbose_name: list(i.__str__() for i in rel.all()) for rel in related}
+            related_dict = {rel.model._meta.verbose_name_plural: list(i.__str__() for i in rel.all()) for rel in
+                            related}
             if related:
                 return JsonResponse({'status': 'related_found',
                                      'related': related_dict})
