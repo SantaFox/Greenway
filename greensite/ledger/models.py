@@ -6,7 +6,29 @@ from django.utils.translation import gettext_lazy as _
 from products.models import Currency, Product
 
 
-class Account(models.Model):
+# https://gist.github.com/freewayz/69d1b8bcb3c225bea57bd70ee1e765f8
+
+class ModelIsDeletableMixin(models.Model):
+
+    def is_deletable(self):
+        related_list = []
+        # get all the related object
+        for rel in self._meta.get_fields():
+            try:
+                # check if there is a relationship with at least one related object
+                related = rel.related_model.objects.filter(**{rel.field.name: self})
+                if related.exists():
+                    related_list.append(related)
+                    # if there is return a Tuple of flag = False the related_model object
+            except AttributeError:  # an attribute error for field occurs when checking for AutoField
+                pass  # just pass as we dont need to check for AutoField
+        return related_list
+
+    class Meta:
+        abstract = True
+
+
+class Account(ModelIsDeletableMixin, models.Model):
     User = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     Name = models.CharField(max_length=50, blank=False, verbose_name=_('Account Name'),
                             help_text=_('Account name that is easy to use and remember'))
@@ -100,6 +122,8 @@ class SupplierOrder(Operation):
     GFT = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
+    Memo = models.TextField(blank=True)
+
     def __str__(self):
         return f'{self.User} / {self.DateOperation} / {self.Counterparty}'
 
@@ -124,6 +148,8 @@ class CustomerOrder(Operation):
     Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True)
 
+    Memo = models.TextField(blank=True)
+
     def __str__(self):
         return f'{self.User} / {self.DateOperation} / {self.Counterparty}'
 
@@ -140,7 +166,6 @@ class ItemSetBreakdown(Operation):
 
     class Meta:
         verbose_name_plural = "Item Set Breakdowns"
-
 
 
 class OperationPosition(models.Model):
@@ -160,11 +185,15 @@ class OperationPosition(models.Model):
 
 
 class SupplierOrderPosition(OperationPosition):
-    Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
-    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
-    Discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)  # Applied on Total
-    DiscountReason = models.CharField(max_length=50, blank=True)
+    # Purchase options:
+    # Money (normal or internal)
+    Price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True)
+    # or GFT
     GFT = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    # or Free because of temporary action
+    FreeOnAction = models.BooleanField(default=False, blank=False)
+
     PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
@@ -205,3 +234,21 @@ class ItemSetBreakdownPosition(OperationPosition):
 
     class Meta:
         verbose_name_plural = "Item Set Breakdown Positions"
+
+
+class Payment(Operation):
+    DEBIT = 'D'
+    CREDIT = 'C'
+    TYPE_CHOICES = (
+        (DEBIT, _('Debit')),
+        (CREDIT, _('Credit')),
+    )
+    ParentOperation = models.ForeignKey(Operation, on_delete=models.PROTECT, related_name='Parent', blank=True, null=True)
+    TransactionType = models.CharField(choices=TYPE_CHOICES, max_length=1, blank=False)
+
+    Account = models.ForeignKey(Account, on_delete=models.PROTECT, blank=True, null=True)
+    Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.ParentOperation} / {self.TransactionType} / {self.Amount} / {self.Currency.Code}'

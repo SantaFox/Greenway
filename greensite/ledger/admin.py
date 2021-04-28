@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Account, Counterparty, SupplierOrder, SupplierOrderPosition, CustomerOrder, CustomerOrderPosition, \
-    ItemSetBreakdown, ItemSetBreakdownPosition
+    ItemSetBreakdown, ItemSetBreakdownPosition, Payment
 
 
 class CounterpartyAdmin(admin.ModelAdmin):
@@ -62,8 +62,16 @@ class ItemSetBreakdownAdmin(admin.ModelAdmin):
     ]
 
 
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ('User', 'ParentOperation', 'DateOperation', 'TransactionType', 'Amount', 'Currency')
+    list_filter = ['User']
+    list_editable = ['DateOperation', 'ParentOperation', 'TransactionType', 'Amount', 'Currency']
+    ordering = ['User', 'DateOperation']
+
+
 admin.site.register(Account)
 admin.site.register(Counterparty, CounterpartyAdmin)
 admin.site.register(SupplierOrder, SupplierOrderAdmin)
 admin.site.register(CustomerOrder, CustomerOrderAdmin)
 admin.site.register(ItemSetBreakdown, ItemSetBreakdownAdmin)
+admin.site.register(Payment, PaymentAdmin)
