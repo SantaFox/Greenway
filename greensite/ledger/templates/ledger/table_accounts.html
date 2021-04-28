@@ -63,7 +63,7 @@
 <div id="editModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/ledger/accounts/action/">
+            <form action="{% url 'ledger:account_action' %}">
                 <div class="modal-header">
                     <h4 class="modal-title">Edit Account</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -88,7 +88,7 @@
 <div id="deleteModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form>
+            <form action="{% url 'ledger:account_delete' %}">
                 <div class="modal-header">
                     <h4 class="modal-title">Delete Account</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
