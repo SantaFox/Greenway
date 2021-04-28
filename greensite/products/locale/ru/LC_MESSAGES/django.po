@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-22 18:39+0300\n"
+"POT-Creation-Date: 2021-04-28 22:37+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,61 +101,64 @@ msgid "< Product name not set >"
 msgstr "< Наименование не задано >"
 
 #: .\products\templates\products\list_products.html:34
-#: .\products\templates\products\view_product.html:56
-#: .\products\templates\products\view_product.html:74
+#: .\products\templates\products\view_product.html:145
+#: .\products\templates\products\view_product.html:161
 msgid "Price"
 msgstr "Цена"
 
 #: .\products\templates\products\list_products.html:39
-#: .\products\templates\products\view_product.html:75
-#: .\products\templates\products\view_product.html:90
+#: .\products\templates\products\view_product.html:162
+#: .\products\templates\products\view_product.html:180
 msgid "Volume"
 msgstr "Объём"
 
-#: .\products\templates\products\view_product.html:19
+#: .\products\templates\products\view_product.html:105
 msgid "Products"
 msgstr "Продукты"
 
-#: .\products\templates\products\view_product.html:28
-#: .\products\templates\products\view_product.html:33
+#: .\products\templates\products\view_product.html:114
+#: .\products\templates\products\view_product.html:119
 msgid "Prev"
 msgstr "Пред."
 
-#: .\products\templates\products\view_product.html:39
-#: .\products\templates\products\view_product.html:43
+#: .\products\templates\products\view_product.html:125
+#: .\products\templates\products\view_product.html:129
 msgid "Next"
 msgstr "След."
 
-#: .\products\templates\products\view_product.html:49
+#: .\products\templates\products\view_product.html:135
 msgid "Edit"
 msgstr "Правка"
 
-#: .\products\templates\products\view_product.html:54
+#: .\products\templates\products\view_product.html:140
 msgid "No product name in this language"
 msgstr "Для этого языка не задано наименование"
 
-#: .\products\templates\products\view_product.html:55
-msgid "No specification in this language"
-msgstr "Для этого языка не задана спецификация"
-
-#: .\products\templates\products\view_product.html:59
+#: .\products\templates\products\view_product.html:147
 msgid "actual since"
 msgstr "действительна с"
 
-#: .\products\templates\products\view_product.html:63
+#: .\products\templates\products\view_product.html:150
 msgid "Price History"
 msgstr "История цен"
 
-#: .\products\templates\products\view_product.html:64
+#: .\products\templates\products\view_product.html:151
 msgctxt "Price History"
 msgid "History"
 msgstr "История"
 
-#: .\products\templates\products\view_product.html:73
+#: .\products\templates\products\view_product.html:160
 msgid "Date"
 msgstr "Дата"
 
-#: .\products\views.py:250
+#: .\products\templates\products\view_product.html:163
+msgid "Comment"
+msgstr ""
+
+#: .\products\views.py:252
 msgctxt "Default Tab name"
 msgid "Description"
 msgstr "Описание"
+
+#~ msgid "No specification in this language"
+#~ msgstr "Для этого языка не задана спецификация"
