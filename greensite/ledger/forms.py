@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Field, Layout
 
-from .models import Counterparty
+from .models import Counterparty, Account
 
 
 class CounterpartyForm(ModelForm):
@@ -24,4 +24,10 @@ class CounterpartyForm(ModelForm):
     class Meta:
         model = Counterparty
         fields = ['Name', 'Phone', 'Email', 'Telegram', 'Instagram', 'Facebook', 'Address', 'City', 'Memo',
-                  'IsSupplier', 'IsCustomer']
+                  'IsSupplier', 'IsCustomer', ]
+
+
+class AccountForm(ModelForm):
+    class Meta:
+        model = Account
+        fields = ['Name', ]

@@ -115,45 +115,22 @@ def counterparty_delete(request):
             else:
                 return JsonResponse({'status': 'ok'})
         elif request.method == 'POST':
-            action = request.POST.get('action')
-            if action == 'add':
-                counterparty_form = CounterpartyForm(request.POST)
-                if not counterparty_form.is_valid():
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {
-                                             'text': f'Counterparty <strong>{counterparty_form.cleaned_data["Name"]}</strong> was not saved',
-                                             'moment': datetime.now(),
-                                         },
-                                         'errors': counterparty_form.errors})
-                counterparty_instance = counterparty_form.save(commit=False)
-                counterparty_instance.User = request.user
-                counterparty_instance.save()
-                messages.success(request,
-                                 f'Account <strong>{counterparty_instance.Name}</strong> added successfully')
-                return JsonResponse({'status': 'success'})
-            elif action == 'edit':
-                request_id = request.POST.get('id')
-                counterparty_instance = get_object_or_404(Counterparty, id=request_id)
-                counterparty_form = CounterpartyForm(request.POST, instance=counterparty_instance)
-                if not counterparty_form.has_changed():
-                    messages.info(request,
-                                  f'Account <strong>{counterparty_instance.Name}</strong> was not changed')
-                    return JsonResponse({'status': 'not_changed'})
-                if not counterparty_form.is_valid():
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {
-                                             'text': f'Counterparty <strong>{counterparty_instance.Name}</strong> was not saved',
-                                             'moment': datetime.now(),
-                                         },
-                                         'errors': counterparty_form.errors})
-                counterparty_form.save()
+            request_id = request.POST.get('id')
+            counterparty_instance = get_object_or_404(Counterparty, id=request_id)
+            try:
+                counterparty_instance.delete()
                 messages.success(request,
                                  f'Counterparty <strong>{counterparty_instance.Name}</strong> deleted successfully')
                 return JsonResponse({'status': 'success'})
-            elif action == 'delete':
-                pass
-            else:
-                return HttpResponseBadRequest()
+            except:
+                print('Error on deletion')
+                return JsonResponse({'status': 'not_valid',
+                                     # 'message': {
+                                     #     'text': f'Counterparty <strong>{counterparty_instance.Name}</strong> was not saved',
+                                     #     'moment': datetime.now(),
+                                     # },
+                                     # 'errors': counterparty_form.errors
+                                     })
         else:
             raise Http404
     else:
