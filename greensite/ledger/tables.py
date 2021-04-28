@@ -81,9 +81,9 @@ class AccountsTable(Table):
 class CounterpartyTable(Table):
     id = PrimaryKeyCheckboxColumn()
 
-    # TODO: Need improval
     Memo = TemplateColumn('<span data-toggle="tooltip" title="{{ value }}">{{ value|truncatechars:20 }}</span>',
-                          empty_values=(None, ''))
+                          empty_values=(None, ''),
+                          orderable=False)
 
     IsSupplier = BootstrapBooleanColumn()
     IsCustomer = BootstrapBooleanColumn()
