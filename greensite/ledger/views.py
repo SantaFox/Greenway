@@ -81,7 +81,7 @@ def counterparty_action(request):
                 counterparty_form = CounterpartyForm(request.POST, instance=counterparty_instance)
                 if not counterparty_form.has_changed():
                     messages.info(request,
-                                  f'Account <strong>{counterparty_instance.Name}</strong> was not changed')
+                                  f'Counterparty <strong>{counterparty_instance.Name}</strong> was not changed')
                     return JsonResponse({'status': 'not_changed'})
                 if not counterparty_form.is_valid():
                     return JsonResponse({'status': 'not_valid',
@@ -92,7 +92,7 @@ def counterparty_action(request):
                                          'errors': counterparty_form.errors})
                 counterparty_form.save()
                 messages.success(request,
-                                 f'Account <strong>{counterparty_instance.Name}</strong> updated successfully')
+                                 f'Counterparty <strong>{counterparty_instance.Name}</strong> updated successfully')
                 return JsonResponse({'status': 'success'})
             else:
                 return HttpResponseBadRequest()
@@ -148,7 +148,7 @@ def counterparty_delete(request):
                                          'errors': counterparty_form.errors})
                 counterparty_form.save()
                 messages.success(request,
-                                 f'Account <strong>{counterparty_instance.Name}</strong> updated successfully')
+                                 f'Counterparty <strong>{counterparty_instance.Name}</strong> deleted successfully')
                 return JsonResponse({'status': 'success'})
             elif action == 'delete':
                 pass
@@ -177,12 +177,22 @@ def account_action(request):
         if request.method == 'GET':
             request_id = request.GET.get('id')
             account_instance = get_object_or_404(Account, id=request_id)
-            account_dict = model_to_dict(account_instance, fields=['id', 'Name', ])
-            return JsonResponse(account_dict)
+            # TODO: Maybe it's better to create and serialize a CounterpartyForm here?
+            counterparty_dict = model_to_dict(account_instance,
+                                              fields=['id', 'Name', ])
+            return JsonResponse(counterparty_dict)
         elif request.method == 'POST':
             action = request.POST.get('action')
             if action == 'add':
-                account_instance = Account()
+                account_form = AccountForm(request.POST)
+                if not account_form.is_valid():
+                    return JsonResponse({'status': 'not_valid',
+                                         'message': {
+                                             'text': f'Counterparty <strong>{account_form.cleaned_data["Name"]}</strong> was not saved',
+                                             'moment': datetime.now(),
+                                         },
+                                         'errors': account_form.errors})
+                account_instance = account_form.save(commit=False)
                 account_instance.User = request.user
                 try:
                     account_instance.save()
@@ -198,22 +208,24 @@ def account_action(request):
                                          'errors': e.args
                                          })
             elif action == 'edit':
-                request_id = request.POST.get('account_id')
+                request_id = request.POST.get('id')
                 account_instance = get_object_or_404(Account, id=request_id)
-                account_instance.Name = request.POST.get('account_name')
-                try:
-                    account_instance.full_clean()
-                except ValidationError as e:
-                    return JsonResponse({'status': 'error', 'errors': e.error_dict})
-                account_instance.save()
-                return JsonResponse({'status': 'success',
-                                     'message': {
-                                         'text': f'Account <strong>{account_instance.Name}</strong> updated successfully',
-                                         'moment': datetime.now(),
-                                     },
-                                     })
-            elif action == 'delete':
-                pass
+                account_form = CounterpartyForm(request.POST, instance=account_instance)
+                if not account_form.has_changed():
+                    messages.info(request,
+                                  f'Account <strong>{account_instance.Name}</strong> was not changed')
+                    return JsonResponse({'status': 'not_changed'})
+                if not account_form.is_valid():
+                    return JsonResponse({'status': 'not_valid',
+                                         'message': {
+                                             'text': f'Counterparty <strong>{account_instance.Name}</strong> was not saved',
+                                             'moment': datetime.now(),
+                                         },
+                                         'errors': account_form.errors})
+                account_form.save()
+                messages.success(request,
+                                 f'Account <strong>{account_instance.Name}</strong> updated successfully')
+                return JsonResponse({'status': 'success'})
             else:
                 return HttpResponseBadRequest()
         else:
