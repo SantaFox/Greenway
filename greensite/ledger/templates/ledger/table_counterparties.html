@@ -3,7 +3,7 @@
 {% load static %}
 {% load render_table from django_tables2 %}
 
-{% block title %}Manage Counterparties{% endblock %}
+{% block title %}{% translate 'Manage Counterparties' %}{% endblock %}
 
 {% block css %}
 <style>
@@ -21,11 +21,11 @@
     <div class="table-title mb-2">
         <div class="row text-white py-3" style="background: #435d7d;">
             <div class="col-sm-6">
-                <h2 class="mb-0">Manage <b>Counterparties</b></h2>
+                <h2 class="mb-0">{% translate 'Manage Counterparties' %}</h2>
             </div>
             <div class="col-sm-6 d-flex align-items-center justify-content-end">
                 <a href="#editModal" class="btn btn-sm btn-success" data-toggle="modal">
-                    <i class="bi bi-plus-circle mr-2"></i>Add New Counterparty</a>
+                    <i class="bi bi-plus-circle mr-2"></i>{% translate 'Add New Counterparty' %}</a>
                 {% comment %}
                 <a href="#deleteModal" class="btn btn-sm btn-danger ml-2" data-toggle="modal">
                     <i class="bi bi-dash-circle mr-2"></i>{% translate "Delete Selected" %}</a>

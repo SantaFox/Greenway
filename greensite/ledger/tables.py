@@ -58,6 +58,7 @@ class AccountsTable(Table):
     actions = Column(
         accessor='pk',
         orderable=False,
+        verbose_name=_('Actions'),
     )
 
     def render_actions(self, value):
@@ -89,6 +90,7 @@ class CounterpartyTable(Table):
     actions = Column(
         accessor='pk',
         orderable=False,
+        verbose_name=_('Actions'),
     )
 
     def render_actions(self, value):
