@@ -42,11 +42,68 @@ def counterparty_action(request):
         if request.method == 'GET':
             request_id = request.GET.get('id')
             counterparty_instance = get_object_or_404(Counterparty, id=request_id)
+            # TODO: Maybe it's better to create and serialize a CounterpartyForm here?
             counterparty_dict = model_to_dict(counterparty_instance,
                                               fields=['id', 'Name', 'Phone', 'Email', 'Instagram', 'Telegram',
                                                       'Facebook', 'City', 'Address', 'Memo',
                                                       'IsSupplier', 'IsCustomer', ])
             return JsonResponse(counterparty_dict)
+        elif request.method == 'POST':
+            action = request.POST.get('action')
+            if action == 'add':
+                counterparty_form = CounterpartyForm(request.POST)
+                if not counterparty_form.is_valid():
+                    return JsonResponse({'status': 'not_valid',
+                                         'message': {
+                                             'text': f'Counterparty <strong>{counterparty_form.cleaned_data["Name"]}</strong> was not saved',
+                                             'moment': datetime.now(),
+                                         },
+                                         'errors': counterparty_form.errors})
+                counterparty_instance = counterparty_form.save(commit=False)
+                counterparty_instance.User = request.user
+                counterparty_instance.save()
+                messages.success(request,
+                                 f'Account <strong>{counterparty_instance.Name}</strong> added successfully')
+                return JsonResponse({'status': 'success'})
+            elif action == 'edit':
+                request_id = request.POST.get('id')
+                counterparty_instance = get_object_or_404(Counterparty, id=request_id)
+                counterparty_form = CounterpartyForm(request.POST, instance=counterparty_instance)
+                if not counterparty_form.has_changed():
+                    messages.info(request,
+                                  f'Account <strong>{counterparty_instance.Name}</strong> was not changed')
+                    return JsonResponse({'status': 'not_changed'})
+                if not counterparty_form.is_valid():
+                    return JsonResponse({'status': 'not_valid',
+                                         'message': {
+                                             'text': f'Counterparty <strong>{counterparty_instance.Name}</strong> was not saved',
+                                             'moment': datetime.now(),
+                                         },
+                                         'errors': counterparty_form.errors})
+                counterparty_form.save()
+                messages.success(request,
+                                 f'Account <strong>{counterparty_instance.Name}</strong> updated successfully')
+                return JsonResponse({'status': 'success'})
+            else:
+                return HttpResponseBadRequest()
+        else:
+            raise Http404
+    else:
+        raise Http404
+
+
+def counterparty_delete(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            request_id = request.GET.get('id')
+            counterparty_instance = get_object_or_404(Counterparty, id=request_id)
+            related = counterparty_instance.is_deletable()
+            related_dict = list({rel.model._meta.verbose_name: list(i.__str__() for i in rel.all())} for rel in related)
+            if related:
+                return JsonResponse({'status': 'related_found',
+                                     'related': related_dict})
+            else:
+                return JsonResponse({'status': 'ok'})
         elif request.method == 'POST':
             action = request.POST.get('action')
             if action == 'add':

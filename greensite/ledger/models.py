@@ -46,7 +46,7 @@ class Account(ModelIsDeletableMixin, models.Model):
         ]
 
 
-class Counterparty(models.Model):
+class Counterparty(ModelIsDeletableMixin, models.Model):
     User = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     Name = models.CharField(max_length=50, blank=False)
 

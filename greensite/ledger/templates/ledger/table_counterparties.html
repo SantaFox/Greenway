@@ -142,14 +142,16 @@
 <div id="deleteModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form>
+            <form action="/ledger/counterparties/delete/">
                 <div class="modal-header">
                     <h4 class="modal-title">Delete Counterparty</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete these Records?</p>
-                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                    <p id="deleteQuestion">Are you sure you want to delete these Records?</p>
+                    <p id="deleteContent">
+                        <p class="text-warning"><small>This action cannot be undone.</small></p>
+                    </p>
                 </div>
                 <div class="modal-footer">
                     <input type="button" class="btn btn-default" data-dismiss="modal"
@@ -202,6 +204,35 @@
             $(modal).find('.modal-footer input[name="action"]').val('add');
             $(modal).find('.modal-body input[type="text"]').val('');
         };
+    })
+
+        $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var modal = $(this)
+        var accountId = button.data('id') // Extract info from data-* attributes
+        $.ajax({
+            url:'/ledger/counterparties/delete/',
+            type: 'GET',
+            data: {id: accountId},
+            dataType: 'json',
+            success: function(response) {
+                var header = $(modal).find('.modal-body #deleteQuestion');
+                var content = $(modal).find('.modal-body #deleteContent');
+                if (response.status == 'ok') {
+                    header.innerHTML = 'Are you sure you want to delete these Record?';
+                    content.innerHTML = '<p class="text-warning"><small>This action cannot be undone.</small></p>'
+                } else {
+                    header.innerHTML = 'Record deletion is impossible. Below objects relate on it:'
+                    content.html('');
+                    for (var i in response.related) {
+                        content.append(i);
+                    };
+                };
+            },
+            error: function() {
+                console.log('something went wrong here');
+            },
+        });
     })
 </script>
 <script type="text/javascript" src="{% static '/ledger/crud.js' %}"></script>
