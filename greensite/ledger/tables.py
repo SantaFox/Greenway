@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django_tables2 import Column, BooleanColumn, CheckBoxColumn, DateColumn, TemplateColumn, Table
 from django_tables2.utils import AttributeDict
 
-from .models import Account, Counterparty, Operation
+from .models import Account, Counterparty, CustomerOrder
 
 
 class BootstrapBooleanColumn(BooleanColumn):
@@ -25,6 +25,12 @@ class BootstrapBooleanColumn(BooleanColumn):
         attrs.update(self.attrs.get('span', {}))
 
         return mark_safe(html % (AttributeDict(attrs).as_html()))
+
+
+class NumericColumn(Column):
+
+    def render(self, value):
+        return '{:0.2f}'.format(value)
 
 
 class PrimaryKeyCheckboxColumn(CheckBoxColumn):
@@ -100,8 +106,26 @@ class CounterpartyTable(Table):
 
 
 class CustomerOrdersTable(Table):
+    id = PrimaryKeyCheckboxColumn()
+
+    Amount = NumericColumn(attrs={
+        "td": {"align": "right"}
+    })
+
+    Actions = TemplateColumn(
+        ('<a href="#editModal" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
+         '<i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
+         '<a href="#deleteModal" data-toggle="modal" data-id="{{ value }}">'
+         '<i class="bi bi-trash text-danger mr-1"></i>Delete</a>'),
+        accessor='id',
+        orderable=False,
+        verbose_name=_('Actions'),
+    )
+
     DateOperation = DateColumn()
 
     class Meta:
-        model = Operation
-        fields = ('DateOperation', 'Counterparty')
+        model = CustomerOrder
+        empty_text = 'There are no Customer Orders for this User'
+        fields = ('id', 'DateOperation', 'Counterparty__Name', 'Amount', 'Currency', 'Actions',)
+        attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
