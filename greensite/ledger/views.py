@@ -13,7 +13,7 @@ from django_tables2 import RequestConfig
 
 from greensite.decorators import prepare_languages
 
-from .models import Account, Counterparty, Operation
+from .models import Account, Counterparty, CustomerOrder, SupplierOrder
 from .tables import AccountsTable, CounterpartyTable, CustomerOrdersTable
 from .forms import CounterpartyForm
 
@@ -262,7 +262,7 @@ def account_delete(request):
 @permission_required('ledger.view_operation', raise_exception=True)
 @prepare_languages
 def table_customer_orders(request):
-    table = CustomerOrdersTable(Operation.objects.filter(User=request.user, Type=1))
+    table = CustomerOrdersTable(CustomerOrder.objects.filter(User=request.user))
     RequestConfig(request).configure(table)
 
     return TemplateResponse(request, 'ledger/table_customer_orders.html', {
