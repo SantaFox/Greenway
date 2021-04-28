@@ -75,10 +75,11 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="hidden" name="account_id">
                     <input type="hidden" name="action" value="edit">
-                    <input type="button" class="btn btn-default" data-dismiss="modal" value="{% translate "Cancel" context "Form button" %}">
-                    <input type="submit" class="btn btn-info" value="{% translate "Save" context "Form button" %}">
+                    <input type="button" class="btn btn-default" data-dismiss="modal"
+                           value="{% translate 'Cancel' context 'Form button' %}">
+                    <input type="submit" class="btn btn-info"
+                           value="{% translate 'Save' context 'Form button' %}">
                 </div>
             </form>
         </div>
@@ -98,8 +99,10 @@
                     <p class="text-warning"><small>This action cannot be undone.</small></p>
                 </div>
                 <div class="modal-footer">
-                    <input type="button" class="btn btn-default" data-dismiss="modal" value="{% translate "Cancel" context "Form button" %}">
-                    <input type="submit" class="btn btn-danger" value="{% translate "Delete" context "Form button" %}">
+                    <input type="button" class="btn btn-light" data-dismiss="modal"
+                           value="{% translate 'Cancel' context 'Form button' %}">
+                    <input type="submit" class="btn btn-danger" disabled
+                           value="{% translate 'Delete' context 'Form button' %}">
                 </div>
             </form>
         </div>
