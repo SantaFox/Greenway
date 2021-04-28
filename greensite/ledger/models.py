@@ -31,10 +31,11 @@ class ModelIsDeletableMixin(models.Model):
 class Account(ModelIsDeletableMixin, models.Model):
     User = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     Name = models.CharField(max_length=50, blank=False, verbose_name=_('Account Name'),
-                            help_text=_('Account name that is easy to use and remember'))
+                            help_text=_('Account name that is easy to use and remember.'))
 
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
+
     # Accounts intended to be multi-currency
 
     def __str__(self):
@@ -48,7 +49,8 @@ class Account(ModelIsDeletableMixin, models.Model):
 
 class Counterparty(ModelIsDeletableMixin, models.Model):
     User = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    Name = models.CharField(max_length=50, blank=False)
+    Name = models.CharField(max_length=50, blank=False, verbose_name=_('Counterparty Name'),
+                                 help_text=_('Name of the Counterparty, preferably "Surname Name"'))
 
     Phone = models.CharField(max_length=50, blank=True)
     Email = models.CharField(max_length=50, blank=True)
@@ -81,7 +83,8 @@ class Counterparty(ModelIsDeletableMixin, models.Model):
 
 class Operation(models.Model):
     User = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    DateOperation = models.DateField(blank=False)
+    DateOperation = models.DateField(blank=False, verbose_name=_('Operation Date'),
+                                     help_text=_('Date when this Operation was executed'))
     Type = models.IntegerField(choices=[
         (1, _('Customer Order')),
         (2, _('Supplier Order')),
@@ -134,21 +137,29 @@ class SupplierOrder(Operation):
 class CustomerOrder(Operation):
     Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True)
 
-    # Delivery-related block
-    DatePlaced = models.DateField(blank=True, null=True)  # Date placed with supplier /
-    DateDispatched = models.DateField(blank=True, null=True)  # Date dispatched by supplier / to customer
-    DateDelivered = models.DateField(blank=True, null=True)  # Date received from supplier / by customer
-    TrackingNumber = models.CharField(max_length=50, blank=True)
+    DateDispatched = models.DateField(blank=True, null=True, verbose_name=_('Dispatch Date'),
+                                      help_text=_(('Date when this Order was dispatched to the Customer.'
+                                                   'Until then, the Order is prepared but held in Storage.')))
+    DateDelivered = models.DateField(blank=True, null=True, verbose_name=_('Delivery Date'),
+                                     help_text=_(('Date when this Order was delivered to the Customer. '
+                                                  'In case of Detailed Delivery, the date of last delivery is used.')))
+    TrackingNumber = models.CharField(max_length=50, blank=True, verbose_name=_('Tracking Number'),
+                                      help_text=_('Tracking Number provided by used Courier Service.'))
     CourierService = models.CharField(choices=[
         ('DHL', 'DHL Express'),
         ('Post', 'Ordinary Post'),
     ], max_length=10, blank=True, null=True)
-    DetailedDelivery = models.BooleanField(default=False)
 
-    Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True)
+    DetailedDelivery = models.BooleanField(default=False, verbose_name=_('Detailed Delivery'),
+                                           help_text=_('Delivery of each Position is managed separately'))
 
-    Memo = models.TextField(blank=True)
+    Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name=_('Amount'),
+                                 help_text=_('Amount to be paid by Customer.'))
+    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_('Currency'),
+                                 help_text=_('Currency of Customer payment.'))
+
+    Memo = models.TextField(blank=True, verbose_name=_('Memo'),
+                            help_text=_('Memo related to this Customer Order'))
 
     def __str__(self):
         return f'{self.User} / {self.DateOperation} / {self.Counterparty}'
@@ -243,7 +254,8 @@ class Payment(Operation):
         (DEBIT, _('Debit')),
         (CREDIT, _('Credit')),
     )
-    ParentOperation = models.ForeignKey(Operation, on_delete=models.PROTECT, related_name='Parent', blank=True, null=True)
+    ParentOperation = models.ForeignKey(Operation, on_delete=models.PROTECT, related_name='Parent', blank=True,
+                                        null=True)
     TransactionType = models.CharField(choices=TYPE_CHOICES, max_length=1, blank=False)
 
     Account = models.ForeignKey(Account, on_delete=models.PROTECT, blank=True, null=True)
