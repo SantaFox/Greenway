@@ -55,25 +55,20 @@ class PrimaryKeyCheckboxColumn(CheckBoxColumn):
 class AccountsTable(Table):
     id = PrimaryKeyCheckboxColumn()
 
-    actions = Column(
-        accessor='pk',
+    Actions = TemplateColumn(
+        ('<a href="#editModal" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
+         '<i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
+         '<a href="#deleteModal" data-toggle="modal" data-id="{{ value }}">'
+         '<i class="bi bi-trash text-danger mr-1"></i>Delete</a>'),
+        accessor='id',
         orderable=False,
         verbose_name=_('Actions'),
     )
 
-    def render_actions(self, value):
-        # url_edit = reverse('ledger:edit_account', args=[value])
-        # url_delete = reverse('ledger:delete_account', args=[value])
-        html = (
-            f'<a href="#editModal" data-toggle="modal" data-id="{value}" class="mr-2"><i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
-            f'<a href="#deleteModal" data-toggle="modal" data-id="{value}"><i class="bi bi-trash text-danger mr-1"></i>Delete</a>'
-            )
-        return mark_safe(html)
-
     class Meta:
         model = Account
-        empty_text = 'There are no accounts for this user'
-        fields = ('id', 'Name', 'actions',)
+        empty_text = 'There are no Accounts for this User'
+        fields = ('id', 'Name', 'Actions',)
         attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
 
 
@@ -87,23 +82,20 @@ class CounterpartyTable(Table):
     IsSupplier = BootstrapBooleanColumn()
     IsCustomer = BootstrapBooleanColumn()
 
-    actions = Column(
-        accessor='pk',
+    Actions = TemplateColumn(
+        ('<a href="#editModal" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
+         '<i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
+         '<a href="#deleteModal" data-toggle="modal" data-id="{{ value }}">'
+         '<i class="bi bi-trash text-danger mr-1"></i>Delete</a>'),
+        accessor='id',
         orderable=False,
         verbose_name=_('Actions'),
     )
 
-    def render_actions(self, value):
-        # TODO: Change to TemplateColumn?
-        html = (
-            f'<a href="#editModal" class="mr-2" data-toggle="modal" data-id="{value}"><i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
-            f'<a href="#deleteModal" data-toggle="modal" data-id="{value}"><i class="bi bi-trash text-danger mr-1"></i>Delete</a>'
-            )
-        return mark_safe(html)
-
     class Meta:
         model = Counterparty
-        fields = ('id', 'Name', 'Phone', 'City', 'Memo', 'IsSupplier', 'IsCustomer', 'actions',)
+        empty_text = 'There are no Counterparties for this User'
+        fields = ('id', 'Name', 'Phone', 'City', 'Memo', 'IsSupplier', 'IsCustomer', 'Actions',)
         attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
 
 
