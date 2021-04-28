@@ -152,11 +152,12 @@
                     <div id="deleteContent">
                         <p class="text-info"><small>This may take some time.</small></p>
                     </div>
+                    <input type="hidden" name="id">
                 </div>
                 <div class="modal-footer">
                     <input type="button" class="btn btn-default" data-dismiss="modal"
                            value="{% translate 'Cancel' context 'Form button' %}">
-                    <input type="submit" class="btn btn-danger"
+                    <input type="submit" class="btn btn-danger" disabled
                            value="{% translate 'Delete' context 'Form button' %}">
                 </div>
             </form>

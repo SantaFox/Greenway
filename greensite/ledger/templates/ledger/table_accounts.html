@@ -35,31 +35,7 @@
     </div>
     {% render_table table %}
 </div>
-<!-- Add Modal HTML -->
-<div id="addModal" class="modal fade" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="/ledger/accounts/action/">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Account</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Account Name</label>
-                        <input type="text" class="form-control" name="account_name" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <input type="hidden" name="action" value="add">
-                    <input type="button" class="btn btn-default" data-dismiss="modal" value="{% translate "Cancel" context "Form button" %}">
-                    <input type="submit" class="btn btn-success" value="{% translate "Add" context "Form button" %}">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- Edit Modal HTML -->
+<!-- Add/Edit Modal HTML -->
 <div id="editModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -71,12 +47,13 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Account Name</label>
-                        <input type="text" class="form-control" name="account_name" required>
+                        <input type="text" class="form-control" name="Name" required>
                     </div>
+                    <input type="hidden" name="id">
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="action" value="edit">
-                    <input type="button" class="btn btn-default" data-dismiss="modal"
+                    <input type="button" class="btn btn-light" data-dismiss="modal"
                            value="{% translate 'Cancel' context 'Form button' %}">
                     <input type="submit" class="btn btn-info"
                            value="{% translate 'Save' context 'Form button' %}">
@@ -95,8 +72,11 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete these Records?</p>
-                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                    <p id="deleteQuestion">Please wait while deletion will be validated</p>
+                    <div id="deleteContent">
+                        <p class="text-info"><small>This may take some time.</small></p>
+                    </div>
+                    <input type="hidden" name="id">
                 </div>
                 <div class="modal-footer">
                     <input type="button" class="btn btn-light" data-dismiss="modal"
