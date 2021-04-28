@@ -1,7 +1,7 @@
 from django.utils.safestring import mark_safe
-from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
-from django_tables2 import A, BooleanColumn, CheckBoxColumn, Column, DateColumn, TemplateColumn, Table
+from django_tables2 import Column, BooleanColumn, CheckBoxColumn, DateColumn, TemplateColumn, Table
 from django_tables2.utils import AttributeDict
 
 from .models import Account, Counterparty, Operation
