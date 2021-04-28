@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, Http404, HttpResponseBadRequest
 from django.template.response import TemplateResponse
@@ -61,10 +62,19 @@ def counterparty_action(request):
                                          'errors': counterparty_form.errors})
                 counterparty_instance = counterparty_form.save(commit=False)
                 counterparty_instance.User = request.user
-                counterparty_instance.save()
-                messages.success(request,
-                                 f'Account <strong>{counterparty_instance.Name}</strong> added successfully')
-                return JsonResponse({'status': 'success'})
+                try:
+                    counterparty_instance.save()
+                    messages.success(request,
+                                     f'Counterparty <strong>{counterparty_instance.Name}</strong> added successfully')
+                    return JsonResponse({'status': 'success'})
+                except IntegrityError as e:
+                    return JsonResponse({'status': 'not_valid',
+                                         'message': {
+                                             'text': f'Counterparty <strong>{counterparty_instance.Name}</strong> was not saved',
+                                             'moment': datetime.now(),
+                                         },
+                                         'errors': e.args
+                                         })
             elif action == 'edit':
                 request_id = request.POST.get('id')
                 counterparty_instance = get_object_or_404(Counterparty, id=request_id)
@@ -174,18 +184,19 @@ def account_action(request):
             if action == 'add':
                 account_instance = Account()
                 account_instance.User = request.user
-                account_instance.Name = request.POST.get('account_name')
                 try:
-                    account_instance.full_clean()
-                except ValidationError as e:
-                    return JsonResponse({'status': 'error', 'errors': e.message_dict})
-                account_instance.save()
-                return JsonResponse({'status': 'success',
-                                     'message': {
-                                         'text': f'Account <strong>{account_instance.Name}</strong> added successfully',
-                                         'moment': datetime.now(),
-                                     },
-                                     })
+                    account_instance.save()
+                    messages.success(request,
+                                     f'Account <strong>{account_instance.Name}</strong> added successfully')
+                    return JsonResponse({'status': 'success'})
+                except IntegrityError as e:
+                    return JsonResponse({'status': 'not_valid',
+                                         'message': {
+                                             'text': f'Counterparty <strong>{account_instance.Name}</strong> was not saved',
+                                             'moment': datetime.now(),
+                                         },
+                                         'errors': e.args
+                                         })
             elif action == 'edit':
                 request_id = request.POST.get('account_id')
                 account_instance = get_object_or_404(Account, id=request_id)
