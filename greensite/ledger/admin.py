@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .models import Account, Counterparty, SupplierOrder, SupplierOrderPosition, CustomerOrder, CustomerOrderPosition, \
-    ItemSetBreakdown, ItemSetBreakdownPosition, Payment
+    ItemSetBreakdown, ItemSetBreakdownPosition, Payment, \
+    Operation   # It is for customized
 
 
 class CounterpartyAdmin(admin.ModelAdmin):
@@ -63,10 +64,16 @@ class ItemSetBreakdownAdmin(admin.ModelAdmin):
 
 
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('User', 'ParentOperation', 'DateOperation', 'TransactionType', 'Amount', 'Currency')
-    list_filter = ['User']
+    list_display = ('User', 'DateOperation', 'ParentOperation', 'TransactionType', 'Amount', 'Currency')
+    list_filter = ['User', 'TransactionType']
     list_editable = ['DateOperation', 'ParentOperation', 'TransactionType', 'Amount', 'Currency']
     ordering = ['User', 'DateOperation']
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "ParentOperation":
+            # TODO: Combine two querysets, CustomerOrders and SupplierOrders
+            kwargs["queryset"] = Operation.objects.filter(Type__lte=2).order_by('DateOperation')
+        return super(PaymentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 admin.site.register(Account)
