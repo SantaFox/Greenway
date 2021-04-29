@@ -163,7 +163,7 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
                             help_text=_('Memo related to this Customer Order'))
 
     def __str__(self):
-        return f'{self.User} / {self.DateOperation} / {self.Counterparty}'
+        return f'{self.User} / {self.DateOperation} / {self.Counterparty} / {self.Amount} / {self.Currency}'
 
     class Meta:
         verbose_name_plural = _('Customer Orders')
@@ -255,13 +255,13 @@ class Payment(ModelIsDeletableMixin, Operation):
         (DEBIT, _('Debit')),
         (CREDIT, _('Credit')),
     )
-    ParentOperation = models.ForeignKey(Operation, on_delete=models.PROTECT, related_name='Parent', blank=True,
-                                        null=True)
+
+    ParentOperation = models.ForeignKey(Operation, on_delete=models.PROTECT, related_name='Parent')
     TransactionType = models.CharField(choices=TYPE_CHOICES, max_length=1, blank=False)
 
-    Account = models.ForeignKey(Account, on_delete=models.PROTECT, blank=True, null=True)
-    Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True)
+    Account = models.ForeignKey(Account, on_delete=models.PROTECT, blank=False)
+    Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
+    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=False)
 
     def __str__(self):
         return f'{self.ParentOperation} / {self.TransactionType} / {self.Amount} / {self.Currency.Code}'
