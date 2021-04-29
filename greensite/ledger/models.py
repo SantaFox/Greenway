@@ -42,6 +42,7 @@ class Account(ModelIsDeletableMixin, models.Model):
         return f'{self.User} / {self.Name}'
 
     class Meta:
+        verbose_name_plural = _('Accounts')
         constraints = [
             models.UniqueConstraint(fields=['User', 'Name'], name='unique_Account')
         ]
@@ -71,7 +72,7 @@ class Counterparty(ModelIsDeletableMixin, models.Model):
         return f'{self.User} / {self.Name}'
 
     class Meta:
-        verbose_name_plural = "Counterparties"
+        verbose_name_plural = _("Counterparties")
         constraints = [
             models.UniqueConstraint(fields=['User', 'Name'], name='unique_Counterparty'),
             models.CheckConstraint(
@@ -105,7 +106,7 @@ class Operation(models.Model):
         return f'{self.User} / {self.DateOperation} / {self.get_Type_display()}'
 
 
-class SupplierOrder(Operation):
+class SupplierOrder(ModelIsDeletableMixin, Operation):
     Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True)
 
     GreenwayOrderNum = models.CharField(max_length=10, blank=True)
@@ -131,7 +132,7 @@ class SupplierOrder(Operation):
         return f'{self.User} / {self.DateOperation} / {self.Counterparty}'
 
     class Meta:
-        verbose_name_plural = "Supplier Orders"
+        verbose_name_plural = _('Supplier Orders')
 
 
 class CustomerOrder(Operation):
@@ -165,7 +166,7 @@ class CustomerOrder(Operation):
         return f'{self.User} / {self.DateOperation} / {self.Counterparty}'
 
     class Meta:
-        verbose_name_plural = "Customer Orders"
+        verbose_name_plural = _('Customer Orders')
 
 
 class ItemSetBreakdown(Operation):
@@ -176,7 +177,7 @@ class ItemSetBreakdown(Operation):
         return f'{self.User} / {self.DateOperation} / {self.Product} / {self.Quantity}'
 
     class Meta:
-        verbose_name_plural = "Item Set Breakdowns"
+        verbose_name_plural = _('Item Set Breakdowns')
 
 
 class OperationPosition(models.Model):
@@ -264,3 +265,6 @@ class Payment(Operation):
 
     def __str__(self):
         return f'{self.ParentOperation} / {self.TransactionType} / {self.Amount} / {self.Currency.Code}'
+
+    class Meta:
+        verbose_name_plural = _("Payments")
