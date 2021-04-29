@@ -30,7 +30,7 @@ def view_index(request):
 def table_counterparties(request):
     table = CounterpartyTable(Counterparty.objects.filter(User=request.user))
     RequestConfig(request,
-                  paginate={"per_page": 10}) \
+                  paginate={"per_page": 15}) \
         .configure(table)
 
     return TemplateResponse(request, 'ledger/table_counterparties.html', {
@@ -253,7 +253,9 @@ def account_delete(request):
 @prepare_languages
 def table_customer_orders(request):
     table = CustomerOrdersTable(CustomerOrder.objects.filter(User=request.user))
-    RequestConfig(request).configure(table)
+    RequestConfig(request,
+                  paginate={"per_page": 15}) \
+        .configure(table)
 
     return TemplateResponse(request, 'ledger/table_customer_orders.html', {
         'table': table,
