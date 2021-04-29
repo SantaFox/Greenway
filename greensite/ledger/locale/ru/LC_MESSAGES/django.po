@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-28 23:38+0300\n"
+"POT-Creation-Date: 2021-04-29 10:05+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -222,6 +222,18 @@ msgstr "Отмена"
 msgctxt "Form button"
 msgid "Save"
 msgstr "Сохранить"
+
+#: .\ledger\templates\ledger\table_accounts.html:76
+#: .\ledger\templates\ledger\table_counterparties.html:152
+#: .\ledger\templates\ledger\table_customer_orders.html:51
+msgid "Please wait while deletion will be validated"
+msgstr ""
+
+#: .\ledger\templates\ledger\table_accounts.html:78
+#: .\ledger\templates\ledger\table_counterparties.html:154
+#: .\ledger\templates\ledger\table_customer_orders.html:53
+msgid "This may take some time"
+msgstr ""
 
 #: .\ledger\templates\ledger\table_accounts.html:86
 #: .\ledger\templates\ledger\table_counterparties.html:162
