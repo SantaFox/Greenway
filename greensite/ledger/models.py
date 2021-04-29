@@ -118,7 +118,8 @@ class SupplierOrder(ModelIsDeletableMixin, Operation):
     TrackingNumber = models.CharField(max_length=50, blank=True)
     CourierService = models.CharField(choices=[
         ('DHL', 'DHL Express'),
-        ('Post', 'Ordinary Post'),
+        ('CZP', 'Czech Post'),
+        ('POST', 'Ordinary Post'),
     ], max_length=10, blank=True, null=True)
 
     Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
@@ -148,7 +149,8 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
                                       help_text=_('Tracking Number provided by used Courier Service.'))
     CourierService = models.CharField(choices=[
         ('DHL', 'DHL Express'),
-        ('Post', 'Ordinary Post'),
+        ('CZP', 'Czech Post'),
+        ('POST', 'Ordinary Post'),
     ], max_length=10, blank=True, null=True)
 
     DetailedDelivery = models.BooleanField(default=False, verbose_name=_('Detailed Delivery'),
