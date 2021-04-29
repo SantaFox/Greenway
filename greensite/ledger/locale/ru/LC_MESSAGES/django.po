@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-28 22:37+0300\n"
+"POT-Creation-Date: 2021-04-28 23:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,137 +28,164 @@ msgstr "Наименование счёта"
 msgid "Account name that is easy to use and remember."
 msgstr "Наименование счёта, простое и удобное для использования"
 
-#: .\ledger\models.py:52
+#: .\ledger\models.py:45
+msgid "Accounts"
+msgstr "Счета"
+
+#: .\ledger\models.py:53
 msgid "Counterparty Name"
 msgstr "Имя контрагента"
 
-#: .\ledger\models.py:53
+#: .\ledger\models.py:54
 msgid "Name of the Counterparty, preferably \"Surname Name\""
-msgstr "Имя или наименование контрагента, предпочтительно в формате \"Фамилия Имя\""
+msgstr ""
+"Имя или наименование контрагента, предпочтительно в формате \"Фамилия Имя\""
 
-#: .\ledger\models.py:86
+#: .\ledger\models.py:75
+msgid "Counterparties"
+msgstr "Контрагенты"
+
+#: .\ledger\models.py:87
 msgid "Operation Date"
 msgstr "Дата операции"
 
-#: .\ledger\models.py:87
+#: .\ledger\models.py:88
 msgid "Date when this Operation was executed"
 msgstr "Дата совершения операци"
 
-#: .\ledger\models.py:89
+#: .\ledger\models.py:90
 msgid "Customer Order"
 msgstr "Заказ покупателя"
 
-#: .\ledger\models.py:90
+#: .\ledger\models.py:91
 msgid "Supplier Order"
 msgstr "Заказ поставщику"
 
-#: .\ledger\models.py:91
+#: .\ledger\models.py:92
 msgid "Received Payment"
 msgstr "Платёж от покупателя"
 
-#: .\ledger\models.py:92
+#: .\ledger\models.py:93
 msgid "Sent Payment"
 msgstr "Оплата поставщику"
 
-#: .\ledger\models.py:93
+#: .\ledger\models.py:94
 msgid "Delivered Goods"
 msgstr "Доставленные товары"
 
-#: .\ledger\models.py:94
+#: .\ledger\models.py:95
 msgid "Received Goods"
 msgstr "Полученные товары"
 
-#: .\ledger\models.py:95
+#: .\ledger\models.py:96
 msgid "Deposited Money"
 msgstr "Вложить деньги"
 
-#: .\ledger\models.py:96
+#: .\ledger\models.py:97
 msgid "Withdrawn money"
 msgstr "Вывести деньги"
 
-#: .\ledger\models.py:97
+#: .\ledger\models.py:98
 msgid "Break set to items"
 msgstr "Разбить набор на товары"
 
-#: .\ledger\models.py:140
+#: .\ledger\models.py:135
+msgid "Supplier Orders"
+msgstr "Заказы поставщикам"
+
+#: .\ledger\models.py:141
 msgid "Dispatch Date"
 msgstr "Дата отправки"
 
-#: .\ledger\models.py:143
+#: .\ledger\models.py:144
 msgid "Delivery Date"
 msgstr "Дата доставки"
 
-#: .\ledger\models.py:146
+#: .\ledger\models.py:147
 msgid "Tracking Number"
 msgstr "Номер отслеживания"
 
-#: .\ledger\models.py:147
+#: .\ledger\models.py:148
 msgid "Tracking Number provided by used Courier Service."
 msgstr "Номер почтового отслеживания, предоставленный курьерской службой"
 
-#: .\ledger\models.py:153
+#: .\ledger\models.py:154
 msgid "Detailed Delivery"
 msgstr "Раздельная доставка"
 
-#: .\ledger\models.py:154
+#: .\ledger\models.py:155
 msgid "Delivery of each Position is managed separately"
 msgstr "Доставка каждой позиции управляется вручную"
 
-#: .\ledger\models.py:156
+#: .\ledger\models.py:157
 msgid "Amount"
 msgstr "Сумма"
 
-#: .\ledger\models.py:157
+#: .\ledger\models.py:158
 msgid "Amount to be paid by Customer."
 msgstr "Сумма для оплаты покупателем"
 
-#: .\ledger\models.py:158
+#: .\ledger\models.py:159
 msgid "Currency"
 msgstr "Валюта"
 
-#: .\ledger\models.py:159
+#: .\ledger\models.py:160
 msgid "Currency of Customer payment."
 msgstr "Валюта платежа покупателя"
 
-#: .\ledger\models.py:161
+#: .\ledger\models.py:162
 msgid "Memo"
 msgstr "Заметки"
 
-#: .\ledger\models.py:162
+#: .\ledger\models.py:163
 msgid "Memo related to this Customer Order"
 msgstr "Заметки к этому заказу покупателя"
 
-#: .\ledger\models.py:225
+#: .\ledger\models.py:169
+msgid "Customer Orders"
+msgstr "Заказы покупателей"
+
+#: .\ledger\models.py:180
+msgid "Item Set Breakdowns"
+msgstr "Разделение наборов"
+
+#: .\ledger\models.py:226
 msgid "In stock / prepared for delivery"
 msgstr "В наличии / приготовлен к отправке"
 
-#: .\ledger\models.py:226
+#: .\ledger\models.py:227
 msgid "In stock / should be ordered"
 msgstr "В наличии / требуется заказать"
 
-#: .\ledger\models.py:227
+#: .\ledger\models.py:228
 msgid "Not in stock / need to be ordered"
 msgstr "Нет в наличии / требуется заказать"
 
-#: .\ledger\models.py:228
+#: .\ledger\models.py:229
 msgid "Not in stock / waiting for incoming"
 msgstr "Нет в наличии / ожидаем поставки"
 
-#: .\ledger\models.py:229
+#: .\ledger\models.py:230
 msgid "Not in stock / no delivery control"
 msgstr "Нет в наличии / не контролировать"
 
-#: .\ledger\models.py:230
+#: .\ledger\models.py:231
 msgid "Delivered to customer"
 msgstr "Доставлен заказчику"
 
-#: .\ledger\models.py:254
+#: .\ledger\models.py:255
 msgid "Debit"
 msgstr ""
 
-#: .\ledger\models.py:255
+#: .\ledger\models.py:256
 msgid "Credit"
 msgstr ""
+
+#: .\ledger\models.py:270
+#, fuzzy
+#| msgid "Sent Payment"
+msgid "Payments"
+msgstr "Оплата поставщику"
 
 #: .\ledger\tables.py:71 .\ledger\tables.py:98 .\ledger\tables.py:122
 msgid "Actions"
@@ -185,6 +212,7 @@ msgstr "Добавить новый счёт"
 #: .\ledger\templates\ledger\table_accounts.html:84
 #: .\ledger\templates\ledger\table_counterparties.html:134
 #: .\ledger\templates\ledger\table_counterparties.html:160
+#: .\ledger\templates\ledger\table_customer_orders.html:59
 msgctxt "Form button"
 msgid "Cancel"
 msgstr "Отмена"
@@ -197,6 +225,7 @@ msgstr "Сохранить"
 
 #: .\ledger\templates\ledger\table_accounts.html:86
 #: .\ledger\templates\ledger\table_counterparties.html:162
+#: .\ledger\templates\ledger\table_customer_orders.html:61
 msgctxt "Form button"
 msgid "Delete"
 msgstr "Удалить"
