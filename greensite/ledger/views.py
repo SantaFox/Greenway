@@ -108,7 +108,7 @@ def counterparty_delete(request):
             request_id = request.GET.get('id')
             counterparty_instance = get_object_or_404(Counterparty, id=request_id)
             related = counterparty_instance.is_deletable()
-            related_dict = {rel.model._meta.verbose_name_plural: list(i.__str__() for i in rel.all()) for rel in
+            related_dict = {str(rel.model._meta.verbose_name_plural): list(i.__str__() for i in rel.all()) for rel in
                             related}
             if related:
                 return JsonResponse({'status': 'related_found',
@@ -218,7 +218,7 @@ def account_delete(request):
             request_id = request.GET.get('id')
             account_instance = get_object_or_404(Account, id=request_id)
             related = account_instance.is_deletable()
-            related_dict = {rel.model._meta.verbose_name_plural: list(i.__str__() for i in rel.all()) for rel in
+            related_dict = {str(rel.model._meta.verbose_name_plural): list(i.__str__() for i in rel.all()) for rel in
                             related}
             if related:
                 return JsonResponse({'status': 'related_found',
