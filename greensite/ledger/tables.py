@@ -1,7 +1,7 @@
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from django_tables2 import Column, BooleanColumn, CheckBoxColumn, DateColumn, TemplateColumn, Table
+from django_tables2 import A, Column, BooleanColumn, CheckBoxColumn, DateColumn, TemplateColumn, Table
 from django_tables2.utils import AttributeDict
 
 from .models import Account, Counterparty, CustomerOrder
@@ -112,6 +112,12 @@ class CustomerOrdersTable(Table):
         "td": {"align": "right"}
     })
 
+    Paid = NumericColumn(
+        accessor=A('paid_amount'),
+        attrs={"td": {"align": "right"}},
+        verbose_name=_('Paid Amount')
+    )
+
     Memo = TemplateColumn('<span data-toggle="tooltip" title="{{ value }}">{{ value|truncatechars:20 }}</span>',
                           empty_values=(None, ''),
                           orderable=False)
@@ -133,3 +139,6 @@ class CustomerOrdersTable(Table):
         empty_text = 'There are no Customer Orders for this User'
         fields = ('id', 'DateOperation', 'Counterparty__Name', 'Amount', 'Currency', 'Paid', 'Memo', 'Actions',)
         attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
+        row_attrs = {
+            "class": lambda record: 'text-black-50' if (record.Amount or 0) == (record.paid_amount or 0) else ''
+        }

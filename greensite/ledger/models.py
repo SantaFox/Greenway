@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.utils.translation import gettext_lazy as _
 
 from products.models import Currency, Product
@@ -161,6 +161,12 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
 
     Memo = models.TextField(blank=True, verbose_name=_('Memo'),
                             help_text=_('Memo related to this Customer Order'))
+
+    @property
+    def paid_amount(self):
+        amount_queryset = Payment.objects.filter(ParentOperation=self).aggregate(TotalAmount=Sum('Amount'))
+        amount = amount_queryset['TotalAmount']
+        return amount
 
     def __str__(self):
         return f'{self.User} / {self.DateOperation} / {self.Counterparty} / {self.Amount} / {self.Currency}'
