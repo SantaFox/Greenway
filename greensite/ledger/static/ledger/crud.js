@@ -47,7 +47,6 @@ $(document).ready(function(){
                 request.setRequestHeader("X-CSRFToken", csrf_cookie());
             },
             success:function(response){
-                console.log(response);
                 let result = response.status;
                 if (result == 'success') {
                     $('.modal').each(function(){
@@ -55,6 +54,7 @@ $(document).ready(function(){
                     });
                     location.reload();
                 } else {
+                    // TODO: Create new Bootsrap Alert here with response.message
                     console.log(response.errors)
                 }
             },
