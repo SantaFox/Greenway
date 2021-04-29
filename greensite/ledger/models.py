@@ -135,7 +135,7 @@ class SupplierOrder(ModelIsDeletableMixin, Operation):
         verbose_name_plural = _('Supplier Orders')
 
 
-class CustomerOrder(Operation):
+class CustomerOrder(ModelIsDeletableMixin, Operation):
     Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True)
 
     DateDispatched = models.DateField(blank=True, null=True, verbose_name=_('Dispatch Date'),
@@ -169,7 +169,7 @@ class CustomerOrder(Operation):
         verbose_name_plural = _('Customer Orders')
 
 
-class ItemSetBreakdown(Operation):
+class ItemSetBreakdown(ModelIsDeletableMixin, Operation):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT, blank=True, null=True)
     Quantity = models.PositiveIntegerField(blank=True, null=True)
 
@@ -248,7 +248,7 @@ class ItemSetBreakdownPosition(OperationPosition):
         verbose_name_plural = "Item Set Breakdown Positions"
 
 
-class Payment(Operation):
+class Payment(ModelIsDeletableMixin, Operation):
     DEBIT = 'D'
     CREDIT = 'C'
     TYPE_CHOICES = (
