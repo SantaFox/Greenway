@@ -112,6 +112,10 @@ class CustomerOrdersTable(Table):
         "td": {"align": "right"}
     })
 
+    Memo = TemplateColumn('<span data-toggle="tooltip" title="{{ value }}">{{ value|truncatechars:20 }}</span>',
+                          empty_values=(None, ''),
+                          orderable=False)
+
     Actions = TemplateColumn(
         ('<a href="#editModal" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
          '<i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
@@ -127,5 +131,5 @@ class CustomerOrdersTable(Table):
     class Meta:
         model = CustomerOrder
         empty_text = 'There are no Customer Orders for this User'
-        fields = ('id', 'DateOperation', 'Counterparty__Name', 'Amount', 'Currency', 'Actions',)
+        fields = ('id', 'DateOperation', 'Counterparty__Name', 'Amount', 'Currency', 'Paid', 'Memo', 'Actions',)
         attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
