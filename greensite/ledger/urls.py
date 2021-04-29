@@ -15,6 +15,6 @@ urlpatterns = [
     path('counterparties/delete/', views.counterparty_delete, name='counterparty_delete'),
 
     path('customer_orders/', views.table_customer_orders, name='customer_orders'),
-    # path('customer_orders/action/', views.customer_orders_action, name='customer_orders_action'),
-    # path('customer_orders/delete/', views.customer_orders_delete, name='customer_orders_delete'),
+    # path('customer_orders/action/', views.customer_order_action, name='customer_orders_action'),
+    path('customer_orders/delete/', views.customer_order_delete, name='customer_orders_delete'),
 ]

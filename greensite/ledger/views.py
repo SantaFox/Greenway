@@ -258,3 +258,39 @@ def table_customer_orders(request):
     return TemplateResponse(request, 'ledger/table_customer_orders.html', {
         'table': table,
     })
+
+
+def customer_order_delete(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            request_id = request.GET.get('id')
+            order_instance = get_object_or_404(CustomerOrder, id=request_id)
+            related = order_instance.is_deletable()
+            related_dict = {str(rel.model._meta.verbose_name_plural): list(i.__str__() for i in rel.all()) for rel in
+                            related}
+            if related:
+                return JsonResponse({'status': 'related_found',
+                                     'related': related_dict}, safe=False)
+            else:
+                return JsonResponse({'status': 'ok'})
+        elif request.method == 'POST':
+            request_id = request.POST.get('id')
+            order_instance = get_object_or_404(CustomerOrder, id=request_id)
+            try:
+                order_instance.delete()
+                messages.success(request,
+                                 f'Customer Order <strong>{order_instance.Name}</strong> deleted successfully')
+                return JsonResponse({'status': 'success'})
+            except:
+                print('Error on deletion')
+                return JsonResponse({'status': 'not_valid',
+                                     # 'message': {
+                                     #     'text': f'Counterparty <strong>{counterparty_instance.Name}</strong> was not saved',
+                                     #     'moment': datetime.now(),
+                                     # },
+                                     # 'errors': counterparty_form.errors
+                                     })
+        else:
+            raise Http404
+    else:
+        raise Http404
