@@ -58,9 +58,9 @@ class TabAdmin(MarkdownxModelAdmin):
 
 
 class PriceAdmin(admin.ModelAdmin):
-    list_display = ('Product', 'Currency', 'DateAdded', 'Price', 'PV')
+    list_display = ('Product', 'DateAdded', 'Price', 'Currency', 'PV', 'GFT', 'Comment')
     list_filter = ['Currency', 'Product']
-    list_editable = ['DateAdded', 'Price', 'PV']
+    list_editable = ['DateAdded', 'Price', 'Currency', 'PV', 'GFT', 'Comment']
     ordering = ['Product__SKU', 'Currency__Code', 'DateAdded']
 
 
