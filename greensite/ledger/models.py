@@ -5,6 +5,19 @@ from django.utils.translation import gettext_lazy as _
 
 from products.models import Currency, Product
 
+DEBIT = 'D'
+CREDIT = 'C'
+TYPE_CHOICES = (
+    (DEBIT, _('Debit')),
+    (CREDIT, _('Credit')),
+)
+
+POSTAL_CHOICES = (
+    ('DHL', 'DHL Express'),
+    ('CZP', 'Czech Post'),
+    ('POST', 'Ordinary Post'),
+)
+
 
 # https://gist.github.com/freewayz/69d1b8bcb3c225bea57bd70ee1e765f8
 
@@ -124,11 +137,7 @@ class SupplierOrder(ModelIsDeletableMixin, Operation):
     DateDispatched = models.DateField(blank=True, null=True)  # Date dispatched by supplier / to customer
     DateDelivered = models.DateField(blank=True, null=True)  # Date received from supplier / by customer
     TrackingNumber = models.CharField(max_length=50, blank=True)
-    CourierService = models.CharField(choices=[
-        ('DHL', 'DHL Express'),
-        ('CZP', 'Czech Post'),
-        ('POST', 'Ordinary Post'),
-    ], max_length=10, blank=True, null=True)
+    CourierService = models.CharField(choices=POSTAL_CHOICES, max_length=10, blank=True, null=True)
 
     Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True)
@@ -265,13 +274,6 @@ class ItemSetBreakdownPosition(OperationPosition):
 
 
 class Payment(ModelIsDeletableMixin, Operation):
-    DEBIT = 'D'
-    CREDIT = 'C'
-    TYPE_CHOICES = (
-        (DEBIT, _('Debit')),
-        (CREDIT, _('Credit')),
-    )
-
     ParentOperation = models.ForeignKey(Operation, on_delete=models.PROTECT, related_name='Parent')
     TransactionType = models.CharField(choices=TYPE_CHOICES, max_length=1, blank=False)
 
