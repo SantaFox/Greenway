@@ -15,7 +15,7 @@ from greensite.decorators import prepare_languages
 
 from .models import Account, Counterparty, CustomerOrder, SupplierOrder
 from .tables import AccountsTable, CounterpartyTable, CustomerOrdersTable
-from .forms import CounterpartyForm, AccountForm
+from .forms import AccountForm, CounterpartyForm, CustomerOrderForm
 
 
 @login_required
@@ -33,8 +33,10 @@ def table_counterparties(request):
                   paginate={"per_page": 15}) \
         .configure(table)
 
+    form = CounterpartyForm
     return TemplateResponse(request, 'ledger/table_counterparties.html', {
         'table': table,
+        'form': form,
     })
 
 
@@ -257,8 +259,10 @@ def table_customer_orders(request):
                   paginate={"per_page": 15}) \
         .configure(table)
 
+    form = CustomerOrderForm()
     return TemplateResponse(request, 'ledger/table_customer_orders.html', {
         'table': table,
+        'form': form,
     })
 
 

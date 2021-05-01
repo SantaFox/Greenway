@@ -1,6 +1,7 @@
 {% extends "greensite/base.html" %}
 {% load i18n %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% load render_table from django_tables2 %}
 
 {% block title %}{% translate 'Manage Customer Orders' %}{% endblock %}
@@ -36,12 +37,36 @@
     {% render_table table %}
 </div>
 
+<!-- Add/Edit Modal HTML -->
+<div id="editModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{% url 'ledger:customer_order_action' %}">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Customer Order</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% crispy form %}
+                    <input type="hidden" name="id">
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="action" value="edit">
+                    <input type="button" class="btn btn-light" data-dismiss="modal"
+                           value="{% translate 'Cancel' context 'Form button' %}">
+                    <input type="submit" class="btn btn-info"
+                           value="{% translate 'Save' context 'Form button' %}">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <!-- Delete Modal HTML -->
 <div id="deleteModal" class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="{% url 'ledger:customer_orders_delete' %}">
+            <form action="{% url 'ledger:customer_order_delete' %}">
                 <div class="modal-header">
                     <h4 class="modal-title">Delete Account</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

@@ -1,6 +1,7 @@
 {% extends "greensite/base.html" %}
 {% load i18n %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% load render_table from django_tables2 %}
 
 {% block title %}{% translate 'Manage Counterparties' %}{% endblock %}
@@ -45,65 +46,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label class="sr-only">Customer Name</label>
-                        <input type="text" class="form-control" name="Name" placeholder="Customer Name" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="sr-only">Phone Number</label>
-                                <input type="text" class="form-control" name="Phone" placeholder="Phone Number">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="sr-only">Email</label>
-                                <input type="text" class="form-control" name="Email" placeholder="Email">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="sr-only">Instagram</label>
-                                <div class="input-group mb-2 mr-sm-2">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">@</div>
-                                    </div>
-                                    <input type="text" class="form-control" name="Instagram" placeholder="Instagram">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="sr-only">Telegram</label>
-                                <input type="text" class="form-control" name="Telegram" placeholder="Telegram">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="sr-only">Facebook</label>
-                                <input type="text" class="form-control" name="Facebook" placeholder="Facebook">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="sr-only">City</label>
-                                <input type="text" class="form-control" name="City" placeholder="City">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="sr-only">Address</label>
-                        <input type="text" class="form-control" name="Address" placeholder="Address">
-                    </div>
-                    <div class="form-group">
-                        <label class="sr-only">Memo</label>
-                        <input type="text" class="form-control" name="Memo" placeholder="Memo">
-                    </div>
+                    {% crispy form %}
                     <div class="form-group">
                         <label>A Customer may act as a Supplier or Customer, or both</label>
                         <div class="form-row">
@@ -111,16 +54,18 @@
                                 <div class="form-group custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" name="IsSupplier"
                                            id="editModal_IsSupplier">
-                                    <label class="custom-control-label" for="editModal_IsSupplier">Act as
-                                        Supplier</label>
+                                    <label class="custom-control-label" for="editModal_IsSupplier">
+                                        Act as Supplier
+                                    </label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" name="IsCustomer"
                                            id="editModal_IsCustomer">
-                                    <label class="custom-control-label" for="editModal_IsCustomer">Act as
-                                        Customer</label>
+                                    <label class="custom-control-label" for="editModal_IsCustomer">
+                                        Act as Customer
+                                    </label>
                                 </div>
                             </div>
                         </div>
