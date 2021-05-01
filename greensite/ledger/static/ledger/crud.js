@@ -79,7 +79,7 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(response) {
                     for (var i in response) {
-                        formElement = $(modal).find('.modal-body input[name="' + i + '"]');
+                        formElement = $(modal).find('.modal-body [name="' + i + '"]');
                         if (formElement.attr('type') == 'checkbox'){
                             formElement.prop('checked', response[i]);
                         } else {
