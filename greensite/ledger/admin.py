@@ -40,9 +40,9 @@ class CustomerOrderPositionInline(admin.TabularInline):
 
 
 class CustomerOrderAdmin(admin.ModelAdmin):
-    list_display = ('User', 'DateOperation', 'Counterparty', 'Amount', 'Currency')
+    list_display = ('User', 'DateOperation', 'Counterparty', 'Amount', 'Currency', 'DateDelivered')
     list_filter = ['User', 'Counterparty']
-    list_editable = ['DateOperation', 'Counterparty', 'Amount', 'Currency']
+    list_editable = ['DateOperation', 'Counterparty', 'Amount', 'Currency', 'DateDelivered']
     ordering = ['User', 'DateOperation', 'Counterparty__Name']
     inlines = [
         CustomerOrderPositionInline,
