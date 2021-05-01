@@ -51,16 +51,24 @@ class Account(ModelIsDeletableMixin, models.Model):
 class Counterparty(ModelIsDeletableMixin, models.Model):
     User = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     Name = models.CharField(max_length=50, blank=False, verbose_name=_('Counterparty Name'),
-                                 help_text=_('Name of the Counterparty, preferably "Surname Name"'))
+                            help_text=_('Name of the Counterparty, preferably "Surname Name"'))
 
-    Phone = models.CharField(max_length=50, blank=True)
-    Email = models.CharField(max_length=50, blank=True)
-    Telegram = models.CharField(max_length=50, blank=True)
-    Instagram = models.CharField(max_length=50, blank=True)
-    Facebook = models.CharField(max_length=50, blank=True)
-    Address = models.CharField(max_length=255, blank=True)
-    City = models.CharField(max_length=50, blank=True)
-    Memo = models.TextField(blank=True)
+    Phone = models.CharField(max_length=50, blank=True, verbose_name=_('Contact Phone'),
+                             help_text=_('Name of the Counterparty, preferably "Surname Name"'))
+    Email = models.CharField(max_length=50, blank=True, verbose_name=_('Email address'),
+                             help_text=_('Name of the Counterparty, preferably "Surname Name"'))
+    Telegram = models.CharField(max_length=50, blank=True, verbose_name=_('Telegram'),
+                                help_text=_('Telegram profile name'))
+    Instagram = models.CharField(max_length=50, blank=True, verbose_name=_('Instagram'),
+                                 help_text=_('Name of the Counterparty, preferably "Surname Name"'))
+    Facebook = models.CharField(max_length=50, blank=True, verbose_name=_('Facebook'),
+                                help_text=_('Name used in Facebook and Facebook Messenger'))
+    Address = models.CharField(max_length=255, blank=True, verbose_name=_('Address'),
+                               help_text=_('Address (without city)'))
+    City = models.CharField(max_length=50, blank=True, verbose_name=_('City Name'),
+                            help_text=_('City name only'))
+    Memo = models.TextField(blank=True, verbose_name=_('Memo'),
+                            help_text=_('Name of the Counterparty, preferably "Surname Name"'))
 
     IsSupplier = models.BooleanField(default=False)
     IsCustomer = models.BooleanField(default=False)
@@ -137,21 +145,21 @@ class SupplierOrder(ModelIsDeletableMixin, Operation):
 
 
 class CustomerOrder(ModelIsDeletableMixin, Operation):
-    Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True)
+    Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True,
+                                     verbose_name=_('Customer Name'),
+                                     help_text=_('Registered Customer'))
 
     DateDispatched = models.DateField(blank=True, null=True, verbose_name=_('Dispatch Date'),
-                                      help_text=_(('Date when this Order was dispatched to the Customer.'
-                                                   'Until then, the Order is prepared but held in Storage.')))
+                                      help_text=_(
+                                          'Date when this Order was dispatched to the Customer. Until then, the Order is prepared but held in Storage.'))
     DateDelivered = models.DateField(blank=True, null=True, verbose_name=_('Delivery Date'),
-                                     help_text=_(('Date when this Order was delivered to the Customer. '
-                                                  'In case of Detailed Delivery, the date of last delivery is used.')))
+                                     help_text=_(
+                                         'Date when this Order was delivered to the Customer. In case of Detailed Delivery, the date of last delivery is used.'))
     TrackingNumber = models.CharField(max_length=50, blank=True, verbose_name=_('Tracking Number'),
                                       help_text=_('Tracking Number provided by used Courier Service.'))
-    CourierService = models.CharField(choices=[
-        ('DHL', 'DHL Express'),
-        ('CZP', 'Czech Post'),
-        ('POST', 'Ordinary Post'),
-    ], max_length=10, blank=True, null=True)
+    CourierService = models.CharField(choices=POSTAL_CHOICES, max_length=10, blank=True, null=True,
+                                      verbose_name=_('Courier Service Name'),
+                                      help_text=_('Select one from provided Courier Services'))
 
     DetailedDelivery = models.BooleanField(default=False, verbose_name=_('Detailed Delivery'),
                                            help_text=_('Delivery of each Position is managed separately'))
