@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, Count
 from django.utils.translation import gettext_lazy as _
 
 from products.models import Currency, Product
@@ -187,8 +187,20 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
         amount = amount_queryset['TotalAmount']
         return amount
 
+    @property
+    def positions_count(self):
+        pos_queryset = CustomerOrderPosition.objects.filter(Operation=self).aggregate(PositionCount=Count('id'))
+        pos_count = pos_queryset['PositionCount']
+        return pos_count
+
+    @property
+    def payments_count(self):
+        payments_queryset = Payment.objects.filter(ParentOperation=self).aggregate(PaymentCount=Count('id'))
+        payments_count = payments_queryset['PaymentCount']
+        return payments_count
+
     def __str__(self):
-        return f'{self.User} / {self.DateOperation} / {self.Counterparty} / {self.Amount} / {self.Currency}'
+        return f'{self.User} / {self.DateOperation} / {self.Customer} / {self.Amount} / {self.Currency}'
 
     class Meta:
         verbose_name_plural = _('Customer Orders')
