@@ -254,7 +254,7 @@ def account_delete(request):
 
 
 @login_required
-@permission_required('ledger.view_operation', raise_exception=True)
+@permission_required('ledger.view_customerorder', raise_exception=True)
 @prepare_languages
 def table_customer_orders(request):
     # comments = Comment.objects.filter(post=OuterRef('pk')).order_by().values('post')
