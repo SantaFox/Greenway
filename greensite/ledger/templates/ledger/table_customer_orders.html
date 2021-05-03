@@ -43,7 +43,7 @@
         <div class="modal-content">
             <form action="{% url 'ledger:customer_order_action' %}">
                 <div class="modal-header">
-                    <h4 class="modal-title">Edit Customer Order</h4>
+                    <h4 class="modal-title">{% translate 'Edit Customer Order' %}</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
@@ -59,7 +59,7 @@
                     </a>
                     <input type="button" class="btn btn-light" data-dismiss="modal"
                            value="{% translate 'Cancel' context 'Form button' %}">
-                    <input type="submit" class="btn btn-info"
+                    <input type="submit" class="btn btn-primary"
                            value="{% translate 'Save' context 'Form button' %}">
                 </div>
             </form>
@@ -73,7 +73,7 @@
         <div class="modal-content">
             <form action="{% url 'ledger:customer_order_delete' %}">
                 <div class="modal-header">
-                    <h4 class="modal-title">Delete Account</h4>
+                    <h4 class="modal-title">{% translate 'Delete Customer Order' %}</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
