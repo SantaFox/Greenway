@@ -40,10 +40,10 @@ class CustomerOrderPositionInline(admin.TabularInline):
 
 
 class CustomerOrderAdmin(admin.ModelAdmin):
-    list_display = ('User', 'DateOperation', 'Counterparty', 'Amount', 'Currency', 'DateDelivered')
-    list_filter = ['User', 'Counterparty']
-    list_editable = ['DateOperation', 'Counterparty', 'Amount', 'Currency', 'DateDelivered']
-    ordering = ['User', 'DateOperation', 'Counterparty__Name']
+    list_display = ('User', 'DateOperation', 'Customer', 'Amount', 'Currency', 'DateDelivered')
+    list_filter = ['User', 'Customer']
+    # list_editable = ['DateOperation', 'Customer', 'Amount', 'Currency', 'DateDelivered']
+    ordering = ['User', 'DateOperation', 'Customer__Name']
     inlines = [
         CustomerOrderPositionInline,
     ]
@@ -66,7 +66,7 @@ class ItemSetBreakdownAdmin(admin.ModelAdmin):
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ('User', 'DateOperation', 'ParentOperation', 'TransactionType', 'Amount', 'Currency')
     list_filter = ['User', 'TransactionType']
-    list_editable = ['DateOperation', 'ParentOperation', 'TransactionType', 'Amount', 'Currency']
+    # list_editable = ['DateOperation', 'ParentOperation', 'TransactionType', 'Amount', 'Currency']
     ordering = ['User', 'DateOperation']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
