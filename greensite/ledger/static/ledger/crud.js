@@ -152,3 +152,32 @@ $(document).ready(function() {
         });
     });
 })
+
+$(document).ready(function() {
+    $('#tableModal').on('show.bs.modal', function (event) {
+
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var modal = $(this)
+        //var itemId = button.data('id') // Extract info from data-* attributes
+        var itemId = $(button).closest("form").find('input[type="hidden"][name="id"]').val()
+        $.ajax({
+            url: $(modal).find('form').attr('action'),
+            type: 'GET',
+            data: {id: itemId},
+            dataType: 'json',
+            success: function(response) {
+                var content = $(modal).find('.modal-body');
+                if (response.status == 'ok') {
+                    content.empty();
+                    $(response.table).appendTo(content);
+                    initialize_checkboxes();
+                } else {
+                    console.log('something went wrong here');
+                };
+            },
+            error: function() {
+                console.log('something went wrong here');
+            },
+        });
+    });
+})
