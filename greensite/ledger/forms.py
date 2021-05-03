@@ -79,7 +79,7 @@ class CustomerOrderForm(ModelForm):
             Div(
                 PrependedText('DateOperation', '<i class="bi bi-calendar-date"></i>', wrapper_class='col-md-6'),
                 css_class='form-row'),
-            PrependedText('Counterparty', '<i class="bi bi-person"></i>'),
+            PrependedText('Customer', '<i class="bi bi-person"></i>'),
             Div(
                 PrependedText('DateDelivered', '<i class="bi bi-gift"></i>', wrapper_class='col-md-6'),
                 Field('DetailedDelivery', wrapper_class='col-md-6'),
@@ -112,5 +112,5 @@ class CustomerOrderForm(ModelForm):
 
     class Meta:
         model = CustomerOrder
-        fields = ['DateOperation', 'Counterparty', 'DateDispatched', 'DateDelivered', 'TrackingNumber',
+        fields = ['DateOperation', 'Customer', 'DateDispatched', 'DateDelivered', 'TrackingNumber',
                   'CourierService', 'DetailedDelivery', 'Amount', 'Currency', 'Memo', ]
