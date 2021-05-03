@@ -363,3 +363,19 @@ def customer_order_delete(request):
             raise Http404
     else:
         raise Http404
+
+
+@login_required
+@permission_required('ledger.view_customerorderposition', raise_exception=True)
+def table_customer_order_positions(request):
+    customer_order_instance = get_object_or_404(CustomerOrder, id=request.GET.get('id'), User=request.user)
+    table = CustomerOrderPositionsTable(CustomerOrderPosition.objects.filter(Operation=customer_order_instance.id))
+    # RequestConfig(request,
+    #               paginate={"per_page": 15}) \
+    #     .configure(table)
+
+    rendered_table = table.as_html(request)
+    return JsonResponse({'status': 'ok',
+                         'table': rendered_table})
+
+# TODO: ALL DIRECT REQUESTS SHOULD ALSO CHECK FOR CORRECT USER!!!!!

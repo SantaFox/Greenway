@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django_tables2 import A, Column, BooleanColumn, CheckBoxColumn, DateColumn, TemplateColumn, Table
 from django_tables2.utils import AttributeDict
 
-from .models import Account, Counterparty, CustomerOrder
+from .models import Account, Counterparty, CustomerOrder, CustomerOrderPosition
 
 
 class BootstrapBooleanColumn(BooleanColumn):
@@ -142,3 +142,34 @@ class CustomerOrdersTable(Table):
         row_attrs = {
             "class": lambda record: 'text-black-50' if (record.Amount or 0) == (record.paid_amount or 0) else ''
         }
+
+
+class CustomerOrderPositionsTable(Table):
+    id = PrimaryKeyCheckboxColumn()
+
+    Price = NumericColumn(attrs={
+        "td": {"align": "right"}
+    })
+
+    Discount = NumericColumn(attrs={
+        "td": {"align": "right"}
+    })
+
+    DateDelivered = DateColumn('d.m.Y')
+
+    # Actions = TemplateColumn(
+    #     ('<a href="#editModal" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
+    #      '<i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
+    #      '<a href="#deleteModal" data-toggle="modal" data-id="{{ value }}">'
+    #      '<i class="bi bi-trash text-danger mr-1"></i>Delete</a>'),
+    #     accessor='id',
+    #     orderable=False,
+    #     verbose_name=_('Actions'),
+    # )
+
+    class Meta:
+        model = CustomerOrderPosition
+        empty_text = _('There are no Position for this Customer Order')
+        fields = ('id', 'Product', 'Quantity', 'Price', 'Currency', 'Discount', 'DiscountReason', 'Status', 'DateDelivered')
+        attrs = {"class": "table table-hover table-sm small", "thead": {"class": ""}}
+        orderable = False
