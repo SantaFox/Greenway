@@ -292,51 +292,51 @@ def customer_order_action(request):
             return JsonResponse(item_dict)
         elif request.method == 'POST':
             action = request.POST.get('action')
-            # if action == 'add':
-            #     account_form = AccountForm(request.POST)
-            #     if not account_form.is_valid():
-            #         return JsonResponse({'status': 'not_valid',
-            #                              'message': {
-            #                                  'text': f'Counterparty <strong>{account_form.cleaned_data["Name"]}</strong> was not saved',
-            #                                  'moment': datetime.now(),
-            #                              },
-            #                              'errors': account_form.errors})
-            #     account_instance = account_form.save(commit=False)
-            #     account_instance.User = request.user
-            #     try:
-            #         account_instance.save()
-            #         messages.success(request,
-            #                          f'Account <strong>{account_instance.Name}</strong> added successfully')
-            #         return JsonResponse({'status': 'success'})
-            #     except IntegrityError as e:
-            #         return JsonResponse({'status': 'not_valid',
-            #                              'message': {
-            #                                  'text': f'Counterparty <strong>{account_instance.Name}</strong> was not saved',
-            #                                  'moment': datetime.now(),
-            #                              },
-            #                              'errors': e.args
-            #                              })
-            # elif action == 'edit':
-            #     request_id = request.POST.get('id')
-            #     account_instance = get_object_or_404(Account, id=request_id)
-            #     account_form = CounterpartyForm(request.POST, instance=account_instance)
-            #     if not account_form.has_changed():
-            #         messages.info(request,
-            #                       f'Account <strong>{account_instance.Name}</strong> was not changed')
-            #         return JsonResponse({'status': 'not_changed'})
-            #     if not account_form.is_valid():
-            #         return JsonResponse({'status': 'not_valid',
-            #                              'message': {
-            #                                  'text': f'Counterparty <strong>{account_instance.Name}</strong> was not saved',
-            #                                  'moment': datetime.now(),
-            #                              },
-            #                              'errors': account_form.errors})
-            #     account_form.save()
-            #     messages.success(request,
-            #                      f'Account <strong>{account_instance.Name}</strong> updated successfully')
-            #     return JsonResponse({'status': 'success'})
-            # else:
-            #     return HttpResponseBadRequest()
+            if action == 'add':
+                item_form = CustomerOrderForm(request.POST)
+                if not item_form.is_valid():
+                    return JsonResponse({'status': 'not_valid',
+                                         'message': {
+                                             'text': f'Customer Order <strong>{item_form.cleaned_data["Name"]}</strong> was not saved',
+                                             'moment': datetime.now(),
+                                         },
+                                         'errors': item_form.errors})
+                item_instance = item_form.save(commit=False)
+                item_instance.User = request.user
+                try:
+                    item_instance.save()
+                    messages.success(request,
+                                     f'Customer Order <strong>{item_instance.Name}</strong> added successfully')
+                    return JsonResponse({'status': 'success'})
+                except IntegrityError as e:
+                    return JsonResponse({'status': 'not_valid',
+                                         'message': {
+                                             'text': f'Customer Order <strong>{item_instance.Name}</strong> was not saved',
+                                             'moment': datetime.now(),
+                                         },
+                                         'errors': e.args
+                                         })
+            elif action == 'edit':
+                request_id = request.POST.get('id')
+                item_instance = get_object_or_404(Account, id=request_id)
+                item_form = CustomerOrderForm(request.POST, instance=item_instance)
+                if not item_form.has_changed():
+                    messages.info(request,
+                                  f'Customer Order <strong>{item_instance.Name}</strong> was not changed')
+                    return JsonResponse({'status': 'not_changed'})
+                if not item_form.is_valid():
+                    return JsonResponse({'status': 'not_valid',
+                                         'message': {
+                                             'text': f'Customer Order <strong>{item_instance.Name}</strong> was not saved',
+                                             'moment': datetime.now(),
+                                         },
+                                         'errors': item_form.errors})
+                item_form.save()
+                messages.success(request,
+                                 f'Customer Order <strong>{item_instance.Name}</strong> updated successfully')
+                return JsonResponse({'status': 'success'})
+            else:
+                return HttpResponseBadRequest()
         else:
             raise Http404
     else:
