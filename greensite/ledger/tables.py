@@ -73,8 +73,8 @@ class AccountsTable(Table):
 
     class Meta:
         model = Account
-        empty_text = 'There are no Accounts for this User'
-        fields = ('id', 'Name', 'Actions',)
+        empty_text = _('There are no Accounts for this User')
+        fields = ('Name', 'Actions',)
         attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
 
 
@@ -100,8 +100,8 @@ class CounterpartyTable(Table):
 
     class Meta:
         model = Counterparty
-        empty_text = 'There are no Counterparties for this User'
-        fields = ('id', 'Name', 'Phone', 'City', 'Memo', 'IsSupplier', 'IsCustomer', 'Actions',)
+        empty_text = _('There are no Counterparties for this User')
+        fields = ('Name', 'Phone', 'City', 'Memo', 'IsSupplier', 'IsCustomer', 'Actions',)
         attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
 
 
@@ -115,7 +115,7 @@ class CustomerOrdersTable(Table):
     Paid = NumericColumn(
         accessor=A('paid_amount'),
         attrs={"td": {"align": "right"}},
-        verbose_name=_('Paid Amount')
+        verbose_name=_('Paid')
     )
 
     Memo = TemplateColumn('<span data-toggle="tooltip" title="{{ value }}">{{ value|truncatechars:20 }}</span>',
@@ -132,12 +132,10 @@ class CustomerOrdersTable(Table):
         verbose_name=_('Actions'),
     )
 
-    DateOperation = DateColumn()
-
     class Meta:
         model = CustomerOrder
-        empty_text = 'There are no Customer Orders for this User'
-        fields = ('id', 'DateOperation', 'Counterparty__Name', 'Amount', 'Currency', 'Paid', 'Memo', 'Actions',)
+        empty_text = _('There are no Customer Orders for this User')
+        fields = ('DateOperation', 'Customer__Name', 'Amount', 'Currency', 'Paid', 'Memo', 'Actions',)
         attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
         row_attrs = {
             "class": lambda record: 'text-black-50' if (record.Amount or 0) == (record.paid_amount or 0) else ''
