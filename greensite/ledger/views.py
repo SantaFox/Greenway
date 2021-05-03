@@ -255,7 +255,17 @@ def account_delete(request):
 @permission_required('ledger.view_operation', raise_exception=True)
 @prepare_languages
 def table_customer_orders(request):
-    table = CustomerOrdersTable(CustomerOrder.objects.filter(User=request.user))
+    # comments = Comment.objects.filter(post=OuterRef('pk')).order_by().values('post')
+    # >> > total_comments = comments.annotate(total=Sum('length')).values('total')
+    # >> > Post.objects.filter(length__gt=Subquery(total_comments))
+
+    subq = Payment.objects.filter(ParentOperation=OuterRef('pk')).values('ParentOperation')
+    sum_paid = subq.annotate(total=Sum('Amount')).values('total')
+
+    qst = CustomerOrder.objects.filter(User=request.user).exclude(Amount=Coalesce(Subquery(sum_paid), Value(0)))
+
+    f = CustomerOrderFilter(request.GET, queryset=qst)
+    table = CustomerOrdersTable(f.qs)
     RequestConfig(request,
                   paginate={"per_page": 15}) \
         .configure(table)
