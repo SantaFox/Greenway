@@ -275,6 +275,8 @@ def customer_order_action(request):
             # TODO: Maybe it's better to create and serialize a CounterpartyForm here?
             # item_form = CustomerOrderForm(instance=item_instance)
             item_dict = model_to_dict(item_instance, exclude=('operation_ptr', 'User', 'Type'))
+            item_dict['positions_count'] = item_instance.positions_count
+            item_dict['payments_count'] = item_instance.payments_count
             return JsonResponse(item_dict)
         elif request.method == 'POST':
             action = request.POST.get('action')

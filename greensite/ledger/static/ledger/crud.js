@@ -79,11 +79,17 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(response) {
                     for (var i in response) {
-                        formElement = $(modal).find('.modal-body [name="' + i + '"]');
-                        if (formElement.attr('type') == 'checkbox'){
-                            formElement.prop('checked', response[i]);
+                        if (i == 'positions_count') {
+                            button = $(modal).find('#positionsCount');
+                            button.text('('+response[i]+')');
+                        } else if (i == 'payments_count') {
                         } else {
-                            formElement.val(response[i]);
+                            formElement = $(modal).find('.modal-body [name="' + i + '"]');
+                            if (formElement.attr('type') == 'checkbox'){
+                                formElement.prop('checked', response[i]);
+                            } else {
+                                formElement.val(response[i]);
+                            }
                         }
                     }
                 },
