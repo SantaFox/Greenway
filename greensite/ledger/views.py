@@ -276,6 +276,7 @@ def table_customer_orders(request):
     return TemplateResponse(request, 'ledger/table_customer_orders.html', {
         'table': table,
         'form': form,
+        'filter': f,
     })
 
 
