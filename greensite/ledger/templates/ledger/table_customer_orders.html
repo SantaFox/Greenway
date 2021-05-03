@@ -16,6 +16,12 @@
     table.table tr th:last-child {
 	    width: 150px;
     }
+    .modal-backdrop + .modal-backdrop {
+      z-index: 1040;
+    }
+    .modal + .modal {
+      z-index: 1050;
+    }
 </style>
 {% endblock %}
 
@@ -27,10 +33,10 @@
                 <h2 class="mb-0">{% translate 'Manage Customer Orders' %}</h2>
             </div>
             <div class="col-sm-6 d-flex align-items-center justify-content-end">
-                <a href="#addAccountModal" class="btn btn-sm btn-success" data-toggle="modal">
+                <a href="#editModal" class="btn btn-sm btn-success" data-toggle="modal">
                     <i class="bi bi-plus-circle mr-2"></i>{% translate 'Add New Customer Order' %}</a>
                 {% comment %}
-                <a href="#deleteAccountModal" class="btn btn-sm btn-danger ml-2" data-toggle="modal">
+                <a href="#deleteModal" class="btn btn-sm btn-danger ml-2" data-toggle="modal">
                     <i class="bi bi-dash-circle mr-2"></i>{% translate "Delete Selected" %}</a>
                 {% endcomment %}
             </div>
