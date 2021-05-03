@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'markdownx',
     'django_tables2',
+    'django_filters',
     # 'debug_toolbar',
 ]
 

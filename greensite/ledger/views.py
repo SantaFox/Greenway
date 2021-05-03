@@ -16,6 +16,7 @@ from greensite.decorators import prepare_languages
 from .models import Account, Counterparty, CustomerOrder, SupplierOrder
 from .tables import AccountsTable, CounterpartyTable, CustomerOrdersTable
 from .forms import AccountForm, CounterpartyForm, CustomerOrderForm
+from .filters import CustomerOrderFilter
 
 
 @login_required
