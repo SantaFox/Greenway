@@ -59,7 +59,7 @@ class PrimaryKeyCheckboxColumn(CheckBoxColumn):
 
 
 class AccountsTable(Table):
-    id = PrimaryKeyCheckboxColumn()
+    # id = PrimaryKeyCheckboxColumn()
 
     Actions = TemplateColumn(
         ('<a href="#editModal" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
@@ -79,7 +79,7 @@ class AccountsTable(Table):
 
 
 class CounterpartyTable(Table):
-    id = PrimaryKeyCheckboxColumn()
+    #id = PrimaryKeyCheckboxColumn()
 
     Memo = TemplateColumn('<span data-toggle="tooltip" title="{{ value }}">{{ value|truncatechars:20 }}</span>',
                           empty_values=(None, ''),
@@ -106,7 +106,7 @@ class CounterpartyTable(Table):
 
 
 class CustomerOrdersTable(Table):
-    id = PrimaryKeyCheckboxColumn()
+    DateOperation = DateColumn('d.m.Y')
 
     Amount = NumericColumn(attrs={
         "td": {"align": "right"}
