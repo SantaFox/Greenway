@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
+from django.db.models import OuterRef, Sum, Subquery, Value, DecimalField
+from django.db.models.functions import Coalesce,Cast
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, Http404, HttpResponseBadRequest
 from django.template.response import TemplateResponse
@@ -13,8 +15,8 @@ from django_tables2 import RequestConfig
 
 from greensite.decorators import prepare_languages
 
-from .models import Account, Counterparty, CustomerOrder, SupplierOrder
-from .tables import AccountsTable, CounterpartyTable, CustomerOrdersTable
+from .models import Account, Counterparty, CustomerOrder, CustomerOrderPosition, Payment
+from .tables import AccountsTable, CounterpartyTable, CustomerOrdersTable, CustomerOrderPositionsTable
 from .forms import AccountForm, CounterpartyForm, CustomerOrderForm
 from .filters import CustomerOrderFilter
 
@@ -169,7 +171,7 @@ def account_action(request):
                 if not account_form.is_valid():
                     return JsonResponse({'status': 'not_valid',
                                          'message': {
-                                             'text': f'Counterparty <strong>{account_form.cleaned_data["Name"]}</strong> was not saved',
+                                             'text': f'Account <strong>{account_form.cleaned_data["Name"]}</strong> was not saved',
                                              'moment': datetime.now(),
                                          },
                                          'errors': account_form.errors})
@@ -199,7 +201,7 @@ def account_action(request):
                 if not account_form.is_valid():
                     return JsonResponse({'status': 'not_valid',
                                          'message': {
-                                             'text': f'Counterparty <strong>{account_instance.Name}</strong> was not saved',
+                                             'text': f'Account <strong>{account_instance.Name}</strong> was not saved',
                                              'moment': datetime.now(),
                                          },
                                          'errors': account_form.errors})
