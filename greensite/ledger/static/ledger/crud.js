@@ -1,4 +1,4 @@
-$(document).ready(function(){
+var initialize_checkboxes = function(){
     // Select/Deselect checkboxes
     var checkbox = $('table tbody input[type="checkbox"]');
     $("#selectAll").click(function(){
@@ -17,7 +17,7 @@ $(document).ready(function(){
             $("#selectAll").prop("checked", false);
         }
     });
-});
+};
 
 $(document).ready(function(){
     $('.modal form').on('submit', function (e) {
