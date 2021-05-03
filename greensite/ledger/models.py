@@ -154,16 +154,16 @@ class SupplierOrder(ModelIsDeletableMixin, Operation):
 
 
 class CustomerOrder(ModelIsDeletableMixin, Operation):
-    Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True,
+    Customer = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True,
                                      verbose_name=_('Customer Name'),
                                      help_text=_('Registered Customer'))
 
     DateDispatched = models.DateField(blank=True, null=True, verbose_name=_('Dispatch Date'),
-                                      help_text=_(
-                                          'Date when this Order was dispatched to the Customer. Until then, the Order is prepared but held in Storage.'))
+                                      help_text=_('Date when this Order was dispatched to the Customer. Until then,\
+                                                   the Order is prepared but held in Storage.'))
     DateDelivered = models.DateField(blank=True, null=True, verbose_name=_('Delivery Date'),
-                                     help_text=_(
-                                         'Date when this Order was delivered to the Customer. In case of Detailed Delivery, the date of last delivery is used.'))
+                                     help_text=_('Date when this Order was delivered to the Customer.\
+                                                  In case of Detailed Delivery, the date of last delivery is used.'))
     TrackingNumber = models.CharField(max_length=50, blank=True, verbose_name=_('Tracking Number'),
                                       help_text=_('Tracking Number provided by used Courier Service.'))
     CourierService = models.CharField(choices=POSTAL_CHOICES, max_length=10, blank=True, null=True,
@@ -208,8 +208,10 @@ class ItemSetBreakdown(ModelIsDeletableMixin, Operation):
 class OperationPosition(models.Model):
     Operation = models.ForeignKey(Operation, on_delete=models.PROTECT)
 
-    Product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    Quantity = models.PositiveIntegerField(blank=False)
+    Product = models.ForeignKey(Product, on_delete=models.PROTECT, verbose_name=_('Product'),
+                                help_text=_('Product'))
+    Quantity = models.PositiveIntegerField(blank=False, verbose_name=_('Quantity'),
+                                           help_text=_('Quantity of Products'))
 
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
@@ -224,8 +226,10 @@ class OperationPosition(models.Model):
 class SupplierOrderPosition(OperationPosition):
     # Purchase options:
     # Money (normal or internal)
-    Price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True)
+    Price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name=_('Price'),
+                                help_text=_('Paid price per one Product'))
+    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_('Currency'),
+                                 help_text=_('Currency of the paid price'))
     # or GFT
     GFT = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     # or Free because of temporary action
@@ -241,10 +245,14 @@ class SupplierOrderPosition(OperationPosition):
 
 
 class CustomerOrderPosition(OperationPosition):
-    Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
-    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
-    Discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)  # Applied on Total
-    DiscountReason = models.CharField(max_length=50, blank=True)
+    Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False, verbose_name=_('Price'),
+                                      help_text=_('Sell price per one Product'))
+    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, verbose_name=_('Currency'),
+                                 help_text=_('Currency of the sell price'))
+    Discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name=_('Discount'),
+                                      help_text=_('Discount applied to total amount for the position'))
+    DiscountReason = models.CharField(max_length=50, blank=True, verbose_name=_('Discount Reason'),
+                                      help_text=_('Reason for provision of Discount'))
 
     Status = models.IntegerField(choices=[
         # Stock control table columns: In Stock | Reserved | To be Ordered | Incoming | Final
