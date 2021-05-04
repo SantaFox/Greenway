@@ -16,6 +16,7 @@ TYPE_CHOICES = (
 
 POSTAL_CHOICES = (
     ('DHL', 'DHL Express'),
+    ('AKIS', 'Akis Express'),
     ('CZP', 'Czech Post'),
     ('POST', 'Ordinary Post'),
 )
