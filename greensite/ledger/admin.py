@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import Q
 
 from .models import Account, Counterparty, SupplierOrder, SupplierOrderPosition, CustomerOrder, CustomerOrderPosition, \
     ItemSetBreakdown, ItemSetBreakdownPosition, Payment, \
@@ -71,8 +72,12 @@ class PaymentAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "ParentOperation":
-            # TODO: Combine two querysets, CustomerOrders and SupplierOrders
-            kwargs["queryset"] = Operation.objects.filter(Type__lte=2).order_by('DateOperation')
+            qry_CustomerOrders = CustomerOrder.objects.all()
+            qry_SupplierOrders = SupplierOrder.objects.all()
+            kwargs["queryset"] = Operation.objects\
+                .filter(Q(id__in=qry_CustomerOrders) | Q(id__in=qry_SupplierOrders))\
+                .select_subclasses(CustomerOrder, SupplierOrder)\
+                .order_by('DateOperation')
         return super(PaymentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 

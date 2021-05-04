@@ -3,6 +3,8 @@ from django.db import models
 from django.db.models import Q, Sum, Count
 from django.utils.translation import gettext_lazy as _
 
+from model_utils.managers import InheritanceManager
+
 from products.models import Currency, Product
 
 DEBIT = 'D'
@@ -112,6 +114,8 @@ class Operation(models.Model):
     # System block
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
+
+    objects = InheritanceManager()
 
     def __str__(self):
         return f'{self.User} / {self.DateOperation}'
