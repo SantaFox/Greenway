@@ -26,11 +26,18 @@ class CategoryInfoAdmin(admin.ModelAdmin):
     ordering = ['Category__Name', 'Language__Code']
 
 
+class PriceInline(admin.TabularInline):
+    model = Price
+    ordering = ['DateAdded', ]
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('SKU', 'Category', 'DateAdded', 'DateRemoved')
     list_filter = ['Category']
     list_editable = ['Category', 'DateAdded', 'DateRemoved']
     ordering = ['SKU']
+    inlines = [
+        PriceInline,
+    ]
 
 
 class ProductInfoAdmin(admin.ModelAdmin):
