@@ -259,11 +259,11 @@ class SupplierOrderPosition(OperationPosition):
 
 class CustomerOrderPosition(OperationPosition):
     Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False, verbose_name=_('Price'),
-                                      help_text=_('Sell price per one Product'))
+                                help_text=_('Sell price per one Product'))
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, verbose_name=_('Currency'),
                                  help_text=_('Currency of the sell price'))
     Discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name=_('Discount'),
-                                      help_text=_('Discount applied to total amount for the position'))
+                                   help_text=_('Discount applied to total amount for the position'))
     DiscountReason = models.CharField(max_length=50, blank=True, verbose_name=_('Discount Reason'),
                                       help_text=_('Reason for provision of Discount'))
 

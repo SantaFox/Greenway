@@ -79,7 +79,7 @@ class AccountsTable(Table):
 
 
 class CounterpartyTable(Table):
-    #id = PrimaryKeyCheckboxColumn()
+    # id = PrimaryKeyCheckboxColumn()
 
     Memo = TemplateColumn('<span data-toggle="tooltip" title="{{ value }}">{{ value|truncatechars:20 }}</span>',
                           empty_values=(None, ''),
@@ -161,20 +161,12 @@ class CustomerOrderPositionsTable(Table):
 
     DateDelivered = DateColumn('d.m.Y')
 
-    # Actions = TemplateColumn(
-    #     ('<a href="#editModal" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
-    #      '<i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
-    #      '<a href="#deleteModal" data-toggle="modal" data-id="{{ value }}">'
-    #      '<i class="bi bi-trash text-danger mr-1"></i>Delete</a>'),
-    #     accessor='id',
-    #     orderable=False,
-    #     verbose_name=_('Actions'),
-    # )
-
     class Meta:
         model = CustomerOrderPosition
         empty_text = _('There are no Position for this Customer Order')
-        fields = ('id', 'Product', 'Quantity', 'Price', 'Currency', 'Discount', 'DiscountReason', 'Status', 'DateDelivered')
+        fields = (
+            'id', 'Product', 'ActualPrice', 'Price', 'Quantity', 'Currency', 'Discount', 'DiscountReason', 'Status',
+            'DateDelivered')
         attrs = {"class": "table table-hover table-sm small", "thead": {"class": ""}}
         orderable = False
 
