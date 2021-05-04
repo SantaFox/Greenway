@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from model_utils.managers import InheritanceManager
 
-from products.models import Currency, Product
+from products.models import Currency, Product, Price
 
 DEBIT = 'D'
 CREDIT = 'C'
@@ -225,6 +225,12 @@ class OperationPosition(models.Model):
 
     def __str__(self):
         return f'{self.Operation} / {self.Product} / {self.Quantity}'
+
+    @property
+    def get_actual_price(self):
+        prices = Price.objects.filter(Product=self.Product, DateAdded__lte=self.Operation.DateOperation).order_by('-DateAdded')
+        price = prices.first()  # First or None
+        return price.Price
 
     class Meta:
         verbose_name_plural = "Operation Positions"

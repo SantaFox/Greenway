@@ -145,6 +145,12 @@ class CustomerOrdersTable(Table):
 class CustomerOrderPositionsTable(Table):
     id = PrimaryKeyCheckboxColumn()
 
+    ActualPrice = NumericColumn(
+        accessor=A('get_actual_price'),
+        attrs={"td": {"align": "right", 'class': 'text-black-50'}},
+        verbose_name=_('Actual'),
+    )
+
     Price = NumericColumn(attrs={
         "td": {"align": "right"}
     })
