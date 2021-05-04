@@ -177,19 +177,19 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
                             help_text=_('Memo related to this Customer Order'))
 
     @property
-    def paid_amount(self):
+    def get_paid_amount(self):
         amount_queryset = Payment.objects.filter(ParentOperation=self).aggregate(TotalAmount=Sum('Amount'))
         amount = amount_queryset['TotalAmount']
         return amount
 
     @property
-    def positions_count(self):
+    def get_positions_count(self):
         pos_queryset = CustomerOrderPosition.objects.filter(Operation=self).aggregate(PositionCount=Count('id'))
         pos_count = pos_queryset['PositionCount']
         return pos_count
 
     @property
-    def payments_count(self):
+    def get_payments_count(self):
         payments_queryset = Payment.objects.filter(ParentOperation=self).aggregate(PaymentCount=Count('id'))
         payments_count = payments_queryset['PaymentCount']
         return payments_count

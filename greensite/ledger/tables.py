@@ -113,7 +113,7 @@ class CustomerOrdersTable(Table):
     })
 
     Paid = NumericColumn(
-        accessor=A('paid_amount'),
+        accessor=A('get_paid_amount'),
         attrs={"td": {"align": "right"}},
         verbose_name=_('Paid')
     )
@@ -138,7 +138,7 @@ class CustomerOrdersTable(Table):
         fields = ('DateOperation', 'Customer__Name', 'Amount', 'Currency', 'Paid', 'Memo', 'Actions',)
         attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
         row_attrs = {
-            "class": lambda record: 'text-black-50' if (record.Amount or 0) == (record.paid_amount or 0) else ''
+            "class": lambda record: 'text-black-50' if (record.Amount or 0) == (record.get_paid_amount or 0) else ''
         }
 
 
