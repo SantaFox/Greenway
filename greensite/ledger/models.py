@@ -105,26 +105,16 @@ class Counterparty(ModelIsDeletableMixin, models.Model):
 
 class Operation(models.Model):
     User = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+
     DateOperation = models.DateField(blank=False, verbose_name=_('Operation Date'),
                                      help_text=_('Date when this Operation was executed'))
-    Type = models.IntegerField(choices=[
-        (1, _('Customer Order')),
-        (2, _('Supplier Order')),
-        (3, _('Received Payment')),
-        (4, _('Sent Payment')),
-        (5, _('Delivered Goods')),
-        (6, _('Received Goods')),
-        (7, _('Deposited Money')),
-        (8, _('Withdrawn money')),
-        (9, _('Break set to items')),
-    ], blank=False, null=True)
 
     # System block
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.User} / {self.DateOperation} / {self.get_Type_display()}'
+        return f'{self.User} / {self.DateOperation}'
 
 
 class SupplierOrder(ModelIsDeletableMixin, Operation):
