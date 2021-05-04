@@ -19,4 +19,5 @@ urlpatterns = [
     path('customer_orders/delete/', views.customer_order_delete, name='customer_order_delete'),
 
     path('customer_order_positions/', views.table_customer_order_positions, name='customer_order_positions'),
+    path('customer_order_payments/', views.table_customer_order_payments, name='customer_order_payments'),
 ]

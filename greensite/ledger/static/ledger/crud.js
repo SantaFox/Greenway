@@ -83,6 +83,8 @@ $(document).ready(function() {
                             button = $(modal).find('#positionsCount');
                             button.text('('+response[i]+')');
                         } else if (i == 'payments_count') {
+                            button = $(modal).find('#paymentsCount');
+                            button.text('('+response[i]+')');
                         } else {
                             formElement = $(modal).find('.modal-body [name="' + i + '"]');
                             if (formElement.attr('type') == 'checkbox'){
@@ -155,11 +157,14 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $('#tableModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var header = button.data('modal-title');
+        var action = button.data('modal-action');
+        var itemId = $(button).closest("form").find('input[type="hidden"][name="id"]').val();
 
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var modal = $(this)
-        //var itemId = button.data('id') // Extract info from data-* attributes
-        var itemId = $(button).closest("form").find('input[type="hidden"][name="id"]').val()
+        var modal = $(this);
+        $(modal).find('form').attr('action', action);
+        $(modal).find('form .modal-header h4').text(header);
         $.ajax({
             url: $(modal).find('form').attr('action'),
             type: 'GET',

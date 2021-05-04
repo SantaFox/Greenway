@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django_tables2 import A, Column, BooleanColumn, CheckBoxColumn, DateColumn, TemplateColumn, Table
 from django_tables2.utils import AttributeDict
 
-from .models import Account, Counterparty, CustomerOrder, CustomerOrderPosition
+from .models import Account, Counterparty, CustomerOrder, CustomerOrderPosition, Payment
 
 
 class BootstrapBooleanColumn(BooleanColumn):
@@ -169,5 +169,22 @@ class CustomerOrderPositionsTable(Table):
         model = CustomerOrderPosition
         empty_text = _('There are no Position for this Customer Order')
         fields = ('id', 'Product', 'Quantity', 'Price', 'Currency', 'Discount', 'DiscountReason', 'Status', 'DateDelivered')
+        attrs = {"class": "table table-hover table-sm small", "thead": {"class": ""}}
+        orderable = False
+
+
+class CustomerOrderPaymentsTable(Table):
+    id = PrimaryKeyCheckboxColumn()
+
+    DateOperation = DateColumn('d.m.Y')
+
+    Amount = NumericColumn(attrs={
+        "td": {"align": "right"}
+    })
+
+    class Meta:
+        model = Payment
+        empty_text = _('There are no Payments for this Customer Order')
+        fields = ('id', 'DateOperation', 'Account', 'Amount', 'Currency')
         attrs = {"class": "table table-hover table-sm small", "thead": {"class": ""}}
         orderable = False

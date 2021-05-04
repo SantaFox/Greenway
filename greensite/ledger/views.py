@@ -16,7 +16,7 @@ from django_tables2 import RequestConfig
 from greensite.decorators import prepare_languages
 
 from .models import Account, Counterparty, CustomerOrder, CustomerOrderPosition, Payment
-from .tables import AccountsTable, CounterpartyTable, CustomerOrdersTable, CustomerOrderPositionsTable
+from .tables import AccountsTable, CounterpartyTable, CustomerOrdersTable, CustomerOrderPositionsTable, CustomerOrderPaymentsTable
 from .forms import AccountForm, CounterpartyForm, CustomerOrderForm
 from .filters import CustomerOrderFilter
 
@@ -385,12 +385,20 @@ def customer_order_delete(request):
 def table_customer_order_positions(request):
     customer_order_instance = get_object_or_404(CustomerOrder, id=request.GET.get('id'), User=request.user)
     table = CustomerOrderPositionsTable(CustomerOrderPosition.objects.filter(Operation=customer_order_instance.id))
-    # RequestConfig(request,
-    #               paginate={"per_page": 15}) \
-    #     .configure(table)
 
     rendered_table = table.as_html(request)
     return JsonResponse({'status': 'ok',
                          'table': rendered_table})
 
 # TODO: ALL DIRECT REQUESTS SHOULD ALSO CHECK FOR CORRECT USER!!!!!
+
+
+@login_required
+@permission_required('ledger.view_payment', raise_exception=True)
+def table_customer_order_payments(request):
+    customer_order_instance = get_object_or_404(CustomerOrder, id=request.GET.get('id'), User=request.user)
+    table = CustomerOrderPaymentsTable(Payment.objects.filter(ParentOperation=customer_order_instance.id))
+
+    rendered_table = table.as_html(request)
+    return JsonResponse({'status': 'ok',
+                         'table': rendered_table})

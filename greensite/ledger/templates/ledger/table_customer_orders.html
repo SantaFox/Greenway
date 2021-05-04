@@ -66,10 +66,18 @@
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="action" value="edit">
-                    <a href="#tableModal" class="btn btn-success mr-auto" data-toggle="modal">
+                    <a href="#tableModal" class="btn btn-success mr-2" data-toggle="modal"
+                       data-modal-action="{% url 'ledger:customer_order_positions' %}"
+                       data-modal-title="{% translate 'Customer Order Positions' %}">
                         <i class="bi bi-table mr-1"></i>
                         {% translate 'Positions' context 'Form button' %}
                         <span id="positionsCount"></span>
+                    </a>
+                    <a href="#tableModal" class="btn btn-success mr-auto" data-toggle="modal"
+                       data-modal-action="{% url 'ledger:customer_order_payments' %}"
+                       data-modal-title="{% translate 'Customer Order Payments' %}">
+                        <i class="bi bi-credit-card mr-1"></i>
+                        <span id="paymentsCount"></span>
                     </a>
                     <input type="button" class="btn btn-light" data-dismiss="modal"
                            value="{% translate 'Cancel' context 'Form button' %}">
