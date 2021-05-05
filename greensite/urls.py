@@ -12,6 +12,7 @@ urlpatterns = [
     path('user/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     re_path(r'^markdownx/', include('markdownx.urls')),
+    re_path('djga/', include('google_analytics.urls')),
 ]
 
 if settings.DEBUG:

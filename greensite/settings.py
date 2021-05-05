@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'ledger.apps.LedgerConfig',
 
     # third-party apps
+    'google_analytics',
     'imagekit',
     'crispy_forms',
     'markdownx',
@@ -150,3 +151,7 @@ MEDIA_URL = '/media/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
+
+GOOGLE_ANALYTICS = {
+    'google_analytics_id': 'UA-196344421-1',
+}
