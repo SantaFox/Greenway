@@ -329,5 +329,5 @@ modules.xml
 
 
 # End of https://www.toptal.com/developers/gitignore/api/pycharm,django,python
-/greensite/static/
-/greensite/media/CACHE/
+/static/
+/media/CACHE/
