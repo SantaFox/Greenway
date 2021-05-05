@@ -12,12 +12,13 @@ from django.template.response import TemplateResponse
 from django.forms.models import model_to_dict
 
 from django_tables2 import RequestConfig
+from crispy_forms.utils import render_crispy_form
 
 from greensite.decorators import prepare_languages
 
 from .models import Account, Counterparty, CustomerOrder, CustomerOrderPosition, Payment
 from .tables import AccountsTable, CounterpartyTable, CustomerOrdersTable, CustomerOrderPositionsTable, CustomerOrderPaymentsTable
-from .forms import AccountForm, CounterpartyForm, CustomerOrderForm
+from .forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerActionPaymentForm
 from .filters import CustomerOrderFilter
 
 
@@ -402,3 +403,65 @@ def table_customer_order_payments(request):
     rendered_table = table.as_html(request)
     return JsonResponse({'status': 'ok',
                          'table': rendered_table})
+
+
+def customer_order_payment_action(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            request_id = request.GET.get('id')
+            #item_instance = get_object_or_404(Payment, id=request_id)
+            form_instance = CustomerActionPaymentForm() # instance=item_instance)
+            rendered_form = render_crispy_form(form_instance)
+            return JsonResponse({'status': 'ok',
+                                 'table': rendered_form})
+        elif request.method == 'POST':
+            action = request.POST.get('action')
+            if action == 'add':
+                item_form = CustomerOrderForm(request.POST)
+                if not item_form.is_valid():
+                    return JsonResponse({'status': 'not_valid',
+                                         'message': {
+                                             'text': f'Customer Order <strong>{item_form.cleaned_data["Name"]}</strong> was not saved',
+                                             'moment': datetime.now(),
+                                         },
+                                         'errors': item_form.errors})
+                item_instance = item_form.save(commit=False)
+                item_instance.User = request.user
+                try:
+                    item_instance.save()
+                    messages.success(request,
+                                     f'Customer Order <strong>{item_instance.Name}</strong> added successfully')
+                    return JsonResponse({'status': 'success'})
+                except IntegrityError as e:
+                    return JsonResponse({'status': 'not_valid',
+                                         'message': {
+                                             'text': f'Customer Order <strong>{item_instance.Name}</strong> was not saved',
+                                             'moment': datetime.now(),
+                                         },
+                                         'errors': e.args
+                                         })
+            elif action == 'edit':
+                request_id = request.POST.get('id')
+                item_instance = get_object_or_404(Account, id=request_id)
+                item_form = CustomerOrderForm(request.POST, instance=item_instance)
+                if not item_form.has_changed():
+                    messages.info(request,
+                                  f'Customer Order <strong>{item_instance.Name}</strong> was not changed')
+                    return JsonResponse({'status': 'not_changed'})
+                if not item_form.is_valid():
+                    return JsonResponse({'status': 'not_valid',
+                                         'message': {
+                                             'text': f'Customer Order <strong>{item_instance.Name}</strong> was not saved',
+                                             'moment': datetime.now(),
+                                         },
+                                         'errors': item_form.errors})
+                item_form.save()
+                messages.success(request,
+                                 f'Customer Order <strong>{item_instance.Name}</strong> updated successfully')
+                return JsonResponse({'status': 'success'})
+            else:
+                return HttpResponseBadRequest()
+        else:
+            raise Http404
+    else:
+        raise Http404

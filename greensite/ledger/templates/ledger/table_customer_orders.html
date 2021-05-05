@@ -16,12 +16,15 @@
     table.table tr th:last-child {
 	    width: 150px;
     }
-    .modal-backdrop + .modal-backdrop {
-      z-index: 1040;
+{% comment %}
+    /* modal backdrop fix */
+    .modal:nth-of-type(even) {
+        z-index: 1052 !important;
     }
-    .modal + .modal {
-      z-index: 1050;
+    .modal-backdrop.show:nth-of-type(even) {
+        z-index: 1051 !important;
     }
+{% endcomment %}
 </style>
 {% endblock %}
 
@@ -129,6 +132,13 @@
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="action" value="edit">
+                    <a href="#formModal" class="btn btn-warning mr-auto" data-toggle="modal"
+                       data-modal-action="{% url 'ledger:customer_order_payment_action' %}"
+                       data-modal-title="{% translate 'Add' %}">
+                        <i class="bi bi-plus-square mr-1"></i>
+                        {% translate 'Add' context 'Form button' %}
+                    </a>
+
                     <input type="button" class="btn btn-light" data-dismiss="modal"
                            value="{% translate 'Cancel' context 'Form button' %}">
                     <input type="submit" class="btn btn-primary"
@@ -138,6 +148,30 @@
         </div>
     </div>
 </div>
+
+<div id="formModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h4 class="modal-title">{% translate 'Customer Order Positions' %}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="action" value="edit">
+
+                    <input type="button" class="btn btn-light" data-dismiss="modal"
+                           value="{% translate 'Cancel' context 'Form button' %}">
+                    <input type="submit" class="btn btn-primary"
+                           value="{% translate 'Save' context 'Form button' %}">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block js-before %}

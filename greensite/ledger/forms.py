@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Field, Layout
 from crispy_forms.bootstrap import PrependedText
 
-from .models import Account, Counterparty, CustomerOrder
+from .models import Account, Counterparty, CustomerOrder, Payment
 
 
 class AccountForm(ModelForm):
@@ -114,3 +114,41 @@ class CustomerOrderForm(ModelForm):
         model = CustomerOrder
         fields = ['DateOperation', 'Customer', 'DateDispatched', 'DateDelivered', 'TrackingNumber',
                   'CourierService', 'DetailedDelivery', 'Amount', 'Currency', 'Memo', ]
+
+
+class CustomerActionPaymentForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            self.fields[field_name].help_text = None
+
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Div(
+                PrependedText('DateOperation', '<i class="bi bi-calendar-date"></i>', wrapper_class='col-md-6'),
+                css_class='form-row'),
+            PrependedText('Account', '<i class="bi bi-menu-button"></i>'),
+            Div(
+                PrependedText('Amount', '<i class="bi bi-cash-stack"></i>', wrapper_class='col-md-4',
+                              css_class="text-right"),
+                Field('Currency', wrapper_class='col-md-4'),
+                css_class='form-row'),
+        )
+
+        # loading Model descriptors from Meta subclass
+        for fld in self._meta.model._meta.get_fields():
+            if not fld.auto_created:
+                self.helper[fld.name].update_attributes(placeholder=fld.verbose_name)
+                if fld.help_text != '':
+                    self.helper[fld.name].update_attributes(title=fld.help_text)
+                    self.helper[fld.name].update_attributes(data_toggle="tooltip")
+
+        self.helper.form_show_labels = False
+        self.helper.use_custom_control = True
+        self.helper.form_tag = False
+        self.helper.disable_csrf = True
+
+    class Meta:
+        model = Payment
+        fields = ['DateOperation', 'Account', 'Amount', 'Currency', ]

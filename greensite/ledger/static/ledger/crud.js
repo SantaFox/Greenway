@@ -186,3 +186,35 @@ $(document).ready(function() {
         });
     });
 })
+
+$(document).ready(function() {
+    $('#formModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var header = button.data('modal-title');
+        var action = button.data('modal-action');
+        var itemId = $(button).closest("form").find('input[type="hidden"][name="id"]').val();
+
+        var modal = $(this);
+        $(modal).find('form').attr('action', action);
+        $(modal).find('form .modal-header h4').text(header);
+        $.ajax({
+            url: $(modal).find('form').attr('action'),
+            type: 'GET',
+            data: {id: itemId},
+            dataType: 'json',
+            success: function(response) {
+                var content = $(modal).find('.modal-body');
+                if (response.status == 'ok') {
+                    content.empty();
+                    $(response.table).appendTo(content);
+                    initialize_checkboxes();
+                } else {
+                    console.log('something went wrong here');
+                };
+            },
+            error: function() {
+                console.log('something went wrong here');
+            },
+        });
+    });
+})
