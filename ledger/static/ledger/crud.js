@@ -193,6 +193,8 @@ $(document).ready(function() {
         var header = button.data('modal-title');
         var action = button.data('modal-action');
         var itemId = $(button).closest("form").find('input[type="hidden"][name="id"]').val();
+        // var parentId = $(button).closest("form").find('input[type="hidden"][name="parent_id"]').val();
+        var parentId = 175
 
         var modal = $(this);
         $(modal).find('form').attr('action', action);
@@ -200,7 +202,7 @@ $(document).ready(function() {
         $.ajax({
             url: $(modal).find('form').attr('action'),
             type: 'GET',
-            data: {id: itemId},
+            data: {id: itemId, parent_id:parentId},
             dataType: 'json',
             success: function(response) {
                 var content = $(modal).find('.modal-body');

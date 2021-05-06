@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
@@ -409,8 +409,20 @@ def customer_order_payment_action(request):
     if request.is_ajax():
         if request.method == 'GET':
             request_id = request.GET.get('id')
-            #item_instance = get_object_or_404(Payment, id=request_id)
-            form_instance = CustomerActionPaymentForm() # instance=item_instance)
+            if request_id:
+                # edit existing item
+                item_instance = get_object_or_404(Payment, id=request_id)
+                form_instance = CustomerActionPaymentForm(instance=item_instance)
+            else:
+                # add new - need some initial data
+                params = {'DateOperation': date.today()}
+                order_id = request.GET.get('parent_id')
+                if order_id:
+                    # if we know order id, then we help with calculations
+                    order_instance = get_object_or_404(CustomerOrder, id=order_id)
+                    params['Amount'] = order_instance.Amount - order_instance.get_paid_amount
+                    params['Currency'] = order_instance.Currency
+                form_instance = CustomerActionPaymentForm(initial=params)
             rendered_form = render_crispy_form(form_instance)
             return JsonResponse({'status': 'ok',
                                  'table': rendered_form})
