@@ -440,7 +440,7 @@ def customer_order_payment_action(request):
                 if not item_form.is_valid():
                     return JsonResponse({'status': 'not_valid',
                                          'message': {
-                                             'text': f'Customer Order <strong>{item_form.cleaned_data["Name"]}</strong> was not saved',
+                                             'text': f'Payment was not saved',
                                              'moment': datetime.now(),
                                          },
                                          'errors': item_form.errors})
@@ -451,12 +451,12 @@ def customer_order_payment_action(request):
                 try:
                     item_instance.save()
                     messages.success(request,
-                                     f'Customer Order <strong>{item_instance.Name}</strong> added successfully')
+                                     f'Payment added successfully')
                     return JsonResponse({'status': 'success'})
                 except IntegrityError as e:
                     return JsonResponse({'status': 'not_valid',
                                          'message': {
-                                             'text': f'Customer Order <strong>{item_instance.Name}</strong> was not saved',
+                                             'text': f'Payment was not saved',
                                              'moment': datetime.now(),
                                          },
                                          'errors': e.args
