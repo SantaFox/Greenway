@@ -180,19 +180,19 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
     def get_paid_amount(self):
         amount_queryset = Payment.objects.filter(ParentOperation=self).aggregate(TotalAmount=Sum('Amount'))
         amount = amount_queryset['TotalAmount']
-        return amount
+        return 0 if amount is None else amount
 
     @property
     def get_positions_count(self):
         pos_queryset = CustomerOrderPosition.objects.filter(Operation=self).aggregate(PositionCount=Count('id'))
         pos_count = pos_queryset['PositionCount']
-        return pos_count
+        return 0 if pos_count is None else pos_count
 
     @property
     def get_payments_count(self):
         payments_queryset = Payment.objects.filter(ParentOperation=self).aggregate(PaymentCount=Count('id'))
         payments_count = payments_queryset['PaymentCount']
-        return payments_count
+        return 0 if payments_count is None else payments_count
 
     def __str__(self):
         return f'{self.User} / {self.DateOperation} / {self.Customer} / {self.Amount} / {self.Currency}'
