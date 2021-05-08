@@ -116,7 +116,7 @@ class CustomerOrderForm(ModelForm):
                   'CourierService', 'DetailedDelivery', 'Amount', 'Currency', 'Memo', ]
 
 
-class CustomerActionPaymentForm(ModelForm):
+class CustomerOrderPaymentForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

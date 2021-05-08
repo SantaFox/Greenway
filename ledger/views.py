@@ -18,7 +18,7 @@ from greensite.decorators import prepare_languages
 
 from .models import Account, Counterparty, CustomerOrder, CustomerOrderPosition, Payment
 from .tables import AccountsTable, CounterpartyTable, CustomerOrdersTable, CustomerOrderPositionsTable, CustomerOrderPaymentsTable
-from .forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerActionPaymentForm
+from .forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerOrderPaymentForm
 from .filters import CustomerOrderFilter
 
 
@@ -413,7 +413,7 @@ def customer_order_payment_action(request):
             if request_id:
                 # edit existing item
                 item_instance = get_object_or_404(Payment, id=request_id)
-                form_instance = CustomerActionPaymentForm(instance=item_instance)
+                form_instance = CustomerOrderPaymentForm(instance=item_instance)
             else:
                 # add new - need some initial data
                 params = {'DateOperation': date.today()}
@@ -423,14 +423,14 @@ def customer_order_payment_action(request):
                     order_instance = get_object_or_404(CustomerOrder, id=order_id)
                     params['Amount'] = order_instance.Amount - order_instance.get_paid_amount
                     params['Currency'] = order_instance.Currency
-                form_instance = CustomerActionPaymentForm(initial=params)
+                form_instance = CustomerOrderPaymentForm(initial=params)
             rendered_form = render_crispy_form(form_instance)
             return JsonResponse({'status': 'ok',
                                  'table': rendered_form})
         elif request.method == 'POST':
             action = request.POST.get('action')
             if action == 'add':
-                item_form = CustomerOrderForm(request.POST)
+                item_form = CustomerOrderPaymentForm(request.POST)
                 if not item_form.is_valid():
                     return JsonResponse({'status': 'not_valid',
                                          'message': {
@@ -455,8 +455,8 @@ def customer_order_payment_action(request):
                                          })
             elif action == 'edit':
                 request_id = request.POST.get('id')
-                item_instance = get_object_or_404(Account, id=request_id)
-                item_form = CustomerOrderForm(request.POST, instance=item_instance)
+                item_instance = get_object_or_404(Payment, id=request_id)
+                item_form = CustomerOrderPaymentForm(request.POST, instance=item_instance)
                 if not item_form.has_changed():
                     messages.info(request,
                                   f'Customer Order <strong>{item_instance.Name}</strong> was not changed')
