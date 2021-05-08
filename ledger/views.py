@@ -16,7 +16,7 @@ from crispy_forms.utils import render_crispy_form
 
 from greensite.decorators import prepare_languages
 
-from .models import Account, Counterparty, CustomerOrder, CustomerOrderPosition, Payment
+from .models import Account, Counterparty, Operation, CustomerOrder, CustomerOrderPosition, Payment
 from .tables import AccountsTable, CounterpartyTable, CustomerOrdersTable, CustomerOrderPositionsTable, CustomerOrderPaymentsTable
 from .forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerOrderPaymentForm
 from .filters import CustomerOrderFilter
@@ -410,6 +410,7 @@ def customer_order_payment_action(request):
     if request.is_ajax():
         if request.method == 'GET':
             request_id = request.GET.get('id')
+            order_id = request.GET.get('parent_id')
             if request_id:
                 # edit existing item
                 item_instance = get_object_or_404(Payment, id=request_id)
@@ -417,7 +418,6 @@ def customer_order_payment_action(request):
             else:
                 # add new - need some initial data
                 params = {'DateOperation': date.today()}
-                order_id = request.GET.get('parent_id')
                 if order_id:
                     # if we know order id, then we help with calculations
                     order_instance = get_object_or_404(CustomerOrder, id=order_id)
@@ -426,9 +426,15 @@ def customer_order_payment_action(request):
                 form_instance = CustomerOrderPaymentForm(initial=params)
             rendered_form = render_crispy_form(form_instance)
             return JsonResponse({'status': 'ok',
-                                 'table': rendered_form})
+                                 'form': rendered_form,
+                                 'hidden': {
+                                    'action': 'edit' if form_instance.is_bound else 'add',
+                                    'parent': order_id,
+                                    }
+                                 })
         elif request.method == 'POST':
             action = request.POST.get('action')
+            parent = request.POST.get('parentId')
             if action == 'add':
                 item_form = CustomerOrderPaymentForm(request.POST)
                 if not item_form.is_valid():
@@ -440,6 +446,8 @@ def customer_order_payment_action(request):
                                          'errors': item_form.errors})
                 item_instance = item_form.save(commit=False)
                 item_instance.User = request.user
+                parent_instance = get_object_or_404(Operation, id=parent)
+                item_instance.ParentOperation = parent_instance
                 try:
                     item_instance.save()
                     messages.success(request,

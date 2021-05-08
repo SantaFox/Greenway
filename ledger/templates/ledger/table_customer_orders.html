@@ -131,7 +131,7 @@
                 <div class="modal-body">
                 </div>
                 <div class="modal-footer">
-                    <input type="hidden" name="action" value="edit">
+                    <input type="hidden" name="parentId">
                     <a href="#formModal" class="btn btn-warning mr-auto" data-toggle="modal"
                        data-modal-action="{% url 'ledger:customer_order_payment_action' %}"
                        data-modal-title="{% translate 'Add' %}">
@@ -160,7 +160,8 @@
                 <div class="modal-body">
                 </div>
                 <div class="modal-footer">
-                    <input type="hidden" name="action" value="edit">
+                    <input type="hidden" name="action">
+                    <input type="hidden" name="parentId">
 
                     <input type="button" class="btn btn-light" data-dismiss="modal"
                            value="{% translate 'Cancel' context 'Form button' %}">

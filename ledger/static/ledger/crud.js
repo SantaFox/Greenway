@@ -165,6 +165,7 @@ $(document).ready(function() {
         var modal = $(this);
         $(modal).find('form').attr('action', action);
         $(modal).find('form .modal-header h4').text(header);
+        $(modal).find('form .modal-footer input[type="hidden"][name="parentId"]').val(itemId); // Child form may need it
         $.ajax({
             url: $(modal).find('form').attr('action'),
             type: 'GET',
@@ -193,8 +194,8 @@ $(document).ready(function() {
         var header = button.data('modal-title');
         var action = button.data('modal-action');
         var itemId = $(button).closest("form").find('input[type="hidden"][name="id"]').val();
-        // var parentId = $(button).closest("form").find('input[type="hidden"][name="parent_id"]').val();
-        var parentId = 175
+        var parentId = $(button).closest("form").find('input[type="hidden"][name="parentId"]').val();
+        //var parentId = 175
 
         var modal = $(this);
         $(modal).find('form').attr('action', action);
@@ -208,8 +209,9 @@ $(document).ready(function() {
                 var content = $(modal).find('.modal-body');
                 if (response.status == 'ok') {
                     content.empty();
-                    $(response.table).appendTo(content);
-                    initialize_checkboxes();
+                    $(response.form).appendTo(content);
+                    $(modal).find('input[type="hidden"][name="action"]').val(response.hidden.action)
+                    $(modal).find('input[type="hidden"][name="parentId"]').val(response.hidden.parent)
                 } else {
                     console.log('something went wrong here');
                 };
