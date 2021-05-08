@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
-from django.db.models import OuterRef, Sum, Subquery, Value, DecimalField
-from django.db.models.functions import Coalesce,Cast
+from django.db.models import OuterRef, Sum, Subquery, Value, Func, F, DecimalField
+from django.db.models.functions import Coalesce, Cast
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, Http404, HttpResponseBadRequest
 from django.template.response import TemplateResponse
@@ -258,14 +258,15 @@ def account_delete(request):
 @permission_required('ledger.view_customerorder', raise_exception=True)
 @prepare_languages
 def table_customer_orders(request):
-    # comments = Comment.objects.filter(post=OuterRef('pk')).order_by().values('post')
-    # >> > total_comments = comments.annotate(total=Sum('length')).values('total')
-    # >> > Post.objects.filter(length__gt=Subquery(total_comments))
-
     subq = Payment.objects.filter(ParentOperation=OuterRef('pk')).values('ParentOperation')
     sum_paid = subq.annotate(total=Sum('Amount')).values('total')
-
-    qst = CustomerOrder.objects.filter(User=request.user).exclude(Amount=Coalesce(Subquery(sum_paid), Value(0)))
+    # F..king workaround for non-explicit SQLite datatypes
+    qst = CustomerOrder.objects\
+        .filter(User=request.user)\
+        .annotate(unpaid=Func(F('Amount') - Coalesce(Subquery(sum_paid), Value(0)),
+                  function='ABS',
+                  output_field=DecimalField()))\
+        .exclude(unpaid__lt=0.0001)
 
     f = CustomerOrderFilter(request.GET, queryset=qst)
     table = CustomerOrdersTable(f.qs)
