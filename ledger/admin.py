@@ -40,6 +40,11 @@ class CustomerOrderPositionInline(admin.TabularInline):
     model = CustomerOrderPosition
 
 
+class CustomerOrderPaymentInLine(admin.TabularInline):
+    model = Payment
+    fk_name = 'ParentOperation'
+
+
 class CustomerOrderAdmin(admin.ModelAdmin):
     list_display = ('User', 'DateOperation', 'Customer', 'Amount', 'Currency', 'DateDelivered')
     list_filter = ['User', 'Customer']
@@ -47,6 +52,7 @@ class CustomerOrderAdmin(admin.ModelAdmin):
     ordering = ['User', 'DateOperation', 'Customer__Name']
     inlines = [
         CustomerOrderPositionInline,
+        CustomerOrderPaymentInLine,
     ]
 
 
