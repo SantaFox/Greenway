@@ -9,7 +9,7 @@ from django.views.generic.base import RedirectView
 from . import views
 
 urlpatterns = [
-    path('', views.view_index, name='index'),
+    path('', include('showcase.urls')),
     path('products/', include('products.urls')),
     path('ledger/', include('ledger.urls')),
     path('user/', include('django.contrib.auth.urls')),
