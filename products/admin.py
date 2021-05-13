@@ -30,6 +30,7 @@ class PriceInline(admin.TabularInline):
     model = Price
     ordering = ['DateAdded', ]
 
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('SKU', 'Category', 'DateAdded', 'DateRemoved')
     list_filter = ['Category']
