@@ -9,10 +9,10 @@ class CarouselInfoInline(admin.TabularInline):
 
 
 class CarouselAdmin(admin.ModelAdmin):
-    # list_display = ('SKU', 'Category', 'DateAdded', 'DateRemoved')
+    list_display = ('Order', 'Slug', 'Active', 'Image', )
     # list_filter = ['Category']
-    # list_editable = ['Category', 'DateAdded', 'DateRemoved']
-    # ordering = ['SKU']
+    list_editable = ['Slug', 'Active']
+    ordering = ['Order']
     inlines = [
         CarouselInfoInline,
     ]
@@ -24,10 +24,10 @@ class FeaturetteInfoInline(admin.TabularInline):
 
 
 class FeaturetteAdmin(admin.ModelAdmin):
-    list_display = ('Slug',)
+    list_display = ('Order', 'Slug', 'Active', 'Image', )
     # list_filter = ['Category']
-    # list_editable = ['Category', 'DateAdded', 'DateRemoved']
-    # ordering = ['SKU']
+    list_editable = ['Slug', 'Active']
+    ordering = ['Order']
     inlines = [
         FeaturetteInfoInline,
     ]
