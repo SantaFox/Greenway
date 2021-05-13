@@ -184,7 +184,7 @@ class Price(models.Model):
 
 class Image(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
-    Image = models.ImageField()
+    Image = models.ImageField(upload_to='products/')
     IsPrimary = models.BooleanField(default=False)
     ImageAdminThumbnail = ImageSpecField(source='Image', spec=AdminThumbnailSpec)
     TimestampCreated = models.DateTimeField(auto_now_add=True)
