@@ -7,6 +7,7 @@ from products.models import Language
 
 
 class Carousel(models.Model):
+    Order = models.IntegerField(blank=False)
     Slug = models.SlugField(blank=False)
     Active = models.BooleanField(default=False)
 
@@ -21,7 +22,7 @@ class Carousel(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['Slug'], name='unique_Carousel')
+            models.UniqueConstraint(fields=['Order'], name='unique_Carousel')
         ]
 
 
@@ -46,6 +47,7 @@ class CarouselInfo(models.Model):
 
 
 class Featurette(models.Model):
+    Order = models.IntegerField(blank=False)
     Slug = models.SlugField(blank=False)
     Active = models.BooleanField(default=False)
 
@@ -60,7 +62,7 @@ class Featurette(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['Slug'], name='unique_Featurette')
+            models.UniqueConstraint(fields=['Order'], name='unique_Featurette')
         ]
 
 
