@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load static %}
+{% load imagekit %}
 {% load google_analytics_tags %}
 <!DOCTYPE html>
 <html lang="{{ language.Code|default:'en' }}">
@@ -207,7 +208,7 @@
             <p class="lead">{{ f.feat_info.Text }}</p>
         </div>
         <div class="col-md-5 {% cycle '' 'order-md-1' %}">
-            <img src="{{ f.featurette.Image.url }}" class="w-100">
+            {% thumbnail "500x500" f.featurette.Image -- class="w-100" %}
         </div>
     </div>
 
