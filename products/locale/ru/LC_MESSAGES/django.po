@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-05 19:02+0300\n"
+"POT-Creation-Date: 2021-05-15 23:00+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,142 +20,142 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: .\products\models.py:83
+#: .\models.py:83
 msgid "Category"
 msgstr "Категория"
 
-#: .\products\models.py:84
+#: .\models.py:84
 msgid "Category to which this product belongs"
 msgstr "Категория, к которой относится продукт"
 
-#: .\products\models.py:87
+#: .\models.py:87
 msgid "Date Added"
 msgstr "Дата появления"
 
-#: .\products\models.py:88
+#: .\models.py:88
 msgid "Date when this product became available to public"
 msgstr "Дата, когда продукт стал впервые доступен для заказа"
 
-#: .\products\models.py:89
+#: .\models.py:89
 msgid "Date Removed"
 msgstr "Дата окончания"
 
-#: .\products\models.py:90
+#: .\models.py:90
 msgid "Date when this product became unavailable to order"
 msgstr "Дата, когда продукт стал недоступен для заказа"
 
-#: .\products\models.py:112
+#: .\models.py:112
 msgid "Product Name"
 msgstr "Наименование продукта"
 
-#: .\products\models.py:113
+#: .\models.py:113
 msgid ""
 "Full product name with Series before name. No Category should be included."
 msgstr ""
 "Полное наименование продукта, с серией перед наименованием. Указывать "
 "категорию не следует."
 
-#: .\products\models.py:114
+#: .\models.py:114
 msgid "Tagline"
 msgstr "Привлекательное описание"
 
-#: .\products\models.py:115
+#: .\models.py:115
 msgid "A catchphrase or slogan that can make the product remembered."
 msgstr "Короткое описание, раскрывающее суть продукта"
 
-#: .\products\models.py:116
+#: .\models.py:116
 msgid "Specification"
 msgstr "Спецификация"
 
-#: .\products\models.py:117
+#: .\models.py:117
 msgid "Specification for product: size, weight etc."
 msgstr "Спецификация продукта - размер, вес и т.д."
 
-#: .\products\models.py:138
+#: .\models.py:138
 msgid "Not tested"
 msgstr "Не проверялся"
 
-#: .\products\models.py:139
+#: .\models.py:139
 msgid "Low quality"
 msgstr "Низкое качество"
 
-#: .\products\models.py:140
+#: .\models.py:140
 msgid "Medium quality"
 msgstr "Среднее качество"
 
-#: .\products\models.py:141
+#: .\models.py:141
 msgid "Good quality"
 msgstr "Хорошее качество"
 
-#: .\products\templates\markdownx\widget.html:7
+#: .\templates\markdownx\widget.html:7
 msgid "Edit Markdown"
 msgstr "Редактирование"
 
-#: .\products\templates\markdownx\widget.html:11
+#: .\templates\markdownx\widget.html:11
 msgid "Preview"
 msgstr "Предпросмотр"
 
-#: .\products\templates\products\list_all.html:14
-#: .\products\templates\products\list_products.html:21
+#: .\templates\products\list_all.html:14
+#: .\templates\products\list_products.html:21
 msgid "< Product name not set >"
 msgstr "< Наименование не задано >"
 
-#: .\products\templates\products\list_products.html:34
-#: .\products\templates\products\view_product.html:145
-#: .\products\templates\products\view_product.html:161
+#: .\templates\products\list_products.html:34
+#: .\templates\products\view_product.html:145
+#: .\templates\products\view_product.html:161
 msgid "Price"
 msgstr "Цена"
 
-#: .\products\templates\products\list_products.html:39
-#: .\products\templates\products\view_product.html:162
-#: .\products\templates\products\view_product.html:180
+#: .\templates\products\list_products.html:39
+#: .\templates\products\view_product.html:162
+#: .\templates\products\view_product.html:180
 msgid "Volume"
 msgstr "Объём"
 
-#: .\products\templates\products\view_product.html:105
+#: .\templates\products\view_product.html:105
 msgid "Products"
 msgstr "Продукты"
 
-#: .\products\templates\products\view_product.html:114
-#: .\products\templates\products\view_product.html:119
+#: .\templates\products\view_product.html:114
+#: .\templates\products\view_product.html:119
 msgid "Prev"
 msgstr "Пред."
 
-#: .\products\templates\products\view_product.html:125
-#: .\products\templates\products\view_product.html:129
+#: .\templates\products\view_product.html:125
+#: .\templates\products\view_product.html:129
 msgid "Next"
 msgstr "След."
 
-#: .\products\templates\products\view_product.html:135
+#: .\templates\products\view_product.html:135
 msgid "Edit"
 msgstr "Правка"
 
-#: .\products\templates\products\view_product.html:140
+#: .\templates\products\view_product.html:140
 msgid "No product name in this language"
 msgstr "Для этого языка не задано наименование"
 
-#: .\products\templates\products\view_product.html:147
+#: .\templates\products\view_product.html:147
 msgid "actual since"
 msgstr "действительна с"
 
-#: .\products\templates\products\view_product.html:150
+#: .\templates\products\view_product.html:150
 msgid "Price History"
 msgstr "История цен"
 
-#: .\products\templates\products\view_product.html:151
+#: .\templates\products\view_product.html:151
 msgctxt "Price History"
 msgid "History"
 msgstr "История"
 
-#: .\products\templates\products\view_product.html:160
+#: .\templates\products\view_product.html:160
 msgid "Date"
 msgstr "Дата"
 
-#: .\products\templates\products\view_product.html:163
+#: .\templates\products\view_product.html:163
 msgid "Comment"
-msgstr ""
+msgstr "Комментарий"
 
-#: .\products\views.py:252
+#: .\views.py:252
 msgctxt "Default Tab name"
 msgid "Description"
 msgstr "Описание"
