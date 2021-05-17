@@ -4,7 +4,7 @@ from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 
-from products.models import Language
+from products.models import Language, Category
 
 def prepare_languages(view_func):
     """
@@ -25,6 +25,8 @@ def prepare_languages(view_func):
         # nice trick
         request.language_instance = language
 
+        nav_categories = Category.objects.all().order_by('Order')
+
         response = view_func(request, *args, **kwargs)
 
         if type(response) == TemplateResponse:
@@ -32,6 +34,7 @@ def prepare_languages(view_func):
                 response.context_data = {}
             response.context_data['language'] = language
             response.context_data['languages'] = languages
+            response.context_data['nav_categories'] = nav_categories
             return response.render()
         elif type(response) == HttpResponseRedirect:
             # do nothing - it is just a redirect

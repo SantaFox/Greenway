@@ -100,10 +100,26 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link px-2"><span>{% translate "News" context "Main Menu" %}</span></a>
                 </li>
+                {% if nav_categories %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link px-2 dropdown-toggle" href="#" id="navbarProducts" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span>{% translate "Products" context "Main Menu" %}</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarLedger">
+                        {% for c in nav_categories %}
+                        <a class="dropdown-item" href="{% url 'products:product' c.Slug %}">
+                            {{ c.Name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </li>
+                {% else %}
                 <li class="nav-item">
                     <a href="/products/"
                        class="nav-link px-2"><span>{% translate "Products" context "Main Menu" %}</span></a>
                 </li>
+                {% endif %}
                 {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
                     <a class="nav-link px-2 dropdown-toggle" href="#" id="navbarLedger" role="button"
