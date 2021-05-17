@@ -54,6 +54,11 @@ class Featurette(models.Model):
     Image = models.ImageField(upload_to='featurette/')
     # ImageAdminThumbnail = ImageSpecField(source='Image', spec=AdminThumbnailSpec)
 
+    ButtonAction = models.CharField(max_length=255, blank=True,
+                                    verbose_name=_('Button Action'),
+                                    help_text=_(
+                                        'Action fired when carousel button is pressed. If empty, no button is shown.'))
+
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
@@ -72,6 +77,9 @@ class FeaturetteInfo(models.Model):
 
     Header = models.CharField(max_length=255, blank=True)
     Text = models.TextField(blank=True)
+
+    ButtonText = models.CharField(max_length=50, blank=True, verbose_name=_('Button Text'),
+                                  help_text=_('Text shown on the '))
 
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
