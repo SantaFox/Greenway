@@ -18,7 +18,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['mygreenway.team', '127.0.0.1', 'mac-mini.santafox.local', ]
+ALLOWED_HOSTS = ['mygreenway.team', '127.0.0.1', 'mac-mini.santafox.local', 'desktop-uusmurv.santafox.local', ]
 
 INTERNAL_IPS = ['127.0.0.1',]
 
@@ -72,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'greensite.context_processors.debug_context',
             ],
         },
     },
