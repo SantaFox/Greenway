@@ -14,6 +14,21 @@ class Carousel(models.Model):
     Image = models.ImageField(upload_to='carousel/')
     # ImageAdminThumbnail = ImageSpecField(source='Image', spec=AdminThumbnailSpec)
 
+    ButtonAction = models.CharField(max_length=255, blank=True,
+                                    verbose_name=_('Button Action'),
+                                    help_text=_(
+                                        'Action fired when carousel button is pressed. If empty, no button is shown.'))
+
+    HeaderClass = models.CharField(max_length=255, blank=True,
+                                   verbose_name=_('Header Class'),
+                                   help_text=_(
+                                      'Bootstrap class for header over image. May be used for color change.'))
+
+    TextClass = models.CharField(max_length=255, blank=True,
+                                 verbose_name=_('Text Class'),
+                                 help_text=_(
+                                    'Bootstrap class for text over image. May be used for color change.'))
+
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
@@ -32,6 +47,9 @@ class CarouselInfo(models.Model):
 
     Header = models.CharField(max_length=255, blank=True)
     Text = models.TextField(blank=True)
+
+    ButtonText = models.CharField(max_length=50, blank=True, verbose_name=_('Button Text'),
+                                  help_text=_('Text shown on the carousel text block'))
 
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
@@ -57,7 +75,7 @@ class Featurette(models.Model):
     ButtonAction = models.CharField(max_length=255, blank=True,
                                     verbose_name=_('Button Action'),
                                     help_text=_(
-                                        'Action fired when carousel button is pressed. If empty, no button is shown.'))
+                                        'Action fired when featurette button is pressed. If empty, no button is shown.'))
 
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)

@@ -9,9 +9,9 @@ class CarouselInfoInline(admin.TabularInline):
 
 
 class CarouselAdmin(admin.ModelAdmin):
-    list_display = ('Order', 'Slug', 'Active', 'Image', )
+    list_display = ('Order', 'Slug', 'Active', 'Image', 'ButtonAction', 'HeaderClass', 'TextClass', )
     # list_filter = ['Category']
-    list_editable = ['Slug', 'Active']
+    list_editable = ['Active', 'ButtonAction', 'HeaderClass', 'TextClass', ]
     ordering = ['Order']
     inlines = [
         CarouselInfoInline,
