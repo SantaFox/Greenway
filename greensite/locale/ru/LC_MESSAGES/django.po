@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-05 19:03+0300\n"
+"POT-Creation-Date: 2021-05-17 11:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,87 +20,97 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: .\settings.py:124
+#: .\settings.py:125
 msgid "English"
 msgstr "Английский"
 
-#: .\settings.py:125
+#: .\settings.py:126
 msgid "Greek"
 msgstr "Греческий"
 
-#: .\settings.py:126
+#: .\settings.py:127
 msgid "Russian"
 msgstr "Русский"
 
-#: .\templates\greensite\base.html:139
+#: .\templates\greensite\index.html:150
+msgid "Prev"
+msgstr "Пред."
+
+#: .\templates\greensite\index.html:154
+msgid "Next"
+msgstr "След."
+
+#: .\templates\greensite\navigation.html:98
 msgctxt "Main Menu"
 msgid "Home"
 msgstr "Главная"
 
-#: .\templates\greensite\base.html:142
+#: .\templates\greensite\navigation.html:101
 msgctxt "Main Menu"
 msgid "News"
 msgstr "Новости"
 
-#: .\templates\greensite\base.html:146
+#: .\templates\greensite\navigation.html:107
+#: .\templates\greensite\navigation.html:120
 msgctxt "Main Menu"
 msgid "Products"
 msgstr "Продукты"
 
-#: .\templates\greensite\base.html:152
+#: .\templates\greensite\navigation.html:127
 msgctxt "Main Menu"
 msgid "Ledger"
 msgstr "Гроссбух"
 
-#: .\templates\greensite\base.html:156
+#: .\templates\greensite\navigation.html:131
 msgctxt "Ledger Menu"
 msgid "Current Stock"
 msgstr "Товары в наличии"
 
-#: .\templates\greensite\base.html:159
+#: .\templates\greensite\navigation.html:134
 msgctxt "Ledger Menu"
 msgid "Customer Orders"
 msgstr "Заказы клиентов"
 
-#: .\templates\greensite\base.html:162
+#: .\templates\greensite\navigation.html:137
 msgctxt "Ledger Menu"
 msgid "Supplier Orders"
 msgstr "Заказы поставщикам"
 
-#: .\templates\greensite\base.html:166
+#: .\templates\greensite\navigation.html:141
 msgctxt "Ledger Menu"
 msgid "Finance"
 msgstr "Финансы"
 
-#: .\templates\greensite\base.html:169
+#: .\templates\greensite\navigation.html:144
 msgctxt "Ledger Menu"
 msgid "Payments"
 msgstr "Платежи"
 
-#: .\templates\greensite\base.html:173
+#: .\templates\greensite\navigation.html:148
 msgctxt "Ledger Menu"
 msgid "Counterparties"
 msgstr "Контрагенты"
 
-#: .\templates\greensite\base.html:176
+#: .\templates\greensite\navigation.html:151
 msgctxt "Ledger Menu"
 msgid "Accounts"
 msgstr "Счета"
 
-#: .\templates\greensite\base.html:218
+#: .\templates\greensite\navigation.html:193
 msgctxt "Main Menu"
 msgid "Profile"
 msgstr "Профиль"
 
-#: .\templates\greensite\base.html:220
+#: .\templates\greensite\navigation.html:195
 msgctxt "Main Menu"
 msgid "Admin"
 msgstr "Админ"
 
-#: .\templates\greensite\base.html:224
+#: .\templates\greensite\navigation.html:199
 msgid "Logout"
 msgstr "Выход"
 
-#: .\templates\greensite\base.html:231 .\templates\registration\login.html:41
+#: .\templates\greensite\navigation.html:206
+#: .\templates\registration\login.html:41
 msgid "Login"
 msgstr "Вход"
