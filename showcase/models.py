@@ -19,6 +19,10 @@ class Carousel(models.Model):
                                     help_text=_(
                                         'Action fired when carousel button is pressed. If empty, no button is shown.'))
 
+    ButtonActionParameter = models.CharField(max_length=255, blank=True,
+                                             verbose_name=_('Button Action Parameter'),
+                                             help_text=_('Optional parameter to build action URL'))
+
     HeaderClass = models.CharField(max_length=255, blank=True,
                                    verbose_name=_('Header Class'),
                                    help_text=_(
