@@ -33,7 +33,7 @@ class CounterpartyForm(ModelForm):
                 PrependedText('Telegram', '<i class="bi bi-telegram"></i>', wrapper_class='col-md-6'),
                 css_class='form-row'),
             Div(
-                PrependedText('Facebook', '<i class="bi bi-facebook"></i>', wrapper_class='col-md-6'),
+                PrependedText('Facebook', '<i class="bi bi-messenger"></i>', wrapper_class='col-md-6'),
                 PrependedText('City', '<i class="bi bi-building"></i>', wrapper_class='col-md-6'),
                 css_class='form-row'),
             PrependedText('Address', '<i class="bi bi-signpost-split"></i>'),
