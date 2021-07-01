@@ -42,10 +42,10 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class ProductInfoAdmin(admin.ModelAdmin):
-    list_display = ('Product', 'Language', 'Name', 'Specification')
+    list_display = ('Product', 'Language', 'Name', 'Tagline', 'Specification')
     list_filter = ['Language', 'Product__Category', 'Product']
-    list_editable = ['Name', 'Specification']
-    ordering = ['Product__SKU', 'Language__Code']
+    list_editable = ['Name', 'Tagline', 'Specification']
+    ordering = ['Product__Category__Name', 'Product__SKU', 'Language__Code']
     search_fields = ['Name', 'Specification']
 
 

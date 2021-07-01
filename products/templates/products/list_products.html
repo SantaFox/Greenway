@@ -17,8 +17,11 @@
         {% generateimage 'products:product_medium_thumbnail' source=p.image.Image -- class="card-img-top" %}
         {% endif %}
         <div class="card-body">
-            <p class="card-title text-center"><a href="/products/{{ p.product.SKU }}/" class="text-success">
-                {{ p.product_info.Name|default:_("< Product name not set >") }}</a></p>
+            <h5 class="card-title text-center"><a href="/products/{{ p.product.SKU }}/" class="text-success">
+                {{ p.product_info.Name|default:_("< Product name not set >") }}</a></h5>
+            {% if p.product_info.Tagline %}
+            <h6 class="card-subtitle text-center text-muted mb-2">{{ p.product_info.Tagline }}</h6>
+            {% endif %}
             {% if p.tags %}
             <h5 class="">
                 {% for tag in p.tags %}
