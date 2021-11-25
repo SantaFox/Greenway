@@ -1,6 +1,8 @@
 {% load i18n %}
 {% load static %}
+{% comment %}
 {% load google_analytics_tags %}
+{% endcomment %}
 <!DOCTYPE html>
 <html lang="{{ language.Code|default:'en' }}">
 <head>
@@ -104,10 +106,12 @@
 
 {% block js %}{% endblock %}
 
+{% comment %}
 {% if not debug_flag %}
 <div style="display:none">
     <img src="{% google_analytics %}" width="0" height="0" />
 </div>
 {% endif %}
+{% endcomment %}
 </body>
 </html>

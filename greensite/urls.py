@@ -15,7 +15,7 @@ urlpatterns = [
     path('user/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     re_path(r'^markdownx/', include('markdownx.urls')),
-    re_path('djga/', include('google_analytics.urls')),
+    # re_path('djga/', include('google_analytics.urls')),
     path(
         "favicon.ico",
         RedirectView.as_view(url=staticfiles_storage.url("favicon.ico")),
@@ -24,7 +24,7 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    import debug_toolbar
-    urlpatterns += [
-        path('__debug__/', include(debug_toolbar.urls)),
-    ]
+    # import debug_toolbar
+    # urlpatterns += [
+    #     path('__debug__/', include(debug_toolbar.urls)),
+    # ]

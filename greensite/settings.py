@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'showcase.apps.ShowcaseConfig',
 
     # third-party apps
-    'google_analytics',
+    # 'google_analytics',
     'imagekit',
     'crispy_forms',
     'markdownx',
@@ -154,6 +154,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
 
-GOOGLE_ANALYTICS = {
-    'google_analytics_id': 'UA-196344421-1',
-}
+# GOOGLE_ANALYTICS = {
+#     'google_analytics_id': 'UA-196344421-1',
+# }
