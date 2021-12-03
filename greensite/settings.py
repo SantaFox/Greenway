@@ -85,12 +85,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': config('POSTGRESS_BASE'),
+            'USER': config('POSTGRESS_USER'),
+            'PASSWORD': config('POSTGRESS_PASS'),
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
 
 
 AUTH_USER_MODEL = 'users.GreenwayUser'
