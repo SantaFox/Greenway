@@ -1,10 +1,10 @@
 from django.contrib import admin
-from django.db import models
 
 from imagekit.admin import AdminThumbnail
 from markdownx.admin import MarkdownxModelAdmin
 
-from .models import Currency, Language, Category, CategoryInfo, Product, ProductInfo, Tab, Price, Image, Tag, TagInfo
+from .models import Currency, Language, Category, CategoryInfo, Product, ProductInfo, Tab, Price, Discount, Image, \
+    Tag, TagInfo
 
 
 class LanguageAdmin(admin.ModelAdmin):
@@ -72,6 +72,13 @@ class PriceAdmin(admin.ModelAdmin):
     ordering = ['Product__SKU', 'Currency__Code', 'DateAdded']
 
 
+class DiscountAdmin(admin.ModelAdmin):
+    list_display = ('Product', 'DateStart', 'DateEnd', 'Price', 'Currency', 'PV', 'Comment')
+    list_filter = ['Currency', 'Product__Category', 'Product']
+    list_editable = ['Price', 'Currency', 'PV', 'Comment']
+    ordering = ['Product__SKU', 'Currency__Code', 'DateStart', 'DateEnd']
+
+
 class ImageAdmin(admin.ModelAdmin):
     list_display = ('Product', 'Image', 'IsPrimary', 'admin_thumbnail')
     list_filter = ['Product']
@@ -102,6 +109,7 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductInfo, ProductInfoAdmin)
 admin.site.register(Tab, TabAdmin)
 admin.site.register(Price, PriceAdmin)
+admin.site.register(Discount, DiscountAdmin)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(TagInfo, TagInfoAdmin)

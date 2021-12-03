@@ -182,6 +182,28 @@ class Price(models.Model):
         ]
 
 
+class Discount(models.Model):
+    Product = models.ForeignKey(Product, on_delete=models.PROTECT)
+
+    DateStart = models.DateTimeField(blank=False, null=False)
+    DateEnd = models.DateTimeField(blank=False, null=False)
+    Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
+    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
+    PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    Comment = models.CharField(max_length=255, blank=True)
+
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.Product} / {self.Currency} / {self.DateStart} / {self.Price} / {self.PV}'
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['Product', 'Currency', 'DateStart', 'DateEnd'], name='unique_Discount')
+        ]
+
+
 class Image(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
     Image = models.ImageField(upload_to='products/')
