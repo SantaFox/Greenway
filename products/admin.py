@@ -32,6 +32,11 @@ class PriceInline(admin.TabularInline):
     ordering = ['DateAdded', ]
 
 
+class DiscountInline(admin.TabularInline):
+    model = Discount
+    ordering = ['DateStart', ]
+
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('SKU', 'Category', 'DateAdded', 'DateRemoved')
     list_filter = ['Category']
@@ -39,6 +44,7 @@ class ProductAdmin(admin.ModelAdmin):
     ordering = ['SKU']
     inlines = [
         PriceInline,
+        DiscountInline,
     ]
 
 
