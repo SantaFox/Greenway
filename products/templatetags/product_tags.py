@@ -8,6 +8,11 @@ register = template.Library()
 
 
 @register.filter
+def get_model_name(obj):
+    return obj._meta.model_name
+
+
+@register.filter
 def internal_links(value):
     """
     Takes a markdown textfield, and searches for internal links in the format:
