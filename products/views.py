@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, render
 from django.db.models import Count, Max, Q, FilteredRelation
 from django.conf import settings
 from django.urls import reverse
-from django.utils import translation
+from django.utils import translation, timezone
 
 from greensite.decorators import prepare_languages
 
@@ -115,6 +115,7 @@ def view_product(request, sku=None):
 
     prices = Price.objects.filter(Product=product, DateAdded__lte=datetime.now()).order_by('-DateAdded')
     price = prices.first()  # First or None
+    price = product.get_price_on_date(timezone.now())   # In theory should work with Discounts and Prices
 
     try:
         image_primary = Image.objects.get(Product=product, IsPrimary=True)

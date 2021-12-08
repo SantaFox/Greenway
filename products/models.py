@@ -101,6 +101,16 @@ class Product(models.Model):
     def ordered_price_set(self):
         return self.price_set.all().order_by('DateAdded')
 
+    def get_price_on_date(self, date):
+        discounts = Discount.objects.filter(Product=self, DateStart__lte=date, DateEnd__gte=date)
+        discount = discounts.first()  # First or None
+        prices = Price.objects.filter(Product=self, DateAdded__lte=date).order_by('-DateAdded')
+        price = prices.first()  # First or None
+        return price if discount is None else discount
+
+    def get_price_table(self):
+        return
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['SKU'], name='unique_Product')
