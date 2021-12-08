@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import truncatechars  # or truncatewords
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Q, F
 
 from imagekit.models import ImageSpecField
 from markdownx.models import MarkdownxField
@@ -200,7 +201,11 @@ class Discount(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['Product', 'Currency', 'DateStart', 'DateEnd'], name='unique_Discount')
+            models.UniqueConstraint(fields=['Product', 'Currency', 'DateStart', 'DateEnd'], name='unique_Discount'),
+            models.CheckConstraint(
+                check=Q(DateEnd__gte=F("DateStart")),
+                name='check_Discount_Dates_are_in_correct_order'
+            )
         ]
 
 
