@@ -44,6 +44,44 @@ class Currency(models.Model):
 
 
 # Data classes below
+class Action(models.Model):
+    DateAdded = models.DateField(blank=False, null=False, verbose_name=_('Date Added'),
+                                 help_text=_('Date when this action is published'))
+    DateStart = models.DateTimeField(blank=False, null=False)
+    DateEnd = models.DateTimeField(blank=False, null=False)
+    Comment = models.CharField(max_length=100, blank=True)  # may be replaced later with real slug
+
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.DateAdded} / {self.Comment}'
+
+    class Meta:
+        verbose_name_plural = "Actions"
+
+
+class ActionInfo(models.Model):
+    Action = models.ForeignKey(Action, on_delete=models.PROTECT)
+    Language = models.ForeignKey(Language, on_delete=models.PROTECT)
+
+    Header = models.CharField(max_length=100, blank=False)
+    SubHeader = models.CharField(max_length=100, blank=True)
+    Text = MarkdownxField(blank=True)
+
+    TimestampCreated = models.DateTimeField(auto_now_add=True)
+    TimestampModified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.Category} / {self.Language} / {self.Tagline}'
+
+    class Meta:
+        verbose_name_plural = "Actions Info"
+        constraints = [
+            models.UniqueConstraint(fields=['Action', 'Language'], name='unique_ActionInfo')
+        ]
+
+
 class Category(models.Model):
     Name = models.CharField(max_length=50, blank=False)
     Slug = models.SlugField(blank=False)
@@ -64,9 +102,11 @@ class Category(models.Model):
 class CategoryInfo(models.Model):
     Category = models.ForeignKey(Category, on_delete=models.PROTECT)
     Language = models.ForeignKey(Language, on_delete=models.PROTECT)
+
     ShortDesc = models.CharField(max_length=100, blank=False)
     LongDesc = models.CharField(max_length=100, blank=True)
     Tagline = models.CharField(max_length=255, blank=True)
+
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
 
@@ -195,6 +235,7 @@ class Price(models.Model):
 
 class Discount(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    Action = models.ForeignKey(Action, on_delete=models.PROTECT, blank = True, null = True)
 
     DateStart = models.DateTimeField(blank=False, null=False)
     DateEnd = models.DateTimeField(blank=False, null=False)

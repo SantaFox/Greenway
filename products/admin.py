@@ -3,14 +3,20 @@ from django.contrib import admin
 from imagekit.admin import AdminThumbnail
 from markdownx.admin import MarkdownxModelAdmin
 
-from .models import Currency, Language, Category, CategoryInfo, Product, ProductInfo, Tab, Price, Discount, Image, \
-    Tag, TagInfo
+from .models import Currency, Language, Action, ActionInfo, Category, CategoryInfo,\
+    Product, ProductInfo, Tab, Price, Discount, Image, Tag, TagInfo
 
 
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ('Code', 'Name', 'Flag')
     list_editable = ['Name', 'Flag']
     ordering = ['Code']
+
+
+class ActionAdmin(admin.ModelAdmin):
+    list_display = ('DateAdded', 'Comment', 'DateStart', 'DateEnd')
+    list_editable = ['Comment', 'DateStart', 'DateEnd']
+    ordering = ['DateAdded']
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -110,6 +116,7 @@ class TagInfoAdmin(admin.ModelAdmin):
 
 admin.site.register(Currency)
 admin.site.register(Language, LanguageAdmin)
+admin.site.register(Action, ActionAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(CategoryInfo, CategoryInfoAdmin)
 admin.site.register(Product, ProductAdmin)
