@@ -1,0 +1,4 @@
+Этот набор состоит из следующих продуктов:
+
+{% for product in products %}* [\#{{ product.SKU }}](/products/{{ product.SKU }}/) - {{ product.Category__Name }}. {{ product.pi__Name|default:_("< Product name not set >") }}
+{% endfor %}

@@ -2,12 +2,14 @@ from datetime import datetime
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect, Http404
+from django.template.loader import get_template
 from django.template.response import TemplateResponse
 from django.shortcuts import get_object_or_404, render
 from django.db.models import Count, Max, Q, FilteredRelation
 from django.conf import settings
 from django.urls import reverse
 from django.utils import translation, timezone
+from django.utils.translation import gettext_lazy as _
 
 from greensite.decorators import prepare_languages
 
@@ -111,11 +113,32 @@ def view_product(request, sku=None):
     except (ProductInfo.DoesNotExist, ProductInfo.MultipleObjectsReturned):
         product_info = None
 
-    tabs = Tab.objects.filter(Product=product, Language=request.language_instance).order_by('Order')
+    tabs_query = Tab.objects.filter(Product=product, Language=request.language_instance).order_by('Order')
+    tabs_list = list(tabs_query)
+
+    product_set_contents = product.SetProducts.all()
+    if product_set_contents:
+        ll = product_set_contents \
+            .annotate(pi=FilteredRelation('productinfo', condition=Q(productinfo__Language=request.language_instance))) \
+            .values('SKU', 'Category__Name', 'Category__Slug', 'pi__Name').order_by('Category__Name', 'SKU')
+
+        # Create new tab
+        tab_product_set = Tab()
+        tab_product_set.Product = product
+        tab_product_set.Language=request.language_instance
+        tab_product_set.Name = _('Contents')
+
+        tab_template = get_template('products/tab_set_contents.txt')
+        tab_product_set.Text = tab_template.render({
+            'products': ll
+        })
+
+        # Add this new tab to the existing list of tabs
+        tabs_list.append(tab_product_set)
 
     prices = Price.objects.filter(Product=product, DateAdded__lte=datetime.now()).order_by('-DateAdded')
-    price = prices.first()  # First or None
-    price = product.get_price_on_date(timezone.now())   # In theory should work with Discounts and Prices
+    # price = prices.first()  # First or None
+    price = product.get_price_on_date(timezone.now())
 
     try:
         image_primary = Image.objects.get(Product=product, IsPrimary=True)
@@ -143,7 +166,7 @@ def view_product(request, sku=None):
         'product_prev': product_prev,
         'product_next': product_next,
         'product_info': product_info,
-        'tabs': tabs,
+        'tabs': tabs_list,
         'price': price,
         'prices': prices,
         'image_primary': image_primary,
