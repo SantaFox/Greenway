@@ -126,7 +126,8 @@ def view_product(request, sku=None):
         tab_product_set = Tab()
         tab_product_set.Product = product
         tab_product_set.Language=request.language_instance
-        tab_product_set.Name = _('Contents')
+        tab_product_set.Icon = 'cart3'  # <i class="bi bi-cart4"></i>
+        tab_product_set.Name = _('Set Contents')
 
         tab_template = get_template('products/tab_set_contents.txt')
         tab_product_set.Text = tab_template.render({
