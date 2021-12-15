@@ -220,12 +220,20 @@
             {% if forloop.first %}
             <a class="nav-link active" id="nav-tab{{ tab.Order }}-tab"
                 data-toggle="tab" href="#nav-tab{{ tab.Order }}" role="tab"
-                aria-controls="nav-tab{{ tab.Order }}" aria-selected="true">{{ tab.Name }}
+                aria-controls="nav-tab{{ tab.Order }}" aria-selected="true">
+                {% if tab.Icon %}
+                    <i class="bi bi-{{ tab.Icon }}"></i>&nbsp;
+                {% endif %}
+                {{ tab.Name }}
             </a>
             {% else %}
             <a class="nav-link" id="nav-tab{{ tab.Order }}-tab"
                 data-toggle="tab" href="#nav-tab{{ tab.Order }}" role="tab"
-                aria-controls="nav-tab{{ tab.Order }}" aria-selected="false">{{ tab.Name }}
+                aria-controls="nav-tab{{ tab.Order }}" aria-selected="false">
+                {% if tab.Icon %}
+                    <i class="bi bi-{{ tab.Icon }}"></i>&nbsp;
+                {% endif %}
+                {{ tab.Name }}
             </a>
             {% endif %}
         {% empty %}

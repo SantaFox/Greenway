@@ -183,6 +183,7 @@ class Tab(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
     Language = models.ForeignKey(Language, on_delete=models.PROTECT)
     Order = models.IntegerField(blank=False)
+    Icon = models.CharField(max_length=50, blank=True)
     Name = models.CharField(max_length=255, blank=False)
     Text = MarkdownxField(blank=True)
     TextQuality = models.IntegerField(choices=[
