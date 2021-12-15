@@ -1,4 +1,5 @@
-Этот набор состоит из следующих продуктов:
+{% load i18n %}
+{% translate "This set contains following products:" %}
 
 {% for product in products %}* [\#{{ product.SKU }}](/products/{{ product.SKU }}/) - {{ product.Category__Name }}. {{ product.pi__Name|default:_("< Product name not set >") }}
 {% endfor %}
