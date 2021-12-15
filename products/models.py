@@ -130,7 +130,7 @@ class Product(models.Model):
     DateRemoved = models.DateField(blank=True, null=True, verbose_name=_('Date Removed'),
                                    help_text=_('Date when this product became unavailable to order'))
 
-    SetProducts = models.ManyToManyField("self", blank=True)
+    SetProducts = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
