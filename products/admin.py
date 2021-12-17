@@ -27,7 +27,7 @@ class PriceInline(admin.TabularInline):
 
 class DiscountInline(admin.TabularInline):
     model = Discount
-    # ordering = ['DateStart', ]
+    ordering = ['Product__SKU', ]
 # *******************************
 
 
