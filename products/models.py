@@ -60,6 +60,14 @@ class Action(models.Model):
     class Meta:
         verbose_name_plural = "Actions"
 
+        # TODO: Should be "DateEnd is NULL or DateEnd is larger than DateStart
+        # constraints = [
+        #     models.CheckConstraint(
+        #         check=Q(DateEnd__gte=F("DateStart")),
+        #         name='check_Action_Dates_are_in_correct_order'
+        #     )
+        # ]
+
 
 class ActionInfo(models.Model):
     Action = models.ForeignKey(Action, on_delete=models.PROTECT)
@@ -142,7 +150,7 @@ class Product(models.Model):
         return self.price_set.all().order_by('DateAdded')
 
     def get_price_on_date(self, date):
-        discounts = Discount.objects.filter(Product=self, DateStart__lte=date, DateEnd__gte=date)
+        discounts = Discount.objects.filter(Product=self, Action__DateStart__lte=date, Action__DateEnd__gte=date)
         discount = discounts.first()  # First or None
         prices = Price.objects.filter(Product=self, DateAdded__lte=date).order_by('-DateAdded')
         price = prices.first()  # First or None
@@ -238,8 +246,6 @@ class Discount(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
     Action = models.ForeignKey(Action, on_delete=models.PROTECT, blank = True, null = True)
 
-    DateStart = models.DateTimeField(blank=False, null=False)
-    DateEnd = models.DateTimeField(blank=False, null=False)
     Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
     PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
@@ -249,15 +255,11 @@ class Discount(models.Model):
     TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.Product} / {self.Currency} / {self.DateStart} / {self.Price} / {self.PV}'
+        return f'{self.Product} / {self.Action} / {self.Price} / {self.Currency} / {self.PV}'
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['Product', 'Currency', 'DateStart', 'DateEnd'], name='unique_Discount'),
-            models.CheckConstraint(
-                check=Q(DateEnd__gte=F("DateStart")),
-                name='check_Discount_Dates_are_in_correct_order'
-            )
+            models.UniqueConstraint(fields=['Product', 'Action', 'Currency'], name='unique_Discount'),
         ]
 
 
