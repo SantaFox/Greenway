@@ -50,6 +50,7 @@ class Action(models.Model):
     DateStart = models.DateTimeField(blank=False, null=False)
     DateEnd = models.DateTimeField(blank=False, null=False)
     Comment = models.CharField(max_length=100, blank=True)  # may be replaced later with real slug
+    Text = MarkdownxField(blank=True)
 
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
