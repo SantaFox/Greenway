@@ -13,10 +13,18 @@ class LanguageAdmin(admin.ModelAdmin):
     ordering = ['Code']
 
 
+class ActionInfoInline(admin.TabularInline):
+    model = ActionInfo
+    ordering = ['Language__Code', ]
+
+
 class ActionAdmin(admin.ModelAdmin):
     list_display = ('DateAdded', 'Comment', 'DateStart', 'DateEnd')
     list_editable = ['Comment', 'DateStart', 'DateEnd']
     ordering = ['DateAdded']
+    inlines = [
+        ActionInfoInline,
+    ]
 
 
 class CategoryAdmin(admin.ModelAdmin):
