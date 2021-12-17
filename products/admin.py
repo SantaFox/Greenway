@@ -13,9 +13,22 @@ class LanguageAdmin(admin.ModelAdmin):
     ordering = ['Code']
 
 
+# ************ InLine
 class ActionInfoInline(admin.TabularInline):
     model = ActionInfo
     ordering = ['Language__Code', ]
+
+
+class PriceInline(admin.TabularInline):
+    model = Price
+    exclude = ('GFT', )
+    ordering = ['DateAdded', ]
+
+
+class DiscountInline(admin.TabularInline):
+    model = Discount
+    # ordering = ['DateStart', ]
+# *******************************
 
 
 class ActionAdmin(admin.ModelAdmin):
@@ -23,6 +36,7 @@ class ActionAdmin(admin.ModelAdmin):
     list_editable = ['Comment', 'DateStart', 'DateEnd']
     ordering = ['DateAdded']
     inlines = [
+        DiscountInline,
         ActionInfoInline,
     ]
 
@@ -38,17 +52,6 @@ class CategoryInfoAdmin(admin.ModelAdmin):
     list_filter = ['Language', 'Category']
     list_editable = ['ShortDesc', 'Tagline']
     ordering = ['Category__Name', 'Language__Code']
-
-
-class PriceInline(admin.TabularInline):
-    model = Price
-    exclude = ('GFT', )
-    ordering = ['DateAdded', ]
-
-
-class DiscountInline(admin.TabularInline):
-    model = Discount
-    ordering = ['DateStart', ]
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -94,10 +97,10 @@ class PriceAdmin(admin.ModelAdmin):
 
 
 class DiscountAdmin(admin.ModelAdmin):
-    list_display = ('Product', 'DateStart', 'DateEnd', 'Price', 'Currency', 'PV', 'Comment')
+    list_display = ('Product', 'Action', 'Price', 'Currency', 'PV', 'Comment')
     list_filter = ['Currency', 'Product__Category', 'Product']
     list_editable = ['Price', 'Currency', 'PV', 'Comment']
-    ordering = ['Product__SKU', 'Currency__Code', 'DateStart', 'DateEnd']
+    ordering = ['Product__SKU', 'Currency__Code', 'Action__DateStart']
 
 
 class ImageAdmin(admin.ModelAdmin):
