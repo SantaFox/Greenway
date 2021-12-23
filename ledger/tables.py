@@ -58,6 +58,14 @@ class PrimaryKeyCheckboxColumn(CheckBoxColumn):
         return mark_safe(html)
 
 
+class InStockTable(Table):
+    product = Column()
+    cust_delivered = Column()
+    cust_not_delivered = Column()
+    supp_delivered = Column()
+    supp_not_delivered = Column()
+
+
 class AccountsTable(Table):
     # id = PrimaryKeyCheckboxColumn()
 

@@ -1,0 +1,19 @@
+{% extends "greensite/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load render_table from django_tables2 %}
+
+{% block title %}{% translate 'Current Stock' %}{% endblock %}
+
+{% block content %}
+<div class="table-wrapper">
+    <div class="table-title mb-2">
+        <div class="row text-white py-3" style="background: #435d7d;">
+            <div class="col-sm-6">
+                <h2 class="mb-0">{% translate 'Current Stock' %}</h2>
+            </div>
+        </div>
+    </div>
+    {% render_table table %}
+</div>
+{% endblock %}

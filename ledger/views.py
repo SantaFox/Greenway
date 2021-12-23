@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
-from django.db.models import OuterRef, Sum, Subquery, Value, Func, F, DecimalField
+from django.db.models import OuterRef, Sum, Subquery, Value, Func, F, DecimalField, Case, When, Q
 from django.db.models.functions import Coalesce, Cast
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, Http404, HttpResponseBadRequest
@@ -15,9 +15,10 @@ from django_tables2 import RequestConfig
 from crispy_forms.utils import render_crispy_form
 
 from greensite.decorators import prepare_languages
+from products.models import Product
 
-from .models import Account, Counterparty, Operation, CustomerOrder, CustomerOrderPosition, Payment
-from .tables import AccountsTable, CounterpartyTable, CustomerOrdersTable, CustomerOrderPositionsTable, CustomerOrderPaymentsTable
+from .models import Account, Counterparty, Operation, CustomerOrder, CustomerOrderPosition, SupplierOrderPosition, Payment
+from .tables import InStockTable, AccountsTable, CounterpartyTable, CustomerOrdersTable, CustomerOrderPositionsTable, CustomerOrderPaymentsTable
 from .forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerOrderPaymentForm
 from .filters import CustomerOrderFilter
 
@@ -26,6 +27,47 @@ from .filters import CustomerOrderFilter
 @prepare_languages
 def view_index(request):
     return TemplateResponse(request, 'ledger/index.html')
+
+
+@login_required
+@prepare_languages
+def view_stock(request):
+    test_date = datetime(2021, 1, 15)
+
+    dict_customer_orders = {pos.get('Product__SKU'): pos for pos in CustomerOrderPosition.objects \
+        .values('Product__SKU') \
+        .annotate(
+            delivered=Sum(Case(When(Operation__customerorder__DateDelivered__lte=test_date, then=F('Quantity')), default=0)),
+            not_delivered=Sum(Case(When(Q(Operation__customerorder__DateDelivered__isnull=True) | Q(Operation__customerorder__DateDelivered__gt=test_date), then=F('Quantity')), default=0)),
+        ).order_by('Product__SKU')}
+    dict_supplier_orders = {pos.get('Product__SKU'): pos for pos in SupplierOrderPosition.objects \
+        .values('Product__SKU') \
+        .annotate(
+            delivered=Sum(Case(When(Operation__supplierorder__DateDelivered__lte=test_date, then=F('Quantity')), default=0)),
+            not_delivered=Sum(Case(When(Q(Operation__supplierorder__DateDelivered__isnull=True) | Q(Operation__supplierorder__DateDelivered__gt=test_date), then=F('Quantity')), default=0)),
+        ).order_by('Product__SKU')}
+    query_products = Product.objects.all().order_by('SKU')
+
+    list_total_stock = []
+    for p in query_products:
+        list_total_stock.append(
+            dict(
+                product=p,
+                cust_delivered=dict_customer_orders.get(p.SKU, {}).get('delivered'),
+                cust_not_delivered=dict_customer_orders.get(p.SKU, {}).get('not_delivered'),
+                supp_delivered=dict_supplier_orders.get(p.SKU, {}).get('delivered'),
+                supp_not_delivered=dict_supplier_orders.get(p.SKU, {}).get('not_delivered'),
+            )
+        )
+    list_in_stock = [i for i in list_total_stock if
+                     i['cust_delivered'] is not None or i['cust_not_delivered'] is not None or
+                     i['supp_delivered'] is not None or i['supp_not_delivered'] is not None]
+
+    table = InStockTable(list_in_stock)
+
+    return TemplateResponse(request, 'ledger/table_stocks.html', {
+        'table': table,
+    })
 
 
 @login_required
