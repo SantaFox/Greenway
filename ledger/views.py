@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
-from django.db.models import OuterRef, Sum, Subquery, Value, Func, F, DecimalField, Case, When, Q
+from django.db.models import OuterRef, Sum, Subquery, Value, Func, F, DecimalField, Case, When, Q, FilteredRelation
 from django.db.models.functions import Coalesce, Cast
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, Http404, HttpResponseBadRequest
@@ -17,7 +17,7 @@ from crispy_forms.utils import render_crispy_form
 from greensite.decorators import prepare_languages
 from products.models import Product
 
-from .models import Account, Counterparty, Operation, CustomerOrder, CustomerOrderPosition, SupplierOrderPosition, Payment
+from .models import Account, Counterparty, Operation, CustomerOrder, CustomerOrderPosition, SupplierOrderPosition, ItemSetBreakdownPosition, Payment, DEBIT, CREDIT
 from .tables import InStockTable, AccountsTable, CounterpartyTable, CustomerOrdersTable, CustomerOrderPositionsTable, CustomerOrderPaymentsTable
 from .forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerOrderPaymentForm
 from .filters import CustomerOrderFilter
@@ -46,22 +46,36 @@ def view_stock(request):
             delivered=Sum(Case(When(Operation__supplierorder__DateDelivered__lte=test_date, then=F('Quantity')), default=0)),
             not_delivered=Sum(Case(When(Q(Operation__supplierorder__DateDelivered__isnull=True) | Q(Operation__supplierorder__DateDelivered__gt=test_date), then=F('Quantity')), default=0)),
         ).order_by('Product__SKU')}
-    query_products = Product.objects.all().order_by('SKU')
+    dict_breakdowns = {pos.get('Product__SKU'): pos for pos in ItemSetBreakdownPosition.objects \
+        .values('Product__SKU') \
+        .annotate(
+            received=Sum(Case(When(TransactionType=CREDIT, Operation__DateOperation__lte=test_date, then=F('Quantity')), default=0)),
+            removed=Sum(Case(When(TransactionType=DEBIT, Operation__DateOperation__lte=test_date, then=F('Quantity')), default=0)),
+        ).order_by('Product__SKU')}
+
+    query_products = Product.objects \
+        .annotate(pi=FilteredRelation('productinfo', condition=Q(productinfo__Language=request.language_instance))) \
+        .values('SKU', 'Category__Name', 'pi__Name').order_by('Category__Name', 'SKU') \
 
     list_total_stock = []
     for p in query_products:
         list_total_stock.append(
             dict(
-                product=p,
-                cust_delivered=dict_customer_orders.get(p.SKU, {}).get('delivered'),
-                cust_not_delivered=dict_customer_orders.get(p.SKU, {}).get('not_delivered'),
-                supp_delivered=dict_supplier_orders.get(p.SKU, {}).get('delivered'),
-                supp_not_delivered=dict_supplier_orders.get(p.SKU, {}).get('not_delivered'),
+                product_SKU=p['SKU'],
+                product_name=p['pi__Name'],
+                prodcut_category=p['Category__Name'],
+                cust_delivered=dict_customer_orders.get(p['SKU'], {}).get('delivered'),
+                cust_not_delivered=dict_customer_orders.get(p['SKU'], {}).get('not_delivered'),
+                supp_delivered=dict_supplier_orders.get(p['SKU'], {}).get('delivered'),
+                supp_not_delivered=dict_supplier_orders.get(p['SKU'], {}).get('not_delivered'),
+                break_received=dict_breakdowns.get(p['SKU'], {}).get('received'),
+                break_removed=dict_breakdowns.get(p['SKU'], {}).get('removed'),
             )
         )
     list_in_stock = [i for i in list_total_stock if
                      i['cust_delivered'] is not None or i['cust_not_delivered'] is not None or
-                     i['supp_delivered'] is not None or i['supp_not_delivered'] is not None]
+                     i['supp_delivered'] is not None or i['supp_not_delivered'] is not None or
+                     i['break_received'] is not None or i['break_removed'] is not None]
 
     table = InStockTable(list_in_stock)
 

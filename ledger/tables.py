@@ -59,11 +59,19 @@ class PrimaryKeyCheckboxColumn(CheckBoxColumn):
 
 
 class InStockTable(Table):
-    product = Column()
-    cust_delivered = Column()
-    cust_not_delivered = Column()
-    supp_delivered = Column()
-    supp_not_delivered = Column()
+    Product_SKU = Column(verbose_name=_('SKU'), accessor='product_SKU')
+    Product_Name = Column(verbose_name=('Name'), accessor='product_name')
+    # supp_delivered = Column(verbose_name=_('Received'))
+    # supp_not_delivered = Column(verbose_name=_('Receive pending'))
+    # cust_delivered = Column(verbose_name=_('Delivered'))
+    # cust_not_delivered = Column(verbose_name=_('Delivery pending'))
+    instock=Column(verbose_name=_('In Stock'), empty_values=())
+
+    def render_instock(self, value, record):
+        return (record.get('supp_delivered') or 0) - (record.get('cust_delivered') or 0) + (record.get('break_received') or 0) - (record.get('break_removed') or 0)
+
+    class Meta:
+        attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
 
 
 class AccountsTable(Table):
