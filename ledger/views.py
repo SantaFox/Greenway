@@ -37,20 +37,51 @@ def view_stock(request):
     dict_customer_orders = {pos.get('Product__SKU'): pos for pos in CustomerOrderPosition.objects \
         .values('Product__SKU') \
         .annotate(
-            delivered=Sum(Case(When(Operation__customerorder__DateDelivered__lte=test_date, then=F('Quantity')), default=0)),
-            not_delivered=Sum(Case(When(Q(Operation__customerorder__DateDelivered__isnull=True) | Q(Operation__customerorder__DateDelivered__gt=test_date), then=F('Quantity')), default=0)),
+            delivered=Sum(Case(
+                When(Operation__customerorder__DetailedDelivery=True,
+                     DateDelivered__lte=test_date,
+                     then=F('Quantity')),
+                When(Operation__customerorder__DetailedDelivery=False,
+                     Operation__customerorder__DateDelivered__lte=test_date,
+                     then=F('Quantity')),
+                default=0)),
+            not_delivered=Sum(Case(
+                When(Operation__customerorder__DetailedDelivery=True,
+                     DateDelivered__isnull=True,
+                     then=F('Quantity')),
+                When(Operation__customerorder__DetailedDelivery=True,
+                     DateDelivered__gt=test_date,
+                     then=F('Quantity')),
+                When(Operation__customerorder__DetailedDelivery=False,
+                     Operation__customerorder__DateDelivered__isnull=True,
+                     then=F('Quantity')),
+                When(Operation__customerorder__DetailedDelivery=False,
+                     Operation__customerorder__DateDelivered__gt=test_date,
+                     then=F('Quantity')),
+                default=0)),
         ).order_by('Product__SKU')}
+
     dict_supplier_orders = {pos.get('Product__SKU'): pos for pos in SupplierOrderPosition.objects \
         .values('Product__SKU') \
         .annotate(
-            delivered=Sum(Case(When(Operation__supplierorder__DateDelivered__lte=test_date, then=F('Quantity')), default=0)),
-            not_delivered=Sum(Case(When(Q(Operation__supplierorder__DateDelivered__isnull=True) | Q(Operation__supplierorder__DateDelivered__gt=test_date), then=F('Quantity')), default=0)),
+            delivered=Sum(Case(
+                When(Operation__supplierorder__DateDelivered__lte=test_date, then=F('Quantity')),
+                default=0)),
+            not_delivered=Sum(Case(
+                When(Q(Operation__supplierorder__DateDelivered__isnull=True), then=F('Quantity')),
+                When(Q(Operation__supplierorder__DateDelivered__gt=test_date), then=F('Quantity')),
+                default=0)),
         ).order_by('Product__SKU')}
+
     dict_breakdowns = {pos.get('Product__SKU'): pos for pos in ItemSetBreakdownPosition.objects \
         .values('Product__SKU') \
         .annotate(
-            received=Sum(Case(When(TransactionType=CREDIT, Operation__DateOperation__lte=test_date, then=F('Quantity')), default=0)),
-            removed=Sum(Case(When(TransactionType=DEBIT, Operation__DateOperation__lte=test_date, then=F('Quantity')), default=0)),
+            received=Sum(Case(
+                When(TransactionType=CREDIT, Operation__DateOperation__lte=test_date, then=F('Quantity')),
+                default=0)),
+            removed=Sum(Case(
+                When(TransactionType=DEBIT, Operation__DateOperation__lte=test_date, then=F('Quantity')),
+                default=0)),
         ).order_by('Product__SKU')}
 
     query_products = Product.objects \
@@ -63,7 +94,7 @@ def view_stock(request):
             dict(
                 product_SKU=p['SKU'],
                 product_name=p['pi__Name'],
-                prodcut_category=p['Category__Name'],
+                product_category=p['Category__Name'],
                 cust_delivered=dict_customer_orders.get(p['SKU'], {}).get('delivered'),
                 cust_not_delivered=dict_customer_orders.get(p['SKU'], {}).get('not_delivered'),
                 supp_delivered=dict_supplier_orders.get(p['SKU'], {}).get('delivered'),

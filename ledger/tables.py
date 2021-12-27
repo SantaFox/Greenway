@@ -59,6 +59,7 @@ class PrimaryKeyCheckboxColumn(CheckBoxColumn):
 
 
 class InStockTable(Table):
+    Category_Name = Column(verbose_name=_('Category'), accessor='product_category')
     Product_SKU = Column(verbose_name=_('SKU'), accessor='product_SKU')
     Product_Name = Column(verbose_name=('Name'), accessor='product_name')
     # supp_delivered = Column(verbose_name=_('Received'))
