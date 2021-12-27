@@ -112,7 +112,7 @@ def view_stock(request):
     # Prepare sum values and filter positions not in stock if requested
     for p in list_in_stock:
         p["in_stock"] = p["supp_delivered"] - p["cust_delivered"] + p['break_received'] - p['break_removed']
-    if request.GET["collapse"] == "true":
+    if request.GET.get("collapse", "false") == "true":
         list_in_stock = [i for i in list_in_stock if i["in_stock"] != 0]
 
     table = InStockTable(list_in_stock)
