@@ -95,20 +95,29 @@ def view_stock(request):
                 product_SKU=p['SKU'],
                 product_name=p['pi__Name'],
                 product_category=p['Category__Name'],
-                cust_delivered=dict_customer_orders.get(p['SKU'], {}).get('delivered'),
-                cust_not_delivered=dict_customer_orders.get(p['SKU'], {}).get('not_delivered'),
-                supp_delivered=dict_supplier_orders.get(p['SKU'], {}).get('delivered'),
-                supp_not_delivered=dict_supplier_orders.get(p['SKU'], {}).get('not_delivered'),
-                break_received=dict_breakdowns.get(p['SKU'], {}).get('received'),
-                break_removed=dict_breakdowns.get(p['SKU'], {}).get('removed'),
+                cust_delivered=dict_customer_orders.get(p['SKU'], {}).get('delivered') or 0,
+                cust_not_delivered=dict_customer_orders.get(p['SKU'], {}).get('not_delivered') or 0,
+                supp_delivered=dict_supplier_orders.get(p['SKU'], {}).get('delivered') or 0,
+                supp_not_delivered=dict_supplier_orders.get(p['SKU'], {}).get('not_delivered') or 0,
+                break_received=dict_breakdowns.get(p['SKU'], {}).get('received') or 0,
+                break_removed=dict_breakdowns.get(p['SKU'], {}).get('removed') or 0,
             )
         )
+    # Remove rows for products that were never processed
     list_in_stock = [i for i in list_total_stock if
-                     i['cust_delivered'] is not None or i['cust_not_delivered'] is not None or
-                     i['supp_delivered'] is not None or i['supp_not_delivered'] is not None or
-                     i['break_received'] is not None or i['break_removed'] is not None]
+                     i['cust_delivered'] != 0 or i['cust_not_delivered'] != 0 or
+                     i['supp_delivered'] != 0 or i['supp_not_delivered'] != 0 or
+                     i['break_received'] != 0 or i['break_removed'] != 0]
+
+    # Prepare sum values and filter positions not in stock if requested
+    for p in list_in_stock:
+        p["in_stock"] = p["supp_delivered"] - p["cust_delivered"] + p['break_received'] - p['break_removed']
+    if request.GET["collapse"] == "true":
+        list_in_stock = [i for i in list_in_stock if i["in_stock"] != 0]
 
     table = InStockTable(list_in_stock)
+
+    RequestConfig(request, paginate=False).configure(table)
 
     return TemplateResponse(request, 'ledger/table_stocks.html', {
         'table': table,

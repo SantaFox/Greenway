@@ -2,18 +2,89 @@
 {% load i18n %}
 {% load static %}
 {% load render_table from django_tables2 %}
+{% load querystring from django_tables2 %}
 
 {% block title %}{% translate 'Current Stock' %}{% endblock %}
+
+{% comment %} http://bestjquery.com/tutorial/table-style/demo5/# {% endcomment %}
+
+{% block css %}
+<style>
+.table-title {
+    background: linear-gradient(to right, #2980b9, #2c3e50);
+    padding: 0px 20px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 0 0 5px rgba(0,0,0,0.05),0 0 0 10px rgba(0,0,0,0.05);
+}
+.table-filter .btn {
+    color: rgba(255,255,255,0.5);
+    background: transparent;
+    font-size: 16px;
+    text-transform: capitalize;
+    border: 2px solid #fff;
+    border-radius: 50px;
+    transition: all 0.3s ease 0s;
+}
+.table-filter .btn:hover {
+    color: #fff;
+    text-shadow: 3px 3px rgba(255,255,255,0.2);
+}
+.table-filter .form-control {
+    color: #fff;
+    background-color: transparent;
+    width: 45%;
+    height: 40px;
+    border: 2px solid #fff;
+    border-radius: 20px;
+    display: inline-block;
+    transition: all 0.3s ease 0s;
+}
+.table-filter .form-control:focus {
+    background-color: rgba(255,255,255,0.2);
+    box-shadow: none;
+    outline: none;
+}
+.table-filter .form-control::placeholder {
+    color: rgba(255,255,255,0.5);
+    font-size: 15px;
+    font-weight: 500;
+}
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="table-wrapper">
     <div class="table-title mb-2">
-        <div class="row text-white py-3" style="background: #435d7d;">
+        <div class="row text-white py-3">
             <div class="col-sm-6">
                 <h2 class="mb-0">{% translate 'Current Stock' %}</h2>
+            </div>
+            <div class="col-sm-6 text-right">
+                <div class="table-filter">
+                    <input type="text" class="form-control" placeholder="{% translate 'Search' %}">
+                    {% if request.GET.collapse == "true" %}
+                    <a role="button" href="{% querystring 'collapse'='false' %}" class="btn btn-default" title="{% translate 'Show empty rows' %}"><i class="bi bi-arrows-expand"></i></a>
+                    {% else %}
+                    <a role="button" href="{% querystring 'collapse'='true' %}" class="btn btn-default" title="{% translate 'Remove empty rows' %}"><i class="bi bi-arrows-collapse"></i></a>
+                    {% endif %}
+                    <button class="btn btn-default" title="{% translate 'Export to PDF' %}"><i class="bi bi-file-earmark-pdf"></i></button>
+                    <button class="btn btn-default" title="{% translate 'Export to Excel' %}"><i class="bi bi-file-earmark-excel"></i></button>
+                </div>
             </div>
         </div>
     </div>
     {% render_table table %}
 </div>
 {% endblock %}
+
+{% comment %}
+$(document).ready(function(){
+  $("#demo").on("hide.bs.collapse", function(){
+    $(".btn").html('<span class="glyphicon glyphicon-collapse-down"></span> Open');
+  });
+  $("#demo").on("show.bs.collapse", function(){
+    $(".btn").html('<span class="glyphicon glyphicon-collapse-up"></span> Close');
+  });
+});
+{% endcomment %}
