@@ -48,7 +48,7 @@ class Action(models.Model):
     DateAdded = models.DateField(blank=False, null=False, verbose_name=_('Date Added'),
                                  help_text=_('Date when this action is published'))
     DateStart = models.DateTimeField(blank=False, null=False)
-    DateEnd = models.DateTimeField(blank=False, null=False)
+    DateEnd = models.DateTimeField(blank=True, null=True)
     Comment = models.CharField(max_length=100, blank=True)  # may be replaced later with real slug
     OriginalURL = models.CharField(max_length=100, blank=True)
 
@@ -81,7 +81,7 @@ class ActionInfo(models.Model):
     TimestampModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.Category} / {self.Language} / {self.Tagline}'
+        return f'{self.Action} / {self.Language} / {self.Header}'
 
     class Meta:
         verbose_name_plural = "Actions Info"
