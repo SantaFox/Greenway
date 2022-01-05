@@ -486,3 +486,11 @@ def customer_order_payment_action(request):
             raise Http404
     else:
         raise Http404
+
+# Идеи для модуля проверки целостности системы:
+# 1. В SupplierOrderPosition, цена/GFT/PV не должны отличаться от актуальных на дату заказа
+# 2. На уровне SQL, структура Operation/OperationPosition и их дочек не нарушено (нет битых пар)
+# 3. В SupplierOrder, сумма позиций по цене, GFT, PV не сильно (в пределах процента) отличается от записанных в заказ
+#
+#
+#
