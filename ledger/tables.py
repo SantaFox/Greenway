@@ -58,6 +58,21 @@ class PrimaryKeyCheckboxColumn(CheckBoxColumn):
         return mark_safe(html)
 
 
+class InStockTable(Table):
+    Category_Name = Column(verbose_name=_('Category'), accessor='product_category')
+    Product_SKU = Column(verbose_name=_('SKU'), accessor='product_SKU')
+    Product_Name = Column(verbose_name=_('Name'), accessor='product_name')
+    In_Stock = Column(verbose_name=_('In Stock'), accessor='in_stock')
+    Receivable = Column(verbose_name=_('Receivable'), accessor='supp_not_delivered')
+    Deliverable = Column(verbose_name=_('Deliverable'), accessor='cust_not_delivered')
+
+    class Meta:
+        attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
+        row_attrs = {
+            "class": lambda record: 'text-black-50' if record.get('in_stock') == 0 else ''
+        }
+
+
 class AccountsTable(Table):
     # id = PrimaryKeyCheckboxColumn()
 
