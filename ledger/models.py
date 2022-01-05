@@ -19,6 +19,7 @@ POSTAL_CHOICES = (
     ('AKIS', 'Akis Express'),
     ('CZP', 'Czech Post'),
     ('POST', 'Ordinary Post'),
+    ('GLS', 'GLS Post Service')
 )
 
 
@@ -123,23 +124,43 @@ class Operation(models.Model):
 
 
 class SupplierOrder(ModelIsDeletableMixin, Operation):
-    Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True)
+    Counterparty = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True,
+                                     verbose_name=_('Supplier Name'),
+                                     help_text=_('Registered Supplier'))
 
-    GreenwayOrderNum = models.CharField(max_length=10, blank=True)
+    GreenwayOrderNum = models.CharField(max_length=10, blank=True, verbose_name=_('Supplier Order Num'),
+                                        help_text=_('Number of this Order in the Supplier''s system'))
 
     # Delivery-related block
-    DatePlaced = models.DateField(blank=True, null=True)  # Date placed with supplier /
-    DateDispatched = models.DateField(blank=True, null=True)  # Date dispatched by supplier / to customer
-    DateDelivered = models.DateField(blank=True, null=True)  # Date received from supplier / by customer
-    TrackingNumber = models.CharField(max_length=50, blank=True)
-    CourierService = models.CharField(choices=POSTAL_CHOICES, max_length=10, blank=True, null=True)
+    DatePlaced = models.DateField(blank=True, null=True, verbose_name=_('Placement Date'),
+                                  help_text=_('Date when this Order was placed to the Supplier system'))
+    DateDispatched = models.DateField(blank=True, null=True, verbose_name=_('Dispatch Date'),
+                                      help_text=_('Date when this Order was dispatched from the Supplier'))
+    DateDelivered = models.DateField(blank=True, null=True, verbose_name=_('Delivery Date'),
+                                     help_text=_('Date when this Order was delivered from the Supplier to Storage'))
+    TrackingNumber = models.CharField(max_length=50, blank=True, verbose_name=_('Tracking Number'),
+                                      help_text=_('Tracking Number provided by used Courier Service'))
+    CourierService = models.CharField(choices=POSTAL_CHOICES, max_length=10, blank=True, null=True,
+                                      verbose_name=_('Courier Service Name'),
+                                      help_text=_('Select one from provided Courier Services'))
+    DeliveryPrice = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
+                                        verbose_name=_('Delivery price'),
+                                        help_text=_('Price of delivery in the same currency as Amount, if separately \
+                                        provided by the Supplier'))
 
-    Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True)
-    GFT = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name=_('Amount'),
+                                 help_text=_('Amount to be paid to the Supplier'))
+    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_('Currency'),
+                                 help_text=_('Currency of Supplier payment'))
+    GFT = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name=_('GFT Amount'),
+                              help_text=_('Gift value calculated in GFT (obsolete since 07.07.2021)'))
+    Gift = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name=_('Gift Amount'),
+                               help_text=_('Gift value calculated in payment Currency (actual since 07.07.2021)'))
+    PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name=_('PV'),
+                             help_text=_('Volume (PV) obtained from this Order'))
 
-    Memo = models.TextField(blank=True)
+    Memo = models.TextField(blank=True, verbose_name=_('Memo'),
+                            help_text=_('Memo related to this Supplier Order'))
 
     def __str__(self):
         return f'{self.User} / {self.DateOperation} / {self.Counterparty}'
@@ -150,17 +171,17 @@ class SupplierOrder(ModelIsDeletableMixin, Operation):
 
 class CustomerOrder(ModelIsDeletableMixin, Operation):
     Customer = models.ForeignKey(Counterparty, on_delete=models.PROTECT, blank=True, null=True,
-                                     verbose_name=_('Customer Name'),
-                                     help_text=_('Registered Customer'))
+                                 verbose_name=_('Customer Name'),
+                                 help_text=_('Registered Customer'))
 
     DateDispatched = models.DateField(blank=True, null=True, verbose_name=_('Dispatch Date'),
                                       help_text=_('Date when this Order was dispatched to the Customer. Until then,\
-                                                   the Order is prepared but held in Storage.'))
+                                                   the Order is prepared but held in Storage'))
     DateDelivered = models.DateField(blank=True, null=True, verbose_name=_('Delivery Date'),
                                      help_text=_('Date when this Order was delivered to the Customer.\
-                                                  In case of Detailed Delivery, the date of last delivery is used.'))
+                                                  In case of Detailed Delivery, the date of last delivery is used'))
     TrackingNumber = models.CharField(max_length=50, blank=True, verbose_name=_('Tracking Number'),
-                                      help_text=_('Tracking Number provided by used Courier Service.'))
+                                      help_text=_('Tracking Number provided by used Courier Service'))
     CourierService = models.CharField(choices=POSTAL_CHOICES, max_length=10, blank=True, null=True,
                                       verbose_name=_('Courier Service Name'),
                                       help_text=_('Select one from provided Courier Services'))
@@ -169,9 +190,9 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
                                            help_text=_('Delivery of each Position is managed separately'))
 
     Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name=_('Amount'),
-                                 help_text=_('Amount to be paid by Customer.'))
+                                 help_text=_('Amount to be paid by Customer'))
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_('Currency'),
-                                 help_text=_('Currency of Customer payment.'))
+                                 help_text=_('Currency of Customer payment'))
 
     Memo = models.TextField(blank=True, verbose_name=_('Memo'),
                             help_text=_('Memo related to this Customer Order'))
@@ -249,9 +270,14 @@ class SupplierOrderPosition(OperationPosition):
     # or GFT
     GFT = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     # or Free because of temporary action
-    FreeOnAction = models.BooleanField(default=False, blank=False)
+    FreeOnAction = models.BooleanField(default=False, blank=False, verbose_name=_('Free Item'),
+                                       help_text=_('This Position is free because of ongoing Action'))
+    # or Price/Currency paid from Gift Account
+    GiftPosition = models.BooleanField(default=False, blank=False, verbose_name=_('Gift'),
+                                       help_text=_('This Position is purchased from accrued Gift funds'))
 
-    PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name=_('PV'),
+                             help_text=_('Volume (PV) obtained per one Product'))
 
     def __str__(self):
         return f'{self.Operation} / {self.Product} / {self.Quantity} / {self.Price} / {self.Currency}'
