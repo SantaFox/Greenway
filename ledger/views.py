@@ -38,25 +38,37 @@ def view_stock(request):
         .values('Product__SKU') \
         .annotate(
             delivered=Sum(Case(
-                When(Operation__customerorder__DetailedDelivery=True,
-                     DateDelivered__lte=test_date,
+                When(Q(Operation__customerorder__DetailedDelivery=True) &
+                     Q(DateDelivered__lte=test_date),
+                     Operation__DateOperation__lte=test_date,
                      then=F('Quantity')),
-                When(Operation__customerorder__DetailedDelivery=False,
-                     Operation__customerorder__DateDelivered__lte=test_date,
+                When(Q(Operation__customerorder__DetailedDelivery=False) &
+                     Q(Operation__customerorder__DateDelivered__lte=test_date),
+                     Operation__DateOperation__lte=test_date,
                      then=F('Quantity')),
                 default=0)),
             not_delivered=Sum(Case(
-                When(Operation__customerorder__DetailedDelivery=True,
-                     DateDelivered__isnull=True,
+                When(Q(Operation__customerorder__DetailedDelivery=True) &
+                     (Q(DateDelivered__isnull=True) | Q(DateDelivered__gt=test_date)),
+                     Operation__DateOperation__lte=test_date,
                      then=F('Quantity')),
-                When(Operation__customerorder__DetailedDelivery=True,
-                     DateDelivered__gt=test_date,
+                When(Q(Operation__customerorder__DetailedDelivery=False) &
+                     (Q(Operation__customerorder__DateDelivered__isnull=True) |
+                      Q(Operation__customerorder__DateDelivered__gt=test_date)),
+                     Operation__DateOperation__lte=test_date,
                      then=F('Quantity')),
-                When(Operation__customerorder__DetailedDelivery=False,
-                     Operation__customerorder__DateDelivered__isnull=True,
+                default=0)),
+            not_delivered_4=Sum(Case(
+                When(Q(Operation__customerorder__DetailedDelivery=True) &
+                     (Q(DateDelivered__isnull=True) | Q(DateDelivered__gt=test_date)),
+                     Operation__DateOperation__lte=test_date,
+                     Status=4,
                      then=F('Quantity')),
-                When(Operation__customerorder__DetailedDelivery=False,
-                     Operation__customerorder__DateDelivered__gt=test_date,
+                When(Q(Operation__customerorder__DetailedDelivery=False) &
+                     (Q(Operation__customerorder__DateDelivered__isnull=True) |
+                      Q(Operation__customerorder__DateDelivered__gt=test_date)),
+                     Operation__DateOperation__lte=test_date,
+                     Status=4,
                      then=F('Quantity')),
                 default=0)),
         ).order_by('Product__SKU')}
@@ -65,11 +77,15 @@ def view_stock(request):
         .values('Product__SKU') \
         .annotate(
             delivered=Sum(Case(
-                When(Operation__supplierorder__DateDelivered__lte=test_date, then=F('Quantity')),
+                When(Q(Operation__supplierorder__DateDelivered__lte=test_date),
+                     Operation__DateOperation__lte=test_date,
+                     then=F('Quantity')),
                 default=0)),
             not_delivered=Sum(Case(
-                When(Q(Operation__supplierorder__DateDelivered__isnull=True), then=F('Quantity')),
-                When(Q(Operation__supplierorder__DateDelivered__gt=test_date), then=F('Quantity')),
+                When(Q(Operation__supplierorder__DateDelivered__isnull=True) |
+                     Q(Operation__supplierorder__DateDelivered__gt=test_date),
+                     Operation__DateOperation__lte=test_date,
+                     then=F('Quantity')),
                 default=0)),
         ).order_by('Product__SKU')}
 
@@ -97,6 +113,7 @@ def view_stock(request):
                 product_category=p['Category__Name'],
                 cust_delivered=dict_customer_orders.get(p['SKU'], {}).get('delivered') or 0,
                 cust_not_delivered=dict_customer_orders.get(p['SKU'], {}).get('not_delivered') or 0,
+                cust_not_delivered_4=dict_customer_orders.get(p['SKU'], {}).get('not_delivered_4') or 0,
                 supp_delivered=dict_supplier_orders.get(p['SKU'], {}).get('delivered') or 0,
                 supp_not_delivered=dict_supplier_orders.get(p['SKU'], {}).get('not_delivered') or 0,
                 break_received=dict_breakdowns.get(p['SKU'], {}).get('received') or 0,
@@ -113,7 +130,8 @@ def view_stock(request):
     for p in list_in_stock:
         p["in_stock"] = p["supp_delivered"] - p["cust_delivered"] + p['break_received'] - p['break_removed']
     if request.GET.get("collapse", "false") == "true":
-        list_in_stock = [i for i in list_in_stock if i["in_stock"] != 0]
+        list_in_stock = [i for i in list_in_stock
+                         if (i["in_stock"] != 0) | (i["supp_not_delivered"] != 0) | (i["cust_not_delivered"] != 0)]
 
     table = InStockTable(list_in_stock)
 
