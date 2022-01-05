@@ -159,7 +159,8 @@
         </p>
         {% if user.is_authenticated and user.is_staff %}
         <div id="price-history-table" class="d-none">
-            <table class="table table-bordered table-sm">
+            <table class="table table-bordered table-sm caption-top">
+                <caption>{% translate "Price Changes" %}</caption>
                 <thead>
                 <tr class="text-center">
                     <th>{% translate "Date" %}</th>
@@ -171,10 +172,33 @@
                 <tbody>
                 {% for p in prices %}
                 <tr>
-                    <td>{{ p.DateAdded|date:"d.m.y" }}</td>
+                    <td>{{ p.DateAdded|date:"d.m.Y" }}</td>
                     <td class="text-right">{{ p.Price|floatformat:2 }}&nbsp;{{ p.Currency.Code }}</td>
                     <td class="text-right">{{ p.PV|floatformat:1 }}&nbsp;PV</td>
                     <td>{{ p.Comment }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <table class="table table-bordered table-sm caption-top">
+                <caption>{% translate "Discount Actions" %}</caption>
+                <thead>
+                <tr class="text-center">
+                    <th>{% translate "Start Date" %}</th>
+                    <th>{% translate "End Date" %}</th>
+                    <th>{% translate "Price" %}</th>
+                    <th>{% translate "Volume" %}</th>
+                    <th>{% translate "Comment" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for d in discounts %}
+                <tr>
+                    <td>{{ d.Action.DateStart|date:"d.m.Y" }}</td>
+                    <td>{{ d.Action.DateEnd|date:"d.m.Y" }}</td>
+                    <td class="text-right">{{ d.Price|floatformat:2 }}&nbsp;{{ d.Currency.Code }}</td>
+                    <td class="text-right">{{ d.PV|floatformat:1 }}&nbsp;PV</td>
+                    <td>{{ d.Comment }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>

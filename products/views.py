@@ -13,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 
 from greensite.decorators import prepare_languages
 
-from .models import Language, Category, Product, ProductInfo, Tab, Price, Image, Tag, TagInfo
+from .models import Language, Category, Product, ProductInfo, Tab, Price, Discount, Image, Tag, TagInfo
 from .forms import ProductForm, ProductInfoForm, TabForm, TagForm, TabsFormset
 
 
@@ -137,8 +137,8 @@ def view_product(request, sku=None):
         # Add this new tab to the existing list of tabs
         tabs_list.append(tab_product_set)
 
-    prices = Price.objects.filter(Product=product, DateAdded__lte=datetime.now()).order_by('-DateAdded')
-    # price = prices.first()  # First or None
+    prices = Price.objects.filter(Product=product, DateAdded__lte=datetime.now()).order_by('DateAdded')
+    discounts = Discount.objects.filter(Product=product, Action__DateStart__lte=timezone.now()).order_by('Action__DateStart')
     price = product.get_price_on_date(timezone.now())
 
     try:
@@ -170,6 +170,7 @@ def view_product(request, sku=None):
         'tabs': tabs_list,
         'price': price,
         'prices': prices,
+        'discounts': discounts,
         'image_primary': image_primary,
         'tags': tags_final_set,
     })

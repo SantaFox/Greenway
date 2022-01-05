@@ -61,13 +61,12 @@ class Action(models.Model):
     class Meta:
         verbose_name_plural = "Actions"
 
-        # TODO: Should be "DateEnd is NULL or DateEnd is larger than DateStart
-        # constraints = [
-        #     models.CheckConstraint(
-        #         check=Q(DateEnd__gte=F("DateStart")),
-        #         name='check_Action_Dates_are_in_correct_order'
-        #     )
-        # ]
+        constraints = [
+            models.CheckConstraint(
+                check=Q(DateEnd__gte=F("DateStart")) | Q(DateEnd__isnull=True),
+                name='check_Action_DateEnd_is_greater_or_null'
+            )
+        ]
 
 
 class ActionInfo(models.Model):

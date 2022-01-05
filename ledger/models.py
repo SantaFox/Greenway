@@ -226,6 +226,9 @@ class ItemSetBreakdown(ModelIsDeletableMixin, Operation):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT, blank=True, null=True)
     Quantity = models.PositiveIntegerField(blank=True, null=True)
 
+    Memo = models.TextField(blank=True, verbose_name=_('Memo'),
+                            help_text=_('Memo related to this ItemSet Breakdown'))
+
     def __str__(self):
         return f'{self.User} / {self.DateOperation} / {self.Product} / {self.Quantity}'
 
@@ -302,6 +305,7 @@ class CustomerOrderPosition(OperationPosition):
         (5, _('Not in stock / no delivery control')),  # Missing item is... ?
         (6, _('Delivered to customer')),
     ], blank=True, null=True)
+
     DateDelivered = models.DateField(blank=True, null=True)  # Date received from supplier / by customer
 
     def __str__(self):
@@ -312,6 +316,7 @@ class CustomerOrderPosition(OperationPosition):
 
 
 class ItemSetBreakdownPosition(OperationPosition):
+    TransactionType = models.CharField(choices=TYPE_CHOICES, max_length=1, blank=False)
 
     def __str__(self):
         return f'{self.Operation} / {self.Product}'
