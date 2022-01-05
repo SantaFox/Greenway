@@ -18,9 +18,9 @@ class SupplierOrderPositionInline(admin.TabularInline):
 
 
 class SupplierOrderAdmin(admin.ModelAdmin):
-    list_display = ('User', 'DateOperation', 'Counterparty', 'GreenwayOrderNum', 'Amount', 'Currency', 'GFT', 'PV')
+    list_display = ('User', 'DateOperation', 'Counterparty', 'GreenwayOrderNum', 'Amount', 'Currency', 'GFT', 'Gift', 'PV')
     list_filter = ['User', 'Counterparty']
-    list_editable = ['GreenwayOrderNum', 'Amount', 'Currency', 'GFT', 'PV']
+    list_editable = ['GreenwayOrderNum', 'Amount', 'Currency', 'GFT', 'Gift', 'PV']
     ordering = ['User', 'DateOperation', 'Counterparty__Name']
     inlines = [
         SupplierOrderPositionInline,
@@ -80,9 +80,9 @@ class PaymentAdmin(admin.ModelAdmin):
         if db_field.name == "ParentOperation":
             qry_CustomerOrders = CustomerOrder.objects.all()
             qry_SupplierOrders = SupplierOrder.objects.all()
-            kwargs["queryset"] = Operation.objects\
-                .filter(Q(id__in=qry_CustomerOrders) | Q(id__in=qry_SupplierOrders))\
-                .select_subclasses(CustomerOrder, SupplierOrder)\
+            kwargs["queryset"] = Operation.objects \
+                .filter(Q(id__in=qry_CustomerOrders) | Q(id__in=qry_SupplierOrders)) \
+                .select_subclasses(CustomerOrder, SupplierOrder) \
                 .order_by('DateOperation')
         return super(PaymentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
