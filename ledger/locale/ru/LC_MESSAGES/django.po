@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-17 11:54+0300\n"
+"POT-Creation-Date: 2022-01-07 14:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: .\filters.py:12 .\models.py:153
+#: .\filters.py:12 .\models.py:174
 msgid "Customer Name"
 msgstr "Имя покупателя"
 
@@ -36,278 +36,440 @@ msgstr ""
 msgid "Credit"
 msgstr ""
 
-#: .\models.py:49
+#: .\models.py:50
 msgid "Account Name"
 msgstr "Наименование счёта"
 
-#: .\models.py:50
+#: .\models.py:51
 msgid "Account name that is easy to use and remember."
 msgstr "Наименование счёта, простое и удобное для использования"
 
-#: .\models.py:61
+#: .\models.py:62
 msgid "Accounts"
 msgstr "Счета"
 
-#: .\models.py:69
+#: .\models.py:70
 msgid "Counterparty Name"
 msgstr "Имя контрагента"
 
-#: .\models.py:70 .\models.py:73 .\models.py:75 .\models.py:79 .\models.py:87
+#: .\models.py:71 .\models.py:74 .\models.py:76 .\models.py:80 .\models.py:88
 msgid "Name of the Counterparty, preferably \"Surname Name\""
 msgstr ""
 "Имя или наименование контрагента, предпочтительно в формате \"Фамилия Имя\""
 
-#: .\models.py:72
+#: .\models.py:73
 msgid "Contact Phone"
 msgstr "Контактный телефон"
 
-#: .\models.py:74
+#: .\models.py:75
 msgid "Email address"
 msgstr "Адрес эл. почты"
 
-#: .\models.py:76
+#: .\models.py:77
 msgid "Telegram"
 msgstr "Телеграм"
 
-#: .\models.py:77
+#: .\models.py:78
 msgid "Telegram profile name"
 msgstr "Имя профиля в Telegram"
 
-#: .\models.py:78
+#: .\models.py:79
 msgid "Instagram"
 msgstr "Инстаграм"
 
-#: .\models.py:80
+#: .\models.py:81
 msgid "Facebook"
 msgstr "Facebook"
 
-#: .\models.py:81
+#: .\models.py:82
 msgid "Name used in Facebook and Facebook Messenger"
 msgstr "Имя профиля в Facebook и Facebook Messenger"
 
-#: .\models.py:82
+#: .\models.py:83
 msgid "Address"
 msgstr "Адрес"
 
-#: .\models.py:83
+#: .\models.py:84
 msgid "Address (without city)"
 msgstr "Адрес (без указания города)"
 
-#: .\models.py:84
+#: .\models.py:85
 msgid "City Name"
 msgstr "Город"
 
-#: .\models.py:85
+#: .\models.py:86
 msgid "City name only"
 msgstr "Город (без указания адреса)"
 
-#: .\models.py:86 .\models.py:176
+#: .\models.py:87 .\models.py:162 .\models.py:197 .\models.py:229
 msgid "Memo"
 msgstr "Заметки"
 
-#: .\models.py:99
+#: .\models.py:100
 msgid "Counterparties"
 msgstr "Контрагенты"
 
-#: .\models.py:112
+#: .\models.py:113
 msgid "Operation Date"
 msgstr "Дата операции"
 
-#: .\models.py:113
+#: .\models.py:114
 msgid "Date when this Operation was executed"
 msgstr "Дата совершения операции"
 
-#: .\models.py:148
-msgid "Supplier Orders"
+#: .\models.py:128
+#, fuzzy
+#| msgid "Supplier Orders"
+msgid "Supplier Name"
 msgstr "Заказы поставщикам"
 
-#: .\models.py:154
-msgid "Registered Customer"
+#: .\models.py:129
+#, fuzzy
+#| msgid "Registered Customer"
+msgid "Registered Supplier"
 msgstr "Зарегистрированный покупатель"
 
-#: .\models.py:156
+#: .\models.py:131
+#, fuzzy
+#| msgid "Supplier Orders"
+msgid "Supplier Order Num"
+msgstr "Заказы поставщикам"
+
+#: .\models.py:132
+msgid "Number of this Order in the Suppliers system"
+msgstr "Номер данного Заказа в системе Поставщика"
+
+#: .\models.py:135
+msgid "Placement Date"
+msgstr "Дата размещения"
+
+#: .\models.py:136
+msgid "Date when this Order was placed to the Supplier system"
+msgstr "Дата передачи данного Заказа в систему Поставщика"
+
+#: .\models.py:137 .\models.py:177
 msgid "Dispatch Date"
 msgstr "Дата отправки"
 
+#: .\models.py:138
+#, fuzzy
+#| msgid "Date when this Operation was executed"
+msgid "Date when this Order was dispatched from the Supplier"
+msgstr "Дата отправки данного Заказа Поставщиком"
+
+#: .\models.py:139 .\models.py:180
+msgid "Delivery Date"
+msgstr "Дата доставки"
+
+#: .\models.py:140
+msgid "Date when this Order was delivered from the Supplier to Storage"
+msgstr "Дата получения этого Заказа от Поставщика на Склад"
+
+#: .\models.py:141 .\models.py:183
+msgid "Tracking Number"
+msgstr "Номер отслеживания"
+
+#: .\models.py:142 .\models.py:184
+#, fuzzy
+#| msgid "Tracking Number provided by used Courier Service."
+msgid "Tracking Number provided by used Courier Service"
+msgstr "Номер почтового отслеживания, предоставленный курьерской службой"
+
+#: .\models.py:144 .\models.py:186
+msgid "Courier Service Name"
+msgstr "Наименование курьерской службы"
+
+#: .\models.py:145 .\models.py:187
+msgid "Select one from provided Courier Services"
+msgstr "Выберите использованную почтовую службу"
+
+#: .\models.py:147
+#, fuzzy
+#| msgid "Delivery Date"
+msgid "Delivery price"
+msgstr "Дата доставки"
+
+#: .\models.py:148
+msgid ""
+"Price of delivery in the same currency as Amount, if "
+"separately                                         provided by the Supplier"
+msgstr "Стоимость доставки в валюте оплаты Заказа, если"
+"была отдельно указана Поставщиком"
+
+#: .\models.py:151 .\models.py:192
+msgid "Amount"
+msgstr "Сумма"
+
+#: .\models.py:152
+#, fuzzy
+msgid "Amount to be paid to the Supplier"
+msgstr "Сумма для оплаты Поставщику"
+
+#: .\models.py:153 .\models.py:194 .\models.py:268 .\models.py:292
+msgid "Currency"
+msgstr "Валюта"
+
+#: .\models.py:154
+#, fuzzy
+#| msgid "Currency of Customer payment."
+msgid "Currency of Supplier payment"
+msgstr "Валюта платежа покупателя"
+
+#: .\models.py:155
+#, fuzzy
+msgid "GFT Amount"
+msgstr "Сумма"
+
+#: .\models.py:156
+msgid "Gift value calculated in GFT (obsolete since 07.07.2021)"
+msgstr "Подарочная стоимость, выраженная в GFT (отменена 07.07.2021)"
+
 #: .\models.py:157
+#, fuzzy
+msgid "Gift Amount"
+msgstr "Подарочная сумма"
+
+#: .\models.py:158
+msgid "Gift value calculated in payment Currency (actual since 07.07.2021)"
+msgstr "Подарочная стоимость, выраженная в валюте оплаты (введена 07.07.2021)"
+
+#: .\models.py:159 .\models.py:279
+msgid "PV"
+msgstr "PV"
+
+#: .\models.py:160
+msgid "Volume (PV) obtained from this Order"
+msgstr "Объем (PV), полученный от этого Заказа"
+
+#: .\models.py:163
+#, fuzzy
+#| msgid "Memo related to this Customer Order"
+msgid "Memo related to this Supplier Order"
+msgstr "Заметки к этому заказу покупателя"
+
+#: .\models.py:169
+msgid "Supplier Orders"
+msgstr "Заказы поставщикам"
+
+#: .\models.py:175
+msgid "Registered Customer"
+msgstr "Зарегистрированный покупатель"
+
+#: .\models.py:178
+#, fuzzy
+#| msgid ""
+#| "Date when this Order was dispatched to the Customer. Until "
+#| "then,                                                   the Order is "
+#| "prepared but held in Storage."
 msgid ""
 "Date when this Order was dispatched to the Customer. Until "
 "then,                                                   the Order is "
-"prepared but held in Storage."
+"prepared but held in Storage"
 msgstr ""
 "Дата, в которую заказ был отправлен Покупателю. До этой даты, подготовленный "
 "заказ хранится на складе."
 
-#: .\models.py:159
-msgid "Delivery Date"
-msgstr "Дата доставки"
-
-#: .\models.py:160
+#: .\models.py:181
+#, fuzzy
+#| msgid ""
+#| "Date when this Order was delivered to the "
+#| "Customer.                                                  In case of "
+#| "Detailed Delivery, the date of last delivery is used."
 msgid ""
 "Date when this Order was delivered to the "
 "Customer.                                                  In case of "
-"Detailed Delivery, the date of last delivery is used."
+"Detailed Delivery, the date of last delivery is used"
 msgstr ""
 "Дата, в которую заказ был доставлен Покупателю. В случае, если используется "
 "\"Раздельная доставка\", то дата последней доставки."
 
-#: .\models.py:162
-msgid "Tracking Number"
-msgstr "Номер отслеживания"
-
-#: .\models.py:163
-msgid "Tracking Number provided by used Courier Service."
-msgstr "Номер почтового отслеживания, предоставленный курьерской службой"
-
-#: .\models.py:165
-msgid "Courier Service Name"
-msgstr "Наименование курьерской службы"
-
-#: .\models.py:166
-msgid "Select one from provided Courier Services"
-msgstr "Выберите использованную почтовую службу"
-
-#: .\models.py:168
+#: .\models.py:189
 msgid "Detailed Delivery"
 msgstr "Раздельная доставка"
 
-#: .\models.py:169
+#: .\models.py:190
 msgid "Delivery of each Position is managed separately"
 msgstr "Доставка каждой позиции управляется вручную"
 
-#: .\models.py:171
-msgid "Amount"
-msgstr "Сумма"
-
-#: .\models.py:172
-msgid "Amount to be paid by Customer."
+#: .\models.py:193
+#, fuzzy
+msgid "Amount to be paid by Customer"
 msgstr "Сумма для оплаты покупателем"
 
-#: .\models.py:173 .\models.py:244 .\models.py:263
-msgid "Currency"
-msgstr "Валюта"
-
-#: .\models.py:174
-msgid "Currency of Customer payment."
+#: .\models.py:195
+#, fuzzy
+msgid "Currency of Customer payment"
 msgstr "Валюта платежа покупателя"
 
-#: .\models.py:177
+#: .\models.py:198
 msgid "Memo related to this Customer Order"
 msgstr "Заметки к этому заказу покупателя"
 
-#: .\models.py:201
+#: .\models.py:222
 msgid "Customer Orders"
 msgstr "Заказы покупателей"
 
-#: .\models.py:212
+#: .\models.py:230
+#, fuzzy
+#| msgid "Memo related to this Customer Order"
+msgid "Memo related to this ItemSet Breakdown"
+msgstr "Заметки к этому заказу покупателя"
+
+#: .\models.py:236
 msgid "Item Set Breakdowns"
 msgstr "Разделение наборов"
 
-#: .\models.py:218 .\models.py:219
+#: .\models.py:242 .\models.py:243
 msgid "Product"
 msgstr "Товар"
 
-#: .\models.py:220
+#: .\models.py:244
 msgid "Quantity"
 msgstr "Количество"
 
-#: .\models.py:221
+#: .\models.py:245
 msgid "Quantity of Products"
 msgstr "Количество товаров"
 
-#: .\models.py:242 .\models.py:261
+#: .\models.py:266 .\models.py:290
 msgid "Price"
 msgstr "Цена"
 
-#: .\models.py:243
+#: .\models.py:267
 msgid "Paid price per one Product"
 msgstr "Цена уплаченная за один продукт"
 
-#: .\models.py:245
+#: .\models.py:269
 msgid "Currency of the paid price"
 msgstr "Валюта платежа покупателя"
 
-#: .\models.py:262
+#: .\models.py:273
+msgid "Free Item"
+msgstr "Бесплатный товар"
+
+#: .\models.py:274
+msgid "This Position is free because of ongoing Action"
+msgstr "Эта Позиция бесплатна в результате идущей Акции"
+
+#: .\models.py:276
+msgid "Gift"
+msgstr ""
+
+#: .\models.py:277
+msgid "This Position is purchased from accrued Gift funds"
+msgstr "Эта Позиция приобретается за счёт подарочных средств"
+
+#: .\models.py:280
+#, fuzzy
+#| msgid "Paid price per one Product"
+msgid "Volume (PV) obtained per one Product"
+msgstr "Цена уплаченная за один продукт"
+
+#: .\models.py:291
 msgid "Sell price per one Product"
 msgstr "Цена полученная за один продукт"
 
-#: .\models.py:264
+#: .\models.py:293
 msgid "Currency of the sell price"
 msgstr "Валюта платежа покупателя"
 
-#: .\models.py:265
+#: .\models.py:294
 msgid "Discount"
 msgstr "Скидка"
 
-#: .\models.py:266
+#: .\models.py:295
 msgid "Discount applied to total amount for the position"
 msgstr "Скидка, примененная к общей стоимости позиции"
 
-#: .\models.py:267
+#: .\models.py:296
 msgid "Discount Reason"
 msgstr "Причина скидки"
 
-#: .\models.py:268
+#: .\models.py:297
 msgid "Reason for provision of Discount"
 msgstr "Причины применения скидки"
 
-#: .\models.py:272
+#: .\models.py:301
 msgid "In stock / prepared for delivery"
 msgstr "В наличии / приготовлен к отправке"
 
-#: .\models.py:273
+#: .\models.py:302
 msgid "In stock / should be ordered"
 msgstr "В наличии / требуется заказать"
 
-#: .\models.py:274
+#: .\models.py:303
 msgid "Not in stock / need to be ordered"
 msgstr "Нет в наличии / требуется заказать"
 
-#: .\models.py:275
+#: .\models.py:304
 msgid "Not in stock / waiting for incoming"
 msgstr "Нет в наличии / ожидаем поставки"
 
-#: .\models.py:276
+#: .\models.py:305
 msgid "Not in stock / no delivery control"
 msgstr "Нет в наличии / не контролировать"
 
-#: .\models.py:277
+#: .\models.py:306
 msgid "Delivered to customer"
 msgstr "Доставлен заказчику"
 
-#: .\models.py:309
+#: .\models.py:340
 msgid "Payments"
 msgstr "Оплаты"
 
-#: .\tables.py:71 .\tables.py:98 .\tables.py:132
+#: .\tables.py:62
+msgid "Category"
+msgstr "Категория"
+
+#: .\tables.py:63
+msgid "SKU"
+msgstr "Артикул"
+
+#: .\tables.py:64
+msgid "Name"
+msgstr "Наименование"
+
+#: .\tables.py:65
+msgid "In Stock"
+msgstr "В наличии"
+
+#: .\tables.py:66
+msgid "Receivable"
+msgstr "Поступление"
+
+#: .\tables.py:67
+msgid "Deliverable"
+msgstr "К поставке"
+
+#: .\tables.py:86 .\tables.py:113 .\tables.py:147
 msgid "Actions"
 msgstr "Действия"
 
-#: .\tables.py:76
+#: .\tables.py:91
 msgid "There are no Accounts for this User"
 msgstr "Для этого Пользователя нет зарегистрированных счетов"
 
-#: .\tables.py:103
+#: .\tables.py:118
 msgid "There are no Counterparties for this User"
 msgstr "Для этого Пользователя нет зарегистрированных контрагентов"
 
-#: .\tables.py:118
+#: .\tables.py:133
 msgid "Paid"
 msgstr "Оплачено"
 
-#: .\tables.py:137
+#: .\tables.py:152
 msgid "There are no Customer Orders for this User"
 msgstr "Для этого Пользователя нет зарегистрированных заказов покупателей"
 
-#: .\tables.py:151
+#: .\tables.py:166
 msgid "Actual"
 msgstr ""
 
-#: .\tables.py:166
+#: .\tables.py:181
 msgid "There are no Position for this Customer Order"
 msgstr "К этому покупательскому заказу нет товарных позиций"
 
-#: .\tables.py:185
+#: .\tables.py:200
 msgid "There are no Payments for this Customer Order"
 msgstr "К этому покупательскому заказу нет платежей"
 
@@ -417,3 +579,28 @@ msgstr "Добавить"
 msgctxt "Form button"
 msgid "Add"
 msgstr "Добавить"
+
+#: .\templates\ledger\table_stocks.html:7
+#: .\templates\ledger\table_stocks.html:20
+msgid "Current Stock"
+msgstr "Наличие на Складе"
+
+#: .\templates\ledger\table_stocks.html:24
+msgid "Search"
+msgstr "Поиск"
+
+#: .\templates\ledger\table_stocks.html:26
+msgid "Show empty rows"
+msgstr "Показать пустые строки"
+
+#: .\templates\ledger\table_stocks.html:28
+msgid "Remove empty rows"
+msgstr "Скрыть пустые строки"
+
+#: .\templates\ledger\table_stocks.html:30
+msgid "Export to PDF"
+msgstr "Экспорт в PDF"
+
+#: .\templates\ledger\table_stocks.html:31
+msgid "Export to Excel"
+msgstr "Экспорт в Excel"
