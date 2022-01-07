@@ -17,6 +17,11 @@ class SupplierOrderPositionInline(admin.TabularInline):
     model = SupplierOrderPosition
 
 
+class SupplierOrderPaymentInLine(admin.TabularInline):
+    model = Payment
+    fk_name = 'ParentOperation'
+
+
 class SupplierOrderAdmin(admin.ModelAdmin):
     list_display = ('User', 'DateOperation', 'Counterparty', 'GreenwayOrderNum', 'Amount', 'Currency', 'GFT', 'Gift', 'PV')
     list_filter = ['User', 'Counterparty']
@@ -24,6 +29,7 @@ class SupplierOrderAdmin(admin.ModelAdmin):
     ordering = ['User', 'DateOperation', 'Counterparty__Name']
     inlines = [
         SupplierOrderPositionInline,
+        SupplierOrderPaymentInLine
     ]
 
     # It works for the form but not for the inline
