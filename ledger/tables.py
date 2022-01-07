@@ -69,7 +69,10 @@ class InStockTable(Table):
     class Meta:
         attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
         row_attrs = {
-            "class": lambda record: 'text-black-50' if record.get('in_stock') == 0 else ''
+            "class": lambda record: 'text-black-50' if record.get('in_stock') == 0 and
+                                                       record.get('supp_not_delivered') == 0 and
+                                                       record.get('cust_not_delivered') == 0
+                                                    else ''
         }
 
 
