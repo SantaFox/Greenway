@@ -18,7 +18,7 @@ from greensite.decorators import prepare_languages
 from products.models import Product
 
 from .models import Account, Counterparty, Operation, CustomerOrder, CustomerOrderPosition, SupplierOrderPosition, ItemSetBreakdownPosition, Payment, DEBIT, CREDIT
-from .tables import InStockTable, AccountsTable, CounterpartyTable, CustomerOrdersTable, CustomerOrderPositionsTable, CustomerOrderPaymentsTable
+from .tables import InStockTable, FundsTable, AccountsTable, CounterpartyTable, CustomerOrdersTable, CustomerOrderPositionsTable, CustomerOrderPaymentsTable
 from .forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerOrderPaymentForm
 from .filters import CustomerOrderFilter
 
@@ -138,6 +138,45 @@ def view_stock(request):
     RequestConfig(request, paginate=False).configure(table)
 
     return TemplateResponse(request, 'ledger/table_stocks.html', {
+        'table': table,
+    })
+
+
+@login_required
+@prepare_languages
+def view_funds(request):
+    date_start = datetime(2021, 1, 1)
+    date_end = datetime(2021, 1, 15)
+
+    qry_Funds = Payment.objects \
+        .values('Account__Name', 'Currency__Code') \
+        .annotate(
+            initial=Sum(Case(
+                When(Q(DateOperation__lte=date_start),
+                     TransactionType=DEBIT,
+                     then=F('Amount') * -1),
+                When(Q(DateOperation__lte=date_start),
+                     TransactionType=CREDIT,
+                     then=F('Amount') * 1),
+                output_field=DecimalField(),
+                default=0)),
+            debited=Sum(Case(
+                When(Q(DateOperation__gte=date_start) & Q(DateOperation__lte=date_end),
+                     TransactionType=DEBIT,
+                     then=F('Amount')),
+                output_field=DecimalField(),
+                default=0)),
+            credited=Sum(Case(
+                When(Q(DateOperation__gte=date_start) & Q(DateOperation__lte=date_end),
+                     TransactionType=CREDIT,
+                     then=F('Amount')),
+                output_field=DecimalField(),
+                default=0)),
+        )
+
+    table = FundsTable(qry_Funds)
+
+    return TemplateResponse(request, 'ledger/table_cash.html', {
         'table': table,
     })
 

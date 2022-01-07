@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.view_index, name='index'),
 
     path('stock/', views.view_stock, name='view_stock'),
+    path('funds/', views.view_funds, name='view_funds'),
 
     path('accounts/', views.table_accounts, name='accounts'),
     path('accounts/action/', views.account_action, name='account_action'),

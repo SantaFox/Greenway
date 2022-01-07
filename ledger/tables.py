@@ -30,7 +30,7 @@ class BootstrapBooleanColumn(BooleanColumn):
 class NumericColumn(Column):
 
     def render(self, value):
-        return '{:0.2f}'.format(value)
+        return '{:0,.2f}'.format(value)
 
 
 class PrimaryKeyCheckboxColumn(CheckBoxColumn):
@@ -65,6 +65,23 @@ class InStockTable(Table):
     In_Stock = Column(verbose_name=_('In Stock'), accessor='in_stock')
     Receivable = Column(verbose_name=_('Receivable'), accessor='supp_not_delivered')
     Deliverable = Column(verbose_name=_('Deliverable'), accessor='cust_not_delivered')
+
+    class Meta:
+        attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
+        row_attrs = {
+            "class": lambda record: 'text-black-50' if record.get('in_stock') == 0 and
+                                                       record.get('supp_not_delivered') == 0 and
+                                                       record.get('cust_not_delivered') == 0
+                                                    else ''
+        }
+
+
+class FundsTable(Table):
+    Account_Name = Column(verbose_name=_('Account'), accessor='Account__Name')
+    Initial = NumericColumn(verbose_name=_('Initial'), accessor='initial')
+    Debited = NumericColumn(verbose_name=_('Debited'), accessor='debited')
+    Credited = NumericColumn(verbose_name=_('Credited'), accessor='credited')
+    Final = NumericColumn(verbose_name=_('In Stock'), accessor='in_stock')
 
     class Meta:
         attrs = {"class": "table table-hover table-sm", "thead": {"class": ""}}
