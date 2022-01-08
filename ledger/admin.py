@@ -15,6 +15,7 @@ class CounterpartyAdmin(admin.ModelAdmin):
 
 class SupplierOrderPositionInline(admin.TabularInline):
     model = SupplierOrderPosition
+    exclude = ('GFT',)
 
 
 class SupplierOrderPaymentInLine(admin.TabularInline):
@@ -23,9 +24,9 @@ class SupplierOrderPaymentInLine(admin.TabularInline):
 
 
 class SupplierOrderAdmin(admin.ModelAdmin):
-    list_display = ('User', 'DateOperation', 'Counterparty', 'GreenwayOrderNum', 'Amount', 'Currency', 'GFT', 'Gift', 'PV')
+    list_display = ('User', 'DateOperation', 'Counterparty', 'GreenwayOrderNum', 'Amount', 'Currency', 'PV')
     list_filter = ['User', 'Counterparty']
-    list_editable = ['GreenwayOrderNum', 'Amount', 'Currency', 'GFT', 'Gift', 'PV']
+    list_editable = ['GreenwayOrderNum', 'Amount', 'Currency', 'PV']
     ordering = ['User', 'DateOperation', 'Counterparty__Name']
     inlines = [
         SupplierOrderPositionInline,
@@ -77,9 +78,9 @@ class ItemSetBreakdownAdmin(admin.ModelAdmin):
 
 
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('User', 'DateOperation', 'ParentOperation', 'TransactionType', 'Amount', 'Currency')
-    list_filter = ['User', 'TransactionType']
-    # list_editable = ['DateOperation', 'ParentOperation', 'TransactionType', 'Amount', 'Currency']
+    list_display = ('User', 'DateOperation', 'ParentOperation', 'TransactionType', 'Account', 'Amount', 'Currency')
+    list_filter = ['User', 'DateOperation', 'TransactionType', 'Account']
+    list_editable = ['DateOperation', 'Account', 'Amount', 'Currency']
     ordering = ['User', 'DateOperation']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
