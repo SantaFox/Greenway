@@ -9,6 +9,7 @@
 {% comment %} http://bestjquery.com/tutorial/table-style/demo5/# {% endcomment %}
 {% block css %}
 <link rel="stylesheet" href="{% static '/ledger/table.css' %}">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 {% endblock %}
 
 {% block content %}
@@ -31,6 +32,20 @@
                 </div>
             </div>
         </div>
+        <div class="row text-white py-3">
+            <div class="col-sm-12">
+                <div id="reportrange" style="cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                    <i class="bi bi-calendar-range"></i>&nbsp;
+                    <span></span>&nbsp;
+                    <i class="bi bi-caret-down-fill"></i>
+                </div>
+                <form method="get">
+                    <input type="hidden" name="startDate" value="{{ startDate|date:'Y-m-d' }}" />
+                    <input type="hidden" name="endDate" value="{{ endDate|date:'Y-m-d' }}" />
+                    <input type="submit" />
+                </form>
+            </div>
+        </div>
     </div>
     {% render_table table %}
 </div>
@@ -46,3 +61,40 @@ $(document).ready(function(){
   });
 });
 {% endcomment %}
+
+{# https://www.daterangepicker.com/#examples #}
+
+{% block js %}
+<script type="text/javascript">
+$(function() {
+    moment.locale('ru');
+
+    var start = moment($('form input[name="startDate"]').val(), 'YYYY-MM-DD');
+    var end = moment($('form input[name="endDate"]').val(), 'YYYY-MM-DD');
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('LL') + ' - ' + end.format('LL'));
+        $('form input[name="startDate"]').val(start.format('YYYY-MM-DD'));
+        $('form input[name="endDate"]').val(end.format('YYYY-MM-DD'));
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+
+    cb(start, end);
+
+});
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+{% endblock %}

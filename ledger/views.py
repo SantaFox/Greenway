@@ -145,8 +145,8 @@ def view_stock(request):
 @login_required
 @prepare_languages
 def view_funds(request):
-    date_start = datetime(2021, 1, 1)
-    date_end = datetime(2021, 1, 15)
+    date_start = datetime.strptime(request.GET.get("startDate", '2022-01-01'), "%Y-%m-%d").date()
+    date_end = datetime.strptime(request.GET.get("endDate", '2022-12-31'), "%Y-%m-%d").date()
 
     qry_Funds = Payment.objects \
         .values('Account__Name', 'Currency__Code') \
@@ -178,6 +178,8 @@ def view_funds(request):
 
     return TemplateResponse(request, 'ledger/table_cash.html', {
         'table': table,
+        'startDate': date_start,
+        'endDate': date_end,
     })
 
 
