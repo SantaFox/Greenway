@@ -53,7 +53,7 @@ class CustomerOrderPaymentInLine(admin.TabularInline):
 
 
 class CustomerOrderAdmin(admin.ModelAdmin):
-    list_display = ('User', 'DateOperation', 'Customer', 'Amount', 'Currency', 'DateDelivered')
+    list_display = ('User', 'DateOperation', 'Customer', 'Amount', 'Currency', 'DateDelivered', 'Memo')
     list_filter = ['User', 'Customer']
     # list_editable = ['DateOperation', 'Customer', 'Amount', 'Currency', 'DateDelivered']
     ordering = ['User', 'DateOperation', 'Customer__Name']
