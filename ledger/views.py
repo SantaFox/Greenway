@@ -17,8 +17,10 @@ from crispy_forms.utils import render_crispy_form
 from greensite.decorators import prepare_languages
 from products.models import Product
 
-from .models import Account, Counterparty, Operation, CustomerOrder, CustomerOrderPosition, SupplierOrderPosition, ItemSetBreakdownPosition, Payment, DEBIT, CREDIT
-from .tables import InStockTable, FundsTable, AccountsTable, CounterpartyTable, CustomerOrdersTable, CustomerOrderPositionsTable, CustomerOrderPaymentsTable
+from .models import Account, Counterparty, Operation, CustomerOrder, CustomerOrderPosition, SupplierOrderPosition, \
+    ItemSetBreakdownPosition, Payment, Transfer, DEBIT, CREDIT
+from .tables import InStockTable, FundsTable, AccountsTable, CounterpartyTable, CustomerOrdersTable, \
+    CustomerOrderPositionsTable, CustomerOrderPaymentsTable
 from .forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerOrderPaymentForm
 from .filters import CustomerOrderFilter
 
@@ -148,7 +150,7 @@ def view_funds(request):
     date_start = datetime.strptime(request.GET.get("startDate", '2022-01-01'), "%Y-%m-%d").date()
     date_end = datetime.strptime(request.GET.get("endDate", '2022-12-31'), "%Y-%m-%d").date()
 
-    qry_Funds = Payment.objects \
+    qry_payments = Payment.objects \
         .values('Account__Name', 'Currency__Code') \
         .annotate(
             initial=Sum(Case(
@@ -174,7 +176,37 @@ def view_funds(request):
                 default=0)),
         )
 
-    table = FundsTable(qry_Funds)
+    qry_transfers_debits = Transfer.objects \
+        .values('DebitAccount__Name', 'DebitCurrency__Code') \
+        .annotate(
+            initial=Sum(Case(
+                When(Q(DateOperation__lte=date_start),
+                     then=F('DebitAmount')),
+                output_field=DecimalField(),
+                default=0)),
+            debited=Sum(Case(
+                When(Q(DateOperation__gte=date_start) & Q(DateOperation__lte=date_end),
+                     then=F('DebitAmount')),
+                output_field=DecimalField(),
+                default=0)),
+        ).exclude(DebitAccount__isnull=True)
+
+    qry_transfers_credits = Transfer.objects \
+        .values('CreditAccount__Name', 'CreditCurrency__Code') \
+        .annotate(
+            initial=Sum(Case(
+                When(Q(DateOperation__lte=date_start),
+                     then=F('CreditAmount')),
+                output_field=DecimalField(),
+                default=0)),
+            credited=Sum(Case(
+                When(Q(DateOperation__gte=date_start) & Q(DateOperation__lte=date_end),
+                     then=F('CreditAmount')),
+                output_field=DecimalField(),
+                default=0)),
+        ).exclude(CreditAccount__isnull=True)
+
+    table = FundsTable(qry_payments)
 
     return TemplateResponse(request, 'ledger/table_cash.html', {
         'table': table,

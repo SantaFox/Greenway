@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db.models import Q
 
 from .models import Account, Counterparty, SupplierOrder, SupplierOrderPosition, CustomerOrder, CustomerOrderPosition, \
-    ItemSetBreakdown, ItemSetBreakdownPosition, Payment, \
+    ItemSetBreakdown, ItemSetBreakdownPosition, Payment, Transfer, \
     Operation   # It is for customized
 
 
@@ -94,9 +94,17 @@ class PaymentAdmin(admin.ModelAdmin):
         return super(PaymentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
+class TransferAdmin(admin.ModelAdmin):
+    list_display = ('User', 'DateOperation', 'DebitAccount', 'DebitAmount', 'DebitCurrency', 'CreditAccount', 'CreditAmount', 'CreditCurrency')
+    list_filter = ['User', ]
+    # list_editable = ['DateOperation', 'Account', 'Amount', 'Currency']
+    ordering = ['User', 'DateOperation']
+
+
 admin.site.register(Account)
 admin.site.register(Counterparty, CounterpartyAdmin)
 admin.site.register(SupplierOrder, SupplierOrderAdmin)
 admin.site.register(CustomerOrder, CustomerOrderAdmin)
 admin.site.register(ItemSetBreakdown, ItemSetBreakdownAdmin)
 admin.site.register(Payment, PaymentAdmin)
+admin.site.register(Transfer, TransferAdmin)

@@ -338,3 +338,22 @@ class Payment(ModelIsDeletableMixin, Operation):
 
     class Meta:
         verbose_name_plural = _("Payments")
+
+
+class Transfer(ModelIsDeletableMixin, Operation):
+    DebitAccount = models.ForeignKey(Account, on_delete=models.PROTECT, blank=True, related_name='debit_account')
+    DebitAmount = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
+    DebitCurrency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, related_name='debit_currency')
+
+    CreditAccount = models.ForeignKey(Account, on_delete=models.PROTECT, blank=True, related_name='credit_account')
+    CreditAmount = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
+    CreditCurrency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, related_name='credit_currency')
+
+    Memo = models.TextField(blank=True, verbose_name=_('Memo'),
+                            help_text=_('Memo related to this Cash Transfer'))
+
+    def __str__(self):
+        return f'{self.User} / {self.DateOperation}'
+
+    class Meta:
+        verbose_name_plural = _("Cash Transfers")
