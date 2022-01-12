@@ -183,7 +183,7 @@ def view_funds(request):
         .annotate(
             initial=Sum(Case(
                 When(Q(DateOperation__lt=date_start),
-                     then=F('DebitAmount')),
+                     then=F('DebitAmount') * -1),
                 output_field=DecimalField(),
                 default=0)),
             debited=Sum(Case(
