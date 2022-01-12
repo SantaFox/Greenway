@@ -28,6 +28,12 @@ class BootstrapBooleanColumn(BooleanColumn):
 
 
 class NumericColumn(Column):
+    attrs = {
+        'td': {
+#            'class': lambda value: 'text-danger' if value < 0 else '',
+#            'align': 'right'
+        }
+    }
 
     def render(self, value):
         return '{:0,.2f}'.format(value)
