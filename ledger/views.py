@@ -156,10 +156,10 @@ def view_funds(request):
         .values(account=F('Account__Name'), currency=F('Currency__Code')) \
         .annotate(
             initial=Sum(Case(
-                When(Q(DateOperation__lte=date_start),
+                When(Q(DateOperation__lt=date_start),
                      TransactionType=DEBIT,
                      then=F('Amount') * -1),
-                When(Q(DateOperation__lte=date_start),
+                When(Q(DateOperation__lt=date_start),
                      TransactionType=CREDIT,
                      then=F('Amount') * 1),
                 output_field=DecimalField(),
@@ -182,7 +182,7 @@ def view_funds(request):
         .values(account=F('DebitAccount__Name'), currency=F('DebitCurrency__Code')) \
         .annotate(
             initial=Sum(Case(
-                When(Q(DateOperation__lte=date_start),
+                When(Q(DateOperation__lt=date_start),
                      then=F('DebitAmount')),
                 output_field=DecimalField(),
                 default=0)),
@@ -198,7 +198,7 @@ def view_funds(request):
         .values(account=F('CreditAccount__Name'), currency=F('CreditCurrency__Code')) \
         .annotate(
             initial=Sum(Case(
-                When(Q(DateOperation__lte=date_start),
+                When(Q(DateOperation__lt=date_start),
                      then=F('CreditAmount')),
                 output_field=DecimalField(),
                 default=0)),
