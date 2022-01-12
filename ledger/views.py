@@ -1,4 +1,6 @@
 from datetime import datetime, date
+from itertools import groupby
+from operator import itemgetter
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
@@ -151,7 +153,7 @@ def view_funds(request):
     date_end = datetime.strptime(request.GET.get("endDate", '2022-12-31'), "%Y-%m-%d").date()
 
     qry_payments = Payment.objects \
-        .values('Account__Name', 'Currency__Code') \
+        .values(account=F('Account__Name'), currency=F('Currency__Code')) \
         .annotate(
             initial=Sum(Case(
                 When(Q(DateOperation__lte=date_start),
@@ -177,7 +179,7 @@ def view_funds(request):
         )
 
     qry_transfers_debits = Transfer.objects \
-        .values('DebitAccount__Name', 'DebitCurrency__Code') \
+        .values(account=F('DebitAccount__Name'), currency=F('DebitCurrency__Code')) \
         .annotate(
             initial=Sum(Case(
                 When(Q(DateOperation__lte=date_start),
@@ -189,16 +191,18 @@ def view_funds(request):
                      then=F('DebitAmount')),
                 output_field=DecimalField(),
                 default=0)),
+            credited=Value(0),
         ).exclude(DebitAccount__isnull=True)
 
     qry_transfers_credits = Transfer.objects \
-        .values('CreditAccount__Name', 'CreditCurrency__Code') \
+        .values(account=F('CreditAccount__Name'), currency=F('CreditCurrency__Code')) \
         .annotate(
             initial=Sum(Case(
                 When(Q(DateOperation__lte=date_start),
                      then=F('CreditAmount')),
                 output_field=DecimalField(),
                 default=0)),
+            debited=Value(0),
             credited=Sum(Case(
                 When(Q(DateOperation__gte=date_start) & Q(DateOperation__lte=date_end),
                      then=F('CreditAmount')),
@@ -206,7 +210,20 @@ def view_funds(request):
                 default=0)),
         ).exclude(CreditAccount__isnull=True)
 
-    table = FundsTable(qry_payments)
+    # modified https://stackoverflow.com/questions/21674331/group-by-multiple-keys-and-summarize-average-values-of-a-list-of-dictionaries
+    qry_union = qry_payments.union(qry_transfers_debits, qry_transfers_credits)
+    grouper = itemgetter('account','currency')
+    result = []
+    for key, grp in groupby(sorted(qry_union, key=grouper), grouper):
+        temp_list = [item for item in grp]
+        temp_dict = dict(zip(['account','currency'], key))
+        temp_dict['initial'] = sum(item['initial'] for item in temp_list)
+        temp_dict['debited'] = sum(item['debited'] for item in temp_list)
+        temp_dict['credited'] = sum(item['credited'] for item in temp_list)
+        temp_dict['final'] = temp_dict['initial'] - temp_dict['debited'] + temp_dict['credited']
+        result.append(temp_dict)
+
+    table = FundsTable(result)
 
     return TemplateResponse(request, 'ledger/table_cash.html', {
         'table': table,
