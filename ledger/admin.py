@@ -24,15 +24,23 @@ class SupplierOrderPaymentInLine(admin.TabularInline):
 
 
 class SupplierOrderAdmin(admin.ModelAdmin):
-    list_display = ('User', 'DateOperation', 'Counterparty', 'GreenwayOrderNum', 'Amount', 'Currency', 'PV')
+    list_display = ('User', 'DateOperation', 'Counterparty', 'GreenwayOrderNum', 'Amount', 'Currency', 'get_debt', 'PV')
     list_filter = ['User', 'Counterparty']
-    list_editable = ['GreenwayOrderNum', 'Amount', 'Currency', 'PV']
+    # list_editable = ['GreenwayOrderNum', 'Amount', 'Currency', 'PV']
     ordering = ['User', 'DateOperation', 'Counterparty__Name']
     inlines = [
         SupplierOrderPositionInline,
         SupplierOrderPaymentInLine
     ]
 
+    @admin.display(description='Not Paid', empty_value='???')
+    def get_debt(self, obj):
+        return '{:0,.2f}'.format(obj.Amount - obj.get_paid_amount)
+
+    class Media:
+        css = {
+            "all": ("admin/formatting.css",)
+        }
     # It works for the form but not for the inline
     # def get_form(self, request, obj=None, **kwargs):
     #     form = super(SupplierOrderAdmin, self).get_form(request, obj, **kwargs)
@@ -53,7 +61,7 @@ class CustomerOrderPaymentInLine(admin.TabularInline):
 
 
 class CustomerOrderAdmin(admin.ModelAdmin):
-    list_display = ('User', 'DateOperation', 'Customer', 'Amount', 'Currency', 'DateDelivered', 'Memo')
+    list_display = ('User', 'DateOperation', 'Customer', 'Amount', 'Currency', 'DateDelivered', 'get_debt', 'Memo')
     list_filter = ['User', 'Customer']
     # list_editable = ['DateOperation', 'Customer', 'Amount', 'Currency', 'DateDelivered']
     ordering = ['User', 'DateOperation', 'Customer__Name']
@@ -61,6 +69,15 @@ class CustomerOrderAdmin(admin.ModelAdmin):
         CustomerOrderPositionInline,
         CustomerOrderPaymentInLine,
     ]
+
+    @admin.display(description='Not Paid', empty_value='???')
+    def get_debt(self, obj):
+        return '{:0,.2f}'.format(obj.Amount - obj.get_paid_amount)
+
+    class Media:
+        css = {
+            "all": ("admin/formatting.css",)
+        }
 
 
 class ItemSetBreakdownPositionInline(admin.TabularInline):
@@ -79,7 +96,7 @@ class ItemSetBreakdownAdmin(admin.ModelAdmin):
 
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ('User', 'DateOperation', 'ParentOperation', 'TransactionType', 'Account', 'Amount', 'Currency')
-    list_filter = ['User', 'DateOperation', 'TransactionType', 'Account']
+    list_filter = ['User', 'TransactionType', 'Account']
     list_editable = ['DateOperation', 'Account', 'Amount', 'Currency']
     ordering = ['User', 'DateOperation']
 
@@ -96,7 +113,7 @@ class PaymentAdmin(admin.ModelAdmin):
 
 class TransferAdmin(admin.ModelAdmin):
     list_display = ('User', 'DateOperation', 'DebitAccount', 'DebitAmount', 'DebitCurrency', 'CreditAccount', 'CreditAmount', 'CreditCurrency')
-    list_filter = ['User', ]
+    list_filter = ['User', 'DebitAccount', 'CreditAccount']
     # list_editable = ['DateOperation', 'Account', 'Amount', 'Currency']
     ordering = ['User', 'DateOperation']
 
