@@ -146,7 +146,7 @@ class SupplierOrder(ModelIsDeletableMixin, Operation):
     DeliveryPrice = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
                                         verbose_name=_('Delivery price'),
                                         help_text=_('Price of delivery in the same currency as Amount, if separately \
-                                        provided by the Supplier'))
+                                        provided by the Supplier. Included in total Amount.'))
 
     Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name=_('Amount'),
                                  help_text=_('Amount to be paid to the Supplier'))
@@ -185,6 +185,10 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
     CourierService = models.CharField(choices=POSTAL_CHOICES, max_length=10, blank=True, null=True,
                                       verbose_name=_('Courier Service Name'),
                                       help_text=_('Select one from provided Courier Services'))
+    DeliveryPrice = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
+                                        verbose_name=_('Delivery price'),
+                                        help_text=_('Price of delivery in the same currency as Amount, if Customer \
+                                        is charged for it. Included in total Amount.'))
 
     DetailedDelivery = models.BooleanField(default=False, verbose_name=_('Detailed Delivery'),
                                            help_text=_('Delivery of each Position is managed separately'))
