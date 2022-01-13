@@ -1,8 +1,3 @@
-from django.template.response import TemplateResponse
+from django.shortcuts import render
 
-from greensite.decorators import prepare_languages
-
-
-@prepare_languages
-def view_index(request):
-    return TemplateResponse(request, 'greensite/index.html')
+# Create your views here.

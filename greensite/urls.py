@@ -6,8 +6,6 @@ from django.urls import include, path, re_path
 from django.views.generic.base import RedirectView
 
 
-from . import views
-
 urlpatterns = [
     path('', include('showcase.urls')),
     path('products/', include('products.urls')),
