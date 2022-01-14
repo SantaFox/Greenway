@@ -2,7 +2,7 @@ from django.forms import ModelForm, DateInput
 from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Field, Layout
+from crispy_forms.layout import Div, Field, Layout, HTML
 from crispy_forms.bootstrap import PrependedText
 
 from .models import Account, Counterparty, CustomerOrder, Payment
@@ -18,6 +18,7 @@ class CounterpartyForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # Remove help_text to make it as tooltips
         for field_name, field in self.fields.items():
             self.fields[field_name].help_text = None
 
@@ -38,6 +39,11 @@ class CounterpartyForm(ModelForm):
                 css_class='form-row'),
             PrependedText('Address', '<i class="bi bi-signpost-split"></i>'),
             Field('Memo', rows=4),
+            HTML('<label>A Customer may act as a Supplier or Customer, or both</label>'),
+            Div(
+                Field('IsSupplier', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
+                Field('IsCustomer', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
+                css_class='form-row'),
         )
 
         # loading Model descriptors from Meta subclass
