@@ -691,3 +691,14 @@ def customer_order_payment_action(request):
             raise Http404
     else:
         raise Http404
+
+
+@login_required
+def database_validation(request):
+    # При вызове через POST мы выполняем первый блок (статистика), дальнейшие блоки вызываются уже по очереди через AJAX
+    # и таким образом формируют лог проверки
+    # 1. SupplierOrder
+    #   1a. Сумма ордера равна сумме позиций с ценой без отметки GiftPosition и FreeOnAction плюс доставка
+
+    if request.POST():
+        pass
