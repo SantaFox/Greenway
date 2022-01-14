@@ -1,6 +1,7 @@
 {% extends "greensite/base.html" %}
 {% load i18n %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% load render_table from django_tables2 %}
 
 {% block title %}{% translate 'Manage Accounts' %}{% endblock %}
@@ -47,10 +48,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>Account Name</label>
-                        <input type="text" class="form-control" name="Name" required>
-                    </div>
+                    {% crispy form %}
                     <input type="hidden" name="id">
                 </div>
                 <div class="modal-footer">

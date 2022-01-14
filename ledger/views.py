@@ -358,8 +358,10 @@ def table_accounts(request):
     table = AccountsTable(Account.objects.filter(User=request.user))
     RequestConfig(request).configure(table)
 
+    form = AccountForm
     return TemplateResponse(request, 'ledger/table_accounts.html', {
         'table': table,
+        'form': form,
         'deleteAction': reverse('ledger:account_delete'),
         'deleteHeader': _('Delete Account'),
     })
