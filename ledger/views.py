@@ -4,14 +4,15 @@ from operator import itemgetter
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
-from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.db.models import OuterRef, Sum, Subquery, Value, Func, F, DecimalField, Case, When, Q, FilteredRelation
 from django.db.models.functions import Coalesce, Cast
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse, Http404, HttpResponseBadRequest
-from django.template.response import TemplateResponse
 from django.forms.models import model_to_dict
+from django.http import JsonResponse, Http404, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404
+from django.template.response import TemplateResponse
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from django_tables2 import RequestConfig
 from crispy_forms.utils import render_crispy_form
