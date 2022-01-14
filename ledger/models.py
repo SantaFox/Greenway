@@ -87,8 +87,10 @@ class Counterparty(ModelIsDeletableMixin, models.Model):
     Memo = models.TextField(blank=True, verbose_name=_('Memo'),
                             help_text=_('Name of the Counterparty, preferably "Surname Name"'))
 
-    IsSupplier = models.BooleanField(default=False)
-    IsCustomer = models.BooleanField(default=False)
+    IsSupplier = models.BooleanField(default=False, verbose_name=_('Act as Supplier'),
+                                     help_text=_('Counterparty act as Supplier and can be selected in Supplier Order'))
+    IsCustomer = models.BooleanField(default=False, verbose_name=_('Act as Customer'),
+                                     help_text=_('Counterparty act as Customer and can be selected in Customer Order'))
 
     TimestampCreated = models.DateTimeField(auto_now_add=True)
     TimestampModified = models.DateTimeField(auto_now=True)
