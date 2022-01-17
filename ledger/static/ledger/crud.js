@@ -113,6 +113,8 @@ $(document).ready(function() {
     В случае получения "Ok" формируется текст подтверждения и разблокируется кнопка Submit, которая также вызывает
     AJAX обработчик, но уже с методом POST, чтобы отделить запрос от действия. Результат работы запроса
     отражается в блоке Messages
+    Для того, чтобы при повторном открытии модального окна не было старого текста, при закрытии весь блок
+    перезаписывается из сохраненной версии
 */
 $(document).ready(function() {
     $('#deleteModal').on('show.bs.modal', function (event) {
@@ -161,6 +163,18 @@ $(document).ready(function() {
             },
         });
     });
+
+    $('#deleteModal').on('hidden.bs.modal', function () {
+        /* I have no idea why to use extra clone(), but without it after first ReplaceWith
+         all changes will reflect savedDelete as well */
+        $('#deleteModal').replaceWith(savedDelete.clone(true))
+    });
+})
+
+var savedDelete;
+
+$(document).ready(function() {
+    savedDelete = $('#deleteModal').clone(true);
 })
 
 $(document).ready(function() {
