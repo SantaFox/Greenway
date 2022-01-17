@@ -24,7 +24,7 @@ class SupplierOrderPaymentInLine(admin.TabularInline):
 
 
 class SupplierOrderAdmin(admin.ModelAdmin):
-    list_display = ('User', 'DateOperation', 'Counterparty', 'GreenwayOrderNum', 'Amount', 'Currency', 'get_debt', 'PV')
+    list_display = ('User', 'DateOperation', 'Counterparty', 'GreenwayOrderNum', 'Amount', 'Currency', 'DateDelivered', 'get_debt', 'Memo')
     list_filter = ['User', 'Counterparty']
     # list_editable = ['GreenwayOrderNum', 'Amount', 'Currency', 'PV']
     ordering = ['User', 'DateOperation', 'Counterparty__Name']
