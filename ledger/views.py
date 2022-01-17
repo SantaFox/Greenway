@@ -37,42 +37,42 @@ def view_index(request):
 @login_required
 @prepare_languages
 def view_stock(request):
-    test_date = datetime(2021, 1, 15)
+    date_report = datetime.strptime(request.GET.get("reportDate", date.today().strftime("%Y-%m-%d")), "%Y-%m-%d").date()
 
     dict_customer_orders = {pos.get('Product__SKU'): pos for pos in CustomerOrderPosition.objects \
         .values('Product__SKU') \
         .annotate(
             delivered=Sum(Case(
                 When(Q(Operation__customerorder__DetailedDelivery=True) &
-                     Q(DateDelivered__lte=test_date),
-                     Operation__DateOperation__lte=test_date,
+                     Q(DateDelivered__lte=date_report),
+                     Operation__DateOperation__lte=date_report,
                      then=F('Quantity')),
                 When(Q(Operation__customerorder__DetailedDelivery=False) &
-                     Q(Operation__customerorder__DateDelivered__lte=test_date),
-                     Operation__DateOperation__lte=test_date,
+                     Q(Operation__customerorder__DateDelivered__lte=date_report),
+                     Operation__DateOperation__lte=date_report,
                      then=F('Quantity')),
                 default=0)),
             not_delivered=Sum(Case(
                 When(Q(Operation__customerorder__DetailedDelivery=True) &
-                     (Q(DateDelivered__isnull=True) | Q(DateDelivered__gt=test_date)),
-                     Operation__DateOperation__lte=test_date,
+                     (Q(DateDelivered__isnull=True) | Q(DateDelivered__gt=date_report)),
+                     Operation__DateOperation__lte=date_report,
                      then=F('Quantity')),
                 When(Q(Operation__customerorder__DetailedDelivery=False) &
                      (Q(Operation__customerorder__DateDelivered__isnull=True) |
-                      Q(Operation__customerorder__DateDelivered__gt=test_date)),
-                     Operation__DateOperation__lte=test_date,
+                      Q(Operation__customerorder__DateDelivered__gt=date_report)),
+                     Operation__DateOperation__lte=date_report,
                      then=F('Quantity')),
                 default=0)),
             not_delivered_4=Sum(Case(
                 When(Q(Operation__customerorder__DetailedDelivery=True) &
-                     (Q(DateDelivered__isnull=True) | Q(DateDelivered__gt=test_date)),
-                     Operation__DateOperation__lte=test_date,
+                     (Q(DateDelivered__isnull=True) | Q(DateDelivered__gt=date_report)),
+                     Operation__DateOperation__lte=date_report,
                      Status=4,
                      then=F('Quantity')),
                 When(Q(Operation__customerorder__DetailedDelivery=False) &
                      (Q(Operation__customerorder__DateDelivered__isnull=True) |
-                      Q(Operation__customerorder__DateDelivered__gt=test_date)),
-                     Operation__DateOperation__lte=test_date,
+                      Q(Operation__customerorder__DateDelivered__gt=date_report)),
+                     Operation__DateOperation__lte=date_report,
                      Status=4,
                      then=F('Quantity')),
                 default=0)),
@@ -82,14 +82,14 @@ def view_stock(request):
         .values('Product__SKU') \
         .annotate(
             delivered=Sum(Case(
-                When(Q(Operation__supplierorder__DateDelivered__lte=test_date),
-                     Operation__DateOperation__lte=test_date,
+                When(Q(Operation__supplierorder__DateDelivered__lte=date_report),
+                     Operation__DateOperation__lte=date_report,
                      then=F('Quantity')),
                 default=0)),
             not_delivered=Sum(Case(
                 When(Q(Operation__supplierorder__DateDelivered__isnull=True) |
-                     Q(Operation__supplierorder__DateDelivered__gt=test_date),
-                     Operation__DateOperation__lte=test_date,
+                     Q(Operation__supplierorder__DateDelivered__gt=date_report),
+                     Operation__DateOperation__lte=date_report,
                      then=F('Quantity')),
                 default=0)),
         ).order_by('Product__SKU')}
@@ -98,10 +98,10 @@ def view_stock(request):
         .values('Product__SKU') \
         .annotate(
             received=Sum(Case(
-                When(TransactionType=CREDIT, Operation__DateOperation__lte=test_date, then=F('Quantity')),
+                When(TransactionType=CREDIT, Operation__DateOperation__lte=date_report, then=F('Quantity')),
                 default=0)),
             removed=Sum(Case(
-                When(TransactionType=DEBIT, Operation__DateOperation__lte=test_date, then=F('Quantity')),
+                When(TransactionType=DEBIT, Operation__DateOperation__lte=date_report, then=F('Quantity')),
                 default=0)),
         ).order_by('Product__SKU')}
 
@@ -144,6 +144,7 @@ def view_stock(request):
 
     return TemplateResponse(request, 'ledger/table_stocks.html', {
         'table': table,
+        'reportDate': date_report,
     })
 
 

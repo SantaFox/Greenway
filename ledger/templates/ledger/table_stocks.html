@@ -9,6 +9,7 @@
 {% comment %} http://bestjquery.com/tutorial/table-style/demo5/# {% endcomment %}
 {% block css %}
 <link rel="stylesheet" href="{% static '/ledger/table.css' %}">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 {% endblock %}
 
 {% block content %}
@@ -31,6 +32,14 @@
                 </div>
             </div>
         </div>
+        <div class="row text-white py-3">
+            <div class="col-sm-12">
+                <form method="get">
+                    <input type="text" class="form-control" name="reportDate" value="{{ reportDate|date:'Y-m-d' }}" />
+                    <input type="submit" />
+                </form>
+            </div>
+        </div>
     </div>
     {% render_table table %}
 </div>
@@ -46,3 +55,54 @@ $(document).ready(function(){
   });
 });
 {% endcomment %}
+
+{# https://www.daterangepicker.com/#examples #}
+
+{% block js %}
+<script type="text/javascript">
+$(function() {
+    $('form input[name="reportDate"]').daterangepicker({
+        "locale": {
+            "format": "YYYY-MM-DD",
+            "separator": " - ",
+            "applyLabel": "Apply",
+            "cancelLabel": "Cancel",
+            "fromLabel": "From",
+            "toLabel": "To",
+            "customRangeLabel": "Custom",
+            "weekLabel": "W",
+            "daysOfWeek": [
+                "Su",
+                "Mo",
+                "Tu",
+                "We",
+                "Th",
+                "Fr",
+                "Sa"
+            ],
+            "monthNames": [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+            ],
+            "firstDay": 1
+        },
+        singleDatePicker: true,
+        showDropdowns: true
+    }, function(start, end, label) {
+        $('form').submit();
+  });
+});
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+{% endblock %}
