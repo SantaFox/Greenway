@@ -15,6 +15,17 @@
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="action" value="edit">
+
+                    {% for btn in editButtons %}
+                        <a href="#tableModal" class="btn btn-success {% if forloop.last %}mr-auto{% else %}mr-2{% endif %}" data-toggle="modal"
+                           data-modal-action="{{ btn.formAction }}"
+                           data-modal-title="{{ btn.formTitle }}">
+                            <i class="{{ btn.buttonIcon }} mr-1"></i>
+                            {{ btn.buttonText }}
+                            <span id="{{ btn.buttonSpanId }}"></span>
+                        </a>
+                    {% endfor %}
+
                     <input type="button" class="btn btn-light" data-dismiss="modal"
                            value="{% translate 'Cancel' context 'Form button' %}">
                     <input type="submit" class="btn btn-primary"

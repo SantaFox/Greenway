@@ -54,44 +54,7 @@
     {% render_table table %}
 </div>
 
-<!-- Add/Edit Modal HTML -->
-<div id="editModal" class="modal fade" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{% url 'ledger:customer_order_action' %}">
-                <div class="modal-header">
-                    <h4 class="modal-title">{% translate 'Edit Customer Order' %}</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    {% crispy form %}
-                    <input type="hidden" name="id">
-                </div>
-                <div class="modal-footer">
-                    <input type="hidden" name="action" value="edit">
-                    <a href="#tableModal" class="btn btn-success mr-2" data-toggle="modal"
-                       data-modal-action="{% url 'ledger:customer_order_positions' %}"
-                       data-modal-title="{% translate 'Customer Order Positions' %}">
-                        <i class="bi bi-table mr-1"></i>
-                        {% translate 'Positions' context 'Form button' %}
-                        <span id="positionsCount"></span>
-                    </a>
-                    <a href="#tableModal" class="btn btn-success mr-auto" data-toggle="modal"
-                       data-modal-action="{% url 'ledger:customer_order_payments' %}"
-                       data-modal-title="{% translate 'Customer Order Payments' %}">
-                        <i class="bi bi-credit-card mr-1"></i>
-                        <span id="paymentsCount"></span>
-                    </a>
-                    <input type="button" class="btn btn-light" data-dismiss="modal"
-                           value="{% translate 'Cancel' context 'Form button' %}">
-                    <input type="submit" class="btn btn-primary"
-                           value="{% translate 'Save' context 'Form button' %}">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
+{% include "ledger/crud_editModal.html" %}
 {% include "ledger/crud_deleteModal.html" %}
 
 <!-- Table Modal HTML -->
