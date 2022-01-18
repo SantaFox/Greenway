@@ -92,6 +92,7 @@ class CounterpartyForm(ModelForm):
 
 class CustomerOrderForm(ModelForm):
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')  # notice the .pop()
         super().__init__(*args, **kwargs)
 
         # self.fields['DateOperation'].widget = DateInput(attrs={
@@ -127,6 +128,8 @@ class CustomerOrderForm(ModelForm):
                 css_class='form-row'),
             Field('Memo', rows=4),
         )
+
+        self.fields['Customer'].queryset = Counterparty.objects.filter(User=self.user)
 
         # loading Model descriptors from Meta subclass
         for fld in self._meta.model._meta.get_fields():

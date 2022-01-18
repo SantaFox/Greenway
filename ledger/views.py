@@ -490,7 +490,7 @@ def table_customer_orders(request):
                   paginate={"per_page": 15}) \
         .configure(table)
 
-    form = CustomerOrderForm()
+    form = CustomerOrderForm(user=request.user)
     return TemplateResponse(request, 'ledger/table_customer_orders.html', {
         'table': table,
         'form': form,
@@ -530,7 +530,7 @@ def customer_order_action(request):
         elif request.method == 'POST':
             action = request.POST.get('action')
             if action == 'add':
-                item_form = CustomerOrderForm(request.POST)
+                item_form = CustomerOrderForm(request.POST, user=request.user)
                 if not item_form.is_valid():
                     return JsonResponse({'status': 'not_valid',
                                          'message': {
@@ -555,8 +555,8 @@ def customer_order_action(request):
                                          })
             elif action == 'edit':
                 request_id = request.POST.get('id')
-                item_instance = get_object_or_404(Account, id=request_id)
-                item_form = CustomerOrderForm(request.POST, instance=item_instance)
+                item_instance = get_object_or_404(CustomerOrder, id=request_id)
+                item_form = CustomerOrderForm(request.POST, instance=item_instance, user=request.user)
                 if not item_form.has_changed():
                     messages.info(request,
                                   f'Customer Order <strong>{item_instance.Name}</strong> was not changed')
