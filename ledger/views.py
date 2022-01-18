@@ -247,6 +247,8 @@ def table_counterparties(request):
     return TemplateResponse(request, 'ledger/table_counterparties.html', {
         'table': table,
         'form': form,
+        'editAction': reverse('ledger:counterparty_action'),
+        'editHeader': _('Edit Counterparty'),
         'deleteAction': reverse('ledger:counterparty_delete'),
         'deleteHeader': _('Delete Counterparty'),
     })
@@ -363,6 +365,8 @@ def table_accounts(request):
     return TemplateResponse(request, 'ledger/table_accounts.html', {
         'table': table,
         'form': form,
+        'editAction': reverse('ledger:account_action'),
+        'editHeader': _('Edit Account'),
         'deleteAction': reverse('ledger:account_delete'),
         'deleteHeader': _('Delete Account'),
     })

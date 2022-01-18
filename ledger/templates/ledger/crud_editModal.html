@@ -1,0 +1,26 @@
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+<div id="editModal" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ editAction }}">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ editHeader }}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {% crispy form %}
+                    <input type="hidden" name="id">
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="action" value="edit">
+                    <input type="button" class="btn btn-light" data-dismiss="modal"
+                           value="{% translate 'Cancel' context 'Form button' %}">
+                    <input type="submit" class="btn btn-primary"
+                           value="{% translate 'Save' context 'Form button' %}">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

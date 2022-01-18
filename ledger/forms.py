@@ -9,6 +9,31 @@ from .models import Account, Counterparty, CustomerOrder, Payment
 
 
 class AccountForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Remove help_text to make it as tooltips
+        for field_name, field in self.fields.items():
+            self.fields[field_name].help_text = None
+
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            PrependedText('Name', '<i class="bi bi-cash-coin"></i>'),
+        )
+
+        # loading Model descriptors from Meta subclass
+        for fld in self._meta.model._meta.get_fields():
+            if not fld.auto_created:
+                self.helper[fld.name].update_attributes(placeholder=fld.verbose_name)
+                if fld.help_text != '':
+                    self.helper[fld.name].update_attributes(title=fld.help_text)
+                    self.helper[fld.name].update_attributes(data_toggle="tooltip")
+
+        self.helper.form_show_labels = False
+        self.helper.use_custom_control = True
+        self.helper.form_tag = False
+        self.helper.disable_csrf = True
+
     class Meta:
         model = Account
         fields = ['Name', ]
