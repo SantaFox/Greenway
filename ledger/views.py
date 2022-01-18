@@ -495,6 +495,8 @@ def table_customer_orders(request):
         'table': table,
         'form': form,
         'filter': f,
+        'deleteAction': reverse('ledger:customer_order_delete'),
+        'deleteHeader': _('Delete Customer Order'),
     })
 
 
