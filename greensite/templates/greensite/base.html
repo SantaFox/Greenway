@@ -91,6 +91,37 @@
             }
     }
 
+    function add_alert(message, message_type) {
+        var css_class;
+        switch (message_type) {
+            case 'Success':
+                css_class = 'alert-success';
+                break;
+            case 'Error':
+                css_class = 'alert-danger';
+                break;
+            case 'Warning':
+                css_class = 'alert-warning';
+                break;
+            default:
+                css_class = 'alert-info';
+        }
+        var list_alerts = $('#messages-list');
+        var new_alert = '<li>' +
+            '<div class="alert ' + css_class + ' alert-dismissible msg fade show" role="alert">' +
+            message +
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+            '<span aria-hidden="true">&times;</span>' +
+            '</button>' +
+            '</div>' +
+            '</li>';
+        var elem = $(new_alert).appendTo(list_alerts);
+        setTimeout(function() {
+                    elem.fadeOut("slow");
+                }, 5000);
+    }
+
+
     // call fade out after DOMContentLoaded
     $(document).ready(function(){
         fade_alerts();

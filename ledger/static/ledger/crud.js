@@ -54,7 +54,9 @@ $(document).ready(function(){
                     });
                     location.reload();
                 } else {
-                    // TODO: Create new Bootstrap Alert here with response.message
+                    if (response.message) {
+                        add_alert(response.message.text, response.message.level);
+                    }
                     console.log(response.errors)
                 }
             },
