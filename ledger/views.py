@@ -258,7 +258,7 @@ def counterparty_action(request):
     if request.is_ajax():
         if request.method == 'GET':
             request_id = request.GET.get('id')
-            counterparty_instance = get_object_or_404(Counterparty, id=request_id)
+            counterparty_instance = get_object_or_404(Counterparty, id=request_id, User=request.user)
             # TODO: Maybe it's better to create and serialize a CounterpartyForm here?
             counterparty_dict = model_to_dict(counterparty_instance,
                                               fields=['id', 'Name', 'Phone', 'Email', 'Instagram', 'Telegram',
@@ -293,7 +293,7 @@ def counterparty_action(request):
                                          })
             elif action == 'edit':
                 request_id = request.POST.get('id')
-                counterparty_instance = get_object_or_404(Counterparty, id=request_id)
+                counterparty_instance = get_object_or_404(Counterparty, id=request_id, User=request.user)
                 counterparty_form = CounterpartyForm(request.POST, instance=counterparty_instance)
                 if not counterparty_form.has_changed():
                     messages.info(request,
@@ -322,7 +322,7 @@ def counterparty_delete(request):
     if request.is_ajax():
         if request.method == 'GET':
             request_id = request.GET.get('id')
-            counterparty_instance = get_object_or_404(Counterparty, id=request_id)
+            counterparty_instance = get_object_or_404(Counterparty, id=request_id, User=request.user)
             related = counterparty_instance.is_deletable()
             related_dict = {str(rel.model._meta.verbose_name_plural): list(i.__str__() for i in rel.all()) for rel in
                             related}
@@ -333,7 +333,7 @@ def counterparty_delete(request):
                 return JsonResponse({'status': 'ok'})
         elif request.method == 'POST':
             request_id = request.POST.get('id')
-            counterparty_instance = get_object_or_404(Counterparty, id=request_id)
+            counterparty_instance = get_object_or_404(Counterparty, id=request_id, User=request.user)
             try:
                 counterparty_instance.delete()
                 messages.success(request,
@@ -376,7 +376,7 @@ def account_action(request):
     if request.is_ajax():
         if request.method == 'GET':
             request_id = request.GET.get('id')
-            account_instance = get_object_or_404(Account, id=request_id)
+            account_instance = get_object_or_404(Account, id=request_id, User=request.user)
             # TODO: Maybe it's better to create and serialize a CounterpartyForm here?
             counterparty_dict = model_to_dict(account_instance,
                                               fields=['id', 'Name', ])
@@ -409,7 +409,7 @@ def account_action(request):
                                          })
             elif action == 'edit':
                 request_id = request.POST.get('id')
-                account_instance = get_object_or_404(Account, id=request_id)
+                account_instance = get_object_or_404(Account, id=request_id, User=request.user)
                 account_form = CounterpartyForm(request.POST, instance=account_instance)
                 if not account_form.has_changed():
                     messages.info(request,
@@ -438,7 +438,7 @@ def account_delete(request):
     if request.is_ajax():
         if request.method == 'GET':
             request_id = request.GET.get('id')
-            account_instance = get_object_or_404(Account, id=request_id)
+            account_instance = get_object_or_404(Account, id=request_id, User=request.user)
             related = account_instance.is_deletable()
             related_dict = {str(rel.model._meta.verbose_name_plural): list(i.__str__() for i in rel.all()) for rel in
                             related}
@@ -449,7 +449,7 @@ def account_delete(request):
                 return JsonResponse({'status': 'ok'})
         elif request.method == 'POST':
             request_id = request.POST.get('id')
-            account_instance = get_object_or_404(Account, id=request_id)
+            account_instance = get_object_or_404(Account, id=request_id, User=request.user)
             try:
                 account_instance.delete()
                 messages.success(request,
@@ -522,7 +522,7 @@ def customer_order_action(request):
     if request.is_ajax():
         if request.method == 'GET':
             request_id = request.GET.get('id')
-            item_instance = get_object_or_404(CustomerOrder, id=request_id)
+            item_instance = get_object_or_404(CustomerOrder, id=request_id, User=request.user)
             # TODO: Maybe it's better to create and serialize a CounterpartyForm here?
             # item_form = CustomerOrderForm(instance=item_instance)
             item_dict = model_to_dict(item_instance, exclude=('operation_ptr', 'User', 'Type'))
@@ -557,7 +557,7 @@ def customer_order_action(request):
                                          })
             elif action == 'edit':
                 request_id = request.POST.get('id')
-                item_instance = get_object_or_404(CustomerOrder, id=request_id)
+                item_instance = get_object_or_404(CustomerOrder, id=request_id, User=request.user)
                 item_form = CustomerOrderForm(request.POST, instance=item_instance, user=request.user)
                 if not item_form.has_changed():
                     messages.info(request,
@@ -586,7 +586,7 @@ def customer_order_delete(request):
     if request.is_ajax():
         if request.method == 'GET':
             request_id = request.GET.get('id')
-            order_instance = get_object_or_404(CustomerOrder, id=request_id)
+            order_instance = get_object_or_404(CustomerOrder, id=request_id, User=request.user)
             related = order_instance.is_deletable()
             related_dict = {str(rel.model._meta.verbose_name_plural): list(i.__str__() for i in rel.all()) for rel in
                             related}
@@ -597,7 +597,7 @@ def customer_order_delete(request):
                 return JsonResponse({'status': 'ok'})
         elif request.method == 'POST':
             request_id = request.POST.get('id')
-            order_instance = get_object_or_404(CustomerOrder, id=request_id)
+            order_instance = get_object_or_404(CustomerOrder, id=request_id, User=request.user)
             try:
                 order_instance.delete()
                 messages.success(request,
@@ -628,8 +628,6 @@ def table_customer_order_positions(request):
     return JsonResponse({'status': 'ok',
                          'table': rendered_table})
 
-# TODO: ALL DIRECT REQUESTS SHOULD ALSO CHECK FOR CORRECT USER!!!!!
-
 
 @login_required
 @permission_required('ledger.view_payment', raise_exception=True)
@@ -649,14 +647,14 @@ def customer_order_payment_action(request):
             order_id = request.GET.get('parent_id')
             if request_id:
                 # edit existing item
-                item_instance = get_object_or_404(Payment, id=request_id)
+                item_instance = get_object_or_404(Payment, id=request_id, User=request.user)
                 form_instance = CustomerOrderPaymentForm(instance=item_instance)
             else:
                 # add new - need some initial data
                 params = {'DateOperation': date.today()}
                 if order_id:
                     # if we know order id, then we help with calculations
-                    order_instance = get_object_or_404(CustomerOrder, id=order_id)
+                    order_instance = get_object_or_404(CustomerOrder, id=order_id, User=request.user)
                     params['Amount'] = order_instance.Amount - order_instance.get_paid_amount
                     params['Currency'] = order_instance.Currency
                 form_instance = CustomerOrderPaymentForm(initial=params)
@@ -682,7 +680,7 @@ def customer_order_payment_action(request):
                                          'errors': item_form.errors})
                 item_instance = item_form.save(commit=False)
                 item_instance.User = request.user
-                parent_instance = get_object_or_404(Operation, id=parent)
+                parent_instance = get_object_or_404(Operation, id=parent, User=request.user)
                 item_instance.ParentOperation = parent_instance
                 try:
                     item_instance.save()
@@ -699,7 +697,7 @@ def customer_order_payment_action(request):
                                          })
             elif action == 'edit':
                 request_id = request.POST.get('id')
-                item_instance = get_object_or_404(Payment, id=request_id)
+                item_instance = get_object_or_404(Payment, id=request_id, User=request.user)
                 item_form = CustomerOrderPaymentForm(request.POST, instance=item_instance)
                 if not item_form.has_changed():
                     messages.info(request,
