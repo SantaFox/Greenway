@@ -1,9 +1,10 @@
 from django.conf import settings
 from django.db import models
+from django.db.models import Q, F
 from django.template.defaultfilters import truncatechars  # or truncatewords
+from django.urls import reverse
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
-from django.db.models import Q, F
 
 from imagekit.models import ImageSpecField
 from markdownx.models import MarkdownxField
@@ -147,6 +148,9 @@ class Product(models.Model):
 
     def __str__(self):
         return self.SKU
+
+    def get_absolute_url(self):
+        return reverse('products:product', args=(self.SKU,))
 
     def get_price_on_date(self, date):
         discounts = Discount.objects.filter(Product=self, Action__DateStart__lte=date, Action__DateEnd__gte=date)
