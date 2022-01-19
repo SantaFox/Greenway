@@ -701,18 +701,18 @@ def customer_order_payment_action(request):
                 item_form = CustomerOrderPaymentForm(request.POST, instance=item_instance)
                 if not item_form.has_changed():
                     messages.info(request,
-                                  f'Customer Order <strong>{item_instance.Name}</strong> was not changed')
+                                  f'Payment <strong>{item_instance.__str__()}</strong> was not changed')
                     return JsonResponse({'status': 'not_changed'})
                 if not item_form.is_valid():
                     return JsonResponse({'status': 'not_valid',
                                          'message': {
-                                             'text': f'Customer Order <strong>{item_instance.Name}</strong> was not saved',
+                                             'text': f'Payment <strong>{item_instance.__str__()}</strong> was not saved',
                                              'moment': datetime.now(),
                                          },
                                          'errors': item_form.errors})
                 item_form.save()
                 messages.success(request,
-                                 f'Customer Order <strong>{item_instance.Name}</strong> updated successfully')
+                                 f'Payment <strong>{item_instance.__str__()}</strong> updated successfully')
                 return JsonResponse({'status': 'success'})
             else:
                 return HttpResponseBadRequest()
