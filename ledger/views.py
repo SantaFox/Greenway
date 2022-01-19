@@ -299,10 +299,17 @@ def counterparty_action(request):
                     return JsonResponse({'status': 'not_valid',
                                          'message': {'text': msg, 'level': 'Error'},
                                          'errors': counterparty_form.errors})
-                counterparty_form.save()
-                messages.success(request,
-                                 f'Counterparty <strong>{counterparty_instance.Name}</strong> updated successfully')
-                return JsonResponse({'status': 'success'})
+                try:
+                    counterparty_form.save()
+                    messages.success(request,
+                                     f'Counterparty <strong>{counterparty_instance.Name}</strong> updated successfully')
+                    return JsonResponse({'status': 'success'})      # 'success' causes CRUD logic to refresh the page
+                except IntegrityError as e:
+                    msg = f'Cannot save Counterparty <strong>{counterparty_instance.Name}</strong>, it contains logic error(s)'
+                    # messages.error(request, msg)
+                    return JsonResponse({'status': 'not_valid',
+                                         'message': {'text': msg, 'level': 'Error'},
+                                         'errors': e.args})
             else:
                 return HttpResponseBadRequest()
         else:
