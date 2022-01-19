@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.db.models import Q, Sum, Count
-from django.utils import translation
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from model_utils.managers import InheritanceManager
@@ -277,19 +277,11 @@ class OperationPosition(models.Model):
 
     @property
     def get_actual_price(self):
-        prices = Price.objects.filter(Product=self.Product, DateAdded__lte=self.Operation.DateOperation).order_by('-DateAdded')
-        price = prices.first()  # First or None
-        return price.Price
+        return self.Product.get_price_on_date(timezone.now())
 
     @property
     def get_product_name(self):
-        # As we don't have a request object here, we refer to django.utils.translation or default language from settings
-        language = Language.objects.get(Code=translation.get_language() or settings.LANGUAGE_CODE)
-        try:
-            product_info = ProductInfo.objects.get(Product=self.Product, Language=language)
-        except (ProductInfo.DoesNotExist, ProductInfo.MultipleObjectsReturned):
-            product_info = None
-        return product_info.Name or self.Product.SKU
+        return self.Product.get_name()
 
     class Meta:
         verbose_name_plural = "Operation Positions"

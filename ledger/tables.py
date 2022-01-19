@@ -190,7 +190,7 @@ class CustomerOrderPositionsTable(Table):
     )
 
     ActualPrice = NumericColumn(
-        accessor=A('get_actual_price'),
+        accessor=A('get_actual_price__Price'),
         attrs={"td": {"align": "right", 'class': 'text-black-50'}},
         verbose_name=_('Actual'),
     )

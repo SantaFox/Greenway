@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.db import models
 from django.template.defaultfilters import truncatechars  # or truncatewords
+from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Q, F
 
@@ -146,9 +148,6 @@ class Product(models.Model):
     def __str__(self):
         return self.SKU
 
-    def ordered_price_set(self):
-        return self.price_set.all().order_by('DateAdded')
-
     def get_price_on_date(self, date):
         discounts = Discount.objects.filter(Product=self, Action__DateStart__lte=date, Action__DateEnd__gte=date)
         discount = discounts.first()  # First or None
@@ -156,8 +155,14 @@ class Product(models.Model):
         price = prices.first()  # First or None
         return price if discount is None else discount
 
-    def get_price_table(self):
-        return
+    def get_name(self):
+        # As we don't have a request object here, we refer to django.utils.translation or default language from settings
+        language = Language.objects.get(Code=translation.get_language() or settings.LANGUAGE_CODE)
+        try:
+            product_info = ProductInfo.objects.get(Product=self, Language=language)
+        except (ProductInfo.DoesNotExist, ProductInfo.MultipleObjectsReturned):
+            product_info = None
+        return product_info.Name or self.SKU
 
     class Meta:
         constraints = [
