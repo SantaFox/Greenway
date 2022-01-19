@@ -162,7 +162,7 @@ class Product(models.Model):
             product_info = ProductInfo.objects.get(Product=self, Language=language)
         except (ProductInfo.DoesNotExist, ProductInfo.MultipleObjectsReturned):
             product_info = None
-        return product_info.Name or self.SKU
+        return product_info.Name if product_info is not None else _('< Product name not set >')
 
     class Meta:
         constraints = [
