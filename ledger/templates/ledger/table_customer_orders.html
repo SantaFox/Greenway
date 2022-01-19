@@ -8,14 +8,10 @@
 
 {% block css %}
 <style>
-{% comment %}
     table.table tr th:first-child {
 	    width: 60px;
     }
-{% endcomment %}
-    table.table tr th:last-child {
-	    width: 150px;
-    }
+
 {% comment %}
     /* modal backdrop fix */
     .modal:nth-of-type(even) {
@@ -25,6 +21,28 @@
         z-index: 1051 !important;
     }
 {% endcomment %}
+
+.table tr.has_original td {
+    padding-top: 2em;
+}
+
+.table tr td.original {
+    padding: 2px 0 0 0;
+    width: 0;
+}
+
+.table th.original {
+    width: 0px;
+    padding: 0;
+}
+
+.table td.original p {
+    position: absolute;
+    height: 2em;
+    padding: 2px 0.3rem;
+    overflow: hidden;
+}
+
 </style>
 {% endblock %}
 
