@@ -270,11 +270,9 @@ def counterparty_action(request):
             if action == 'add':
                 counterparty_form = CounterpartyForm(request.POST)
                 if not counterparty_form.is_valid():
+                    msg = f'Cannot add Counterparty <strong>{counterparty_form.cleaned_data["Name"]}</strong>, the form contains errors'
                     return JsonResponse({'status': 'not_valid',
-                                         'message': {
-                                             'text': f'Counterparty <strong>{counterparty_form.cleaned_data["Name"]}</strong> was not saved',
-                                             'moment': datetime.now(),
-                                         },
+                                         'message': {'text': msg, 'level': 'Error'},
                                          'errors': counterparty_form.errors})
                 counterparty_instance = counterparty_form.save(commit=False)
                 counterparty_instance.User = request.user
@@ -282,29 +280,24 @@ def counterparty_action(request):
                     counterparty_instance.save()
                     messages.success(request,
                                      f'Counterparty <strong>{counterparty_instance.Name}</strong> added successfully')
-                    return JsonResponse({'status': 'success'})
+                    return JsonResponse({'status': 'success'})      # 'success' causes CRUD logic to refresh the page
                 except IntegrityError as e:
+                    msg = f'Cannot add Counterparty <strong>{counterparty_instance.Name}</strong>, it contains logic error(s)'
                     return JsonResponse({'status': 'not_valid',
-                                         'message': {
-                                             'text': f'Counterparty <strong>{counterparty_instance.Name}</strong> was not saved',
-                                             'moment': datetime.now(),
-                                         },
-                                         'errors': e.args
-                                         })
+                                         'message': {'text': msg, 'level': 'Error'},
+                                         'errors': e.args})
             elif action == 'edit':
                 request_id = request.POST.get('id')
                 counterparty_instance = get_object_or_404(Counterparty, id=request_id, User=request.user)
                 counterparty_form = CounterpartyForm(request.POST, instance=counterparty_instance)
                 if not counterparty_form.has_changed():
-                    messages.info(request,
-                                  f'Counterparty <strong>{counterparty_instance.Name}</strong> was not changed')
-                    return JsonResponse({'status': 'not_changed'})
+                    msg = f'Counterparty <strong>{counterparty_instance.Name}</strong> was not changed'
+                    return JsonResponse({'status': 'not_changed',
+                                         'message': {'text': msg, 'level': 'Warning'}})
                 if not counterparty_form.is_valid():
+                    msg = f'Cannot save Counterparty <strong>{counterparty_instance.Name}</strong>, the form contains errors'
                     return JsonResponse({'status': 'not_valid',
-                                         'message': {
-                                             'text': f'Counterparty <strong>{counterparty_instance.Name}</strong> was not saved',
-                                             'moment': datetime.now(),
-                                         },
+                                         'message': {'text': msg, 'level': 'Error'},
                                          'errors': counterparty_form.errors})
                 counterparty_form.save()
                 messages.success(request,
