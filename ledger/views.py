@@ -408,69 +408,17 @@ def table_customer_orders(request):
     })
 
 
-def customer_order_action(request):
-    if request.is_ajax():
-        if request.method == 'GET':
-            request_id = request.GET.get('id')
-            item_instance = get_object_or_404(CustomerOrder, id=request_id, User=request.user)
-            # TODO: Maybe it's better to create and serialize a CounterpartyForm here?
-            # item_form = CustomerOrderForm(instance=item_instance)
-            item_dict = model_to_dict(item_instance, exclude=('operation_ptr', 'User', 'Type'))
-            item_dict['positions_count'] = item_instance.get_positions_count
-            item_dict['payments_count'] = item_instance.get_payments_count
-            return JsonResponse(item_dict)
-        elif request.method == 'POST':
-            action = request.POST.get('action')
-            if action == 'add':
-                item_form = CustomerOrderForm(request.POST, user=request.user)
-                if not item_form.is_valid():
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {
-                                             'text': f'Customer Order <strong>{item_form.cleaned_data["Name"]}</strong> was not saved',
-                                             'moment': datetime.now(),
-                                         },
-                                         'errors': item_form.errors})
-                item_instance = item_form.save(commit=False)
-                item_instance.User = request.user
-                try:
-                    item_instance.save()
-                    messages.success(request,
-                                     f'Customer Order <strong>{item_instance.Name}</strong> added successfully')
-                    return JsonResponse({'status': 'success'})
-                except IntegrityError as e:
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {
-                                             'text': f'Customer Order <strong>{item_instance.Name}</strong> was not saved',
-                                             'moment': datetime.now(),
-                                         },
-                                         'errors': e.args
-                                         })
-            elif action == 'edit':
-                request_id = request.POST.get('id')
-                item_instance = get_object_or_404(CustomerOrder, id=request_id, User=request.user)
-                item_form = CustomerOrderForm(request.POST, instance=item_instance, user=request.user)
-                if not item_form.has_changed():
-                    messages.info(request,
-                                  f'Customer Order <strong>{item_instance.__str__()}</strong> was not changed')
-                    return JsonResponse({'status': 'not_changed'})
-                if not item_form.is_valid():
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {
-                                             'text': f'Customer Order <strong>{item_instance.__str__()}</strong> was not saved',
-                                             'moment': datetime.now(),
-                                         },
-                                         'errors': item_form.errors})
-                item_form.save()
-                messages.success(request,
-                                 f'Customer Order <strong>{item_instance.__str__()}</strong> updated successfully')
-                return JsonResponse({'status': 'success'})
-            else:
-                return HttpResponseBadRequest()
-        else:
-            raise Http404
-    else:
-        raise Http404
+class CustomerOrderAction(CrudActionView):
+    model = CustomerOrder
+    exclude = ['operation_ptr', 'User']
+    form = CustomerOrderForm
+    msg_name_class = _('Customer Order')
 
+    def get_additional_info(self, instance):
+        return {
+            'positions_count': instance.get_positions_count,
+            'payments_count': instance.get_payments_count,
+        }
 
 def customer_order_delete(request):
     if request.is_ajax():

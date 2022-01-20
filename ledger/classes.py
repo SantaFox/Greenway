@@ -18,6 +18,7 @@ class CrudActionView(View):
 
     model = None
     fields = None
+    exclude = None
 
     form = None
 
@@ -38,8 +39,9 @@ class CrudActionView(View):
         request_id = request.GET.get(self.object_id_key)
         object_instance = get_object_or_404(self.model, id=request_id, User=request.user)
         # TODO: Maybe it's better to create and serialize a CounterpartyForm here?
-        object_dict = model_to_dict(object_instance, fields=self.fields)
-        return JsonResponse(object_dict)
+        object_dict = model_to_dict(object_instance, fields=self.fields, exclude=self.exclude)
+        object_dict_add = self.get_additional_info(object_instance)
+        return JsonResponse({**object_dict, **object_dict_add})
 
     def post(self, request):
         action = request.POST.get(self.action_key)
@@ -88,3 +90,7 @@ class CrudActionView(View):
                                      'errors': e.args})
         else:
             return HttpResponseBadRequest()
+
+    def get_additional_info(self, instance):
+        return dict()
+
