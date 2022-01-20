@@ -94,3 +94,60 @@ class CrudActionView(View):
     def get_additional_info(self, instance):
         return dict()
 
+
+@method_decorator(login_required, name='dispatch')
+class CrudDeleteView(View):
+    http_method_names = ['get', 'post']
+
+    object_id_key = 'id'
+
+    model = None
+
+    msg_name_class = None
+
+    msg_name = None        #
+    msg_success = _('%(class)s <strong>%(name)s</strong> deleted successfully')
+    msg_not_exist = _('Cannot delete %(class)s <strong>%(name)s</strong> as it doesn"t exists')
+    msg_integrity_error = _('Cannot delete %(class)s <strong>%(name)s</strong>, it contains logic error(s)')
+
+    def get(self, request):
+        request_id = request.GET.get(self.object_id_key)
+        try:
+            object_instance = self.model.objects.get(id=request_id, User=request.user)
+        except self.model.DoesNotExist as e:
+            msg = self.msg_not_exist % {'class': self.msg_name_class, 'name': self.msg_name}
+            # messages.error(request, msg)
+            return JsonResponse({'status': 'not_exist',
+                                 'message': {'text': msg, 'level': 'Error'},
+                                 'errors': e.args})
+
+        related = object_instance.is_deletable()
+        if related:
+            related_dict = {str(rel.model._meta.verbose_name_plural): list(i.__str__() for i in rel.all()) for rel in
+                            related}
+            return JsonResponse({'status': 'related_found',
+                                 'related': related_dict})
+        else:
+            return JsonResponse({'status': 'ok'})
+
+    def post(self, request):
+        request_id = request.POST.get(self.object_id_key)
+        try:
+            object_instance = self.model.objects.get(id=request_id, User=request.user)
+        except self.model.DoesNotExist as e:
+            msg = self.msg_not_exist % {'class': self.msg_name_class, 'name': self.msg_name}
+            # messages.error(request, msg)
+            return JsonResponse({'status': 'not_exist',
+                                 'message': {'text': msg, 'level': 'Error'},
+                                 'errors': e.args})
+        try:
+            object_instance.delete()
+            messages.success(request,
+                             self.msg_success % {'class': self.msg_name_class, 'name': self.msg_name})
+            return JsonResponse({'status': 'success'})
+        except IntegrityError as e:
+            msg = self.msg_integrity_error % {'class': self.msg_name_class, 'name': self.msg_name}
+            # messages.error(request, msg)
+            return JsonResponse({'status': 'not_valid',
+                                 'message': {'text': msg, 'level': 'Error'},
+                                 'errors': e.args})

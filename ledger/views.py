@@ -26,7 +26,7 @@ from .tables import InStockTable, FundsTable, AccountsTable, CounterpartyTable, 
     CustomerOrderPositionsTable, CustomerOrderPaymentsTable
 from .forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerOrderPaymentForm
 from .filters import CustomerOrderFilter
-from .classes import CrudActionView
+from .classes import CrudActionView, CrudDeleteView
 
 
 @login_required
@@ -263,40 +263,9 @@ class CounterpartyAction(CrudActionView):
     msg_name_class = _('Counterparty')
 
 
-def counterparty_delete(request):
-    if request.is_ajax():
-        if request.method == 'GET':
-            request_id = request.GET.get('id')
-            counterparty_instance = get_object_or_404(Counterparty, id=request_id, User=request.user)
-            related = counterparty_instance.is_deletable()
-            related_dict = {str(rel.model._meta.verbose_name_plural): list(i.__str__() for i in rel.all()) for rel in
-                            related}
-            if related:
-                return JsonResponse({'status': 'related_found',
-                                     'related': related_dict})
-            else:
-                return JsonResponse({'status': 'ok'})
-        elif request.method == 'POST':
-            request_id = request.POST.get('id')
-            counterparty_instance = get_object_or_404(Counterparty, id=request_id, User=request.user)
-            try:
-                counterparty_instance.delete()
-                messages.success(request,
-                                 f'Counterparty <strong>{counterparty_instance.Name}</strong> deleted successfully')
-                return JsonResponse({'status': 'success'})
-            except:
-                print('Error on deletion')
-                return JsonResponse({'status': 'not_valid',
-                                     # 'message': {
-                                     #     'text': f'Counterparty <strong>{counterparty_instance.Name}</strong> was not saved',
-                                     #     'moment': datetime.now(),
-                                     # },
-                                     # 'errors': counterparty_form.errors
-                                     })
-        else:
-            raise Http404
-    else:
-        raise Http404
+class CounterpartyDelete(CrudDeleteView):
+    model = Counterparty
+    msg_name_class = _('Counterparty')
 
 
 @login_required
@@ -324,40 +293,9 @@ class AccountAction(CrudActionView):
     msg_name_class = _('Account')
 
 
-def account_delete(request):
-    if request.is_ajax():
-        if request.method == 'GET':
-            request_id = request.GET.get('id')
-            account_instance = get_object_or_404(Account, id=request_id, User=request.user)
-            related = account_instance.is_deletable()
-            related_dict = {str(rel.model._meta.verbose_name_plural): list(i.__str__() for i in rel.all()) for rel in
-                            related}
-            if related:
-                return JsonResponse({'status': 'related_found',
-                                     'related': related_dict})
-            else:
-                return JsonResponse({'status': 'ok'})
-        elif request.method == 'POST':
-            request_id = request.POST.get('id')
-            account_instance = get_object_or_404(Account, id=request_id, User=request.user)
-            try:
-                account_instance.delete()
-                messages.success(request,
-                                 f'Account <strong>{account_instance.Name}</strong> deleted successfully')
-                return JsonResponse({'status': 'success'})
-            except:
-                print('Error on deletion')
-                return JsonResponse({'status': 'not_valid',
-                                     # 'message': {
-                                     #     'text': f'Counterparty <strong>{counterparty_instance.Name}</strong> was not saved',
-                                     #     'moment': datetime.now(),
-                                     # },
-                                     # 'errors': counterparty_form.errors
-                                     })
-        else:
-            raise Http404
-    else:
-        raise Http404
+class AccountDelete(CrudDeleteView):
+    model = Account
+    msg_name_class = _('Account')
 
 
 @login_required
@@ -420,40 +358,10 @@ class CustomerOrderAction(CrudActionView):
             'payments_count': instance.get_payments_count,
         }
 
-def customer_order_delete(request):
-    if request.is_ajax():
-        if request.method == 'GET':
-            request_id = request.GET.get('id')
-            order_instance = get_object_or_404(CustomerOrder, id=request_id, User=request.user)
-            related = order_instance.is_deletable()
-            related_dict = {str(rel.model._meta.verbose_name_plural): list(i.__str__() for i in rel.all()) for rel in
-                            related}
-            if related:
-                return JsonResponse({'status': 'related_found',
-                                     'related': related_dict}, safe=False)
-            else:
-                return JsonResponse({'status': 'ok'})
-        elif request.method == 'POST':
-            request_id = request.POST.get('id')
-            order_instance = get_object_or_404(CustomerOrder, id=request_id, User=request.user)
-            try:
-                order_instance.delete()
-                messages.success(request,
-                                 f'Customer Order <strong>{order_instance.Name}</strong> deleted successfully')
-                return JsonResponse({'status': 'success'})
-            except:
-                print('Error on deletion')
-                return JsonResponse({'status': 'not_valid',
-                                     # 'message': {
-                                     #     'text': f'Counterparty <strong>{counterparty_instance.Name}</strong> was not saved',
-                                     #     'moment': datetime.now(),
-                                     # },
-                                     # 'errors': counterparty_form.errors
-                                     })
-        else:
-            raise Http404
-    else:
-        raise Http404
+
+class CustomerOrderDelete(CrudDeleteView):
+    model = CustomerOrder
+    msg_name_class = _('Customer Order')
 
 
 @login_required

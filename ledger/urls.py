@@ -11,15 +11,15 @@ urlpatterns = [
 
     path('accounts/', views.table_accounts, name='accounts'),
     path('accounts/action/', views.AccountAction.as_view(), name='account_action'),
-    path('accounts/delete/', views.account_delete, name='account_delete'),
+    path('accounts/delete/', views.AccountDelete.as_view(), name='account_delete'),
 
     path('counterparties/', views.table_counterparties, name='counterparties'),
     path('counterparties/action/', views.CounterpartyAction.as_view(), name='counterparty_action'),
-    path('counterparties/delete/', views.counterparty_delete, name='counterparty_delete'),
+    path('counterparties/delete/', views.CounterpartyDelete.as_view(), name='counterparty_delete'),
 
     path('customer_orders/', views.table_customer_orders, name='customer_orders'),
-    path('customer_orders/delete/', views.customer_order_delete, name='customer_order_delete'),
     path('customer_orders/action/', views.CustomerOrderAction.as_view(), name='customer_order_action'),
+    path('customer_orders/delete/', views.CustomerOrderDelete.as_view(), name='customer_order_delete'),
 
     path('customer_order_positions/', views.table_customer_order_positions, name='customer_order_positions'),
 
