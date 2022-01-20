@@ -26,6 +26,7 @@ from .tables import InStockTable, FundsTable, AccountsTable, CounterpartyTable, 
     CustomerOrderPositionsTable, CustomerOrderPaymentsTable
 from .forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerOrderPaymentForm
 from .filters import CustomerOrderFilter
+from .classes import CrudActionView
 
 
 @login_required
@@ -254,68 +255,12 @@ def table_counterparties(request):
     })
 
 
-def counterparty_action(request):
-    if request.is_ajax():
-        if request.method == 'GET':
-            request_id = request.GET.get('id')
-            counterparty_instance = get_object_or_404(Counterparty, id=request_id, User=request.user)
-            # TODO: Maybe it's better to create and serialize a CounterpartyForm here?
-            counterparty_dict = model_to_dict(counterparty_instance,
-                                              fields=['id', 'Name', 'Phone', 'Email', 'Instagram', 'Telegram',
-                                                      'Facebook', 'City', 'Address', 'Memo',
-                                                      'IsSupplier', 'IsCustomer', ])
-            return JsonResponse(counterparty_dict)
-        elif request.method == 'POST':
-            action = request.POST.get('action')
-            if action == 'add':
-                counterparty_form = CounterpartyForm(request.POST)
-                if not counterparty_form.is_valid():
-                    msg = f'Cannot add Counterparty <strong>{counterparty_form.cleaned_data["Name"]}</strong>, the form contains errors'
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {'text': msg, 'level': 'Error'},
-                                         'errors': counterparty_form.errors})
-                counterparty_instance = counterparty_form.save(commit=False)
-                counterparty_instance.User = request.user
-                try:
-                    counterparty_instance.save()
-                    messages.success(request,
-                                     f'Counterparty <strong>{counterparty_instance.Name}</strong> added successfully')
-                    return JsonResponse({'status': 'success'})      # 'success' causes CRUD logic to refresh the page
-                except IntegrityError as e:
-                    msg = f'Cannot add Counterparty <strong>{counterparty_instance.Name}</strong>, it contains logic error(s)'
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {'text': msg, 'level': 'Error'},
-                                         'errors': e.args})
-            elif action == 'edit':
-                request_id = request.POST.get('id')
-                counterparty_instance = get_object_or_404(Counterparty, id=request_id, User=request.user)
-                counterparty_form = CounterpartyForm(request.POST, instance=counterparty_instance)
-                if not counterparty_form.has_changed():
-                    msg = f'Counterparty <strong>{counterparty_instance.Name}</strong> was not changed'
-                    return JsonResponse({'status': 'not_changed',
-                                         'message': {'text': msg, 'level': 'Warning'}})
-                if not counterparty_form.is_valid():
-                    msg = f'Cannot save Counterparty <strong>{counterparty_instance.Name}</strong>, the form contains errors'
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {'text': msg, 'level': 'Error'},
-                                         'errors': counterparty_form.errors})
-                try:
-                    counterparty_form.save()
-                    messages.success(request,
-                                     f'Counterparty <strong>{counterparty_instance.Name}</strong> updated successfully')
-                    return JsonResponse({'status': 'success'})      # 'success' causes CRUD logic to refresh the page
-                except IntegrityError as e:
-                    msg = f'Cannot save Counterparty <strong>{counterparty_instance.Name}</strong>, it contains logic error(s)'
-                    # messages.error(request, msg)
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {'text': msg, 'level': 'Error'},
-                                         'errors': e.args})
-            else:
-                return HttpResponseBadRequest()
-        else:
-            raise Http404
-    else:
-        raise Http404
+class CounterpartyAction(CrudActionView):
+    model = Counterparty
+    fields = ['id', 'Name', 'Phone', 'Email', 'Instagram', 'Telegram',
+              'Facebook', 'City', 'Address', 'Memo', 'IsSupplier', 'IsCustomer']
+    form = CounterpartyForm
+    msg_name_class = _('Counterparty')
 
 
 def counterparty_delete(request):
@@ -372,66 +317,11 @@ def table_accounts(request):
     })
 
 
-def account_action(request):
-    if request.is_ajax():
-        if request.method == 'GET':
-            request_id = request.GET.get('id')
-            account_instance = get_object_or_404(Account, id=request_id, User=request.user)
-            # TODO: Maybe it's better to create and serialize a CounterpartyForm here?
-            counterparty_dict = model_to_dict(account_instance,
-                                              fields=['id', 'Name', ])
-            return JsonResponse(counterparty_dict)
-        elif request.method == 'POST':
-            action = request.POST.get('action')
-            if action == 'add':
-                account_form = AccountForm(request.POST)
-                if not account_form.is_valid():
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {
-                                             'text': f'Account <strong>{account_form.cleaned_data["Name"]}</strong> was not saved',
-                                             'moment': datetime.now(),
-                                         },
-                                         'errors': account_form.errors})
-                account_instance = account_form.save(commit=False)
-                account_instance.User = request.user
-                try:
-                    account_instance.save()
-                    messages.success(request,
-                                     f'Account <strong>{account_instance.Name}</strong> added successfully')
-                    return JsonResponse({'status': 'success'})
-                except IntegrityError as e:
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {
-                                             'text': f'Counterparty <strong>{account_instance.Name}</strong> was not saved',
-                                             'moment': datetime.now(),
-                                         },
-                                         'errors': e.args
-                                         })
-            elif action == 'edit':
-                request_id = request.POST.get('id')
-                account_instance = get_object_or_404(Account, id=request_id, User=request.user)
-                account_form = CounterpartyForm(request.POST, instance=account_instance)
-                if not account_form.has_changed():
-                    messages.info(request,
-                                  f'Account <strong>{account_instance.Name}</strong> was not changed')
-                    return JsonResponse({'status': 'not_changed'})
-                if not account_form.is_valid():
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {
-                                             'text': f'Account <strong>{account_instance.Name}</strong> was not saved',
-                                             'moment': datetime.now(),
-                                         },
-                                         'errors': account_form.errors})
-                account_form.save()
-                messages.success(request,
-                                 f'Account <strong>{account_instance.Name}</strong> updated successfully')
-                return JsonResponse({'status': 'success'})
-            else:
-                return HttpResponseBadRequest()
-        else:
-            raise Http404
-    else:
-        raise Http404
+class AccountAction(CrudActionView):
+    model = Account
+    fields = ['id', 'Name']
+    form = AccountForm
+    msg_name_class = _('Account')
 
 
 def account_delete(request):

@@ -10,11 +10,11 @@ urlpatterns = [
     path('funds/', views.view_funds, name='view_funds'),
 
     path('accounts/', views.table_accounts, name='accounts'),
-    path('accounts/action/', views.account_action, name='account_action'),
+    path('accounts/action/', views.AccountAction.as_view(), name='account_action'),
     path('accounts/delete/', views.account_delete, name='account_delete'),
 
     path('counterparties/', views.table_counterparties, name='counterparties'),
-    path('counterparties/action/', views.counterparty_action, name='counterparty_action'),
+    path('counterparties/action/', views.CounterpartyAction.as_view(), name='counterparty_action'),
     path('counterparties/delete/', views.counterparty_delete, name='counterparty_delete'),
 
     path('customer_orders/', views.table_customer_orders, name='customer_orders'),
