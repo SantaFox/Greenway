@@ -112,8 +112,13 @@ $(document).ready(function() {
                 },
             });
         } else {
+            // TODO: We can ask application to prepare form with some initial values
             $(modal).find('.modal-footer input[name="action"]').val('add');
             $(modal).find('.modal-body input[type="text"]').val('');
+            $(modal).find('.modal-body input[type="number"]').val('');
+            $(modal).find('.modal-body input[type="checkbox"]').prop('checked', false);
+            $(modal).find('.modal-body textarea').val('');
+            $(modal).find('.modal-body select').val('');
         };
     });
 })
