@@ -11,10 +11,11 @@
                 </div>
                 <div class="modal-body">
                     {% crispy form %}
-                    <input type="hidden" name="id">
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="action" value="edit">
+                    <input type="hidden" name="id">
+                    <input type="hidden" name="parentId">
 
                     {% for btn in editButtons %}
                         <a href="#tableModal" class="btn {{ btn.buttonClass }} {% if forloop.last %}mr-auto{% else %}mr-2{% endif %}" data-toggle="modal"
