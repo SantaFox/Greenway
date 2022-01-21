@@ -161,6 +161,7 @@ class CustomerOrderPaymentForm(ModelForm):
         self.helper.layout = Layout(
             Div(
                 PrependedText('DateOperation', '<i class="bi bi-calendar-date"></i>', wrapper_class='col-md-6'),
+                Field('TransactionType', wrapper_class='col-md-6'),
                 css_class='form-row'),
             PrependedText('Account', '<i class="bi bi-menu-button"></i>'),
             Div(
@@ -185,4 +186,4 @@ class CustomerOrderPaymentForm(ModelForm):
 
     class Meta:
         model = Payment
-        fields = ['DateOperation', 'Account', 'Amount', 'Currency', ]
+        fields = ['DateOperation', 'TransactionType', 'Account', 'Amount', 'Currency', ]

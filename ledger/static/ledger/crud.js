@@ -98,7 +98,7 @@ $(document).ready(function() {
                             button = $(modal).find('#paymentsCount');
                             button.text('('+response[i]+')');
                         } else {
-                            formElement = $(modal).find('.modal-body [name="' + i + '"]');
+                            formElement = $(modal).find('.modal-body,.modal-footer [name="' + i + '"]');
                             if (formElement.attr('type') == 'checkbox'){
                                 formElement.prop('checked', response[i]);
                             } else {
