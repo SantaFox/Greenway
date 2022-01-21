@@ -228,6 +228,6 @@ class CustomerOrderPaymentsTable(Table):
     class Meta:
         model = Payment
         empty_text = _('There are no Payments for this Customer Order')
-        fields = ('id', 'DateOperation', 'Account__Name', 'Amount', 'Currency')
+        fields = ('id', 'DateOperation', 'TransactionType', 'Account__Name', 'Amount', 'Currency')
         attrs = {"class": "table table-hover table-sm small", "thead": {"class": ""}}
         orderable = False
