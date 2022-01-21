@@ -22,7 +22,7 @@
                            data-modal-title="{{ btn.formTitle }}">
                             <i class="{{ btn.buttonIcon }} mr-1"></i>
                             {{ btn.buttonText }}
-                            <span id="{{ btn.buttonSpanId }}"></span>
+                            {% if btn.buttonSpanId %}<span id="{{ btn.buttonSpanId }}"></span>{% endif %}
                         </a>
                     {% endfor %}
 
