@@ -247,9 +247,14 @@ def table_counterparties(request):
     form = CounterpartyForm
     return TemplateResponse(request, 'ledger/table_counterparties.html', {
         'table': table,
-        'form': form,
-        'editAction': reverse('ledger:counterparty_action'),
-        'editHeader': _('Edit Counterparty'),
+        'forms': [
+            {
+                'FormId': 'editCounterparty',
+                'Action': reverse('ledger:counterparty_action'),
+                'Header': _('Edit Counterparty'),
+                'CrispyForm': form
+            }
+        ],
         'deleteAction': reverse('ledger:counterparty_delete'),
         'deleteHeader': _('Delete Counterparty'),
     })
@@ -278,9 +283,14 @@ def table_accounts(request):
     form = AccountForm
     return TemplateResponse(request, 'ledger/table_accounts.html', {
         'table': table,
-        'form': form,
-        'editAction': reverse('ledger:account_action'),
-        'editHeader': _('Edit Account'),
+        'forms': [
+            {
+                'FormId': 'editAccount',
+                'Action': reverse('ledger:account_action'),
+                'Header': _('Edit Account'),
+                'CrispyForm': form
+            }
+        ],
         'deleteAction': reverse('ledger:account_delete'),
         'deleteHeader': _('Delete Account'),
     })
@@ -318,28 +328,76 @@ def table_customer_orders(request):
                   paginate={"per_page": 15}) \
         .configure(table)
 
-    form = CustomerOrderForm(user=request.user)
     return TemplateResponse(request, 'ledger/table_customer_orders.html', {
         'table': table,
-        'form': form,
         'filter': f,
-        'editAction': reverse('ledger:customer_order_action'),
-        'editHeader': _('Edit Customer Order'),
-        'editButtons': [
-            {'buttonText': 'Positions',
-             'buttonClass': 'btn-success',
-             'buttonIcon': 'bi bi-table',
-             'buttonSpanId': 'positionsCount',
-             'formAction': reverse('ledger:customer_order_positions'),
-             'formTitle': _('Customer Order Positions'),
-             },
-            {'buttonText': '',
-             'buttonClass': 'btn-success',
-             'buttonIcon': 'bi bi-credit-card',
-             'buttonSpanId': 'paymentsCount',
-             'formAction': reverse('ledger:customer_order_payments'),
-             'formTitle': _('Customer Order Payments'),
-             },
+        'forms': [
+            {
+                'FormId': 'editOrder',
+                'Action': reverse('ledger:customer_order_action'),
+                'Header': _('Edit Customer Order'),
+                'CrispyForm': CustomerOrderForm(user=request.user),
+                'Buttons': [
+                    {'buttonHref': '#tablePositions',
+                     'buttonText': 'Positions',
+                     'buttonClass': 'btn-success',
+                     'buttonIcon': 'bi bi-table',
+                     'buttonSpanId': 'positionsCount',
+                     'formAction': reverse('ledger:customer_order_positions'),
+                     'formTitle': _('Customer Order Positions'),
+                     },
+                    {'buttonHref': '#tablePayments',
+                     'buttonText': '',
+                     'buttonClass': 'btn-success',
+                     'buttonIcon': 'bi bi-credit-card',
+                     'buttonSpanId': 'paymentsCount',
+                     'formAction': reverse('ledger:customer_order_payments'),
+                     'formTitle': _('Customer Order Payments'),
+                     },
+                ]
+            },
+            {
+                'FormId': 'tablePositions',
+                'Handler': 'tableModal',
+                'Header': _('Customer Order Positions'),
+                'ModalStyle': 'modal-lg',
+                'Buttons': [
+                    {'buttonHref': '#editPosition',
+                     'buttonText': 'Add',
+                     'buttonClass': 'btn-warning',
+                     'buttonIcon': 'bi bi-plus-square',
+                     'formAction': reverse('ledger:customer_order_position_action'),
+                     'formTitle': _('Edit Order Position'),
+                     },
+                ]
+            },
+            {
+                'FormId': 'tablePayments',
+                'Handler': 'tableModal',
+                'Header': _('Customer Order Payments'),
+                'ModalStyle': 'modal-lg',
+                'Buttons': [
+                    {'buttonHref': '#editPayment',
+                     'buttonText': 'Add',
+                     'buttonClass': 'btn-warning',
+                     'buttonIcon': 'bi bi-plus-square',
+                     'formAction': reverse('ledger:customer_order_payment_action'),
+                     'formTitle': _('Edit Order Payment'),
+                     },
+                ]
+            },
+            {
+                'FormId': 'editPosition',
+                'Action': reverse('ledger:customer_order_position_action'),
+                'Header': _('Edit Order Position'),
+                'CrispyForm': CustomerOrderPositionForm(user=request.user)
+            },
+            {
+                'FormId': 'editPayment',
+                'Action': reverse('ledger:customer_order_payment_action'),
+                'Header': _('Edit Order Payment'),
+                'CrispyForm': CustomerOrderPaymentForm(user=request.user)
+            }
         ],
         'deleteAction': reverse('ledger:customer_order_delete'),
         'deleteHeader': _('Delete Customer Order'),

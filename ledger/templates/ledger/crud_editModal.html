@@ -1,24 +1,25 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-<div id="editModal" class="modal fade" data-backdrop="static">
-    <div class="modal-dialog">
+{% for frm in forms %}
+<div id="{{ frm.FormId }}" class="modal fade {{ frm.Handler|default:'editModal' }}" data-backdrop="static">
+    <div class="modal-dialog {{frm.ModalStyle }}">
         <div class="modal-content">
-            <form action="{{ editAction }}">
+            <form action="{{ frm.Action }}">
                 <div class="modal-header">
-                    <h4 class="modal-title">{{ editHeader }}</h4>
+                    <h4 class="modal-title">{{ frm.Header }}</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
-                    {% crispy form %}
+                    {% if frm.CrispyForm %}{% crispy frm.CrispyForm %}{% endif %}
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="action" value="edit">
                     <input type="hidden" name="id">
                     <input type="hidden" name="parentId">
 
-                    {% for btn in editButtons %}
-                        <a href="#tableModal" class="btn {{ btn.buttonClass }} {% if forloop.last %}mr-auto{% else %}mr-2{% endif %}" data-toggle="modal"
+                    {% for btn in frm.Buttons %}
+                        <a href="{{ btn.buttonHref }}" class="btn {{ btn.buttonClass }} {% if forloop.last %}mr-auto{% else %}mr-2{% endif %}" data-toggle="modal"
                            data-modal-action="{{ btn.formAction }}"
                            data-modal-title="{{ btn.formTitle }}">
                             <i class="{{ btn.buttonIcon }} mr-1"></i>
@@ -36,3 +37,4 @@
         </div>
     </div>
 </div>
+{% endfor %}
