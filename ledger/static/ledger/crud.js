@@ -223,7 +223,7 @@ $(document).ready(function() {
                     $(response.table).appendTo(content);
                     initialize_checkboxes();
                 } else {
-                    console.log('something went wrong here');
+                    add_alert('Internal server error, please contacts support', 'Error');
                 };
             },
             error: function() {
