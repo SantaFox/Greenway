@@ -17,15 +17,15 @@ class CrudActionView(View):
     action_key = 'action'
 
     model = None
+    user_id_field = 'User'
     fields = None
     exclude = {'User'}
     form = None
 
     parent_id_key = 'parent_id'
     parent_id_field = None
+    parent_user_id_field = 'User'
     parent_model = None
-
-    user_id_field = 'User'
 
     msg_name_class = None
 
@@ -45,16 +45,21 @@ class CrudActionView(View):
         parent_id = request.GET.get(self.parent_id_key)
 
         user_filter = {self.user_id_field: request.user}
+        parent_user_filter = {self.parent_user_id_field: request.user}
 
         if request_id:
             # edit existing object
             object_instance = get_object_or_404(self.model, id=request_id, **user_filter)
             object_form = self.form(instance=object_instance)
         else:
-            # add new - need some initial data
-            object_instance = self.model(User=request.user)
+            # add new - need some initial data. However, the instance itself may not contain a User field if
+            # the parent instance have; so we need to check. However, I have no idea why User may be needed,
+            # because it will be anyway excluded later.
+            object_instance = self.model()
+            if 'User' in [f.name for f in object_instance._meta.get_fields()]:
+                object_instance.User = request.user
             if parent_id:
-                parent_instance = get_object_or_404(self.parent_model, id=parent_id, **user_filter)
+                parent_instance = get_object_or_404(self.parent_model, id=parent_id, **parent_user_filter)
                 setattr(object_instance, self.parent_id_field, parent_instance)
             params = self.get_default_info(object_instance)
             for attr, value in params.items():
@@ -62,6 +67,7 @@ class CrudActionView(View):
             object_form = self.form(initial=params)
 
         # TODO: Maybe it's better to create and serialize a CounterpartyForm here?
+
         object_dict = model_to_dict(object_instance, fields=self.fields, exclude=self.exclude)
         object_dict_add = self.get_additional_info(object_instance)
         return JsonResponse({**object_dict, **object_dict_add})
@@ -78,7 +84,8 @@ class CrudActionView(View):
                                      'message': {'text': msg, 'level': 'Error'},
                                      'errors': object_form.errors})
             object_instance = object_form.save(commit=False)
-            object_instance.User = request.user
+            if 'User' in [f.name for f in object_instance._meta.get_fields()]:
+                object_instance.User = request.user
             try:
                 object_instance.save()
                 messages.success(request,
