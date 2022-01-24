@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Field, Layout, HTML
 from crispy_forms.bootstrap import PrependedText
 
-from .models import Account, Counterparty, CustomerOrder, Payment
+from .models import Account, Counterparty, CustomerOrder, CustomerOrderPosition, Payment
 
 
 class AccountForm(ModelForm):
@@ -148,6 +148,50 @@ class CustomerOrderForm(ModelForm):
         model = CustomerOrder
         fields = ['DateOperation', 'Customer', 'DateDispatched', 'DateDelivered', 'TrackingNumber',
                   'CourierService', 'DetailedDelivery', 'Amount', 'Currency', 'Memo', ]
+
+
+class CustomerOrderPositionForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user') if 'user' in kwargs else None # notice the .pop()
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            self.fields[field_name].help_text = None
+
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('Product'),
+            Field('Quantity'),
+            Div(
+                PrependedText('Price', '<i class="bi bi-cash-stack"></i>', wrapper_class='col-md-4',
+                              css_class="text-right"),
+                Field('Currency', wrapper_class='col-md-4'),
+                css_class='form-row'),
+            Div(
+                PrependedText('Discount', '<i class="bi bi-cash-stack"></i>', wrapper_class='col-md-4',
+                              css_class="text-right"),
+                Field('DiscountReason', wrapper_class='col-md-4'),
+                css_class='form-row'),
+            Field('Status'),
+            Field('DateDelivered')
+        )
+
+        # loading Model descriptors from Meta subclass
+        for fld in self._meta.model._meta.get_fields():
+            if not fld.auto_created:
+                self.helper[fld.name].update_attributes(placeholder=fld.verbose_name)
+                if fld.help_text != '':
+                    self.helper[fld.name].update_attributes(title=fld.help_text)
+                    self.helper[fld.name].update_attributes(data_toggle="tooltip")
+
+        self.helper.form_show_labels = False
+        self.helper.use_custom_control = True
+        self.helper.form_tag = False
+        self.helper.disable_csrf = True
+
+    class Meta:
+        model = CustomerOrderPosition
+        fields = ['Product', 'Quantity', 'Price', 'Currency', 'Discount', 'DiscountReason', 'Status', 'DateDelivered']
 
 
 class CustomerOrderPaymentForm(ModelForm):

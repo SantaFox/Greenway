@@ -24,7 +24,7 @@ from .models import Account, Counterparty, Operation, CustomerOrder, CustomerOrd
     ItemSetBreakdownPosition, Payment, Transfer, DEBIT, CREDIT
 from .tables import InStockTable, FundsTable, AccountsTable, CounterpartyTable, CustomerOrdersTable, \
     CustomerOrderPositionsTable, CustomerOrderPaymentsTable
-from .forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerOrderPaymentForm
+from .forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerOrderPositionForm, CustomerOrderPaymentForm
 from .filters import CustomerOrderFilter
 from .classes import CrudActionView, CrudDeleteView
 
@@ -373,6 +373,15 @@ def table_customer_order_positions(request):
     rendered_table = table.as_html(request)
     return JsonResponse({'status': 'ok',
                          'table': rendered_table})
+
+
+class CustomerOrderPositionAction(CrudActionView):
+    model = CustomerOrderPosition
+    exclude = ['operation_ptr', 'User']
+    form = CustomerOrderPositionForm
+    parent_id_field = 'ParentOperation'
+    parent_model = CustomerOrder
+    msg_name_class = _('Position of Customer Order')
 
 
 @login_required
