@@ -52,6 +52,7 @@ $(document).ready(function(){
                     $('.modal').each(function(){
                         $(this).modal('hide');
                     });
+                    /* TODO: We should check for instruction here, and reload page OR refresh parent */
                     location.reload();
                 } else {
                     if (response.message) {
@@ -61,7 +62,7 @@ $(document).ready(function(){
                 }
             },
             error:function(){
-                console.log('something went wrong here');
+                add_alert('Internal server error, please contacts support', 'Error');
             },
         });
     });
@@ -176,7 +177,7 @@ $(document).ready(function() {
                 };
             },
             error: function() {
-                console.log('something went wrong here');
+                add_alert('Internal server error, please contacts support', 'Error');
             },
         });
     });
@@ -221,7 +222,6 @@ $(document).ready(function() {
                 };
             },
             error: function() {
-                console.log('something went wrong here');
             },
         });
     });
@@ -257,6 +257,7 @@ $(document).ready(function() {
             },
             error: function() {
                 console.log('something went wrong here');
+                add_alert('Internal server error, please contacts support', 'Error');
             },
         });
     });
