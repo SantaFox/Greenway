@@ -265,6 +265,7 @@ class CounterpartyAction(CrudActionView):
               'Facebook', 'City', 'Address', 'Memo', 'IsSupplier', 'IsCustomer']
     form = CounterpartyForm
     msg_name_class = _('Counterparty')
+    msg_edit_name = lambda self, instance: instance.Name
 
 
 class CounterpartyDelete(CrudDeleteView):
@@ -300,6 +301,7 @@ class AccountAction(CrudActionView):
     fields = ['id', 'Name']
     form = AccountForm
     msg_name_class = _('Account')
+    msg_edit_name = lambda self, instance: instance.Name
 
 
 class AccountDelete(CrudDeleteView):
