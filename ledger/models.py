@@ -196,11 +196,11 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
                                  help_text=_('Registered Customer'))
 
     DateDispatched = models.DateField(blank=True, null=True, verbose_name=_('Dispatch Date'),
-                                      help_text=_('Date when this Order was dispatched to the Customer. Until then,\
-                                                   the Order is prepared but held in Storage'))
+                                      help_text=_('Date when this Order was dispatched to the Customer. Until then, '
+                                                  'the Order is prepared but held in Storage'))
     DateDelivered = models.DateField(blank=True, null=True, verbose_name=_('Delivery Date'),
-                                     help_text=_('Date when this Order was delivered to the Customer.\
-                                                  In case of Detailed Delivery, the date of last delivery is used'))
+                                     help_text=_('Date when this Order was delivered to the Customer. '
+                                                 'In case of Detailed Delivery, the date of last delivery is used'))
     TrackingNumber = models.CharField(max_length=50, blank=True, verbose_name=_('Tracking Number'),
                                       help_text=_('Tracking Number provided by used Courier Service'))
     CourierService = models.CharField(choices=POSTAL_CHOICES, max_length=10, blank=True, null=True,
@@ -208,8 +208,8 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
                                       help_text=_('Select one from provided Courier Services'))
     DeliveryPrice = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
                                         verbose_name=_('Delivery price'),
-                                        help_text=_('Price of delivery in the same currency as Amount, if Customer \
-                                        is charged for it. Included in total Amount.'))
+                                        help_text=_('Price of delivery in the same currency as Amount, if Customer '
+                                                    'is charged for it. Included in total Amount.'))
 
     DetailedDelivery = models.BooleanField(default=False, verbose_name=_('Detailed Delivery'),
                                            help_text=_('Delivery of each Position is managed separately'))
