@@ -57,10 +57,10 @@ class CrudActionView(View):
             try:
                 object_instance.save()
                 messages.success(request,
-                                 self.msg_add_success % {'class': self.msg_name_class, 'name': self.msg_add_name})
+                                 self.msg_add_success % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)})
                 return JsonResponse({'status': 'success'})  # 'success' causes CRUD logic to refresh the page
             except IntegrityError as e:
-                msg = self.msg_add_integrity_error % {'class': self.msg_name_class, 'name': self.msg_add_name}
+                msg = self.msg_add_integrity_error % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)}
                 return JsonResponse({'status': 'not_valid',
                                      'message': {'text': msg, 'level': 'Error'},
                                      'errors': e.args})
@@ -69,21 +69,21 @@ class CrudActionView(View):
             object_instance = get_object_or_404(self.model, id=request_id, User=request.user)
             object_form = self.form(request.POST, instance=object_instance)
             if not object_form.has_changed():
-                msg = self.msg_edit_not_changed % {'class': self.msg_name_class, 'name': self.msg_add_name}
+                msg = self.msg_edit_not_changed % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)}
                 return JsonResponse({'status': 'not_changed',
                                      'message': {'text': msg, 'level': 'Warning'}})
             if not object_form.is_valid():
-                msg = self.msg_edit_not_valid % {'class': self.msg_name_class, 'name': self.msg_add_name}
+                msg = self.msg_edit_not_valid % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)}
                 return JsonResponse({'status': 'not_valid',
                                      'message': {'text': msg, 'level': 'Error'},
                                      'errors': object_form.errors})
             try:
                 object_form.save()
                 messages.success(request,
-                                 self.msg_edit_success % {'class': self.msg_name_class, 'name': self.msg_add_name})
+                                 self.msg_edit_success % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)})
                 return JsonResponse({'status': 'success'})  # 'success' causes CRUD logic to refresh the page
             except IntegrityError as e:
-                msg = self.msg_edit_integrity_error % {'class': self.msg_name_class, 'name': self.msg_add_name}
+                msg = self.msg_edit_integrity_error % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)}
                 # messages.error(request, msg)
                 return JsonResponse({'status': 'not_valid',
                                      'message': {'text': msg, 'level': 'Error'},
