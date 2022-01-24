@@ -71,56 +71,61 @@ $(document).ready(function(){
 /*
     Обработчик добавления или редактирования объекта из строки в основной таблице страницы.
     Если у кнопки, вызвавшей обработчик, прописан data-id, то это редактирование указанного объекта (так оформлены
-    кнопки в таблице); если не прописан - то это добавление (кнопка в шапке).
+    кнопки в таблице); если не прописан - то это добавление (кнопка в шапке или в подвале табличной субформы).
+    Если у кнопки, вызвавшей обработчик, прописан data-parent-id, то эта информация также передаётся в обработчик. По
+    идее, это нужно только при добавлении, т.к. при редактировании запись не может переноситься в другой родительский
+    объект (к примеру, оплата не может преноситься в другой заказ).
     Если это редактирование, то запрашивается список нужных полей для редактирования (так как в таблице могут быть
     не все) через AJAX по адресу, указанному в параметрах формы. Дальше все поля формы заполняются из полученных
     с сервера данных. Для positionsCount и paymentsCount специальные обработчики, указывающие количество
     строк в соответствующих подтаблицах.
-    Если это добавление, то используются пустые поля.
+    Если это добавление, то используются пустые поля, хотя должны запрашиваться с сервера.
 */
 $(document).ready(function() {
     $('.editModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var modal = $(this)
-        if (typeof button.data('id') !== 'undefined') {
+        var itemId = button.data('id') // Extract info from data-* attributes
+        var parentId = $(button).closest("form").find('input[type="hidden"][name="parentId"]').val();
+
+        var ajaxData = {}
+        if (itemId) ajaxData.id = itemId;
+        if (parentId) ajaxData.parent_id = parentId;
+
+        if (typeof button.data('id') == 'undefined') {
+            $(modal).find('.modal-footer input[name="action"]').val('add');
+        } else {
             $(modal).find('.modal-footer input[name="action"]').val('edit');
-            var itemId = button.data('id') // Extract info from data-* attributes
-            $.ajax({
-                url: $(modal).find('form').attr('action'),
-                type: 'GET',
-                data: {id: itemId},
-                dataType: 'json',
-                success: function(response) {
-                    for (var i in response) {
-                        if (i == 'positions_count') {
-                            button = $(modal).find('#positionsCount');
-                            button.text('('+response[i]+')');
-                        } else if (i == 'payments_count') {
-                            button = $(modal).find('#paymentsCount');
-                            button.text('('+response[i]+')');
+        };
+
+        $.ajax({
+            url: $(modal).find('form').attr('action'),
+            type: 'GET',
+            data: ajaxData,
+            dataType: 'json',
+            success: function(response) {
+                for (var i in response) {
+                    if (i == 'positions_count') {
+                        var span = $(modal).find('#positionsCount');
+                        span.text('('+response[i]+')');
+                    } else if (i == 'payments_count') {
+                        var span = $(modal).find('#paymentsCount');
+                        span.text('('+response[i]+')');
+                    } else {
+                        var formElement = $(modal).find('.modal-body [name="' + i + '"],.modal-footer [name="' + i + '"]');
+                        if (formElement.attr('type') == 'checkbox'){
+                            formElement.prop('checked', response[i]);
                         } else {
-                            formElement = $(modal).find('.modal-body [name="' + i + '"],.modal-footer [name="' + i + '"]');
-                            if (formElement.attr('type') == 'checkbox'){
-                                formElement.prop('checked', response[i]);
-                            } else {
-                                formElement.val(response[i]);
-                            }
+                            formElement.val(response[i]);
                         }
                     }
-                },
-                error: function() {
-                    console.log('something went wrong here');
-                },
-            });
-        } else {
-            // TODO: We can ask application to prepare form with some initial values
-            $(modal).find('.modal-footer input[name="action"]').val('add');
-            $(modal).find('.modal-body input[type="text"]').val('');
-            $(modal).find('.modal-body input[type="number"]').val('');
-            $(modal).find('.modal-body input[type="checkbox"]').prop('checked', false);
-            $(modal).find('.modal-body textarea').val('');
-            $(modal).find('.modal-body select').val('');
-        };
+                }
+            },
+            error: function() {
+                add_alert('Internal server error, please contacts support', 'Error');
+            },
+        });
+
     });
 })
 
@@ -222,41 +227,6 @@ $(document).ready(function() {
                 };
             },
             error: function() {
-            },
-        });
-    });
-})
-
-$(document).ready(function() {
-    $('#formModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var header = button.data('modal-title');
-        var action = button.data('modal-action');
-        var itemId = $(button).closest("form").find('input[type="hidden"][name="id"]').val();
-        var parentId = $(button).closest("form").find('input[type="hidden"][name="parentId"]').val();
-        //var parentId = 175
-
-        var modal = $(this);
-        $(modal).find('form').attr('action', action);
-        $(modal).find('form .modal-header h4').text(header);
-        $.ajax({
-            url: $(modal).find('form').attr('action'),
-            type: 'GET',
-            data: {id: itemId, parent_id:parentId},
-            dataType: 'json',
-            success: function(response) {
-                var content = $(modal).find('.modal-body');
-                if (response.status == 'ok') {
-                    content.empty();
-                    $(response.form).appendTo(content);
-                    $(modal).find('input[type="hidden"][name="action"]').val(response.hidden.action)
-                    $(modal).find('input[type="hidden"][name="parentId"]').val(response.hidden.parent)
-                } else {
-                    console.log('something went wrong here');
-                };
-            },
-            error: function() {
-                console.log('something went wrong here');
                 add_alert('Internal server error, please contacts support', 'Error');
             },
         });
