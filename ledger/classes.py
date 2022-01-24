@@ -70,10 +70,18 @@ class CrudActionView(View):
 
         object_dict = model_to_dict(object_instance, fields=self.fields, exclude=self.exclude)
         object_dict_add = self.get_additional_info(object_instance)
-        return JsonResponse({**object_dict, **object_dict_add})
+        tech_dict = {}
+        if request_id: tech_dict[self.object_id_key] = request_id
+        if parent_id: tech_dict[self.parent_id_key] = parent_id
+        return JsonResponse({**object_dict, **object_dict_add, **tech_dict})
 
     def post(self, request):
+        request_id = request.POST.get(self.object_id_key)
+        parent_id = request.POST.get(self.parent_id_key)
+
         user_filter = {self.user_id_field: request.user}
+        parent_user_filter = {self.parent_user_id_field: request.user}
+
         action = request.POST.get(self.action_key)
 
         if action == 'add':
@@ -86,6 +94,9 @@ class CrudActionView(View):
             object_instance = object_form.save(commit=False)
             if self.user_id_field in [f.name for f in object_instance._meta.get_fields()]:
                 setattr(object_instance, self.user_id_field, request.user)
+            if parent_id:
+                parent_instance = get_object_or_404(self.parent_model, id=parent_id, **parent_user_filter)
+                setattr(object_instance, self.parent_id_field, parent_instance)
             try:
                 object_instance.save()
                 messages.success(request,
@@ -97,7 +108,6 @@ class CrudActionView(View):
                                      'message': {'text': msg, 'level': 'Error'},
                                      'errors': e.args})
         elif action == 'edit':
-            request_id = request.POST.get(self.object_id_key)
             object_instance = get_object_or_404(self.model, id=request_id, **user_filter)
             object_form = self.form(request.POST, instance=object_instance)
             if not object_form.has_changed():
