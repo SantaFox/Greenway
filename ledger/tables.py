@@ -97,7 +97,7 @@ class AccountsTable(Table):
     # id = PrimaryKeyCheckboxColumn()
 
     Actions = TemplateColumn(
-        ('<a href="#editModal" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
+        ('<a href="#editAccount" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
          '<i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
          '<a href="#deleteModal" data-toggle="modal" data-id="{{ value }}">'
          '<i class="bi bi-trash text-danger mr-1"></i>Delete</a>'),
@@ -124,7 +124,7 @@ class CounterpartyTable(Table):
     IsCustomer = BootstrapBooleanColumn()
 
     Actions = TemplateColumn(
-        ('<a href="#editModal" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
+        ('<a href="#editCounterparty" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
          '<i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
          '<a href="#deleteModal" data-toggle="modal" data-id="{{ value }}">'
          '<i class="bi bi-trash text-danger mr-1"></i>Delete</a>'),
@@ -158,7 +158,7 @@ class CustomerOrdersTable(Table):
                           orderable=False)
 
     Actions = TemplateColumn(
-        ('<a href="#editModal" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
+        ('<a href="#editOrder" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
          '<i class="bi bi-pencil-square text-success mr-1"></i>Edit</a>'
          '<a href="#deleteModal" data-toggle="modal" data-id="{{ value }}">'
          '<i class="bi bi-trash text-danger mr-1"></i>Delete</a>'),
@@ -205,6 +205,16 @@ class CustomerOrderPositionsTable(Table):
 
     DateDelivered = DateColumn('d.m.Y')
 
+    Actions = TemplateColumn(
+        ('<a href="#editPosition" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
+         '<i class="bi bi-pencil-square text-success mr-1"></i></a>'
+         '<a href="#deleteModal" data-toggle="modal" data-id="{{ value }}">'
+         '<i class="bi bi-trash text-danger mr-1"></i></a>'),
+        accessor='id',
+        orderable=False,
+        verbose_name=_('Actions'),
+    )
+
     class Meta:
         model = CustomerOrderPosition
         empty_text = _('There are no Position for this Customer Order')
@@ -224,6 +234,16 @@ class CustomerOrderPaymentsTable(Table):
     Amount = NumericColumn(attrs={
         "td": {"align": "right"}
     })
+
+    Actions = TemplateColumn(
+        ('<a href="#editPayment" class="mr-2" data-toggle="modal" data-id="{{ value}}">'
+         '<i class="bi bi-pencil-square text-success mr-1"></i></a>'
+         '<a href="#deleteModal" data-toggle="modal" data-id="{{ value }}">'
+         '<i class="bi bi-trash text-danger mr-1"></i></a>'),
+        accessor='id',
+        orderable=False,
+        verbose_name=_('Actions'),
+    )
 
     class Meta:
         model = Payment
