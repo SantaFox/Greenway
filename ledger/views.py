@@ -440,6 +440,7 @@ class CustomerOrderPositionAction(CrudActionView):
     form = CustomerOrderPositionForm
     parent_id_field = 'ParentOperation'
     parent_model = CustomerOrder
+    user_id_field = 'Operation__User'
     msg_name_class = _('Position of Customer Order')
 
 

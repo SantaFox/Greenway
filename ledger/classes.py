@@ -25,6 +25,8 @@ class CrudActionView(View):
     parent_id_field = None
     parent_model = None
 
+    user_id_field = 'User'
+
     msg_name_class = None
 
     msg_add_name = None         # item_form.cleaned_data["Name"]
@@ -42,15 +44,17 @@ class CrudActionView(View):
         request_id = request.GET.get(self.object_id_key)
         parent_id = request.GET.get(self.parent_id_key)
 
+        user_filter = {self.user_id_field: request.user}
+
         if request_id:
             # edit existing object
-            object_instance = get_object_or_404(self.model, id=request_id, User=request.user)
+            object_instance = get_object_or_404(self.model, id=request_id, **user_filter)
             object_form = self.form(instance=object_instance)
         else:
             # add new - need some initial data
             object_instance = self.model(User=request.user)
             if parent_id:
-                parent_instance = get_object_or_404(self.parent_model, id=parent_id, User=request.user)
+                parent_instance = get_object_or_404(self.parent_model, id=parent_id, **user_filter)
                 setattr(object_instance, self.parent_id_field, parent_instance)
             params = self.get_default_info(object_instance)
             for attr, value in params.items():
@@ -63,7 +67,9 @@ class CrudActionView(View):
         return JsonResponse({**object_dict, **object_dict_add})
 
     def post(self, request):
+        user_filter = {self.user_id_field: request.user}
         action = request.POST.get(self.action_key)
+
         if action == 'add':
             object_form = self.form(request.POST)
             if not object_form.is_valid():
@@ -85,7 +91,7 @@ class CrudActionView(View):
                                      'errors': e.args})
         elif action == 'edit':
             request_id = request.POST.get(self.object_id_key)
-            object_instance = get_object_or_404(self.model, id=request_id, User=request.user)
+            object_instance = get_object_or_404(self.model, id=request_id, **user_filter)
             object_form = self.form(request.POST, instance=object_instance)
             if not object_form.has_changed():
                 msg = self.msg_edit_not_changed % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)}
