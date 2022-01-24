@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.db import IntegrityError
 from django.db.models import OuterRef, Sum, Subquery, Value, Func, F, DecimalField, Case, When, Q, FilteredRelation
 from django.db.models.functions import Coalesce, Cast
-from django.forms.models import model_to_dict
 from django.http import JsonResponse, Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
@@ -453,6 +452,24 @@ def table_customer_order_payments(request):
                          'table': rendered_table})
 
 
+class CustomerOrderPaymentAction(CrudActionView):
+    model = Payment
+    exclude = ['operation_ptr', 'User']
+    form = CustomerOrderPaymentForm
+    parent_id_field = 'ParentOperation'
+    parent_model = CustomerOrder
+    msg_name_class = _('Payment of Customer Order')
+
+    def get_default_info(self, instance):
+        # Usually we have only "model"."parent_id_field" and "model".User filled
+        params = {'DateOperation': date.today()}
+        if instance.ParentOperation:
+            # if we know order id, then we help with calculations
+            params['Amount'] = instance.ParentOperation.Amount - instance.ParentOperation.get_paid_amount
+            params['Currency'] = instance.ParentOperation.Currency
+        return {**params}
+
+
 def customer_order_payment_action(request):
     if request.is_ajax():
         if request.method == 'GET':
@@ -549,4 +566,3 @@ def database_validation(request):
 
     if request.POST():
         pass
-    

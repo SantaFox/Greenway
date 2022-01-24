@@ -26,5 +26,6 @@ urlpatterns = [
          name='customer_order_position_action'),
 
     path('customer_order_payments/', views.table_customer_order_payments, name='customer_order_payments'),
-    path('customer_order_payments/action', views.customer_order_payment_action, name='customer_order_payment_action'),
+    path('customer_order_payments/action', views.CustomerOrderPaymentAction.as_view(),
+         name='customer_order_payment_action'),
 ]
