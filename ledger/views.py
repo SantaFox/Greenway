@@ -465,7 +465,7 @@ class CustomerOrderPaymentAction(CrudActionView):
 
     def get_default_info(self, instance):
         # Usually we have only "model"."parent_id_field" and "model".User filled
-        params = {'DateOperation': date.today()}
+        params = {'DateOperation': date.today(), 'TransactionType': CREDIT}
         if instance.ParentOperation:
             # if we know order id, then we help with calculations
             params['Amount'] = instance.ParentOperation.Amount - instance.ParentOperation.get_paid_amount
