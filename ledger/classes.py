@@ -18,9 +18,12 @@ class CrudActionView(View):
 
     model = None
     fields = None
-    exclude = None
-
+    exclude = {'User'}
     form = None
+
+    parent_id_key = 'parent_id'
+    parent_id_field = None
+    parent_model = None
 
     msg_name_class = None
 
@@ -37,7 +40,23 @@ class CrudActionView(View):
 
     def get(self, request):
         request_id = request.GET.get(self.object_id_key)
-        object_instance = get_object_or_404(self.model, id=request_id, User=request.user)
+        parent_id = request.GET.get(self.parent_id_key)
+
+        if request_id:
+            # edit existing object
+            object_instance = get_object_or_404(self.model, id=request_id, User=request.user)
+            object_form = self.form(instance=object_instance)
+        else:
+            # add new - need some initial data
+            object_instance = self.model(User=request.user)
+            if parent_id:
+                parent_instance = get_object_or_404(self.parent_model, id=parent_id, User=request.user)
+                setattr(object_instance, self.parent_id_field, parent_instance)
+            params = self.get_default_info(object_instance)
+            for attr, value in params.items():
+                setattr(object_instance, attr, value)
+            object_form = self.form(initial=params)
+
         # TODO: Maybe it's better to create and serialize a CounterpartyForm here?
         object_dict = model_to_dict(object_instance, fields=self.fields, exclude=self.exclude)
         object_dict_add = self.get_additional_info(object_instance)
@@ -90,6 +109,9 @@ class CrudActionView(View):
                                      'errors': e.args})
         else:
             return HttpResponseBadRequest()
+
+    def get_default_info(self, instance):
+        return dict()
 
     def get_additional_info(self, instance):
         return dict()
