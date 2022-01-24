@@ -78,7 +78,7 @@ $(document).ready(function(){
     Если это добавление, то используются пустые поля.
 */
 $(document).ready(function() {
-    $('#editModal').on('show.bs.modal', function (event) {
+    $('.editModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var modal = $(this)
         if (typeof button.data('id') !== 'undefined') {
@@ -195,7 +195,7 @@ $(document).ready(function() {
 })
 
 $(document).ready(function() {
-    $('#tableModal').on('show.bs.modal', function (event) {
+    $('.tableModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
         var header = button.data('modal-title');
         var action = button.data('modal-action');
