@@ -105,8 +105,6 @@ class CustomerOrderForm(ModelForm):
 
         for field_name, field in self.fields.items():
             self.fields[field_name].help_text = None
-            if field_name not in ('DetailedDelivery'):
-                self.fields[field_name].label = False
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
@@ -116,7 +114,7 @@ class CustomerOrderForm(ModelForm):
             PrependedText('Customer', '<i class="bi bi-person"></i>'),
             Div(
                 PrependedText('DateDelivered', '<i class="bi bi-gift"></i>', wrapper_class='col-md-6'),
-                Field('DetailedDelivery', wrapper_class='col-md-6'),
+                Field('DetailedDelivery', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
                 css_class='form-row'),
             Div(
                 PrependedText('DateDispatched', '<i class="bi bi-truck"></i>', wrapper_class='col-md-6'),
@@ -143,7 +141,7 @@ class CustomerOrderForm(ModelForm):
                     self.helper[fld.name].update_attributes(title=fld.help_text)
                     self.helper[fld.name].update_attributes(data_toggle="tooltip")
 
-        # self.helper.form_show_labels = False
+        self.helper.form_show_labels = False
         self.helper.use_custom_control = True
         self.helper.form_tag = False
         self.helper.disable_csrf = True
