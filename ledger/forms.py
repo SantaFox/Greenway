@@ -10,6 +10,7 @@ from .models import Account, Counterparty, CustomerOrder, CustomerOrderPosition,
 
 class AccountForm(ModelForm):
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user') if 'user' in kwargs else None # notice the .pop()
         super().__init__(*args, **kwargs)
 
         # Remove help_text to make it as tooltips
@@ -41,6 +42,7 @@ class AccountForm(ModelForm):
 
 class CounterpartyForm(ModelForm):
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user') if 'user' in kwargs else None # notice the .pop()
         super().__init__(*args, **kwargs)
 
         # Remove help_text to make it as tooltips
@@ -92,7 +94,7 @@ class CounterpartyForm(ModelForm):
 
 class CustomerOrderForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user')  # notice the .pop()
+        self.user = kwargs.pop('user') if 'user' in kwargs else None # notice the .pop()
         super().__init__(*args, **kwargs)
 
         # self.fields['DateOperation'].widget = DateInput(attrs={
@@ -129,7 +131,9 @@ class CustomerOrderForm(ModelForm):
             Field('Memo', rows=4),
         )
 
-        self.fields['Customer'].queryset = Counterparty.objects.filter(User=self.user)
+        queryset_filters = dict(User=self.user)
+        self.fields['Customer'].queryset = Counterparty.objects.filter(
+            **{k: v for k, v in queryset_filters.items() if v is not None})
 
         # loading Model descriptors from Meta subclass
         for fld in self._meta.model._meta.get_fields():
@@ -196,6 +200,7 @@ class CustomerOrderPositionForm(ModelForm):
 
 class CustomerOrderPaymentForm(ModelForm):
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user') if 'user' in kwargs else None # notice the .pop()
         super().__init__(*args, **kwargs)
 
         for field_name, field in self.fields.items():
