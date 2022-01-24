@@ -56,8 +56,8 @@ class CrudActionView(View):
             # the parent instance have; so we need to check. However, I have no idea why User may be needed,
             # because it will be anyway excluded later.
             object_instance = self.model()
-            if 'User' in [f.name for f in object_instance._meta.get_fields()]:
-                object_instance.User = request.user
+            if self.user_id_field in [f.name for f in object_instance._meta.get_fields()]:
+                setattr(object_instance, self.user_id_field, request.user)
             if parent_id:
                 parent_instance = get_object_or_404(self.parent_model, id=parent_id, **parent_user_filter)
                 setattr(object_instance, self.parent_id_field, parent_instance)
@@ -84,8 +84,8 @@ class CrudActionView(View):
                                      'message': {'text': msg, 'level': 'Error'},
                                      'errors': object_form.errors})
             object_instance = object_form.save(commit=False)
-            if 'User' in [f.name for f in object_instance._meta.get_fields()]:
-                object_instance.User = request.user
+            if self.user_id_field in [f.name for f in object_instance._meta.get_fields()]:
+                setattr(object_instance, self.user_id_field, request.user)
             try:
                 object_instance.save()
                 messages.success(request,
