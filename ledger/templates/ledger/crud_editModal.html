@@ -16,7 +16,7 @@
                 <div class="modal-footer">
                     <input type="hidden" name="action">
                     <input type="hidden" name="id">
-                    <input type="hidden" name="parentId">
+                    <input type="hidden" name="parent_id">
 
                     {% for btn in frm.Buttons %}
                         <a href="{{ btn.buttonHref }}" class="btn {{ btn.buttonClass }} {% if forloop.last %}mr-auto{% else %}mr-2{% endif %}" data-toggle="modal"

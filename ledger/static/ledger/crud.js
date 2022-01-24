@@ -79,14 +79,14 @@ $(document).ready(function(){
     не все) через AJAX по адресу, указанному в параметрах формы. Дальше все поля формы заполняются из полученных
     с сервера данных. Для positionsCount и paymentsCount специальные обработчики, указывающие количество
     строк в соответствующих подтаблицах.
-    Если это добавление, то используются пустые поля, хотя должны запрашиваться с сервера.
+    Если это добавление, то используются поля, запрошенные с сервера.
 */
 $(document).ready(function() {
     $('.editModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var modal = $(this)
         var itemId = button.data('id') // Extract info from data-* attributes
-        var parentId = $(button).closest("form").find('input[type="hidden"][name="parentId"]').val();
+        var parentId = $(button).closest("form").find('input[type="hidden"][name="parent_id"]').val();
 
         var ajaxData = {}
         if (itemId) ajaxData.id = itemId;
@@ -210,7 +210,7 @@ $(document).ready(function() {
         var modal = $(this);
         $(modal).find('form').attr('action', action);
         $(modal).find('form .modal-header h4').text(header);
-        $(modal).find('form .modal-footer input[type="hidden"][name="parentId"]').val(itemId); // Child form may need it
+        $(modal).find('form .modal-footer input[type="hidden"][name="parent_id"]').val(itemId); // Child form may need it
         $.ajax({
             url: $(modal).find('form').attr('action'),
             type: 'GET',
