@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-24 22:25+0200\n"
+"POT-Creation-Date: 2022-01-24 22:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -156,7 +156,7 @@ msgstr "Город"
 msgid "City name only"
 msgstr "Город (без указания адреса)"
 
-#: models.py:88 models.py:165 models.py:222 models.py:254 models.py:379
+#: models.py:88 models.py:165 models.py:222 models.py:254 models.py:383
 msgid "Memo"
 msgstr "Заметки"
 
@@ -166,7 +166,8 @@ msgstr "Поставщик"
 
 #: models.py:92
 msgid "Counterparty act as Supplier and can be selected in Supplier Order"
-msgstr "Контрагент является Поставщиком и доступен для выбора в Заказах Поставщикам"
+msgstr ""
+"Контрагент является Поставщиком и доступен для выбора в Заказах Поставщикам"
 
 #: models.py:93
 msgid "Act as Customer"
@@ -174,7 +175,8 @@ msgstr "Покупатель"
 
 #: models.py:94
 msgid "Counterparty act as Customer and can be selected in Customer Order"
-msgstr "Контрагент является Покупателем и доступен для выбора в Заказах Покупателей"
+msgstr ""
+"Контрагент является Покупателем и доступен для выбора в Заказах Покупателей"
 
 #: models.py:103
 msgid "Counterparties"
@@ -259,17 +261,12 @@ msgstr "Стоимость доставки"
 
 #: models.py:151
 #, fuzzy
-#| msgid ""
-#| "Price of delivery in the same currency as Amount, if "
-#| "separately                                         provided by the "
-#| "Supplier"
 msgid ""
-"Price of delivery in the same currency as Amount, if "
-"separately                                         provided by the Supplier. "
-"Included in total Amount."
+"Price of delivery in the same currency as Amount, if separately provided by "
+"the Supplier. Included in total Amount."
 msgstr ""
-"Стоимость доставки в валюте оплаты Заказа, еслибыла отдельно указана "
-"Поставщиком"
+"Стоимость доставки в валюте оплаты Заказа, если была отдельно указана "
+"Поставщиком. Включена в общую Стоимость."
 
 #: models.py:154 models.py:217
 msgid "Amount"
@@ -352,8 +349,9 @@ msgstr ""
 msgid ""
 "Price of delivery in the same currency as Amount, if Customer is charged for "
 "it. Included in total Amount."
-msgstr "Стоимость доставки в валюте основной цены, если дополнительно удерживается "
-"с Покупателя. Включается в общую Стоимость."
+msgstr ""
+"Стоимость доставки в валюте основной цены, если дополнительно удерживается с "
+"Покупателя. Включается в общую Стоимость."
 
 #: models.py:214
 msgid "Detailed Delivery"
@@ -487,13 +485,13 @@ msgstr "Доставлен заказчику"
 msgid "Payments"
 msgstr "Оплаты"
 
-#: models.py:380
+#: models.py:384
 #, fuzzy
 #| msgid "Memo related to this Customer Order"
 msgid "Memo related to this Cash Transfer"
 msgstr "Заметки к этому Переводу Средств"
 
-#: models.py:386
+#: models.py:390
 msgid "Cash Transfers"
 msgstr "Переводы Средств"
 

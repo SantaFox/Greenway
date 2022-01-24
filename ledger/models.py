@@ -148,8 +148,8 @@ class SupplierOrder(ModelIsDeletableMixin, Operation):
                                       help_text=_('Select one from provided Courier Services'))
     DeliveryPrice = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,
                                         verbose_name=_('Delivery price'),
-                                        help_text=_('Price of delivery in the same currency as Amount, if separately \
-                                        provided by the Supplier. Included in total Amount.'))
+                                        help_text=_('Price of delivery in the same currency as Amount, if separately '
+                                                    'provided by the Supplier. Included in total Amount.'))
 
     Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name=_('Amount'),
                                  help_text=_('Amount to be paid to the Supplier'))
@@ -368,13 +368,17 @@ class Payment(ModelIsDeletableMixin, Operation):
 
 
 class Transfer(ModelIsDeletableMixin, Operation):
-    DebitAccount = models.ForeignKey(Account, on_delete=models.PROTECT, blank=True, null=True, related_name='debit_account')
+    DebitAccount = models.ForeignKey(Account, on_delete=models.PROTECT, blank=True, null=True,
+                                     related_name='debit_account')
     DebitAmount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    DebitCurrency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True, related_name='debit_currency')
+    DebitCurrency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True,
+                                      related_name='debit_currency')
 
-    CreditAccount = models.ForeignKey(Account, on_delete=models.PROTECT, blank=True, null=True, related_name='credit_account')
+    CreditAccount = models.ForeignKey(Account, on_delete=models.PROTECT, blank=True, null=True,
+                                      related_name='credit_account')
     CreditAmount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    CreditCurrency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True, related_name='credit_currency')
+    CreditCurrency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True,
+                                       related_name='credit_currency')
 
     Memo = models.TextField(blank=True, verbose_name=_('Memo'),
                             help_text=_('Memo related to this Cash Transfer'))
