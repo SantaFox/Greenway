@@ -24,12 +24,12 @@ class CrudActionView(View):
 
     msg_name_class = None
 
-    msg_add_name = None
+    msg_add_name = None         # item_form.cleaned_data["Name"]
     msg_add_success = _('%(class)s <strong>%(name)s</strong> added successfully')
     msg_add_not_valid = _('Cannot add %(class)s <strong>%(name)s</strong>, the form contains errors')
     msg_add_integrity_error = _('Cannot add %(class)s <strong>%(name)s</strong>, it contains logic error(s)')
 
-    msg_edit_name = None
+    msg_edit_name = lambda self, instance: instance.__str__()
     msg_edit_success = _('%(class)s <strong>%(name)s</strong> updated successfully')
     msg_edit_not_changed = _('%(class)s <strong>%(name)s</strong> was not changed')
     msg_edit_not_valid = _('Cannot update %(class)s <strong>%(name)s</strong>, the form contains errors')
