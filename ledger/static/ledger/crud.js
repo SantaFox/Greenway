@@ -92,10 +92,10 @@ $(document).ready(function() {
         if (itemId) ajaxData.id = itemId;
         if (parentId) ajaxData.parent_id = parentId;
 
-        if (typeof button.data('id') == 'undefined') {
-            $(modal).find('.modal-footer input[name="action"]').val('add');
-        } else {
+        if (itemId) {
             $(modal).find('.modal-footer input[name="action"]').val('edit');
+        } else {
+            $(modal).find('.modal-footer input[name="action"]').val('add');
         };
 
         $.ajax({
