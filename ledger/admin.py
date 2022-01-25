@@ -35,7 +35,7 @@ class SupplierOrderAdmin(admin.ModelAdmin):
 
     @admin.display(description='Not Paid', empty_value='???')
     def get_debt(self, obj):
-        return '{:0,.2f}'.format(obj.Amount - obj.get_paid_amount)
+        return '{:0,.2f}'.format((obj.Amount or 0) - obj.get_paid_amount)
 
     class Media:
         css = {
@@ -72,7 +72,7 @@ class CustomerOrderAdmin(admin.ModelAdmin):
 
     @admin.display(description='Not Paid', empty_value='???')
     def get_debt(self, obj):
-        return '{:0,.2f}'.format(obj.Amount - obj.get_paid_amount)
+        return '{:0,.2f}'.format((obj.Amount or 0) - obj.get_paid_amount)
 
     class Media:
         css = {
