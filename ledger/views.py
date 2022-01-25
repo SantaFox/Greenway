@@ -411,6 +411,11 @@ class CustomerOrderAction(CrudActionView):
             'payments_count': instance.get_payments_count,
         }
 
+    def get_default_info(self, instance):
+        # Usually we have only "model"."parent_id_field" and "model".User filled
+        params = {}
+        return {**params}
+
 
 class CustomerOrderDelete(CrudDeleteView):
     model = CustomerOrder
@@ -472,86 +477,6 @@ class CustomerOrderPaymentAction(CrudActionView):
         return {**params}
 
 
-def customer_order_payment_action(request):
-    if request.is_ajax():
-        if request.method == 'GET':
-            request_id = request.GET.get('id')
-            order_id = request.GET.get('parent_id')
-            if request_id:
-                # edit existing item
-                item_instance = get_object_or_404(Payment, id=request_id, User=request.user)
-                form_instance = CustomerOrderPaymentForm(instance=item_instance)
-            else:
-                # add new - need some initial data
-                params = {'DateOperation': date.today()}
-                if order_id:
-                    # if we know order id, then we help with calculations
-                    order_instance = get_object_or_404(CustomerOrder, id=order_id, User=request.user)
-                    params['Amount'] = order_instance.Amount - order_instance.get_paid_amount
-                    params['Currency'] = order_instance.Currency
-                form_instance = CustomerOrderPaymentForm(initial=params)
-            rendered_form = render_crispy_form(form_instance)
-            return JsonResponse({'status': 'ok',
-                                 'form': rendered_form,
-                                 'hidden': {
-                                    'action': 'edit' if form_instance.is_bound else 'add',
-                                    'parent': order_id,
-                                    }
-                                 })
-        elif request.method == 'POST':
-            action = request.POST.get('action')
-            parent = request.POST.get('parentId')
-            if action == 'add':
-                item_form = CustomerOrderPaymentForm(request.POST)
-                if not item_form.is_valid():
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {
-                                             'text': f'Payment was not saved',
-                                             'moment': datetime.now(),
-                                         },
-                                         'errors': item_form.errors})
-                item_instance = item_form.save(commit=False)
-                item_instance.User = request.user
-                parent_instance = get_object_or_404(Operation, id=parent, User=request.user)
-                item_instance.ParentOperation = parent_instance
-                try:
-                    item_instance.save()
-                    messages.success(request,
-                                     f'Payment added successfully')
-                    return JsonResponse({'status': 'success'})
-                except IntegrityError as e:
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {
-                                             'text': f'Payment was not saved',
-                                             'moment': datetime.now(),
-                                         },
-                                         'errors': e.args
-                                         })
-            elif action == 'edit':
-                request_id = request.POST.get('id')
-                item_instance = get_object_or_404(Payment, id=request_id, User=request.user)
-                item_form = CustomerOrderPaymentForm(request.POST, instance=item_instance)
-                if not item_form.has_changed():
-                    messages.info(request,
-                                  f'Payment <strong>{item_instance.__str__()}</strong> was not changed')
-                    return JsonResponse({'status': 'not_changed'})
-                if not item_form.is_valid():
-                    return JsonResponse({'status': 'not_valid',
-                                         'message': {
-                                             'text': f'Payment <strong>{item_instance.__str__()}</strong> was not saved',
-                                             'moment': datetime.now(),
-                                         },
-                                         'errors': item_form.errors})
-                item_form.save()
-                messages.success(request,
-                                 f'Payment <strong>{item_instance.__str__()}</strong> updated successfully')
-                return JsonResponse({'status': 'success'})
-            else:
-                return HttpResponseBadRequest()
-        else:
-            raise Http404
-    else:
-        raise Http404
 class CustomerOrderPaymentDelete(CrudDeleteView):
     model = Payment
     msg_name_class = _('Payment of Customer Order')
