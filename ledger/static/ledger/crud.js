@@ -83,6 +83,13 @@ $(document).ready(function(){
 */
 $(document).ready(function() {
     $('.editModal').on('show.bs.modal', function (event) {
+
+        var zIndex = 1040 + (10 * $('.modal:visible').length);
+        $(this).css('z-index', zIndex);
+        setTimeout(function() {
+            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+
         var button = $(event.relatedTarget) // Button that triggered the modal
         var modal = $(this)
         var itemId = button.data('id') // Extract info from data-* attributes
@@ -157,6 +164,12 @@ $(document).ready(function() {
             });
         }
 
+        var zIndex = 1040 + (10 * $('.modal:visible').length);
+        $(this).css('z-index', zIndex);
+        setTimeout(function() {
+            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+
         var button = $(event.relatedTarget) // Button that triggered the modal
         var modal = $(this)
         var itemId = button.data('id') // Extract info from data-* attributes
@@ -206,6 +219,12 @@ $(document).ready(function() {
         var header = button.data('modal-title');
         var action = button.data('modal-action');
         var itemId = $(button).closest("form").find('input[type="hidden"][name="id"]').val();
+
+        var zIndex = 1040 + (10 * $('.modal:visible').length);
+        $(this).css('z-index', zIndex);
+        setTimeout(function() {
+            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
 
         var modal = $(this);
         $(modal).find('form').attr('action', action);
