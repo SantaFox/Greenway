@@ -92,6 +92,9 @@ $(document).ready(function() {
 
         var button = $(event.relatedTarget) // Button that triggered the modal
         var modal = $(this)
+
+        // We get "id" from data-* attributes of calling button and "parent_id" from hidden fields
+        // in the form that contained calling button
         var itemId = button.data('id') // Extract info from data-* attributes
         var parentId = $(button).closest("form").find('input[type="hidden"][name="parent_id"]').val();
 
@@ -215,10 +218,6 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $('.tableModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var header = button.data('modal-title');
-        var action = button.data('modal-action');
-        var itemId = $(button).closest("form").find('input[type="hidden"][name="id"]').val();
 
         var zIndex = 1040 + (10 * $('.modal:visible').length);
         $(this).css('z-index', zIndex);
@@ -227,9 +226,13 @@ $(document).ready(function() {
         }, 0);
 
         var modal = $(this);
-        $(modal).find('form').attr('action', action);
-        $(modal).find('form .modal-header h4').text(header);
+        var button = $(event.relatedTarget); // Button that triggered the modal
+
+        // We get "id" from previous window (it should be an order id by design of this screen
+        // and save it in hidden field of table modal form for further child forms
+        var itemId = $(button).closest("form").find('input[type="hidden"][name="id"]').val();
         $(modal).find('form .modal-footer input[type="hidden"][name="parent_id"]').val(itemId); // Child form may need it
+
         $.ajax({
             url: $(modal).find('form').attr('action'),
             type: 'GET',
