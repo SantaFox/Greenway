@@ -19,9 +19,7 @@
                     <input type="hidden" name="parent_id">
 
                     {% for btn in frm.Buttons %}
-                        <a href="{{ btn.buttonHref }}" class="btn {{ btn.buttonClass }} {% if forloop.last %}mr-auto{% else %}mr-2{% endif %}" data-toggle="modal"
-                           data-modal-action="{{ btn.formAction }}"
-                           data-modal-title="{{ btn.formTitle }}">
+                        <a href="{{ btn.buttonHref }}" class="btn {{ btn.buttonClass }} {% if forloop.last %}mr-auto{% else %}mr-2{% endif %}" data-toggle="modal">
                             <i class="{{ btn.buttonIcon }} mr-1"></i>
                             {{ btn.buttonText }}
                             {% if btn.buttonSpanId %}<span id="{{ btn.buttonSpanId }}"></span>{% endif %}

@@ -344,22 +344,19 @@ def table_customer_orders(request):
                      'buttonClass': 'btn-success',
                      'buttonIcon': 'bi bi-table',
                      'buttonSpanId': 'positionsCount',
-                     'formAction': reverse('ledger:customer_order_positions'),
-                     'formTitle': _('Customer Order Positions'),
                      },
                     {'buttonHref': '#tablePayments',
                      'buttonText': '',
                      'buttonClass': 'btn-success',
                      'buttonIcon': 'bi bi-credit-card',
                      'buttonSpanId': 'paymentsCount',
-                     'formAction': reverse('ledger:customer_order_payments'),
-                     'formTitle': _('Customer Order Payments'),
                      },
                 ]
             },
             {
                 'FormId': 'tablePositions',
                 'Handler': 'tableModal',
+                'Action': reverse('ledger:customer_order_positions'),
                 'Header': _('Customer Order Positions'),
                 'ModalStyle': 'modal-lg',
                 'Buttons': [
@@ -367,14 +364,13 @@ def table_customer_orders(request):
                      'buttonText': 'Add',
                      'buttonClass': 'btn-warning',
                      'buttonIcon': 'bi bi-plus-square',
-                     'formAction': reverse('ledger:customer_order_position_action'),
-                     'formTitle': _('Edit Order Position'),
                      },
                 ]
             },
             {
                 'FormId': 'tablePayments',
                 'Handler': 'tableModal',
+                'Action': reverse('ledger:customer_order_payments'),
                 'Header': _('Customer Order Payments'),
                 'ModalStyle': 'modal-lg',
                 'Buttons': [
@@ -382,8 +378,6 @@ def table_customer_orders(request):
                      'buttonText': 'Add',
                      'buttonClass': 'btn-warning',
                      'buttonIcon': 'bi bi-plus-square',
-                     'formAction': reverse('ledger:customer_order_payment_action'),
-                     'formTitle': _('Edit Order Payment'),
                      },
                 ]
             },
