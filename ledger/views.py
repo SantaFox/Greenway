@@ -429,7 +429,7 @@ def table_customer_order_positions(request):
     table = CustomerOrderPositionsTable(CustomerOrderPosition.objects.filter(Operation=customer_order_instance.id))
 
     rendered_table = table.as_html(request)
-    return JsonResponse({'status': 'ok',
+    return JsonResponse({'status': 'success',
                          'table': rendered_table})
 
 
@@ -455,7 +455,7 @@ def table_customer_order_payments(request):
     table = CustomerOrderPaymentsTable(Payment.objects.filter(ParentOperation=customer_order_instance.id))
 
     rendered_table = table.as_html(request)
-    return JsonResponse({'status': 'ok',
+    return JsonResponse({'status': 'success',
                          'table': rendered_table})
 
 

@@ -237,7 +237,7 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 var content = $(modal).find('.modal-body');
-                if (response.status == 'ok') {
+                if (response.status == 'success') {
                     content.empty();
                     $(response.table).appendTo(content);
                     initialize_checkboxes();
