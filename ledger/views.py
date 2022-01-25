@@ -444,6 +444,11 @@ class CustomerOrderPositionAction(CrudActionView):
     msg_name_class = _('Position of Customer Order')
 
 
+class CustomerOrderPositionDelete(CrudDeleteView):
+    model = CustomerOrderPosition
+    msg_name_class = _('Position of Customer Order')
+
+
 @login_required
 @permission_required('ledger.view_payment', raise_exception=True)
 def table_customer_order_payments(request):
@@ -553,6 +558,9 @@ def customer_order_payment_action(request):
             raise Http404
     else:
         raise Http404
+class CustomerOrderPaymentDelete(CrudDeleteView):
+    model = Payment
+    msg_name_class = _('Payment of Customer Order')
 
 
 @login_required
