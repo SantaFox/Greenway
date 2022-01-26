@@ -413,7 +413,7 @@ class CustomerOrderAction(CrudActionView):
 
     def get_default_info(self, instance):
         # Usually we have only "model"."parent_id_field" and "model".User filled
-        params = {}
+        params = {'DateOperation': date.today()}
         return {**params}
 
 
