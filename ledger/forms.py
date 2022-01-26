@@ -163,19 +163,20 @@ class CustomerOrderPositionForm(ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Field('Product'),
-            Field('Quantity'),
             Div(
+                PrependedText('Quantity', '<i class="bi bi-123"></i>', wrapper_class='col-md-4',
+                              css_class="text-right"),
                 PrependedText('Price', '<i class="bi bi-cash-stack"></i>', wrapper_class='col-md-4',
                               css_class="text-right"),
-                Field('Currency', wrapper_class='col-md-4'),
+                PrependedText('Currency', '<i class="bi bi-currency-exchange"></i>', wrapper_class='col-md-4'),
                 css_class='form-row'),
             Div(
-                PrependedText('Discount', '<i class="bi bi-cash-stack"></i>', wrapper_class='col-md-4',
+                PrependedText('Discount', '<i class="bi bi-piggy-bank"></i>', wrapper_class='col-md-4',
                               css_class="text-right"),
-                Field('DiscountReason', wrapper_class='col-md-4'),
+                Field('DiscountReason', wrapper_class='col-md-8'),
                 css_class='form-row'),
-            Field('Status'),
-            Field('DateDelivered')
+            PrependedText('Status', '<i class="bi bi-basket"></i>'),
+            PrependedText('DateDelivered', '<i class="bi bi-gift"></i>')
         )
 
         # loading Model descriptors from Meta subclass
