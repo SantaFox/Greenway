@@ -1,3 +1,4 @@
+/*
 var initialize_checkboxes = function(){
     // Select/Deselect checkboxes
     var checkbox = $('table tbody input[type="checkbox"]');
@@ -18,7 +19,7 @@ var initialize_checkboxes = function(){
         }
     });
 };
-
+*/
 $(document).ready(function(){
     $('.modal form').on('submit', function (e) {
 
@@ -243,7 +244,7 @@ $(document).ready(function() {
                 if (response.status == 'success') {
                     content.empty();
                     $(response.table).appendTo(content);
-                    initialize_checkboxes();
+                    // initialize_checkboxes();
                 } else {
                     add_alert('Internal server error, please contacts support', 'Error');
                 };

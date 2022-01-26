@@ -178,7 +178,7 @@ class CustomerOrdersTable(Table):
 
 
 class CustomerOrderPositionsTable(Table):
-    id = PrimaryKeyCheckboxColumn()
+    # id = PrimaryKeyCheckboxColumn()
 
     ProductName = TemplateColumn(
         '<p>{{ value }}</p>',
@@ -219,7 +219,7 @@ class CustomerOrderPositionsTable(Table):
         model = CustomerOrderPosition
         empty_text = _('There are no Position for this Customer Order')
         fields = (
-            'id', 'ProductName', 'Product__SKU', 'ActualPrice', 'Price', 'Quantity', 'Currency', 'Discount',
+            'ProductName', 'Product__SKU', 'ActualPrice', 'Price', 'Quantity', 'Currency', 'Discount',
             'DiscountReason', 'Status', 'DateDelivered')
         attrs = {"class": "table table-hover table-sm small", "thead": {"class": ""}}
         row_attrs = {"class": "has_original"}
@@ -227,7 +227,7 @@ class CustomerOrderPositionsTable(Table):
 
 
 class CustomerOrderPaymentsTable(Table):
-    id = PrimaryKeyCheckboxColumn()
+    # id = PrimaryKeyCheckboxColumn()
 
     DateOperation = DateColumn('d.m.Y')
 
@@ -248,6 +248,6 @@ class CustomerOrderPaymentsTable(Table):
     class Meta:
         model = Payment
         empty_text = _('There are no Payments for this Customer Order')
-        fields = ('id', 'DateOperation', 'TransactionType', 'Account__Name', 'Amount', 'Currency')
+        fields = ('DateOperation', 'TransactionType', 'Account__Name', 'Amount', 'Currency')
         attrs = {"class": "table table-hover table-sm small", "thead": {"class": ""}}
         orderable = False
