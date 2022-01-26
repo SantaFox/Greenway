@@ -340,7 +340,7 @@ def table_customer_orders(request):
                 'CrispyForm': CustomerOrderForm(user=request.user),
                 'Buttons': [
                     {'buttonHref': '#tablePositions',
-                     'buttonText': 'Positions',
+                     'buttonText': _('Positions'),
                      'buttonClass': 'btn-success',
                      'buttonIcon': 'bi bi-table',
                      'buttonSpanId': 'positionsCount',
@@ -361,7 +361,7 @@ def table_customer_orders(request):
                 'ModalStyle': 'modal-lg',
                 'Buttons': [
                     {'buttonHref': '#editPosition',
-                     'buttonText': 'Add',
+                     'buttonText': _('Add'),
                      'buttonClass': 'btn-warning',
                      'buttonIcon': 'bi bi-plus-square',
                      },
@@ -375,7 +375,7 @@ def table_customer_orders(request):
                 'ModalStyle': 'modal-lg',
                 'Buttons': [
                     {'buttonHref': '#editPayment',
-                     'buttonText': 'Add',
+                     'buttonText': _('Add'),
                      'buttonClass': 'btn-warning',
                      'buttonIcon': 'bi bi-plus-square',
                      },
