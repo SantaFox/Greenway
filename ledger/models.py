@@ -331,7 +331,7 @@ class CustomerOrderPosition(OperationPosition):
         (4, _('Not in stock / waiting for incoming')),  # Missing item shows as INCOMING
         (5, _('Not in stock / no delivery control')),  # Missing item is... ?
         (6, _('Delivered to customer')),
-    ], blank=True, null=True)
+    ], blank=True, null=True, verbose_name=_('Ordering status'), help_text=_('Ordering status of this position'))
 
     DateDelivered = models.DateField(blank=True, null=True)  # Date received from supplier / by customer
 
