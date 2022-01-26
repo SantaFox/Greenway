@@ -427,6 +427,8 @@ class CustomerOrderDelete(CrudDeleteView):
 def table_customer_order_positions(request):
     customer_order_instance = get_object_or_404(CustomerOrder, id=request.GET.get('id'), User=request.user)
     table = CustomerOrderPositionsTable(CustomerOrderPosition.objects.filter(Operation=customer_order_instance.id))
+    if not customer_order_instance.DetailedDelivery:
+        table.exclude = ('DateDelivered', )
 
     rendered_table = table.as_html(request)
     return JsonResponse({'status': 'success',
