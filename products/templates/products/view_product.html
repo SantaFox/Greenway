@@ -148,7 +148,10 @@
             {% if price|get_model_name == 'price' %}
             <span class="font-weight-light">({% translate "actual since" %} {{ price.DateAdded|date:"j E Y" }})</span>
             {% elif price|get_model_name == 'discount' %}
-            <span class="font-weight-light">({% translate "discount since" %} {{ price.DateStart|date:"j E Y" }} {% translate "till" %} {{ price.DateEnd|date:"j E Y" }})</span>
+            <span class="font-weight-light">
+                ({% translate "discount since" %} {{ price.Action.DateStart|date:"j E Y" }}
+                {% translate "till" %} {{ price.Action.DateEnd|date:"j E Y" }})
+            </span>
             {% endif %}
             {% if user.is_authenticated and user.is_staff %}
             <a tabindex="0" role="button" class="btn btn-sm btn-info ml-2" data-toggle="popover" data-trigger="focus"
