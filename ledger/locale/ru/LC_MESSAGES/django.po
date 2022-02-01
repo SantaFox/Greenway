@@ -605,8 +605,6 @@ msgid "Add New Account"
 msgstr "Добавить новый счёт"
 
 #: templates/ledger/table_cash.html:7 templates/ledger/table_cash.html:21
-#, fuzzy
-#| msgid "Current Stock"
 msgid "Current Funds"
 msgstr "Текущие ДС"
 
