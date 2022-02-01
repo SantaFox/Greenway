@@ -189,6 +189,11 @@ class CustomerOrderPositionsTable(Table):
         verbose_name='',
     )
 
+    Product__SKU = TemplateColumn(
+        '#{{ value }}'
+    )
+
+
     ActualPrice = NumericColumn(
         accessor=A('get_actual_price__Price'),
         attrs={"td": {"align": "right", 'class': 'text-black-50'}},
