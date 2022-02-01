@@ -333,7 +333,9 @@ class CustomerOrderPosition(OperationPosition):
         (6, _('Delivered to customer')),
     ], blank=True, null=True, verbose_name=_('Ordering status'), help_text=_('Ordering status of this position'))
 
-    DateDelivered = models.DateField(blank=True, null=True)  # Date received from supplier / by customer
+    DateDelivered = models.DateField(blank=True, null=True, verbose_name=_('Delivery Date'),
+                                     help_text=_('Date when this Order position was delivered to the Customer. '
+                                                 'This field is available only if Detailed Deliver set in Order.'))
 
     def __str__(self):
         return f'{self.Operation} / {self.Product} / {self.Quantity} / {self.Price} / {self.Currency}'
