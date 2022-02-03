@@ -129,7 +129,7 @@ $(document).ready(function() {
                         if (formElement.attr('type') == 'checkbox'){
                             formElement.prop('checked', response[i]);
                         } else {
-                            formElement.val(response[i]);
+                            formElement.val(response[i]).trigger('change');
                         }
                     }
                 }
