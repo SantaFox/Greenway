@@ -3,8 +3,6 @@ from itertools import groupby
 from operator import itemgetter
 
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib import messages
-from django.db import IntegrityError
 from django.db.models import OuterRef, Sum, Subquery, Value, Func, F, DecimalField, Case, When, Q, FilteredRelation
 from django.db.models.functions import Coalesce, Cast
 from django.http import JsonResponse, Http404, HttpResponseBadRequest
@@ -259,6 +257,13 @@ def table_counterparties(request):
     })
 
 
+def counterparty_search(request):
+    qry = Counterparty.objects.filter(User=request.user)
+    search = request.GET.get('q', '')
+    response_dict = [{"value": cp.pk, "text": cp.Name} for cp in qry.filter(Name__icontains=search)]
+    return JsonResponse(response_dict, safe=False)
+
+
 class CounterpartyAction(CrudActionView):
     model = Counterparty
     fields = ['id', 'Name', 'Phone', 'Email', 'Instagram', 'Telegram',
@@ -401,12 +406,13 @@ def table_customer_orders(request):
 
 class CustomerOrderAction(CrudActionView):
     model = CustomerOrder
-    exclude = ['operation_ptr', 'User']
+    exclude = ['Customer', 'operation_ptr', 'User']
     form = CustomerOrderForm
     msg_name_class = _('Customer Order')
 
     def get_additional_info(self, instance):
         return {
+            'Customer': {'value': instance.Customer.pk, 'text': instance.Customer.Name},
             'positions_count': instance.get_positions_count,
             'payments_count': instance.get_payments_count,
         }
@@ -435,14 +441,31 @@ def table_customer_order_positions(request):
                          'table': rendered_table})
 
 
+def product_search(request):
+    qry = Product.objects.all()
+    search = request.GET.get('q', '')
+    qry_filter = Q(SKU__icontains=search) | Q(Category__Name__icontains=search) | Q(productinfo__Name__icontains=search)
+    response_dict = [
+        {"value": cp.pk,
+         "text": cp.get_full_name()
+         } for cp in qry.filter(qry_filter).order_by('SKU').distinct()
+    ]
+    return JsonResponse(response_dict, safe=False)
+
+
 class CustomerOrderPositionAction(CrudActionView):
     model = CustomerOrderPosition
-    exclude = ['operation_ptr', 'User']
+    exclude = ['Product', 'operation_ptr', 'User']
     form = CustomerOrderPositionForm
     parent_id_field = 'Operation'
     parent_model = CustomerOrder
     user_id_field = 'Operation__User'
     msg_name_class = _('Position of Customer Order')
+
+    def get_additional_info(self, instance):
+        return {
+            'Product': {'value': instance.Product.pk, 'text': f'#{instance.Product.get_full_name()}'},
+        }
 
 
 class CustomerOrderPositionDelete(CrudDeleteView):

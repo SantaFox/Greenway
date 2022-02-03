@@ -126,7 +126,10 @@ $(document).ready(function() {
                     } else {
                         var full_name = form_name + '-' + i;
                         var formElement = $(modal).find('.modal-body [name="' + full_name + '"],.modal-footer [name="' + i + '"]');
-                        if (formElement.attr('type') == 'checkbox'){
+                        if (response[i] !== null && response[i].constructor == Object){
+                            formElement = $(modal).find('.modal-body [name="' + full_name + '_text"]');
+                            formElement.autoComplete('set', response[i]);
+                        } else if (formElement.attr('type') == 'checkbox'){
                             formElement.prop('checked', response[i]);
                         } else {
                             formElement.val(response[i]).trigger('change');

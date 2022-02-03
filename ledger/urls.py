@@ -9,11 +9,14 @@ urlpatterns = [
     path('stock/', views.view_stock, name='view_stock'),
     path('funds/', views.view_funds, name='view_funds'),
 
+    path('products/search/', views.product_search, name='product_search'),
+
     path('accounts/', views.table_accounts, name='accounts'),
     path('accounts/action/', views.AccountAction.as_view(), name='account_action'),
     path('accounts/delete/', views.AccountDelete.as_view(), name='account_delete'),
 
     path('counterparties/', views.table_counterparties, name='counterparties'),
+    path('counterparties/search/', views.counterparty_search, name='counterparty_search'),
     path('counterparties/action/', views.CounterpartyAction.as_view(), name='counterparty_action'),
     path('counterparties/delete/', views.CounterpartyDelete.as_view(), name='counterparty_delete'),
 
