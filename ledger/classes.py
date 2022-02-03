@@ -73,6 +73,7 @@ class CrudActionView(View):
         tech_dict = {}
         if request_id: tech_dict[self.object_id_key] = request_id
         if parent_id: tech_dict[self.parent_id_key] = parent_id
+        if object_form.prefix: tech_dict['form_prefix'] = object_form.prefix
         return JsonResponse({**object_dict, **object_dict_add, **tech_dict})
 
     def post(self, request):

@@ -115,6 +115,7 @@ $(document).ready(function() {
             data: ajaxData,
             dataType: 'json',
             success: function(response) {
+                var form_name = ('form_prefix' in response) ? response.form_prefix : '';
                 for (var i in response) {
                     if (i == 'positions_count') {
                         var span = $(modal).find('#positionsCount');
@@ -123,7 +124,8 @@ $(document).ready(function() {
                         var span = $(modal).find('#paymentsCount');
                         span.text('('+response[i]+')');
                     } else {
-                        var formElement = $(modal).find('.modal-body [name="' + i + '"],.modal-footer [name="' + i + '"]');
+                        var full_name = form_name + '-' + i;
+                        var formElement = $(modal).find('.modal-body [name="' + full_name + '"],.modal-footer [name="' + i + '"]');
                         if (formElement.attr('type') == 'checkbox'){
                             formElement.prop('checked', response[i]);
                         } else {

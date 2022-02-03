@@ -146,6 +146,8 @@ class CustomerOrderForm(ModelForm):
         self.helper.form_tag = False
         self.helper.disable_csrf = True
 
+        self.prefix = 'form_CustomerOrder'
+
     class Meta:
         model = CustomerOrder
         fields = ['DateOperation', 'Customer', 'DateDispatched', 'DateDelivered', 'TrackingNumber',
@@ -192,6 +194,8 @@ class CustomerOrderPositionForm(ModelForm):
         self.helper.form_tag = False
         self.helper.disable_csrf = True
 
+        self.prefix = 'form_CustomerOrderPosition'
+
     class Meta:
         model = CustomerOrderPosition
         fields = ['Product', 'Quantity', 'Price', 'Currency', 'Discount', 'DiscountReason', 'Status', 'DateDelivered']
@@ -231,6 +235,8 @@ class CustomerOrderPaymentForm(ModelForm):
         self.helper.use_custom_control = True
         self.helper.form_tag = False
         self.helper.disable_csrf = True
+
+        self.prefix = 'form_CustomerOrderPayment'
 
     class Meta:
         model = Payment
