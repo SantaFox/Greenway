@@ -161,12 +161,15 @@ class Product(models.Model):
 
     def get_name(self):
         # As we don't have a request object here, we refer to django.utils.translation or default language from settings
-        language = Language.objects.get(Code=translation.get_language() or settings.LANGUAGE_CODE)
+        lang_code = translation.get_language() or settings.LANGUAGE_CODE
         try:
-            product_info = ProductInfo.objects.get(Product=self, Language=language)
+            product_info = ProductInfo.objects.get(Product=self, Language__Code=lang_code)
         except (ProductInfo.DoesNotExist, ProductInfo.MultipleObjectsReturned):
-            product_info = None
-        return product_info.Name if product_info is not None else _('< Product name not set >')
+            product_info = _('No product name in this language')
+        return product_info.Name
+
+    def get_full_name(self):
+        return f'{self.SKU}: {self.get_name()}'
 
     class Meta:
         constraints = [
