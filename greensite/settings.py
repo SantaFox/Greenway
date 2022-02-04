@@ -20,6 +20,8 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['mygreenway.team', '127.0.0.1', 'mac-mini.santafox.local', 'desktop-uusmurv.santafox.local', ]
 
+CSRF_TRUSTED_ORIGINS = ['https://mygreenway.team']
+
 INTERNAL_IPS = ['127.0.0.1',]
 
 # Application definition
