@@ -437,12 +437,20 @@ def table_customer_order_positions(request):
 
 class CustomerOrderPositionAction(CrudActionView):
     model = CustomerOrderPosition
-    exclude = ['operation_ptr', 'User']
+    exclude = ['operation_ptr', 'operationposition_ptr', 'User']
     form = CustomerOrderPositionForm
     parent_id_field = 'Operation'
     parent_model = CustomerOrder
     user_id_field = 'Operation__User'
     msg_name_class = _('Position of Customer Order')
+
+    def get_default_info(self, instance):
+        # Usually we have only "model"."parent_id_field" and "model".User filled
+        params = {}
+        if instance.Operation:
+            # if we know order id, then we help with calculations
+            params['Currency'] = instance.Operation.Currency
+        return {**params}
 
 
 class CustomerOrderPositionDelete(CrudDeleteView):
