@@ -124,7 +124,7 @@ $(document).ready(function() {
                         var span = $(modal).find('#paymentsCount');
                         span.text('('+response[i]+')');
                     } else {
-                        var full_name = form_name + '-' + i;
+                        var full_name = (form_name !== '') ? form_name + '-' + i : i;
                         var formElement = $(modal).find('.modal-body [name="' + full_name + '"],.modal-footer [name="' + i + '"]');
                         if (formElement.attr('type') == 'checkbox'){
                             formElement.prop('checked', response[i]);
