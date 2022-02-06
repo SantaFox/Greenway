@@ -411,11 +411,16 @@ class CustomerOrderAction(CrudActionView):
     msg_name_class = _('Customer Order')
 
     def get_additional_info(self, instance):
-        return {
-            'Customer': {'value': instance.Customer.pk, 'text': instance.Customer.Name},
+        params = {
             'positions_count': instance.get_positions_count,
             'payments_count': instance.get_payments_count,
         }
+        if instance.Customer:
+            params['Customer'] = {'value': instance.Customer.pk, 'text': instance.Customer.Name}
+        else:
+            params['Customer'] = {}
+
+        return params
 
     def get_default_info(self, instance):
         # Usually we have only "model"."parent_id_field" and "model".User filled

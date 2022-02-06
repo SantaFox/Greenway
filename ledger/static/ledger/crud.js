@@ -128,7 +128,11 @@ $(document).ready(function() {
                         var formElement = $(modal).find('.modal-body [name="' + full_name + '"],.modal-footer [name="' + i + '"]');
                         if (response[i] !== null && response[i].constructor == Object){
                             formElement = $(modal).find('.modal-body [name="' + full_name + '_text"]');
-                            formElement.autoComplete('set', response[i]);
+                            if (jQuery.isEmptyObject(response[i])){
+                                formElement.autoComplete('clear');
+                            } else {
+                                formElement.autoComplete('set', response[i]);
+                            }
                         } else if (formElement.attr('type') == 'checkbox'){
                             formElement.prop('checked', response[i]);
                         } else {
