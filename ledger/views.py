@@ -411,16 +411,13 @@ class CustomerOrderAction(CrudActionView):
     msg_name_class = _('Customer Order')
 
     def get_additional_info(self, instance):
-        params = {
+        return {
+            'Customer': {'value': instance.Customer.pk,
+                         'text': instance.Customer.Name
+                         } if instance.Customer_id else {},
             'positions_count': instance.get_positions_count,
             'payments_count': instance.get_payments_count,
         }
-        if instance.Customer:
-            params['Customer'] = {'value': instance.Customer.pk, 'text': instance.Customer.Name}
-        else:
-            params['Customer'] = {}
-
-        return params
 
     def get_default_info(self, instance):
         # Usually we have only "model"."parent_id_field" and "model".User filled
@@ -468,8 +465,11 @@ class CustomerOrderPositionAction(CrudActionView):
     msg_name_class = _('Position of Customer Order')
 
     def get_additional_info(self, instance):
+        # Strange thing, direct access to empty instance.Product gives an exception
         return {
-            'Product': {'value': instance.Product.pk, 'text': f'#{instance.Product.get_full_name()}'},
+            'Product': {'value': instance.Product.pk,
+                        'text': f'#{instance.Product.get_full_name()}'
+                        } if instance.Product_id else {},
         }
 
 
