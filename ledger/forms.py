@@ -1,4 +1,5 @@
 from django.forms import ModelForm, DateInput
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.helper import FormHelper
@@ -111,7 +112,10 @@ class CustomerOrderForm(ModelForm):
             Div(
                 PrependedText('DateOperation', '<i class="bi bi-calendar-date"></i>', wrapper_class='col-md-6'),
                 css_class='form-row'),
-            PrependedText('Customer', '<i class="bi bi-person"></i>'),
+            PrependedText('Customer', '<i class="bi bi-person"></i>',
+                          css_class='basicAutoSelect',
+                          autocomplete='off',
+                          data_url=reverse('ledger:counterparty_search')),
             Div(
                 PrependedText('DateDelivered', '<i class="bi bi-gift"></i>', wrapper_class='col-md-6'),
                 Field('DetailedDelivery', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
@@ -164,7 +168,10 @@ class CustomerOrderPositionForm(ModelForm):
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Field('Product'),
+            Field('Product',
+                  css_class='basicAutoSelect',
+                  autocomplete='off',
+                  data_url=reverse('ledger:product_search')),
             Div(
                 PrependedText('Quantity', '<i class="bi bi-123"></i>', wrapper_class='col-md-4',
                               css_class="text-right"),
