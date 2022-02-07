@@ -464,6 +464,14 @@ class CustomerOrderPositionAction(CrudActionView):
     user_id_field = 'Operation__User'
     msg_name_class = _('Position of Customer Order')
 
+    def get_default_info(self, instance):
+        # Usually we have only "model"."parent_id_field" and "model".User filled
+        params = {}
+        if instance.Operation:
+            # if we know order id, then we help with calculations
+            params['Currency'] = instance.Operation.Currency
+        return {**params}
+
     def get_additional_info(self, instance):
         # Strange thing, direct access to empty instance.Product gives an exception
         return {
