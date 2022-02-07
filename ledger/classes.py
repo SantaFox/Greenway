@@ -98,11 +98,14 @@ class CrudActionView(View):
             if parent_id:
                 parent_instance = get_object_or_404(self.parent_model, id=parent_id, **parent_user_filter)
                 setattr(object_instance, self.parent_id_field, parent_instance)
+
             try:
                 object_instance.save()
-                messages.success(request,
-                                 self.msg_add_success % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)})
-                return JsonResponse({'status': 'success'})  # 'success' causes CRUD logic to refresh the page
+                msg = self.msg_add_success % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)}
+                if not parent_id: messages.success(request, msg)    # For further reload() if its is first-level form
+                return JsonResponse({'status': 'success',
+                                     'message': {'text': msg, 'level': 'Success'},
+                                     })  # 'success' causes CRUD logic to refresh the page
             except IntegrityError as e:
                 msg = self.msg_add_integrity_error % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)}
                 return JsonResponse({'status': 'not_valid',
@@ -120,11 +123,14 @@ class CrudActionView(View):
                 return JsonResponse({'status': 'not_valid',
                                      'message': {'text': msg, 'level': 'Error'},
                                      'errors': object_form.errors})
+
             try:
                 object_form.save()
-                messages.success(request,
-                                 self.msg_edit_success % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)})
-                return JsonResponse({'status': 'success'})  # 'success' causes CRUD logic to refresh the page
+                msg = self.msg_edit_success % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)}
+                if not parent_id: messages.success(request, msg)    # For further reload() if its is first-level form
+                return JsonResponse({'status': 'success',
+                                     'message': {'text': msg, 'level': 'Success'},
+                                     })  # 'success' causes CRUD logic to refresh the page
             except IntegrityError as e:
                 msg = self.msg_edit_integrity_error % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)}
                 # messages.error(request, msg)

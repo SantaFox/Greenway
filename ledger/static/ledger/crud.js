@@ -39,6 +39,7 @@ $(document).ready(function(){
             return cookieValue;
         };
 
+        var divModal = $(e.target).closest('.modal');
         e.preventDefault();
         $.ajax({
             url: $(this).attr('action'),
@@ -50,15 +51,14 @@ $(document).ready(function(){
             success:function(response){
                 let result = response.status;
                 if (result == 'success') {
-                    $('.modal').each(function(){
-                        $(this).modal('hide');
-                    });
-                    /* TODO: We should check for instruction here, and reload page OR refresh parent */
-                    location.reload();
-                } else {
-                    if (response.message) {
-                        add_alert(response.message.text, response.message.level);
-                    }
+                    $(divModal).modal('hide');
+                }
+                /* TODO: We should check for instruction here, and reload page OR refresh parent */
+                /* location.reload(); */
+                if (response.message) {
+                    add_alert(response.message.text, response.message.level);
+                }
+                if (response.errors) {
                     console.log(response.errors)
                 }
             },
