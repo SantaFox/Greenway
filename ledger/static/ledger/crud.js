@@ -61,6 +61,10 @@ $(document).ready(function(){
                 if (response.errors) {
                     console.log(response.errors)
                 }
+                var parentCaller = $(divModal).data('parent');
+                var parentDiv = $(parentCaller).closest('.modal');
+                var parentId = $(parentDiv).find('input[type="hidden"][name="parent_id"]').val();
+                refreshTable(parentDiv, parentId);
             },
             error:function(){
                 add_alert('Internal server error, please contacts support', 'Error');
@@ -93,6 +97,7 @@ $(document).ready(function() {
 
         var button = $(event.relatedTarget) // Button that triggered the modal
         var modal = $(this)
+        modal.data('parent', button);
 
         // We get "id" from data-* attributes of calling button and "parent_id" from hidden fields
         // in the form that contained calling button
@@ -226,6 +231,29 @@ $(document).ready(function() {
     savedDelete = $('#deleteModal').clone(true);
 })
 
+
+function refreshTable(divModal, parentId) {
+    $.ajax({
+        url: $(divModal).find('form').attr('action'),
+        type: 'GET',
+        data: {id: parentId},
+        dataType: 'json',
+        success: function(response) {
+            var content = $(divModal).find('.modal-body');
+            if (response.status == 'success') {
+                content.empty();
+                $(response.table).appendTo(content);
+                // initialize_checkboxes();
+            } else {
+                add_alert('Internal server error, please contacts support', 'Error');
+            };
+        },
+        error: function() {
+            add_alert('Internal server error, please contacts support', 'Error');
+        },
+    });
+}
+
 $(document).ready(function() {
     $('.tableModal').on('show.bs.modal', function (event) {
 
@@ -243,24 +271,6 @@ $(document).ready(function() {
         var itemId = $(button).closest("form").find('input[type="hidden"][name="id"]').val();
         $(modal).find('form .modal-footer input[type="hidden"][name="parent_id"]').val(itemId); // Child form may need it
 
-        $.ajax({
-            url: $(modal).find('form').attr('action'),
-            type: 'GET',
-            data: {id: itemId},
-            dataType: 'json',
-            success: function(response) {
-                var content = $(modal).find('.modal-body');
-                if (response.status == 'success') {
-                    content.empty();
-                    $(response.table).appendTo(content);
-                    // initialize_checkboxes();
-                } else {
-                    add_alert('Internal server error, please contacts support', 'Error');
-                };
-            },
-            error: function() {
-                add_alert('Internal server error, please contacts support', 'Error');
-            },
-        });
+        refreshTable(modal, itemId);
     });
 })
