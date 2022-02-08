@@ -101,6 +101,8 @@ class CrudActionView(View):
 
             try:
                 object_instance.save()
+                # Sometimes we need to update parent to match updated (added) values
+                if parent_id: self.update_parent(object_instance)
                 msg = self.msg_add_success % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)}
                 if not parent_id: messages.success(request, msg)    # For further reload() if its is first-level form
                 return JsonResponse({'status': 'success',
@@ -126,6 +128,8 @@ class CrudActionView(View):
 
             try:
                 object_form.save()
+                # Sometimes we need to update parent to match updated (added) values
+                if parent_id: self.update_parent(object_instance)
                 msg = self.msg_edit_success % {'class': self.msg_name_class, 'name': self.msg_edit_name(object_instance)}
                 if not parent_id: messages.success(request, msg)    # For further reload() if its is first-level form
                 return JsonResponse({'status': 'success',
@@ -145,6 +149,9 @@ class CrudActionView(View):
 
     def get_additional_info(self, instance):
         return dict()
+
+    def update_parent(self, instance):
+        pass
 
 
 @method_decorator(login_required, name='dispatch')
