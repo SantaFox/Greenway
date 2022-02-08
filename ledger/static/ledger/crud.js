@@ -53,8 +53,6 @@ $(document).ready(function(){
                 if (result == 'success') {
                     $(divModal).modal('hide');
                 }
-                /* TODO: We should check for instruction here, and reload page OR refresh parent */
-                /* location.reload(); */
                 if (response.message) {
                     add_alert(response.message.text, response.message.level);
                 }
@@ -64,7 +62,11 @@ $(document).ready(function(){
                 var parentCaller = $(divModal).data('parent');
                 var parentDiv = $(parentCaller).closest('.modal');
                 var parentId = $(parentDiv).find('input[type="hidden"][name="parent_id"]').val();
-                refreshTable(parentDiv, parentId);
+                if (parentId){
+                    refreshTable(parentDiv, parentId);
+                } else {
+                    location.reload();
+                }
             },
             error:function(){
                 add_alert('Internal server error, please contacts support', 'Error');
