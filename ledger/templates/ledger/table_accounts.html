@@ -2,10 +2,12 @@
 {% load i18n %}
 {% load static %}
 {% load render_table from django_tables2 %}
+{% load querystring from django_tables2 %}
 
 {% block title %}{% translate 'Manage Accounts' %}{% endblock %}
 
 {% block css %}
+<link rel="stylesheet" href="{% static '/ledger/table.css' %}">
 <style>
     table.table tr th:last-child {
 	    width: 150px;
@@ -16,17 +18,18 @@
 {% block content %}
 <div class="table-wrapper">
     <div class="table-title mb-2">
-        <div class="row text-white py-3" style="background: #435d7d;">
+        <div class="row text-white py-3">
             <div class="col-sm-6">
-                <h2 class="mb-0">{% translate 'Manage Accounts' %}</h2>
+                <h2 class="mb-0">{% translate 'Registered Accounts' %}</h2>
             </div>
-            <div class="col-sm-6 d-flex align-items-center justify-content-end">
-                <a href="#editAccount" class="btn btn-sm btn-success" data-toggle="modal">
-                    <i class="bi bi-plus-circle mr-2"></i>{% translate 'Add New Account' %}</a>
-                {% comment %}
-                <a href="#deleteModal" class="btn btn-sm btn-danger ml-2" data-toggle="modal">
-                    <i class="bi bi-dash-circle mr-2"></i>{% translate "Delete Selected" %}</a>
-                {% endcomment %}
+            <div class="col-sm-6 text-right">
+                <div class="table-filter">
+                    <input type="text" class="form-control" placeholder="{% translate 'Search' %}">
+                    <a role="button" href="#editAccount" data-toggle="modal" class="btn btn-default"
+                       title="{% translate 'Add New Account' %}">
+                        <i class="bi bi-file-earmark-plus-fill"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
