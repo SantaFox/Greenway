@@ -50,25 +50,6 @@ def list_products(request, category=None):
 
     dict_images = {im.Product: im for im in Image.objects.filter(Product__Category=category, IsPrimary=True)}
 
-    # Цен может быть от 0 до много, надо вытащить самую "близкую" или NONE, и дальше собрать в словаре
-    # Самое красивое решение - здаесь: https://stackoverflow.com/questions/59893756/django-group-by-one-field-only-take-the-latest-max-of-each-group-and-get-bac
-    # Но к сожалению SQLite backend не поддерживает команду DISTINCT ON (fields), поэтому делаем менее красивое решение
-    # Важно: уникальный ключ - продукт + дата цены + **ВАЛЮТА**
-    dict_price_distinct = Price.objects \
-        .filter(Product__Category=category, DateAdded__lte=datetime.now()) \
-        .values('Product_id', 'Currency_id') \
-        .annotate(max_date=Max('DateAdded')) \
-        .order_by()
-    dict_price_list = list(dict_price_distinct)
-
-    dict_prices = {prc.Product: prc for prc in Price.objects.filter(Product__Category=category, DateAdded__lte=datetime.now()) if
-                   # Creating main unique index
-                   {'Product_id': prc.Product_id,
-                    'Currency_id': prc.Currency_id,
-                    'max_date': prc.DateAdded
-                    } in dict_price_list
-                   }
-
     # And final step, we need tags for each product. It may be None or one or several Tags
     # We also need translations, as instances if possible
     tags_distinct = Tag.objects.filter(Product__Category=category).distinct()
@@ -84,13 +65,22 @@ def list_products(request, category=None):
             else:
                 dict_tags[p] = [new_tag_instance, ]
 
+    sale_tag = Tag.objects.get(Slug='sale')
+    sale_tag_instance = {'tag': sale_tag, 'tag_info': dict_tag_infos[sale_tag]}
+
     final_set = []
     for product in products:
+        product_price = product.get_price_on_date(timezone.now())
+        if product_price._meta.model_name == 'discount':
+            if dict_tags.get(product):
+                dict_tags[product].append(sale_tag_instance)
+            else:
+                dict_tags[product] = [sale_tag_instance, ]
         final_set.append(
             dict(product=product,
                  product_info=dict_product_infos.get(product),
                  image=dict_images.get(product),
-                 price=dict_prices.get(product),
+                 price = product_price,
                  tags=dict_tags.get(product),
                  )
         )
