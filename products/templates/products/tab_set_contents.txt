@@ -3,3 +3,5 @@
 
 {% for product in products %}* [\#{{ product.SKU }}](/products/{{ product.SKU }}/) - {{ product.Category__Name }}. {{ product.pi__Name|default:_("< Product name not set >") }}
 {% endfor %}
+
+{% translate "Total amount is" %} {{ total_amount }}, {% translate "sum of PV is" %} {{ total_PV }}

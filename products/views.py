@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.template.loader import get_template
 from django.template.response import TemplateResponse
 from django.shortcuts import get_object_or_404, render
-from django.db.models import Count, Max, Q, FilteredRelation
+from django.db.models import Count, Sum, Q, FilteredRelation
 from django.conf import settings
 from django.urls import reverse
 from django.utils import translation, timezone
@@ -111,6 +111,8 @@ def view_product(request, sku=None):
         ll = product_set_contents \
             .annotate(pi=FilteredRelation('productinfo', condition=Q(productinfo__Language=request.language_instance))) \
             .values('SKU', 'Category__Name', 'Category__Slug', 'pi__Name').order_by('Category__Name', 'SKU')
+        total_amount = sum(p.get_price_on_date(timezone.now()).Price or 0 for p in product_set_contents)
+        total_PV = sum(p.get_price_on_date(timezone.now()).PV or 0 for p in product_set_contents)
 
         # Create new tab
         tab_product_set = Tab()
@@ -121,7 +123,9 @@ def view_product(request, sku=None):
 
         tab_template = get_template('products/tab_set_contents.txt')
         tab_product_set.Text = tab_template.render({
-            'products': ll
+            'products': ll,
+            'total_amount': total_amount,
+            'total_PV': total_PV,
         })
 
         # Add this new tab to the existing list of tabs
