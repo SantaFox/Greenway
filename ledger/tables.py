@@ -84,6 +84,7 @@ class InStockTable(Table):
 
 class FundsTable(Table):
     Account_Name = Column(verbose_name=_('Account'), accessor='account')
+    Currency_Code = Column(verbose_name=_('Currency'), accessor='currency')
     Initial = NumericColumn(verbose_name=_('Initial'), accessor='initial')
     Debited = NumericColumn(verbose_name=_('Debited'), accessor='debited')
     Credited = NumericColumn(verbose_name=_('Credited'), accessor='credited')
