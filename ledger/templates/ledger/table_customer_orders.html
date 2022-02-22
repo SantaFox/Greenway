@@ -3,10 +3,12 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load render_table from django_tables2 %}
+{% load querystring from django_tables2 %}
 
 {% block title %}{% translate 'Manage Customer Orders' %}{% endblock %}
 
 {% block css %}
+<link rel="stylesheet" href="{% static '/ledger/table.css' %}">
 <style>
 .table tr.has_original td {
     padding-top: 2em;
@@ -39,24 +41,26 @@
 {% block content %}
 <div class="table-wrapper">
     <div class="table-title mb-2">
-        <div class="row text-white py-3" style="background: #435d7d;">
+        <div class="row text-white py-3">
             <div class="col-sm-6">
-                <h2 class="mb-0">{% translate 'Manage Customer Orders' %}</h2>
+                <h2 class="mb-0">{% translate 'Customer Orders' %}</h2>
             </div>
-            <div class="col-sm-6 d-flex align-items-center justify-content-end">
-                <a href="#editOrder" class="btn btn-sm btn-success" data-toggle="modal">
-                    <i class="bi bi-plus-circle mr-2"></i>{% translate 'Add New Customer Order' %}</a>
-                {% comment %}
-                <a href="#deleteModal" class="btn btn-sm btn-danger ml-2" data-toggle="modal">
-                    <i class="bi bi-dash-circle mr-2"></i>{% translate "Delete Selected" %}</a>
-                {% endcomment %}
+            <div class="col-sm-6 text-right">
+                <div class="table-filter">
+                    <input type="text" class="form-control" placeholder="{% translate 'Search' %}">
+                    <a role="button" href="#editOrder" data-toggle="modal" class="btn btn-default"
+                       title="{% translate 'Add New Customer Order' %}">
+                        <i class="bi bi-file-earmark-plus-fill"></i>
+                    </a>
+                    {% if request.GET.collapse == "false" %}
+                    <a role="button" href="{% querystring 'collapse'='true' %}" class="btn btn-default" title="{% translate 'Hide completed orders' %}"><i class="bi bi-arrows-collapse"></i></a>
+                    {% else %}
+                    <a role="button" href="{% querystring 'collapse'='false' %}" class="btn btn-default" title="{% translate 'Show completed orders' %}"><i class="bi bi-arrows-expand"></i></a>
+                    {% endif %}
+                    <button class="btn btn-default" title="{% translate 'Export to PDF' %}"><i class="bi bi-file-earmark-pdf"></i></button>
+                    <button class="btn btn-default" title="{% translate 'Export to Excel' %}"><i class="bi bi-file-earmark-excel"></i></button>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <form method="get">
-                {{ filter.form.as_p }}
-                <input type="submit" />
-            </form>
         </div>
     </div>
     {% render_table table %}

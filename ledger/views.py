@@ -318,25 +318,21 @@ class AccountDelete(CrudDeleteView):
 @permission_required('ledger.view_customerorder', raise_exception=True)
 @prepare_languages
 def table_customer_orders(request):
-    subq = Payment.objects.filter(ParentOperation=OuterRef('pk')).values('ParentOperation')
-    sum_paid = subq.annotate(total=Sum('Amount')).values('total')
-    # F..king workaround for non-explicit SQLite datatypes
-    qst = CustomerOrder.objects\
-        .filter(User=request.user)\
-        .annotate(unpaid=Func(F('Amount') - Coalesce(Subquery(sum_paid), Value(0)),
-                  function='ABS',
-                  output_field=DecimalField()))\
-        .exclude(unpaid__lt=0.0001)
+    qst = {
+        co for co in CustomerOrder.objects
+        .filter(User=request.user)
+        .order_by('DateOperation', 'pk')
+        if (request.GET.get("collapse", "true") == "false") or (co.Amount != co.get_paid_amount)
+    }
 
-    f = CustomerOrderFilter(request.GET, queryset=qst)
-    table = CustomerOrdersTable(f.qs)
+    table = CustomerOrdersTable(qst)
     RequestConfig(request,
                   paginate={"per_page": 15}) \
         .configure(table)
 
     return TemplateResponse(request, 'ledger/table_customer_orders.html', {
         'table': table,
-        'filter': f,
+        # 'filter': f,
         'forms': [
             {
                 'FormId': 'editOrder',
