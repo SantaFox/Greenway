@@ -1,0 +1,18 @@
+{% extends 'greensite/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'libs/toastr/build/toastr.min.css' %}">
+{% endblock  %}
+
+{% block content %}
+{% include 'dashboard/content.html' %}
+{% endblock %}
+
+{% block extra_javascript %}
+
+    <script src="{% static 'dashboard/js/init.js' %}"></script>
+    <!-- toastr plugin -->
+    <script src="{% static 'libs/toastr/build/toastr.min.js' %}"></script>   
+
+{% endblock extra_javascript %}

@@ -7,7 +7,7 @@ from django.views.generic.base import RedirectView
 
 
 urlpatterns = [
-    path('', include('showcase.urls')),
+    path('', include('dashboard.urls')),
     path('products/', include('products.urls')),
     path('ledger/', include('ledger.urls')),
     path('user/', include('django.contrib.auth.urls')),

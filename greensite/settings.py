@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'products.apps.ProductsConfig',
     'ledger.apps.LedgerConfig',
     'showcase.apps.ShowcaseConfig',
+    'dashboard.apps.DashboardConfig',
 
     # third-party apps
     # 'google_analytics',

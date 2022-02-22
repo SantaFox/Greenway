@@ -1,142 +1,92 @@
-{% load i18n %}
 {% load static %}
-{% comment %}
-{% load google_analytics_tags %}
-{% endcomment %}
-<!DOCTYPE html>
-<html lang="{{ language.Code|default:'en' }}">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="Content-Language" content="{{ language.Code|default:'en' }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{% block title %}Greenway Cyprus{% endblock title %}</title>
-    <link rel="icon" href="{% static '/greensite/favicon.ico' %}"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans">
-    <style>
-        .main-container {
-            margin-top: 1em;
-        }
-        body {
-            font-family: 'Noto Sans', sans-serif;
-        }
-        .msg {
-            margin: 0 !important;
-            margin-bottom: 4px !important;
-            margin-top: 4px !important;
-        }
-        .messages {
-            z-index: 9999;
-            position: fixed;
-            right: 2em;
-            margin-top: -1em;
-            list-style: none;
-            text-align: right;
-        }
-        .alert {
-            margin-top: 1rem;
-        }
-        .alert-error {
-            background-color: #f2dede;
-            border-color: #ebcccc;
-            color: #a94442;
-        }
-    </style>
-    {% block css %}{% endblock css %}
-</head>
-<body>
+<!doctype html>
+<html lang="en">
 
-{% include "./navigation.html" %}
+    <head>
 
-<div class="ui container main-container">
+        <meta charset="utf-8" />
+        <title>{{title}} | Minible - Admin & Dashboard Template</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
 
-    {% block messages %}
-    <ul class="messages" id="messages-list">
-        {% for message in messages %}
-        <li>
-            {% if message.tags %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible msg fade show" role="alert">
-            {% else %}
-            <div class="alert alert-info alert-dismissible msg fade show" role="alert">
-            {% endif %}
-                {{ message|safe }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+        {% block extra_css %}
+        {% endblock %}
+        {%block css%}
+        <!-- Bootstrap Css -->
+        <link href="{% static 'css/bootstrap.min.css' %}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="{% static 'css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="{% static 'css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+        {%endblock%}
+
+    </head>
+    
+    <body>
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+            {% block header %}
+            {% include 'greensite/header.html' %}
+            {% endblock %}
+            {% block sidebar %}
+            {% include 'greensite/sidebar.html' %}
+            {% endblock %}
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">{{title}}</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">{{heading}}</a></li>
+                                            <li class="breadcrumb-item active">{{title}}</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                        {% block content %}
+                        {% endblock %}
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+                {% block footer %}
+                {% include 'greensite/footer.html' %}
+                {% endblock %}
             </div>
-        </li>
-        {% endfor %}
-    </ul>
-    {% endblock %}
+            <!-- end main content-->
+        </div>
+        <!-- END layout-wrapper -->
 
-    {% block content %}{% endblock %}
-</div>
+        {% block javascript %}   
+        <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+        <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'libs/metismenu/dist/metisMenu.min.js' %}"></script>
+        <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
+        <script src="{% static 'libs/node-waves/dist/waves.min.js' %}"></script>
+        <script src="{% static 'libs/waypoints/lib/jquery.waypoints.min.js' %}"></script>
+        <script src="{% static 'libs/jquery.counterup/jquery.counterup.min.js' %}"></script> 
+        {% block extra_javascript %}        
+        {% endblock %}
 
-{% block js-before %}{% endblock %}
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
-<script>
-    // fade out message alerts
-    function fade_alerts() {
-        alerts = document.getElementsByClassName("alert msg");
-            var i = alerts.length;
-            for (let elem of alerts) {
-                i--;
-                time = 5000+(1000*i);
-                setTimeout(function() {
-                    $(elem).fadeOut("slow");
-                }, time);
-            }
-    }
+        <script src="{% static 'js/app.js' %}"></script>    
+        {% endblock %}
+        
 
-    function add_alert(message, message_type) {
-        var css_class;
-        switch (message_type) {
-            case 'Success':
-                css_class = 'alert-success';
-                break;
-            case 'Error':
-                css_class = 'alert-danger';
-                break;
-            case 'Warning':
-                css_class = 'alert-warning';
-                break;
-            default:
-                css_class = 'alert-info';
-        }
-        var list_alerts = $('#messages-list');
-        var new_alert = '<li>' +
-            '<div class="alert ' + css_class + ' alert-dismissible msg fade show" role="alert">' +
-            message +
-            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-            '<span aria-hidden="true">&times;</span>' +
-            '</button>' +
-            '</div>' +
-            '</li>';
-        var elem = $(new_alert).appendTo(list_alerts);
-        setTimeout(function() {
-                    elem.fadeOut("slow");
-                }, 5000);
-    }
+    </body>
 
-
-    // call fade out after DOMContentLoaded
-    $(document).ready(function(){
-        fade_alerts();
-    });
-
-</script>
-
-{% block js %}{% endblock %}
-
-{% comment %}
-{% if not debug_flag %}
-<div style="display:none">
-    <img src="{% google_analytics %}" width="0" height="0" />
-</div>
-{% endif %}
-{% endcomment %}
-</body>
 </html>
