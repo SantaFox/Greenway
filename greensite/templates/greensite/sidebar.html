@@ -36,15 +36,10 @@
                             <li class="menu-title">Catalogue</li>
 
                             <li>
-                                <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                    <i class="uil-label-alt"></i>
-                                    <span>Categories</span>
+                                <a href="javascript: void(0);" class=" waves-effect">
+                                    <i class="uil-cube"></i>
+                                    <span>Products</span>
                                 </a>
-                                <ul class="sub-menu" aria-expanded="false">
-                                    {% for c in nav_categories %}
-                                    <li><a href="{% url 'products:product' c.Slug %}">{{ c.Name }}</a></li>
-                                    {% endfor %}
-                                </ul>
                             </li>
 
                             <li>

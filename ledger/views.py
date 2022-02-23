@@ -318,86 +318,106 @@ class AccountDelete(CrudDeleteView):
 @permission_required('ledger.view_customerorder', raise_exception=True)
 @prepare_languages
 def table_customer_orders(request):
-    qst = {
-        co for co in CustomerOrder.objects
-        .filter(User=request.user)
-        .order_by('DateOperation', 'pk')
-        if (request.GET.get("collapse", "true") == "false") or (co.Amount != co.get_paid_amount)
-    }
+    # qst = {
+    #     co for co in CustomerOrder.objects
+    #     .filter(User=request.user)
+    #     .order_by('DateOperation', 'pk')
+    #     if (request.GET.get("collapse", "true") == "false") or (co.Amount != co.get_paid_amount)
+    # }
+    #
+    # table = CustomerOrdersTable(qst)
+    # RequestConfig(request,
+    #               paginate={"per_page": 15}) \
+    #     .configure(table)
 
-    table = CustomerOrdersTable(qst)
-    RequestConfig(request,
-                  paginate={"per_page": 15}) \
-        .configure(table)
+    # Статусы:
+    # Completed - поставка выполнена полностью, оплата выполнена полностью
+    # поставка выполнена полностью, оплата выполнена частично
+    # поставка выполнена полностью, оплата не выполнялась
+    # поставка выполнена частично, оплата выполнена полностью
+    # поставка выполнена частично, оплата выполнена частично
+    # поставка выполнена частично, оплата не выполнялась
+    # поставка не выполнялась, оплата выполнена полностью
+    # поставка не выполнялась, оплата выполнена частично
+    # поставка не выполнялась, оплата не выполнялась
 
-    return TemplateResponse(request, 'ledger/table_customer_orders.html', {
-        'table': table,
-        # 'filter': f,
-        'forms': [
-            {
-                'FormId': 'editOrder',
-                'Action': reverse('ledger:customer_order_action'),
-                'Header': _('Edit Customer Order'),
-                'CrispyForm': CustomerOrderForm(user=request.user),
-                'Buttons': [
-                    {'buttonHref': '#tablePositions',
-                     'buttonText': _('Positions'),
-                     'buttonClass': 'btn-success',
-                     'buttonIcon': 'bi bi-table',
-                     'buttonSpanId': 'positionsCount',
-                     },
-                    {'buttonHref': '#tablePayments',
-                     'buttonText': '',
-                     'buttonClass': 'btn-success',
-                     'buttonIcon': 'bi bi-credit-card',
-                     'buttonSpanId': 'paymentsCount',
-                     },
-                ]
-            },
-            {
-                'FormId': 'tablePositions',
-                'Handler': 'tableModal',
-                'Action': reverse('ledger:customer_order_positions'),
-                'Header': _('Customer Order Positions'),
-                'ModalStyle': 'modal-lg',
-                'Buttons': [
-                    {'buttonHref': '#editPosition',
-                     'buttonText': _('Add'),
-                     'buttonClass': 'btn-warning',
-                     'buttonIcon': 'bi bi-plus-square',
-                     },
-                ]
-            },
-            {
-                'FormId': 'tablePayments',
-                'Handler': 'tableModal',
-                'Action': reverse('ledger:customer_order_payments'),
-                'Header': _('Customer Order Payments'),
-                'ModalStyle': 'modal-lg',
-                'Buttons': [
-                    {'buttonHref': '#editPayment',
-                     'buttonText': _('Add'),
-                     'buttonClass': 'btn-warning',
-                     'buttonIcon': 'bi bi-plus-square',
-                     },
-                ]
-            },
-            {
-                'FormId': 'editPosition',
-                'Action': reverse('ledger:customer_order_position_action'),
-                'Header': _('Edit Order Position'),
-                'CrispyForm': CustomerOrderPositionForm(user=request.user)
-            },
-            {
-                'FormId': 'editPayment',
-                'Action': reverse('ledger:customer_order_payment_action'),
-                'Header': _('Edit Order Payment'),
-                'CrispyForm': CustomerOrderPaymentForm(user=request.user)
-            }
-        ],
-        'deleteAction': reverse('ledger:customer_order_delete'),
-        'deleteHeader': _('Delete Customer Order'),
+
+
+    qst = CustomerOrder.objects.filter(User=request.user)
+
+    return TemplateResponse(request, 'ledger/ecommerce-orders.html', {
+        'title': 'Orders',
+        'heading': 'Ledger',
+        'orders': qst,
     })
+    # return TemplateResponse(request, 'ledger/table_customer_orders.html', {
+    #     'table': table,
+    #     # 'filter': f,
+    #     'forms': [
+    #         {
+    #             'FormId': 'editOrder',
+    #             'Action': reverse('ledger:customer_order_action'),
+    #             'Header': _('Edit Customer Order'),
+    #             'CrispyForm': CustomerOrderForm(user=request.user),
+    #             'Buttons': [
+    #                 {'buttonHref': '#tablePositions',
+    #                  'buttonText': _('Positions'),
+    #                  'buttonClass': 'btn-success',
+    #                  'buttonIcon': 'bi bi-table',
+    #                  'buttonSpanId': 'positionsCount',
+    #                  },
+    #                 {'buttonHref': '#tablePayments',
+    #                  'buttonText': '',
+    #                  'buttonClass': 'btn-success',
+    #                  'buttonIcon': 'bi bi-credit-card',
+    #                  'buttonSpanId': 'paymentsCount',
+    #                  },
+    #             ]
+    #         },
+    #         {
+    #             'FormId': 'tablePositions',
+    #             'Handler': 'tableModal',
+    #             'Action': reverse('ledger:customer_order_positions'),
+    #             'Header': _('Customer Order Positions'),
+    #             'ModalStyle': 'modal-lg',
+    #             'Buttons': [
+    #                 {'buttonHref': '#editPosition',
+    #                  'buttonText': _('Add'),
+    #                  'buttonClass': 'btn-warning',
+    #                  'buttonIcon': 'bi bi-plus-square',
+    #                  },
+    #             ]
+    #         },
+    #         {
+    #             'FormId': 'tablePayments',
+    #             'Handler': 'tableModal',
+    #             'Action': reverse('ledger:customer_order_payments'),
+    #             'Header': _('Customer Order Payments'),
+    #             'ModalStyle': 'modal-lg',
+    #             'Buttons': [
+    #                 {'buttonHref': '#editPayment',
+    #                  'buttonText': _('Add'),
+    #                  'buttonClass': 'btn-warning',
+    #                  'buttonIcon': 'bi bi-plus-square',
+    #                  },
+    #             ]
+    #         },
+    #         {
+    #             'FormId': 'editPosition',
+    #             'Action': reverse('ledger:customer_order_position_action'),
+    #             'Header': _('Edit Order Position'),
+    #             'CrispyForm': CustomerOrderPositionForm(user=request.user)
+    #         },
+    #         {
+    #             'FormId': 'editPayment',
+    #             'Action': reverse('ledger:customer_order_payment_action'),
+    #             'Header': _('Edit Order Payment'),
+    #             'CrispyForm': CustomerOrderPaymentForm(user=request.user)
+    #         }
+    #     ],
+    #     'deleteAction': reverse('ledger:customer_order_delete'),
+    #     'deleteHeader': _('Delete Customer Order'),
+    # })
 
 
 class CustomerOrderAction(CrudActionView):

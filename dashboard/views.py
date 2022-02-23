@@ -7,5 +7,6 @@ from greensite.decorators import prepare_languages
 def view_index(request):
 
     return TemplateResponse(request, 'dashboard/index.html', {
+        'title': 'Dashboard',
     })
 

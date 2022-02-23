@@ -85,7 +85,9 @@ def list_products(request, category=None):
                  )
         )
 
-    return TemplateResponse(request, 'products/list_products.html', {
+    return TemplateResponse(request, 'products/ecommerce-products.html', {
+        'title': 'Products',
+        'heading': 'Catalogue',
         'category': category,
         'products_list': final_set,
     })

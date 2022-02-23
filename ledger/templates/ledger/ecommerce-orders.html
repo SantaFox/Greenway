@@ -1,0 +1,83 @@
+{% extends 'greensite/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+        <!-- DataTables -->
+        <link href="{% static 'libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+
+        <!-- Responsive datatable examples -->
+        <link href="{% static 'libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />  
+
+{% endblock  %}
+{% block content %}
+					<div class="row">
+                            <div class="col-lg-12">
+                                <div>
+                                            
+                                    <div class="float-end">
+                                        <form class="d-inline-flex mb-3">
+                                            <label class="form-check-label my-2 me-2" for="order-selectinput">Orders</label>
+                                            <select class="form-select" id="order-selectinput">
+                                                <option value="0">All</option>
+                                                <option selected value="1">Active</option>
+                                                <option value="2">(Pending)</option>
+                                                <option value="3">Not delivered</option>
+                                                <option value="4">Not paid</option>
+                                                <option value="5">Completed</option>
+                                            </select>
+                                        </form>
+                                        
+                                    </div>
+                                    <button type="button" class="btn btn-success waves-effect waves-light mb-3"><i class="mdi mdi-plus me-1"></i> Add New Order</button>
+                                </div>
+                                <div class="table-responsive mb-4">
+                                    <table class="table table-centered datatable dt-responsive nowrap table-card-list" style="border-collapse: collapse; border-spacing: 0 12px; width: 100%;">
+                                        <thead>
+                                            <tr class="bg-transparent">
+                                                <th>Order ID</th>
+                                                <th>Order Date</th>
+                                                <th>Customer</th>
+                                                <th>Amount</th>
+                                                <th>Paid</th>
+                                                <th>Delivery Date</th>
+                                                <th>Comment</th>
+                                                <th style="width: 120px;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for order in orders %}
+                                            <tr>
+                                                <td><a href="javascript: void(0);" class="text-dark fw-bold">#MN0132</a> </td>
+                                                <td data-sort="{{ order.DateOperation|date:'U' }}">{{ order.DateOperation }}</td>
+                                                <td>{{ order.Customer.Name }}</td>
+                                                <td>{{ order.Amount|floatformat:2 }}</td>
+                                                <td>{{ order.get_paid_amount|floatformat:2 }}</td>
+                                                <td>{{ order.DateDelivered }}</td>
+                                                <td>{{ order.Memo|truncatechars:30 }}</td>
+                                                <td>
+                                                    <a href="javascript:void(0);" class="px-3 text-primary"><i class="uil uil-pen font-size-18"></i></a>
+                                                    <a href="javascript:void(0);" class="px-3 text-danger"><i class="uil uil-trash-alt font-size-18"></i></a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end table -->
+                            </div>
+                        </div>
+                        <!-- end row -->
+{% endblock %}
+{% block extra_javascript %}
+        <!-- Required datatable js -->
+        <script src="{% static 'libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+        
+        <!-- Responsive examples -->
+        <script src="{% static 'libs/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+        <script src="{% static 'libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js' %}"></script>
+
+        <!-- init js -->
+        <script src="{% static 'ledger/datatables.init.js' %}"></script>
+
+{% endblock  %}

@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'products.apps.ProductsConfig',
     'ledger.apps.LedgerConfig',
-    'showcase.apps.ShowcaseConfig',
     'dashboard.apps.DashboardConfig',
 
     # third-party apps
