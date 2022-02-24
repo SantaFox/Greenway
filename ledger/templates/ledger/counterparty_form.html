@@ -1,0 +1,109 @@
+{% extends 'greensite/base.html' %}
+{% load static %}
+{% block extra_css %}
+        <!-- select2 css -->
+        <link href="{% static 'libs/select2/dist/css/select2.min.css' %}" rel="stylesheet" type="text/css" />
+
+        <!-- dropzone css -->
+        <link href="{% static 'libs/dropzone/dist/min/dropzone.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock  %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">Textual inputs</h4>
+                <p class="card-title-desc">Here are examples of <code>.form-control</code> applied to each
+                    textual HTML5 <code>&lt;input&gt;</code> <code>type</code>.</p>
+
+                <div class="mb-3 row">
+                    <label for="id_Name" class="col-md-1 col-form-label">Text</label>
+                    <div class="col-md-11">
+                        <input class="form-control" type="text" value="{{ object.Name }}" id="id_Name">
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label for="id_Phone" class="col-md-1 col-form-label">Phone</label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="tel" value="{{ object.Phone }}" id="id_Phone">
+                    </div>
+                    <label for="id_Email" class="col-md-1 col-form-label">Email</label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="email" value="{{ object.Email }}" id="id_Email">
+                    </div>
+                    <label for="id_Telegram" class="col-md-1 col-form-label">Telegram</label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="text" value="{{ object.Telegram }}" id="id_Telegram"
+                               placeholder="Enter Telegram alias">
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label for="id_Instagram" class="col-md-1 col-form-label">Instagram</label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="text" value="{{ object.Instagram }}" id="id_Instagram">
+                    </div>
+                    <label for="id_Facebook" class="col-md-1 col-form-label">Facebook</label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="text" value="{{ object.Facebook }}" id="id_Facebook">
+                    </div>
+                    <label for="id_City" class="col-md-1 col-form-label">City</label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="text" value="{{ object.City }}" id="id_City">
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label for="id_Address" class="col-md-1 col-form-label">Address</label>
+                    <div class="col-md-11">
+                        <input class="form-control" type="text" value="{{ object.Address }}" id="id_Address">
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label class="col-md-1 col-form-label">Customer Roles</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="formCheck1">
+                        <label class="form-check-label" for="formCheck1">
+                            Form Checkbox
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="formCheck2" checked>
+                        <label class="form-check-label" for="formCheck2">
+                            Form Checkbox checked
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label class="form-label" for="id_Memo">Comment</label>
+                    <textarea id="id_Memo" class="form-control" rows="3" placeholder="Enter your message">{{ object.Memo }}</textarea>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- end row -->
+
+    <div class="row mb-4">
+        <div class="col ms-auto">
+            <div class="d-flex flex-reverse flex-wrap gap-2">
+                <a href="#" class="btn btn-danger"> <i class="uil uil-times"></i> Cancel </a>
+                <a href="#" class="btn btn-success"> <i class="uil uil-file-alt"></i> Save </a>
+            </div>
+        </div> <!-- end col -->
+    </div> <!-- end row-->
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+		<!-- select 2 plugin -->
+        <script src="{% static 'libs/select2/dist/js/select2.min.js' %}"></script>
+
+        <!-- init js -->
+        <script src="{% static 'js/pages/ecommerce-add-product.init.js' %}"></script>
+{% endblock  %}

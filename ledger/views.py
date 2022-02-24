@@ -10,9 +10,10 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.views.generic import TemplateView
+from django.views.generic.edit import UpdateView
 
 from django_tables2 import RequestConfig
-from crispy_forms.utils import render_crispy_form
 
 from greensite.decorators import prepare_languages
 from products.models import Product
@@ -22,7 +23,6 @@ from .models import Account, Counterparty, Operation, CustomerOrder, CustomerOrd
 from .tables import InStockTable, FundsTable, AccountsTable, CounterpartyTable, CustomerOrdersTable, \
     CustomerOrderPositionsTable, CustomerOrderPaymentsTable
 from .forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerOrderPositionForm, CustomerOrderPaymentForm
-from .filters import CustomerOrderFilter
 from .classes import CrudActionView, CrudDeleteView
 
 
@@ -236,32 +236,25 @@ def view_funds(request):
 @permission_required('ledger.view_counterparty', raise_exception=True)
 @prepare_languages
 def table_counterparties(request):
-    table = CounterpartyTable(Counterparty.objects.filter(User=request.user))
-    RequestConfig(request,
-                  paginate={"per_page": 15}) \
-        .configure(table)
+    qst = Counterparty.objects.filter(User=request.user)
 
-    form = CounterpartyForm
-    return TemplateResponse(request, 'ledger/table_counterparties.html', {
-        'table': table,
-        'forms': [
-            {
-                'FormId': 'editCounterparty',
-                'Action': reverse('ledger:counterparty_action'),
-                'Header': _('Edit Counterparty'),
-                'CrispyForm': form
-            }
-        ],
-        'deleteAction': reverse('ledger:counterparty_delete'),
-        'deleteHeader': _('Delete Counterparty'),
+    return TemplateResponse(request, 'ledger/ecommerce-customers.html', {
+        'title': 'Counterparties',
+        'heading': 'Ledger',
+        'table': qst,
     })
 
 
-def counterparty_search(request):
-    qry = Counterparty.objects.filter(User=request.user)
-    search = request.GET.get('q', '')
-    response_dict = [{"value": cp.pk, "text": cp.Name} for cp in qry.filter(Name__icontains=search)]
-    return JsonResponse(response_dict, safe=False)
+class CounterpartyEdit(UpdateView):
+    model = Counterparty
+    fields = ['Name', 'Phone', 'Email', 'Instagram', 'Telegram',
+              'Facebook', 'City', 'Address', 'Memo', 'IsSupplier', 'IsCustomer']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Edit Counterparty'
+        context['heading'] = 'Ledger'
+        return context
 
 
 class CounterpartyAction(CrudActionView):

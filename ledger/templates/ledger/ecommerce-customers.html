@@ -1,0 +1,72 @@
+{% extends 'greensite/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+        <!-- DataTables -->
+        <link href="{% static 'libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+
+        <!-- Responsive datatable examples -->
+        <link href="{% static 'libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />   
+
+{% endblock  %}
+{% block content %}
+					<div class="row">
+                            <div class="col-lg-12">
+                                <div>
+                                    <div>
+                                        <button type="button" class="btn btn-success waves-effect waves-light mb-3"><i class="mdi mdi-plus me-1"></i> Add customers</button> 
+                                    </div>
+
+                                    <div class="table-responsive mb-4">
+                                        <table class="table table-centered datatable dt-responsive nowrap table-card-list" style="border-collapse: collapse; border-spacing: 0 12px; width: 100%;">
+                                            <thead>
+                                                <tr class="bg-transparent">
+                                                    <th>Customer</th>
+                                                    <th>Phone</th>
+                                                    <th>Email</th>
+                                                    <th>City</th>
+                                                    <th>Memo</th>
+                                                    <th style="width: 120px;">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for customer in table %}
+                                                <tr>
+                                                    <td>
+                                                        <div class="avatar-xs d-inline-block me-2">
+                                                            <span class="avatar-title rounded-circle bg-light text-body">
+                                                                J
+                                                            </span>
+                                                        </div>
+                                                        <span>{{ customer.Name }}</span>
+                                                    </td>
+                                                    <td>{{ customer.Phone }}</td>
+                                                    <td>{{ customer.Email }}</td>
+                                                    <td>{{ customer.City }}</td>
+                                                    <td>{{ customer.Memo|truncatechars:30 }}</td>
+                                                    <td>
+                                                        <a href="javascript:void(0);" class="px-3 text-primary"><i class="uil uil-pen font-size-18"></i></a>
+                                                        <a href="javascript:void(0);" class="px-3 text-danger"><i class="uil uil-trash-alt font-size-18"></i></a>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+{% endblock %}
+{% block extra_javascript %}
+        <!-- Required datatable js -->
+        <script src="{% static 'libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+        
+        <!-- Responsive examples -->
+        <script src="{% static 'libs/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+        <script src="{% static 'libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js' %}"></script>
+
+        <!-- init js -->
+        <script src="{% static 'ledger/counterparties.init.js' %}"></script>
+{% endblock  %}
