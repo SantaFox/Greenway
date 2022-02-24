@@ -20,6 +20,9 @@ $.fn.dataTable.ext.search.push(
         } else if ( filter == 2 ) {
         } else if ( filter == 3 ) {
         } else if ( filter == 4 ) {
+            if ( order_amount != order_paid ) {
+                return true;
+            }
         } else if ( filter == 5 ) {
         }
         return false;

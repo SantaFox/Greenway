@@ -37,8 +37,10 @@
                                                 <th>Order ID</th>
                                                 <th>Order Date</th>
                                                 <th>Customer</th>
-                                                <th>Amount</th>
-                                                <th>Paid</th>
+                                                <th>Order Amount</th>
+                                                <th>Paid Amount</th>
+                                                <th>Order Currency</th>
+                                                <th>Payments Status</th>
                                                 <th>Delivery Date</th>
                                                 <th>Comment</th>
                                                 <th style="width: 120px;">Action</th>
@@ -50,8 +52,18 @@
                                                 <td><a href="javascript: void(0);" class="text-dark fw-bold">#MN0132</a> </td>
                                                 <td data-sort="{{ order.DateOperation|date:'U' }}">{{ order.DateOperation }}</td>
                                                 <td>{{ order.Customer.Name }}</td>
-                                                <td>{{ order.Amount|floatformat:2 }}</td>
+                                                <td>{{ order.get_order_amount|floatformat:2 }}</td>
                                                 <td>{{ order.get_paid_amount|floatformat:2 }}</td>
+                                                <td>{{ order.Currency.Code }}</td>
+                                                {% if order.get_order_amount == 0 %}
+                                                    <td><div class="badge bg-soft-info font-size-12">Empty</div></td>
+                                                {% elif order.get_paid_amount == 0 %}
+                                                    <td><div class="badge bg-soft-danger font-size-12">Not Paid</div></td>
+                                                {% elif order.get_paid_amount == order.get_order_amount %}
+                                                    <td><div class="badge bg-soft-success font-size-12">Paid</div></td>
+                                                {% elif order.get_paid_amount < order.get_order_amount %}
+                                                    <td><div class="badge bg-soft-warning font-size-12">Partially Paid</div></td>
+                                                {% endif %}
                                                 <td>{{ order.DateDelivered }}</td>
                                                 <td>{{ order.Memo|truncatechars:30 }}</td>
                                                 <td>

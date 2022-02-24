@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
-from django.db.models import Q, Sum, Count
+from django.db.models import OuterRef, Sum, Subquery, Value, Func, F, DecimalField, Case, When, Q, FilteredRelation, Count
+from django.db.models.functions import Coalesce, Cast
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -221,6 +222,15 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
 
     Memo = models.TextField(blank=True, verbose_name=_('Memo'),
                             help_text=_('Memo related to this Customer Order'))
+
+    @property
+    def get_order_amount(self):
+        amount_queryset = CustomerOrderPosition.objects.filter(Operation=self)\
+            .aggregate(TotalAmount=Sum(
+                    F('Price') * F('Quantity') - Cast(Coalesce('Discount', 0), DecimalField())
+                ))
+        amount = amount_queryset['TotalAmount'] + (self.DeliveryPrice or 0)
+        return 0 if amount is None else amount
 
     @property
     def get_paid_amount(self):
