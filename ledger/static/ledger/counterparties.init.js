@@ -32,6 +32,7 @@
 // datatable
 $(document).ready(function() {
     var table = $('.datatable').DataTable( {
+        stateSave: true
 //        'columnDefs': [
 //            {
 //                'targets': [ 4 ],           // get_paid_amount

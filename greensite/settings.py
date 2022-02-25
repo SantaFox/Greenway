@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # 'google_analytics',
     'imagekit',
     'crispy_forms',
+    'crispy_bootstrap5',
     'markdownx',
     'django_tables2',
     'django_filters',
@@ -164,7 +165,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
 

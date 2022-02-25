@@ -1,5 +1,6 @@
 from django.forms import ModelForm, DateInput
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.helper import FormHelper
@@ -52,26 +53,24 @@ class CounterpartyForm(ModelForm):
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            PrependedText('Name', '<i class="bi bi-person"></i>'),
+            PrependedText('Name', mark_safe('<i class="uil-user-circle"></i>')),
             Div(
-                PrependedText('Phone', '<i class="bi bi-telephone-outbound"></i>', wrapper_class='col-md-6'),
-                PrependedText('Email', '<i class="bi bi-envelope"></i>', wrapper_class='col-md-6'),
-                css_class='form-row'),
+                PrependedText('Phone', mark_safe('<i class="uil-phone"></i>'), wrapper_class='col-md-4'),
+                PrependedText('Email', mark_safe('<i class="uil-envelope"></i>'), wrapper_class='col-md-4'),
+                PrependedText('Telegram', mark_safe('<i class="uil-telegram-alt"></i>'), wrapper_class='col-md-4'),
+                css_class='row'),
             Div(
-                PrependedText('Instagram', '<i class="bi bi-instagram"></i>', wrapper_class='col-md-6'),
-                PrependedText('Telegram', '<i class="bi bi-telegram"></i>', wrapper_class='col-md-6'),
-                css_class='form-row'),
-            Div(
-                PrependedText('Facebook', '<i class="bi bi-messenger"></i>', wrapper_class='col-md-6'),
-                PrependedText('City', '<i class="bi bi-building"></i>', wrapper_class='col-md-6'),
-                css_class='form-row'),
-            PrependedText('Address', '<i class="bi bi-signpost-split"></i>'),
+                PrependedText('Instagram', mark_safe('<i class="uil-instagram"></i>'), wrapper_class='col-md-4'),
+                PrependedText('Facebook', mark_safe('<i class="uil-facebook-messenger"></i>'), wrapper_class='col-md-4'),
+                PrependedText('City', mark_safe('<i class="uil-building"></i>'), wrapper_class='col-md-4'),
+                css_class='row'),
+            PrependedText('Address', mark_safe('<i class="uil-sign-alt"></i>')),
             Field('Memo', rows=4),
             HTML('<label>A Customer may act as a Supplier or Customer, or both</label>'),
             Div(
                 Field('IsSupplier', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
                 Field('IsCustomer', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
-                css_class='form-row'),
+                css_class='row'),
         )
 
         # loading Model descriptors from Meta subclass

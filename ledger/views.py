@@ -3,6 +3,7 @@ from itertools import groupby
 from operator import itemgetter
 
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import OuterRef, Sum, Subquery, Value, Func, F, DecimalField, Case, When, Q, FilteredRelation
 from django.db.models.functions import Coalesce, Cast
 from django.http import JsonResponse, Http404, HttpResponseBadRequest
@@ -245,10 +246,11 @@ def table_counterparties(request):
     })
 
 
-class CounterpartyEdit(UpdateView):
+class CounterpartyEdit(SuccessMessageMixin, UpdateView):
     model = Counterparty
-    fields = ['Name', 'Phone', 'Email', 'Instagram', 'Telegram',
-              'Facebook', 'City', 'Address', 'Memo', 'IsSupplier', 'IsCustomer']
+    form_class = CounterpartyForm
+    success_message = "Counterparty successfully updated"
+    success_url = '/ledger/counterparties/' # reverse('ledger:counterparties')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
