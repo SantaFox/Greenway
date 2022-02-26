@@ -12,8 +12,9 @@ urlpatterns = [
     path('products/search/', views.product_search, name='product_search'),
 
     path('accounts/', views.table_accounts, name='accounts'),
-    path('accounts/action/', views.AccountAction.as_view(), name='account_action'),
-    path('accounts/delete/', views.AccountDelete.as_view(), name='account_delete'),
+    path('account/add/', views.AccountCreate.as_view(), name='account_add'),
+    path('account/<int:pk>/', views.AccountUpdate.as_view(), name='account_edit'),
+    path('account/<int:pk>/delete/', views.AccountDelete.as_view(), name='account_delete'),
 
     path('counterparties/', views.table_counterparties, name='counterparties'),
     path('counterparty/add/', views.CounterpartyCreate.as_view(), name='counterparty_add'),

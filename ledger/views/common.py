@@ -234,42 +234,6 @@ def view_funds(request):
 
 
 @login_required
-@permission_required('ledger.view_account', raise_exception=True)
-@prepare_languages
-def table_accounts(request):
-    table = AccountsTable(Account.objects.filter(User=request.user))
-    RequestConfig(request).configure(table)
-
-    form = AccountForm
-    return TemplateResponse(request, 'ledger/table_accounts.html', {
-        'table': table,
-        'forms': [
-            {
-                'FormId': 'editAccount',
-                'Action': reverse('ledger:account_action'),
-                'Header': _('Edit Account'),
-                'CrispyForm': form
-            }
-        ],
-        'deleteAction': reverse('ledger:account_delete'),
-        'deleteHeader': _('Delete Account'),
-    })
-
-
-class AccountAction(CrudActionView):
-    model = Account
-    fields = ['id', 'Name']
-    form = AccountForm
-    msg_name_class = _('Account')
-    msg_edit_name = lambda self, instance: instance.Name
-
-
-class AccountDelete(CrudDeleteView):
-    model = Account
-    msg_name_class = _('Account')
-
-
-@login_required
 @permission_required('ledger.view_customerorder', raise_exception=True)
 @prepare_languages
 def table_customer_orders(request):

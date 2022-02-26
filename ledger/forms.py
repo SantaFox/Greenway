@@ -21,7 +21,7 @@ class AccountForm(ModelForm):
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            PrependedText('Name', '<i class="bi bi-cash-coin"></i>'),
+            PrependedText('Name', mark_safe('<i class="uil-university"></i>'), autocomplete="off"),
         )
 
         # loading Model descriptors from Meta subclass
@@ -30,7 +30,7 @@ class AccountForm(ModelForm):
                 self.helper[fld.name].update_attributes(placeholder=fld.verbose_name)
                 if fld.help_text != '':
                     self.helper[fld.name].update_attributes(title=fld.help_text)
-                    self.helper[fld.name].update_attributes(data_toggle="tooltip")
+                    self.helper[fld.name].update_attributes(data_bs_toggle="tooltip")
 
         self.helper.form_show_labels = False
         self.helper.use_custom_control = True
