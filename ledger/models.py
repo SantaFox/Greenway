@@ -70,24 +70,24 @@ class Account(ModelIsDeletableMixin, models.Model):
 class Counterparty(ModelIsDeletableMixin, models.Model):
     User = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     Name = models.CharField(max_length=50, blank=False, verbose_name=_('Counterparty Name'),
-                            help_text=_('Name of the Counterparty, preferably "Surname Name"'))
+                            help_text=_('Name of the Counterparty, preferably in format "Surname Name"'))
 
     Phone = models.CharField(max_length=50, blank=True, verbose_name=_('Contact Phone'),
-                             help_text=_('Name of the Counterparty, preferably "Surname Name"'))
+                             help_text=_('Contact phone, including area code'))
     Email = models.CharField(max_length=50, blank=True, verbose_name=_('Email address'),
-                             help_text=_('Name of the Counterparty, preferably "Surname Name"'))
+                             help_text=_('Contact email'))
     Telegram = models.CharField(max_length=50, blank=True, verbose_name=_('Telegram'),
                                 help_text=_('Telegram profile name'))
     Instagram = models.CharField(max_length=50, blank=True, verbose_name=_('Instagram'),
-                                 help_text=_('Name of the Counterparty, preferably "Surname Name"'))
+                                 help_text=_('Instagram profile name'))
     Facebook = models.CharField(max_length=50, blank=True, verbose_name=_('Facebook'),
-                                help_text=_('Name used in Facebook and Facebook Messenger'))
+                                help_text=_('Profile name used in Facebook and Facebook Messenger'))
     Address = models.CharField(max_length=255, blank=True, verbose_name=_('Address'),
                                help_text=_('Address (without city)'))
     City = models.CharField(max_length=50, blank=True, verbose_name=_('City Name'),
                             help_text=_('City name only'))
     Memo = models.TextField(blank=True, verbose_name=_('Memo'),
-                            help_text=_('Name of the Counterparty, preferably "Surname Name"'))
+                            help_text=_('Comment'))
 
     IsSupplier = models.BooleanField(default=False, verbose_name=_('Act as Supplier'),
                                      help_text=_('Counterparty act as Supplier and can be selected in Supplier Order'))

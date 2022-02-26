@@ -79,12 +79,18 @@ class CounterpartyForm(ModelForm):
                 self.helper[fld.name].update_attributes(placeholder=fld.verbose_name)
                 if fld.help_text != '':
                     self.helper[fld.name].update_attributes(title=fld.help_text)
-                    self.helper[fld.name].update_attributes(data_toggle="tooltip")
+                    self.helper[fld.name].update_attributes(data_bs_toggle="tooltip")
 
         self.helper.form_show_labels = False
         self.helper.use_custom_control = True
         self.helper.form_tag = False
         self.helper.disable_csrf = True
+
+    def clean(self):
+        data = super().clean()
+        if data['IsCustomer'] == False and data['IsSupplier'] == False:
+            self.add_error(None, 'A Counterparty should be a Customer or Supplier, or both')
+        return data
 
     class Meta:
         model = Counterparty

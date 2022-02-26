@@ -9,22 +9,22 @@ from django.db.models.functions import Coalesce, Cast
 from django.http import JsonResponse, Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from django_tables2 import RequestConfig
 
 from greensite.decorators import prepare_languages
 from products.models import Product
 
-from .models import Account, Counterparty, Operation, CustomerOrder, CustomerOrderPosition, SupplierOrderPosition, \
+from ledger.models import Account, Counterparty, Operation, CustomerOrder, CustomerOrderPosition, SupplierOrderPosition, \
     ItemSetBreakdownPosition, Payment, Transfer, DEBIT, CREDIT
-from .tables import InStockTable, FundsTable, AccountsTable, CounterpartyTable, CustomerOrdersTable, \
+from ledger.tables import InStockTable, FundsTable, AccountsTable, CounterpartyTable, CustomerOrdersTable, \
     CustomerOrderPositionsTable, CustomerOrderPaymentsTable
-from .forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerOrderPositionForm, CustomerOrderPaymentForm
-from .classes import CrudActionView, CrudDeleteView
+from ledger.forms import AccountForm, CounterpartyForm, CustomerOrderForm, CustomerOrderPositionForm, CustomerOrderPaymentForm
+from ledger.classes import CrudActionView, CrudDeleteView
 
 
 @login_required
@@ -231,46 +231,6 @@ def view_funds(request):
         'startDate': date_start,
         'endDate': date_end,
     })
-
-
-@login_required
-@permission_required('ledger.view_counterparty', raise_exception=True)
-@prepare_languages
-def table_counterparties(request):
-    qst = Counterparty.objects.filter(User=request.user)
-
-    return TemplateResponse(request, 'ledger/ecommerce-customers.html', {
-        'title': 'Counterparties',
-        'heading': 'Ledger',
-        'table': qst,
-    })
-
-
-class CounterpartyEdit(SuccessMessageMixin, UpdateView):
-    model = Counterparty
-    form_class = CounterpartyForm
-    success_message = "Counterparty successfully updated"
-    success_url = '/ledger/counterparties/' # reverse('ledger:counterparties')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Edit Counterparty'
-        context['heading'] = 'Ledger'
-        return context
-
-
-class CounterpartyAction(CrudActionView):
-    model = Counterparty
-    fields = ['id', 'Name', 'Phone', 'Email', 'Instagram', 'Telegram',
-              'Facebook', 'City', 'Address', 'Memo', 'IsSupplier', 'IsCustomer']
-    form = CounterpartyForm
-    msg_name_class = _('Counterparty')
-    msg_edit_name = lambda self, instance: instance.Name
-
-
-class CounterpartyDelete(CrudDeleteView):
-    model = Counterparty
-    msg_name_class = _('Counterparty')
 
 
 @login_required

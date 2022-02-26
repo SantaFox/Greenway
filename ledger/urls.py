@@ -16,9 +16,9 @@ urlpatterns = [
     path('accounts/delete/', views.AccountDelete.as_view(), name='account_delete'),
 
     path('counterparties/', views.table_counterparties, name='counterparties'),
-    path('counterparties/edit/<int:pk>/', views.CounterpartyEdit.as_view(), name='counterparty_edit'),
-    path('counterparties/action/', views.CounterpartyAction.as_view(), name='counterparty_action'),
-    path('counterparties/delete/', views.CounterpartyDelete.as_view(), name='counterparty_delete'),
+    path('counterparty/add/', views.CounterpartyCreate.as_view(), name='counterparty_add'),
+    path('counterparty/<int:pk>/', views.CounterpartyUpdate.as_view(), name='counterparty_edit'),
+    path('counterparty/<int:pk>/delete/', views.CounterpartyDelete.as_view(), name='counterparty_delete'),
 
     path('customer_orders/', views.table_customer_orders, name='customer_orders'),
     path('customer_orders/action/', views.CustomerOrderAction.as_view(), name='customer_order_action'),
