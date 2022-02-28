@@ -3,7 +3,6 @@ from itertools import groupby
 from operator import itemgetter
 
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import OuterRef, Sum, Subquery, Value, Func, F, DecimalField, Case, When, Q, FilteredRelation
 from django.db.models.functions import Coalesce, Cast
 from django.http import JsonResponse, Http404, HttpResponseBadRequest
@@ -11,8 +10,6 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from django_tables2 import RequestConfig
 
@@ -234,46 +231,6 @@ def view_funds(request):
 
 
 @login_required
-@permission_required('ledger.view_customerorder', raise_exception=True)
-@prepare_languages
-def table_customer_orders(request):
-    qst = CustomerOrder.objects.filter(User=request.user)
-
-    return TemplateResponse(request, 'ledger/ecommerce-orders.html', {
-        'title': 'Orders',
-        'heading': 'Ledger',
-        'orders': qst,
-    })
-
-
-
-class CustomerOrderAction(CrudActionView):
-    model = CustomerOrder
-    exclude = ['Customer', 'operation_ptr', 'User']
-    form = CustomerOrderForm
-    msg_name_class = _('Customer Order')
-
-    def get_additional_info(self, instance):
-        return {
-            'Customer': {'value': instance.Customer.pk,
-                         'text': instance.Customer.Name
-                         } if instance.Customer_id else {},
-            'positions_count': instance.get_positions_count,
-            'payments_count': instance.get_payments_count,
-        }
-
-    def get_default_info(self, instance):
-        # Usually we have only "model"."parent_id_field" and "model".User filled
-        params = {'DateOperation': date.today()}
-        return {**params}
-
-
-class CustomerOrderDelete(CrudDeleteView):
-    model = CustomerOrder
-    msg_name_class = _('Customer Order')
-
-
-@login_required
 @permission_required('ledger.view_customerorderposition', raise_exception=True)
 def table_customer_order_positions(request):
     customer_order_instance = get_object_or_404(CustomerOrder, id=request.GET.get('id'), User=request.user)
@@ -284,18 +241,6 @@ def table_customer_order_positions(request):
     rendered_table = table.as_html(request)
     return JsonResponse({'status': 'success',
                          'table': rendered_table})
-
-
-def product_search(request):
-    qry = Product.objects.all()
-    search = request.GET.get('q', '')
-    qry_filter = Q(SKU__icontains=search) | Q(Category__Name__icontains=search) | Q(productinfo__Name__icontains=search)
-    response_dict = [
-        {"value": cp.pk,
-         "text": cp.get_full_name()
-         } for cp in qry.filter(qry_filter).order_by('SKU').distinct()
-    ]
-    return JsonResponse(response_dict, safe=False)
 
 
 class CustomerOrderPositionAction(CrudActionView):

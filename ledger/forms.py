@@ -103,44 +103,42 @@ class CustomerOrderForm(ModelForm):
         self.user = kwargs.pop('user') if 'user' in kwargs else None # notice the .pop()
         super().__init__(*args, **kwargs)
 
-        # self.fields['DateOperation'].widget = DateInput(attrs={
-        #     'required': True,
-        #     'class': 'date-time-picker',
-        #     'data-options': '{"format":"Y-m-d H:i", "timepicker":"true"}'
-        # })
-
+        # Remove help_text to make it as tooltips
         for field_name, field in self.fields.items():
             self.fields[field_name].help_text = None
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                PrependedText('DateOperation', '<i class="bi bi-calendar-date"></i>', wrapper_class='col-md-6'),
-                css_class='form-row'),
-            PrependedText('Customer', '<i class="bi bi-person"></i>',
-                          css_class='basicAutoSelect',
-                          autocomplete='off',
-                          data_url=reverse('ledger:counterparty_search')),
+                PrependedText('DateOperation', mark_safe('<i class="uil-calendar-alt"></i>'), wrapper_class='col-md-4'),
+                PrependedText('Customer', mark_safe('<i class="uil-user-square"></i>'),
+                              css_class='select2',
+                              wrapper_class='col-md-7'),
+                css_class='row'),
+            # PrependedText('Customer', '<i class="bi bi-person"></i>',
+            #               css_class='basicAutoSelect',
+            #               autocomplete='off',
+            #               data_url=reverse('ledger:counterparty_search')),
             Div(
-                PrependedText('DateDelivered', '<i class="bi bi-gift"></i>', wrapper_class='col-md-6'),
+                PrependedText('DateDispatched', mark_safe('<i class="uil-truck"></i>'), wrapper_class='col-md-4'),
+                PrependedText('TrackingNumber', mark_safe('<i class="uil-bug"></i>'), wrapper_class='col-md-4'),
+                Field('CourierService', wrapper_class='col-md-4'),
+                css_class='row'),
+            Div(
+                PrependedText('DateDelivered', mark_safe('<i class="bi bi-gift"></i>'), wrapper_class='col-md-6'),
                 Field('DetailedDelivery', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
-                css_class='form-row'),
+                css_class='row'),
             Div(
-                PrependedText('DateDispatched', '<i class="bi bi-truck"></i>', wrapper_class='col-md-6'),
-                PrependedText('TrackingNumber', '<i class="bi bi-bug"></i>', wrapper_class='col-md-6'),
-                css_class='form-row'),
-            Field('CourierService'),
-            Div(
-                PrependedText('Amount', '<i class="bi bi-cash-stack"></i>', wrapper_class='col-md-4',
+                PrependedText('Amount', mark_safe('<i class="bi bi-cash-stack"></i>'), wrapper_class='col-md-4',
                               css_class="text-right"),
                 Field('Currency', wrapper_class='col-md-4'),
-                css_class='form-row'),
+                css_class='row'),
             Field('Memo', rows=4),
         )
 
-        queryset_filters = dict(User=self.user)
-        self.fields['Customer'].queryset = Counterparty.objects.filter(
-            **{k: v for k, v in queryset_filters.items() if v is not None})
+        # queryset_filters = dict(User=self.user)
+        # self.fields['Customer'].queryset = Counterparty.objects.filter(
+        #     **{k: v for k, v in queryset_filters.items() if v is not None})
 
         # loading Model descriptors from Meta subclass
         for fld in self._meta.model._meta.get_fields():
@@ -148,14 +146,12 @@ class CustomerOrderForm(ModelForm):
                 self.helper[fld.name].update_attributes(placeholder=fld.verbose_name)
                 if fld.help_text:
                     self.helper[fld.name].update_attributes(title=fld.help_text)
-                    self.helper[fld.name].update_attributes(data_toggle="tooltip")
+                    self.helper[fld.name].update_attributes(data_bs_toggle="tooltip")
 
         self.helper.form_show_labels = False
         self.helper.use_custom_control = True
         self.helper.form_tag = False
         self.helper.disable_csrf = True
-
-        self.prefix = 'form_CustomerOrder'
 
     class Meta:
         model = CustomerOrder

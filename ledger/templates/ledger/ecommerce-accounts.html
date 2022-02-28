@@ -2,61 +2,52 @@
 {% load static %}
 
 {% block extra_css %}
-<!-- DataTables -->
 <link href="{% static 'libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css"/>
-
-<!-- Responsive datatable examples -->
-<link href="{% static 'libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}" rel="stylesheet"
-      type="text/css"/>
-
+<link href="{% static 'libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}" rel="stylesheet" type="text/css"/>
 {% endblock  %}
+
 {% block content %}
 <div class="row">
     <div class="col-lg-12">
         <div>
-            <div>
-                <a role="button" href="{% url 'ledger:account_add' %}" class="btn btn-success waves-effect waves-light mb-3">
-                    <i class="mdi mdi-plus me-1"></i> Add Account
-                </a>
-            </div>
+            <a role="button" href="{% url 'ledger:account_add' %}" class="btn btn-success waves-effect waves-light mb-3">
+                <i class="mdi mdi-plus me-1"></i> Add Account
+            </a>
+        </div>
 
-            <div class="table-responsive mb-4">
-                <table class="table table-centered datatable dt-responsive nowrap table-card-list"
-                       style="border-collapse: collapse; border-spacing: 0 12px; width: 100%;">
-                    <thead>
-                    <tr class="bg-transparent">
-                        <th>Name</th>
-                        <th style="width: 120px;">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for customer in table %}
-                    <tr>
-                        <td>{{ customer.Name }}</td>
-                        <td>
-                            <a href="{% url 'ledger:account_edit' customer.pk %}" class="px-3 text-primary">
-                                <i class="uil uil-pen font-size-18"></i>
-                            </a>
-                            <a href="{% url 'ledger:account_delete' customer.pk %}" class="px-3 text-danger">
-                                <i class="uil uil-trash-alt font-size-18"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        <div class="table-responsive mb-4">
+            <table class="table table-centered datatable dt-responsive nowrap table-card-list"
+                   style="border-collapse: collapse; border-spacing: 0 12px; width: 100%;">
+                <thead>
+                <tr class="bg-transparent">
+                    <th>Name</th>
+                    <th style="width: 120px;">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for customer in table %}
+                <tr>
+                    <td>{{ customer.Name }}</td>
+                    <td>
+                        <a href="{% url 'ledger:account_edit' customer.pk %}" class="px-3 text-primary">
+                            <i class="uil uil-pen font-size-18"></i>
+                        </a>
+                        <a href="{% url 'ledger:account_delete' customer.pk %}" class="px-3 text-danger">
+                            <i class="uil uil-trash-alt font-size-18"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
-<!-- end row -->
 {% endblock %}
+
 {% block extra_javascript %}
-<!-- Required datatable js -->
 <script src="{% static 'libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
-
-<!-- Responsive examples -->
 <script src="{% static 'libs/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
 <script src="{% static 'libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js' %}"></script>
 
