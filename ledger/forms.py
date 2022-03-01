@@ -113,6 +113,8 @@ class CustomerOrderForm(ModelForm):
                 PrependedText('DateOperation', mark_safe('<i class="uil-calendar-alt"></i>'), wrapper_class='col-md-4'),
                 Field('Customer',
                       css_class='select2',
+                      data_ajax__url=reverse('ledger:counterparties_search'),
+                      data_ajax__cache=True,
                       wrapper_class='col-md-8'),
             ),
             Row(
@@ -121,11 +123,12 @@ class CustomerOrderForm(ModelForm):
                 PrependedText('CourierService', mark_safe('<i class="uil-post-stamp"></i>'), wrapper_class='col-md-4'),
             ),
             Row(
-                PrependedText('DateDelivered', mark_safe('<i class="uil-gift"></i>'), wrapper_class='col-md-6'),
-                Field('DetailedDelivery', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
+                PrependedText('DateDelivered', mark_safe('<i class="uil-gift"></i>'), wrapper_class='col-md-4'),
+                # Field('DetailedDelivery', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
+                Field('DetailedDelivery'),
             ),
             Row(
-                PrependedText('Amount', mark_safe('<i class="bi bi-cash-stack"></i>'), wrapper_class='col-md-4',
+                PrependedText('Amount', mark_safe('<i class="uil-bill"></i>'), wrapper_class='col-md-4',
                               css_class="text-right"),
                 Field('Currency', wrapper_class='col-md-4'),
             ),

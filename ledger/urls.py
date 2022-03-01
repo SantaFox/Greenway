@@ -10,6 +10,7 @@ urlpatterns = [
     path('funds/', views.view_funds, name='view_funds'),
 
     path('products/search/', views.product_search, name='product_search'),
+    path('counterparties/search/', views.counterparty_search, name='counterparties_search'),
 
     path('accounts/', views.table_accounts, name='accounts'),
     path('account/add/', views.AccountCreate.as_view(), name='account_add'),

@@ -8,11 +8,11 @@ from products.models import Product
 from ledger.models import Counterparty
 
 
-@login_required
-@require_GET
-@permission_required('products.view_product', raise_exception=True)
+# @login_required
+# @require_GET
+# @permission_required('products.view_product', raise_exception=True)
 def counterparty_search(request):
-    qry = Counterparty.objects.all(User=request.user)
+    qry = Counterparty.objects.filter(User=request.user)
     search = request.GET.get('q', '')
     qry_filter = Q(Name__icontains=search) |\
                  Q(Email__icontains=search) |\

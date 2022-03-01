@@ -3,8 +3,8 @@
 {% load crispy_forms_tags %}
 
 {% block extra_css %}
-<!-- select2 css -->
 <link href="{% static 'libs/select2/dist/css/select2.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'libs/flatpickr/dist/flatpickr.min.css' %}" rel="stylesheet" type="text/css">
 {% endblock  %}
 
 {% block content %}
@@ -37,8 +37,8 @@
 {% endblock %}
 
 {% block extra_javascript %}
-<!-- select 2 plugin -->
 <script src="{% static 'libs/select2/dist/js/select2.min.js' %}"></script>
+<script src="{% static 'libs/flatpickr/dist/flatpickr.min.js' %}"></script>
 <!-- init js -->
 <script src="{% static 'ledger/order.init.js' %}"></script>
 {% endblock  %}
