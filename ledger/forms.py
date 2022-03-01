@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Field, Layout, HTML
+from crispy_forms.layout import Div, Field, Layout, HTML, Row
 from crispy_forms.bootstrap import PrependedText
 
 from .models import Account, Counterparty, CustomerOrder, CustomerOrderPosition, Payment
@@ -54,23 +54,23 @@ class CounterpartyForm(ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             PrependedText('Name', mark_safe('<i class="uil-user-circle"></i>')),
-            Div(
+            Row(
                 PrependedText('Phone', mark_safe('<i class="uil-phone"></i>'), wrapper_class='col-md-4'),
                 PrependedText('Email', mark_safe('<i class="uil-envelope"></i>'), wrapper_class='col-md-4'),
                 PrependedText('Telegram', mark_safe('<i class="uil-telegram-alt"></i>'), wrapper_class='col-md-4'),
-                css_class='row'),
-            Div(
+            ),
+            Row(
                 PrependedText('Instagram', mark_safe('<i class="uil-instagram"></i>'), wrapper_class='col-md-4'),
                 PrependedText('Facebook', mark_safe('<i class="uil-facebook-messenger"></i>'), wrapper_class='col-md-4'),
                 PrependedText('City', mark_safe('<i class="uil-building"></i>'), wrapper_class='col-md-4'),
-                css_class='row'),
+            ),
             PrependedText('Address', mark_safe('<i class="uil-sign-alt"></i>')),
             Field('Memo', rows=4),
             HTML('<label>A Customer may act as a Supplier or Customer, or both</label>'),
-            Div(
+            Row(
                 Field('IsSupplier', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
                 Field('IsCustomer', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
-                css_class='row'),
+            ),
         )
 
         # loading Model descriptors from Meta subclass
@@ -109,36 +109,36 @@ class CustomerOrderForm(ModelForm):
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Div(
+            Row(
                 PrependedText('DateOperation', mark_safe('<i class="uil-calendar-alt"></i>'), wrapper_class='col-md-4'),
-                PrependedText('Customer', mark_safe('<i class="uil-user-square"></i>'),
-                              css_class='select2',
-                              wrapper_class='col-md-7'),
-                css_class='row'),
-            # PrependedText('Customer', '<i class="bi bi-person"></i>',
-            #               css_class='basicAutoSelect',
-            #               autocomplete='off',
-            #               data_url=reverse('ledger:counterparty_search')),
-            Div(
+                Field('Customer',
+                      css_class='select2',
+                      wrapper_class='col-md-8'),
+            ),
+            Row(
                 PrependedText('DateDispatched', mark_safe('<i class="uil-truck"></i>'), wrapper_class='col-md-4'),
                 PrependedText('TrackingNumber', mark_safe('<i class="uil-bug"></i>'), wrapper_class='col-md-4'),
-                Field('CourierService', wrapper_class='col-md-4'),
-                css_class='row'),
-            Div(
-                PrependedText('DateDelivered', mark_safe('<i class="bi bi-gift"></i>'), wrapper_class='col-md-6'),
+                PrependedText('CourierService', mark_safe('<i class="uil-post-stamp"></i>'), wrapper_class='col-md-4'),
+            ),
+            Row(
+                PrependedText('DateDelivered', mark_safe('<i class="uil-gift"></i>'), wrapper_class='col-md-6'),
                 Field('DetailedDelivery', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
-                css_class='row'),
-            Div(
+            ),
+            Row(
                 PrependedText('Amount', mark_safe('<i class="bi bi-cash-stack"></i>'), wrapper_class='col-md-4',
                               css_class="text-right"),
                 Field('Currency', wrapper_class='col-md-4'),
-                css_class='row'),
+            ),
             Field('Memo', rows=4),
         )
 
         # queryset_filters = dict(User=self.user)
-        # self.fields['Customer'].queryset = Counterparty.objects.filter(
-        #     **{k: v for k, v in queryset_filters.items() if v is not None})
+        external_instance = kwargs['instance']
+        if external_instance:
+            queryset_filters = dict(pk=external_instance.Customer.pk)
+            self.fields['Customer'].queryset = Counterparty.objects.filter(
+                **{k: v for k, v in queryset_filters.items() if v is not None}
+            )
 
         # loading Model descriptors from Meta subclass
         for fld in self._meta.model._meta.get_fields():

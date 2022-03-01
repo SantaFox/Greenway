@@ -1,8 +1,8 @@
 /* Custom filtering function which will search data in column four between two values */
 $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
-        var order_amount = parseFloat( data[3] ) || 0;
-        var order_paid = parseFloat( data[4] ) || 0;
+        var order_amount = parseFloat( data[2] ) || 0;
+        var order_paid = parseFloat( data[3] ) || 0;
         // 0 - all
         // 1 - active
         // 2 - (pending)
@@ -34,7 +34,7 @@ $(document).ready(function() {
     var table = $('.datatable').DataTable( {
         'columnDefs': [
             {
-                'targets': [ 4 ],           // get_paid_amount
+                'targets': [ 3 ],           // get_paid_amount
                 'visible': false
             }
         ]
