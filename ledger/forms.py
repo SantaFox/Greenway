@@ -115,6 +115,8 @@ class CustomerOrderForm(ModelForm):
                       css_class='select2',
                       data_ajax__url=reverse('ledger:counterparties_search'),
                       data_ajax__cache=True,
+                      data_placeholder=_('Customer Name'),
+                      data_minimum_input_length=2,
                       wrapper_class='col-md-8'),
             ),
             Row(
@@ -142,6 +144,7 @@ class CustomerOrderForm(ModelForm):
             self.fields['Customer'].queryset = Counterparty.objects.filter(
                 **{k: v for k, v in queryset_filters.items() if v is not None}
             )
+        self.fields['Customer'].empty_label = ''
 
         # loading Model descriptors from Meta subclass
         for fld in self._meta.model._meta.get_fields():
