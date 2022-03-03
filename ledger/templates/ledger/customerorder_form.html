@@ -12,7 +12,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Order data</h4>
+                <h4 class="card-title">Order Data</h4>
                 <p class="card-title-desc">Here are examples of <code>.form-control</code> applied to each
                     textual HTML5 <code>&lt;input&gt;</code> <code>type</code>.</p>
                 <form method="post">{% csrf_token %}
@@ -26,7 +26,24 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Positions</h4>
+                <h4 class="card-title mb-4">Order Positions</h4>
+                <div class="row font-size-16">
+                    <div class="col-md-2">
+                        <div class="form-check-inline">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        </div>
+                        <label>Product</label>
+                    </div>
+
+                    <label class="col-md-1">Quantity</label>
+                    <label class="col-md-1">Price ?</label>
+                    <label class="col-md-1">Currency</label>
+                    <label class="col-md-1">Discount</label>
+                    <label class="col-md-2">Reason</label>
+                    <label class="col-md-2">Status</label>
+                    <label class="col-md-1">Date</label>
+                    <label class="col-md-1">Action</label>
+                </div>
                     {% crispy positions positions_helper %}
 <!--                <form class="repeater" enctype="multipart/form-data">-->
 <!--                    <div data-repeater-list="group-a">-->

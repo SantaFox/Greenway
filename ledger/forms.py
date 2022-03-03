@@ -203,23 +203,27 @@ class CustomerOrderPositionFormHelper(FormHelper):
                       data_minimum_input_length=2,
                       data_dropdown_auto_width=True,
                       wrapper_class='col-md-2'),
-                PrependedText('Quantity', mark_safe('<i class="uil-calculator-alt"></i>'), wrapper_class='col-md-1',
-                              css_class="text-right"),
-                PrependedText('Price', mark_safe('<i class="uil-pricetag-alt"></i>'), wrapper_class='col-md-1',
-                              css_class="text-right"),
-                PrependedText('Currency', mark_safe('<i class="uil-euro"></i>'), wrapper_class='col-md-1'),
-                PrependedText('Discount', mark_safe('<i class="uil-pricetag-alt"></i>'), wrapper_class='col-md-1',
-                              css_class="text-right"),
+                Field('Quantity', wrapper_class='col-md-1', css_class='text-end'),
+                Field('Price', wrapper_class='col-md-1', css_class='text-end'),
+                Field('Currency', wrapper_class='col-md-1'),
+                Field('Discount', wrapper_class='col-md-1', css_class='text-end'),
                 Field('DiscountReason', wrapper_class='col-md-2'),
-                PrependedText('Status', mark_safe('<i class="uil-calculator-alt"></i>'), wrapper_class='col-md-2'),
-                PrependedText('DateDelivered', mark_safe('<i class="uil-calculator-alt"></i>'), wrapper_class='col-md-1'),
+                Field('Status', wrapper_class='col-md-2'),
+                Field('DateDelivered', wrapper_class='col-md-1'),
                 Div(
                     StrictButton(mark_safe('<i class="uil-trash-alt"></i>'), css_class='btn-danger'),
                     css_class='col-md-1'
                 ),
+                # css_class='form-control-sm'
             ),
         )
 
+        # mark_safe('<i class="uil-calculator-alt"></i>')
+        # mark_safe('<i class="uil-pricetag-alt"></i>')
+        # mark_safe('<i class="uil-euro"></i>')
+        # mark_safe('<i class="uil-percentage"></i>')
+        # mark_safe('<i class="uil-puzzle-piece"></i>')
+        # mark_safe('<i class="uil-truck-loading"></i>')
         # loading Model descriptors from Meta subclass
         # for fld in self._meta.model._meta.get_fields():
         #     if not fld.auto_created:
@@ -234,7 +238,10 @@ class CustomerOrderPositionFormHelper(FormHelper):
         self.disable_csrf = True
 
 
-CustomerOrderPositionsFormset = inlineformset_factory(CustomerOrder, CustomerOrderPosition, form=CustomerOrderPositionForm, extra=3)
+CustomerOrderPositionsFormset = inlineformset_factory(CustomerOrder,
+                                                      CustomerOrderPosition,
+                                                      form=CustomerOrderPositionForm,
+                                                      extra=0)
 
 
 class CustomerOrderPaymentForm(ModelForm):
