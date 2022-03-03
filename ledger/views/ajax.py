@@ -33,11 +33,14 @@ def counterparty_search(request):
 
 @login_required
 @require_GET
-@permission_required('products.view_product', raise_exception=True)
+# @permission_required('products.view_product', raise_exception=True)
 def product_search(request):
     qry = Product.objects.all()
     search = request.GET.get('q', '')
-    qry_filter = Q(SKU__icontains=search) | Q(Category__Name__icontains=search) | Q(productinfo__Name__icontains=search)
+    qry_filter = Q(SKU__icontains=search) |\
+                 Q(Category__Name__icontains=search) |\
+                 Q(productinfo__Name__icontains=search)
+
     response_dict = [
         {"id": cp.pk,
          "text": cp.get_full_name()

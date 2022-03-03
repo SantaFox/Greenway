@@ -9,7 +9,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from greensite.decorators import prepare_languages
 
 from ledger.models import CustomerOrder
-from ledger.forms import CustomerOrderForm
+from ledger.forms import CustomerOrderForm, CustomerOrderPositionsFormset, CustomerOrderPositionFormHelper
 
 
 @login_required
@@ -35,6 +35,14 @@ class CustomerOrderCreate(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Add Customer Order'
         context['heading'] = 'Ledger'
+
+        if self.request.POST:
+            context['positions'] = CustomerOrderPositionsFormset(self.request.POST, instance=self.object)
+            context['positions'].full_clean()
+        else:
+            context['positions'] = CustomerOrderPositionsFormset(instance=self.object)
+            context['positions_helper'] = CustomerOrderPositionFormHelper()
+
         return context
 
     # def get_initial(self):
@@ -44,6 +52,10 @@ class CustomerOrderCreate(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     #     return initial
 
     def form_valid(self, form):
+        context=self.get_context_data()
+        positions = context['positions']
+
+
         form.instance.User = self.request.user
         return super().form_valid(form)
 
@@ -54,17 +66,33 @@ class CustomerOrderUpdate(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     success_message = "Customer Order %(Name)s successfully updated"
     success_url = reverse_lazy('ledger:accounts')
 
-    def form_valid(self, form):
-        if not form.has_changed():
-            form.add_error(None, 'Form data was not changed')
-            return super().form_invalid(form)
-        return super().form_valid(form)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Edit Customer Order'
         context['heading'] = 'Ledger'
+
+        if self.request.POST:
+            context['positions'] = CustomerOrderPositionsFormset(self.request.POST, instance=self.object)
+            context['positions'].full_clean()
+        else:
+            context['positions'] = CustomerOrderPositionsFormset(instance=self.object)
+            context['positions_helper'] = CustomerOrderPositionFormHelper()
+
         return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
+    def form_valid(self, form):
+        context=self.get_context_data()
+        positions = context['positions']
+
+        if not form.has_changed():
+            form.add_error(None, 'Form data was not changed')
+            return super().form_invalid(form)
+        return super().form_valid(form)
 
 
 class CustomerOrderDelete(SuccessMessageMixin, LoginRequiredMixin, DeleteView):

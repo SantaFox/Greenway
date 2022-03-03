@@ -9,7 +9,7 @@ urlpatterns = [
     path('stock/', views.view_stock, name='view_stock'),
     path('funds/', views.view_funds, name='view_funds'),
 
-    path('products/search/', views.product_search, name='product_search'),
+    path('products/search/', views.product_search, name='products_search'),
     path('counterparties/search/', views.counterparty_search, name='counterparties_search'),
 
     path('accounts/', views.table_accounts, name='accounts'),

@@ -1,13 +1,14 @@
-from django.forms import ModelForm, DateInput
+from django.forms import ModelForm, inlineformset_factory
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Field, Layout, HTML, Row
-from crispy_forms.bootstrap import PrependedText
+from crispy_forms.bootstrap import PrependedText, StrictButton
 
 from .models import Account, Counterparty, CustomerOrder, CustomerOrderPosition, Payment
+from products.models import Product
 
 
 class AccountForm(ModelForm):
@@ -116,7 +117,7 @@ class CustomerOrderForm(ModelForm):
                       data_ajax__url=reverse('ledger:counterparties_search'),
                       data_ajax__cache=True,
                       data_placeholder=_('Customer Name'),
-                      data_minimum_input_length=2,
+                      # data_minimum_input_length=2,
                       wrapper_class='col-md-8'),
             ),
             Row(
@@ -126,8 +127,8 @@ class CustomerOrderForm(ModelForm):
             ),
             Row(
                 PrependedText('DateDelivered', mark_safe('<i class="uil-gift"></i>'), wrapper_class='col-md-4'),
-                # Field('DetailedDelivery', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
-                Field('DetailedDelivery'),
+                Field('DetailedDelivery', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
+                # Field('DetailedDelivery', wrapper_class='col-md-4'),
             ),
             Row(
                 PrependedText('Amount', mark_safe('<i class="uil-bill"></i>'), wrapper_class='col-md-4',
@@ -137,13 +138,14 @@ class CustomerOrderForm(ModelForm):
             Field('Memo', rows=4),
         )
 
-        # queryset_filters = dict(User=self.user)
+        queryset_filters = dict(User=self.user)
         external_instance = kwargs['instance']
         if external_instance:
-            queryset_filters = dict(pk=external_instance.Customer.pk)
-            self.fields['Customer'].queryset = Counterparty.objects.filter(
-                **{k: v for k, v in queryset_filters.items() if v is not None}
-            )
+            queryset_filters['pk'] = external_instance.Customer.pk
+
+        self.fields['Customer'].queryset = Counterparty.objects.filter(
+            **{k: v for k, v in queryset_filters.items() if v is not None}
+        )
         self.fields['Customer'].empty_label = ''
 
         # loading Model descriptors from Meta subclass
@@ -173,46 +175,66 @@ class CustomerOrderPositionForm(ModelForm):
         for field_name, field in self.fields.items():
             self.fields[field_name].help_text = None
 
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            Field('Product',
-                  css_class='basicAutoSelect',
-                  autocomplete='off',
-                  data_url=reverse('ledger:product_search')),
-            Div(
-                PrependedText('Quantity', '<i class="bi bi-123"></i>', wrapper_class='col-md-4',
-                              css_class="text-right"),
-                PrependedText('Price', '<i class="bi bi-cash-stack"></i>', wrapper_class='col-md-4',
-                              css_class="text-right"),
-                PrependedText('Currency', '<i class="bi bi-currency-exchange"></i>', wrapper_class='col-md-4'),
-                css_class='form-row'),
-            Div(
-                PrependedText('Discount', '<i class="bi bi-piggy-bank"></i>', wrapper_class='col-md-4',
-                              css_class="text-right"),
-                Field('DiscountReason', wrapper_class='col-md-8'),
-                css_class='form-row'),
-            PrependedText('Status', '<i class="bi bi-basket"></i>'),
-            PrependedText('DateDelivered', '<i class="bi bi-gift"></i>')
+        queryset_filters = dict()
+        external_instance = kwargs.get('instance', None)
+        queryset_filters['pk'] = external_instance.Product.pk if external_instance else 0
+
+        self.fields['Product'].queryset = Product.objects.filter(
+            **{k: v for k, v in queryset_filters.items() if v is not None}
         )
-
-        # loading Model descriptors from Meta subclass
-        for fld in self._meta.model._meta.get_fields():
-            if not fld.auto_created:
-                self.helper[fld.name].update_attributes(placeholder=fld.verbose_name)
-                if fld.help_text != '':
-                    self.helper[fld.name].update_attributes(title=fld.help_text)
-                    self.helper[fld.name].update_attributes(data_toggle="tooltip")
-
-        self.helper.form_show_labels = False
-        self.helper.use_custom_control = True
-        self.helper.form_tag = False
-        self.helper.disable_csrf = True
-
-        self.prefix = 'form_CustomerOrderPosition'
+        self.fields['Product'].empty_label = ''
 
     class Meta:
         model = CustomerOrderPosition
         fields = ['Product', 'Quantity', 'Price', 'Currency', 'Discount', 'DiscountReason', 'Status', 'DateDelivered']
+
+
+class CustomerOrderPositionFormHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.layout = Layout(
+            Row(
+                Field('Product',
+                      css_class='select2',
+                      data_ajax__url=reverse('ledger:products_search'),
+                      data_ajax__cache=True,
+                      data_placeholder=_('Product'),
+                      data_minimum_input_length=2,
+                      data_dropdown_auto_width=True,
+                      wrapper_class='col-md-2'),
+                PrependedText('Quantity', mark_safe('<i class="uil-calculator-alt"></i>'), wrapper_class='col-md-1',
+                              css_class="text-right"),
+                PrependedText('Price', mark_safe('<i class="uil-pricetag-alt"></i>'), wrapper_class='col-md-1',
+                              css_class="text-right"),
+                PrependedText('Currency', mark_safe('<i class="uil-euro"></i>'), wrapper_class='col-md-1'),
+                PrependedText('Discount', mark_safe('<i class="uil-pricetag-alt"></i>'), wrapper_class='col-md-1',
+                              css_class="text-right"),
+                Field('DiscountReason', wrapper_class='col-md-2'),
+                PrependedText('Status', mark_safe('<i class="uil-calculator-alt"></i>'), wrapper_class='col-md-2'),
+                PrependedText('DateDelivered', mark_safe('<i class="uil-calculator-alt"></i>'), wrapper_class='col-md-1'),
+                Div(
+                    StrictButton(mark_safe('<i class="uil-trash-alt"></i>'), css_class='btn-danger'),
+                    css_class='col-md-1'
+                ),
+            ),
+        )
+
+        # loading Model descriptors from Meta subclass
+        # for fld in self._meta.model._meta.get_fields():
+        #     if not fld.auto_created:
+        #         self.helper[fld.name].update_attributes(placeholder=fld.verbose_name)
+        #         if fld.help_text != '':
+        #             self.helper[fld.name].update_attributes(title=fld.help_text)
+        #             self.helper[fld.name].update_attributes(data_toggle="tooltip")
+
+        self.form_show_labels = False
+        self.use_custom_control = True
+        self.form_tag = False
+        self.disable_csrf = True
+
+
+CustomerOrderPositionsFormset = inlineformset_factory(CustomerOrder, CustomerOrderPosition, form=CustomerOrderPositionForm, extra=3)
 
 
 class CustomerOrderPaymentForm(ModelForm):
