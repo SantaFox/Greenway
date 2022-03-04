@@ -4,6 +4,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.template.response import TemplateResponse
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from greensite.decorators import prepare_languages
@@ -112,5 +113,16 @@ class CustomerOrderDelete(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
                 str(rel.model._meta.verbose_name_plural): list(i.__str__() for i in rel.all()) for rel in related
             }
             context['related'] = related_dict
+
+        return context
+
+
+class CustomerOrderPrint(LoginRequiredMixin, DetailView):
+    model = CustomerOrder
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Print Customer Order'
+        context['heading'] = 'Ledger'
 
         return context

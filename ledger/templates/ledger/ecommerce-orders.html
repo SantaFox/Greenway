@@ -64,10 +64,13 @@
                     <td>{{ order.DateDelivered }}</td>
                     <td>{{ order.Memo|truncatechars:30 }}</td>
                     <td>
-                        <a href="{% url 'ledger:customer_order_edit' order.pk %}" class="px-3 text-primary">
+                        <a href="{% url 'ledger:customer_order_print' order.pk %}" class="px-2 text-dark">
+                            <i class="uil uil-print font-size-18"></i>
+                        </a>
+                        <a href="{% url 'ledger:customer_order_edit' order.pk %}" class="px-2 text-primary">
                             <i class="uil uil-pen font-size-18"></i>
                         </a>
-                        <a href="{% url 'ledger:customer_order_delete' order.pk %}" class="px-3 text-danger">
+                        <a href="{% url 'ledger:customer_order_delete' order.pk %}" class="px-2 text-danger">
                             <i class="uil uil-trash-alt font-size-18"></i>
                         </a>
                     </td>
