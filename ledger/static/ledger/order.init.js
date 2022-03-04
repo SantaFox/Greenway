@@ -1,5 +1,25 @@
+function formatProduct (product) {
+  if (!product.id) {
+    return product.text;
+  }
+
+  var $product = $(
+    '<span><strong></strong><span></span></span>'
+  );
+
+  // Use .text() instead of HTML string concatenation to avoid script injection issues
+  var str = product.text;
+  $product.find("strong").text(str.slice(0, str.indexOf(':') + 1));
+  $product.find("span").text(str.slice(str.indexOf(':') + 1));
+
+  return $product;
+};
+
 // Select2
-$(".select2").select2();
+$("select.select2[name='Customer']").select2();
+$("select.select2[name!='Customer']").select2({
+    templateSelection: formatProduct
+});
 $(".dateinput").flatpickr();
 $('.repeater').repeater({
     defaultValues: {

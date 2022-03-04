@@ -1,4 +1,4 @@
-from django.forms import ModelForm, inlineformset_factory
+from django.forms import ModelForm, inlineformset_factory, ModelChoiceField
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -99,6 +99,11 @@ class CounterpartyForm(ModelForm):
                   'IsSupplier', 'IsCustomer', ]
 
 
+class CustomerChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.Name
+
+
 class CustomerOrderForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user') if 'user' in kwargs else None # notice the .pop()
@@ -118,6 +123,7 @@ class CustomerOrderForm(ModelForm):
                       data_ajax__cache=True,
                       data_placeholder=_('Customer Name'),
                       # data_minimum_input_length=2,
+                      data_allow_clear=True,
                       wrapper_class='col-md-8'),
             ),
             Row(
@@ -165,6 +171,14 @@ class CustomerOrderForm(ModelForm):
         model = CustomerOrder
         fields = ['DateOperation', 'Customer', 'DateDispatched', 'DateDelivered', 'TrackingNumber',
                   'CourierService', 'DetailedDelivery', 'Amount', 'Currency', 'Memo', ]
+        field_classes = {
+            'Customer': CustomerChoiceField,
+        }
+
+
+class ProductChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.get_full_name()
 
 
 class CustomerOrderPositionForm(ModelForm):
@@ -187,6 +201,9 @@ class CustomerOrderPositionForm(ModelForm):
     class Meta:
         model = CustomerOrderPosition
         fields = ['Product', 'Quantity', 'Price', 'Currency', 'Discount', 'DiscountReason', 'Status', 'DateDelivered']
+        field_classes = {
+            'Product': ProductChoiceField,
+        }
 
 
 class CustomerOrderPositionFormHelper(FormHelper):
@@ -202,10 +219,10 @@ class CustomerOrderPositionFormHelper(FormHelper):
                       data_placeholder=_('Product'),
                       data_minimum_input_length=2,
                       data_dropdown_auto_width=True,
-                      wrapper_class='col-md-2'),
+                      wrapper_class='col-md-3'),
                 Field('Quantity', wrapper_class='col-md-1', css_class='text-end'),
                 Field('Price', wrapper_class='col-md-1', css_class='text-end'),
-                Field('Currency', wrapper_class='col-md-1'),
+                # Field('Currency', wrapper_class='col-md-1'),
                 Field('Discount', wrapper_class='col-md-1', css_class='text-end'),
                 Field('DiscountReason', wrapper_class='col-md-2'),
                 Field('Status', wrapper_class='col-md-2'),
