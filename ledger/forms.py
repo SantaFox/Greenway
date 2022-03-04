@@ -122,8 +122,6 @@ class CustomerOrderForm(ModelForm):
                       data_ajax__url=reverse('ledger:counterparties_search'),
                       data_ajax__cache=True,
                       data_placeholder=_('Customer Name'),
-                      # data_minimum_input_length=2,
-                      data_allow_clear=True,
                       wrapper_class='col-md-8'),
             ),
             Row(
@@ -139,7 +137,11 @@ class CustomerOrderForm(ModelForm):
             Row(
                 PrependedText('Amount', mark_safe('<i class="uil-bill"></i>'), wrapper_class='col-md-4',
                               css_class="text-right"),
-                Field('Currency', wrapper_class='col-md-4'),
+                Field('Currency',
+                      css_class='select2',
+                      data_placeholder=_('Order Currency'),
+                      data_minimum_results_for_search='Infinity',
+                      wrapper_class='col-md-4'),
             ),
             Field('Memo', rows=4),
         )
@@ -152,7 +154,10 @@ class CustomerOrderForm(ModelForm):
         self.fields['Customer'].queryset = Counterparty.objects.filter(
             **{k: v for k, v in queryset_filters.items() if v is not None}
         )
+
         self.fields['Customer'].empty_label = ''
+        self.fields['CourierService'].empty_label = ''
+        self.fields['Currency'].empty_label = ''
 
         # loading Model descriptors from Meta subclass
         for fld in self._meta.model._meta.get_fields():

@@ -17,7 +17,8 @@ function formatProduct (product) {
 
 // Select2
 $("select.select2[name='Customer']").select2();
-$("select.select2[name!='Customer']").select2({
+$("select.select2[name='Currency']").select2();
+$("select.select2[name$='Product']").select2({
     templateSelection: formatProduct
 });
 $(".dateinput").flatpickr();
