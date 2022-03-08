@@ -231,7 +231,7 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
             .aggregate(TotalAmount=Sum(
                     F('Price') * F('Quantity') - Cast(Coalesce('Discount', 0), DecimalField())
                 ))
-        amount = amount_queryset['TotalAmount'] + (self.DeliveryPrice or 0)
+        amount = (amount_queryset['TotalAmount'] or 0) + (self.DeliveryPrice or 0)
         return 0 if amount is None else amount
 
     @property

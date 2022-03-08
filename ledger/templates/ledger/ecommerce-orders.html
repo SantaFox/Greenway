@@ -53,7 +53,7 @@
                     <td>{{ order.get_paid_amount|floatformat:2 }}</td>
                     <td>{{ order.Currency.Code }}</td>
                     {% if order.get_order_amount == 0 %}
-                    <td><div class="badge bg-soft-info font-size-12">Empty</div></td>
+                    <td><div class="badge bg-soft-info font-size-12">Empty Order</div></td>
                     {% elif order.get_paid_amount == 0 %}
                     <td><div class="badge bg-soft-danger font-size-12">Not Paid</div></td>
                     {% elif order.get_paid_amount == order.get_order_amount %}

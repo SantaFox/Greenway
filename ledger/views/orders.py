@@ -29,8 +29,8 @@ def table_customer_orders(request):
 class CustomerOrderCreate(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     model = CustomerOrder
     form_class = CustomerOrderForm
-    success_message = "Customer Order %(Name)s successfully created"
-    success_url = reverse_lazy('ledger:accounts')
+    success_message = "Customer Order successfully created"
+    success_url = reverse_lazy('ledger:customer_orders')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -40,6 +40,7 @@ class CustomerOrderCreate(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         if self.request.POST:
             context['positions'] = CustomerOrderPositionsFormset(self.request.POST, instance=self.object)
             context['positions'].full_clean()
+            context['positions_helper'] = CustomerOrderPositionFormHelper()
         else:
             context['positions'] = CustomerOrderPositionsFormset(instance=self.object)
             context['positions_helper'] = CustomerOrderPositionFormHelper()
@@ -56,7 +57,6 @@ class CustomerOrderCreate(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         context=self.get_context_data()
         positions = context['positions']
 
-
         form.instance.User = self.request.user
         return super().form_valid(form)
 
@@ -64,8 +64,8 @@ class CustomerOrderCreate(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 class CustomerOrderUpdate(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     model = CustomerOrder
     form_class = CustomerOrderForm
-    success_message = "Customer Order %(Name)s successfully updated"
-    success_url = reverse_lazy('ledger:accounts')
+    success_message = "Customer Order successfully updated"
+    success_url = reverse_lazy('ledger:customer_orders')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -75,6 +75,7 @@ class CustomerOrderUpdate(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         if self.request.POST:
             context['positions'] = CustomerOrderPositionsFormset(self.request.POST, instance=self.object)
             context['positions'].full_clean()
+            context['positions_helper'] = CustomerOrderPositionFormHelper()
         else:
             context['positions'] = CustomerOrderPositionsFormset(instance=self.object)
             context['positions_helper'] = CustomerOrderPositionFormHelper()

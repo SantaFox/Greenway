@@ -8,6 +8,7 @@
 {% endblock  %}
 
 {% block content %}
+<form method="post" enctype="multipart/form-data">{% csrf_token %}
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -15,9 +16,7 @@
                 <h4 class="card-title">Order Data</h4>
                 <p class="card-title-desc">Here are examples of <code>.form-control</code> applied to each
                     textual HTML5 <code>&lt;input&gt;</code> <code>type</code>.</p>
-                <form method="post">{% csrf_token %}
                     {% crispy form %}
-                </form>
             </div>
         </div>
     </div>
@@ -89,22 +88,21 @@
 
 <div class="row">
     <div class="col-12">
-        <form>
-            <div class="row mb-4">
-                <div class="col ms-auto">
-                    <div class="d-flex flex-reverse flex-wrap gap-2">
-                        <button type="submit" class="btn btn-success w-lg waves-effect waves-light me-1">
-                            Save
-                        </button>
-                        <a role="button" class="btn btn-info w-lg waves-effect" href="{% url 'ledger:customer_orders' %}">
-                            Cancel
-                        </a>
-                    </div>
+        <div class="row mb-4">
+            <div class="col ms-auto">
+                <div class="d-flex flex-reverse flex-wrap gap-2">
+                    <button type="submit" class="btn btn-success w-lg waves-effect waves-light me-1">
+                        Save
+                    </button>
+                    <a role="button" class="btn btn-info w-lg waves-effect" href="{% url 'ledger:customer_orders' %}">
+                        Cancel
+                    </a>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
+</form>
 {% endblock %}
 
 {% block extra_javascript %}
