@@ -168,19 +168,16 @@ class SupplierOrder(ModelIsDeletableMixin, Operation):
     Memo = models.TextField(blank=True, verbose_name=_('Memo'),
                             help_text=_('Memo related to this Supplier Order'))
 
-    @property
     def get_paid_amount(self):
         amount_queryset = Payment.objects.filter(ParentOperation=self).aggregate(TotalAmount=Sum('Amount'))
         amount = amount_queryset['TotalAmount']
         return 0 if amount is None else amount
 
-    @property
     def get_positions_count(self):
         pos_queryset = SupplierOrderPosition.objects.filter(Operation=self).aggregate(PositionCount=Count('id'))
         pos_count = pos_queryset['PositionCount']
         return 0 if pos_count is None else pos_count
 
-    @property
     def get_payments_count(self):
         payments_queryset = Payment.objects.filter(ParentOperation=self).aggregate(PaymentCount=Count('id'))
         payments_count = payments_queryset['PaymentCount']
@@ -225,7 +222,6 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
     Memo = models.TextField(blank=True, verbose_name=_('Memo'),
                             help_text=_('Memo related to this Customer Order'))
 
-    @property
     def get_order_amount(self):
         amount_queryset = CustomerOrderPosition.objects.filter(Operation=self)\
             .aggregate(TotalAmount=Sum(
@@ -234,19 +230,16 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
         amount = (amount_queryset['TotalAmount'] or 0) + (self.DeliveryPrice or 0)
         return 0 if amount is None else amount
 
-    @property
     def get_paid_amount(self):
         amount_queryset = Payment.objects.filter(ParentOperation=self).aggregate(TotalAmount=Sum('Amount'))
         amount = amount_queryset['TotalAmount']
         return 0 if amount is None else amount
 
-    @property
     def get_positions_count(self):
         pos_queryset = CustomerOrderPosition.objects.filter(Operation=self).aggregate(PositionCount=Count('id'))
         pos_count = pos_queryset['PositionCount']
         return 0 if pos_count is None else pos_count
 
-    @property
     def get_payments_count(self):
         payments_queryset = Payment.objects.filter(ParentOperation=self).aggregate(PaymentCount=Count('id'))
         payments_count = payments_queryset['PaymentCount']
@@ -287,11 +280,9 @@ class OperationPosition(models.Model):
     def __str__(self):
         return f'{self.Operation} / {self.Product} / {self.Quantity}'
 
-    @property
     def get_actual_price(self):
         return self.Product.get_price_on_date(timezone.now())
 
-    @property
     def get_product_name(self):
         return self.Product.get_name()
 
