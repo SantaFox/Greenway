@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Field, Layout, HTML, Row
+from crispy_forms.layout import Div, Field, Layout, HTML, Row, Hidden
 from crispy_forms.bootstrap import PrependedText, StrictButton
 
 from .models import Account, Counterparty, CustomerOrder, CustomerOrderPosition, Payment
@@ -235,6 +235,7 @@ class CustomerOrderPositionFormHelper(FormHelper):
                 Field('DiscountReason', wrapper_class='col-md-2'),
                 Field('Status', wrapper_class='col-md-2'),
                 Field('DateDelivered', wrapper_class='col-md-1'),
+                # Hidden('DELETE', False),
                 Div(
                     StrictButton(mark_safe('<i class="uil-trash-alt"></i>'), css_class='btn-danger'),
                     css_class='col-md-1'
@@ -242,7 +243,7 @@ class CustomerOrderPositionFormHelper(FormHelper):
                 # css_class='form-control-sm'
             ),
         )
-
+        # self.render_required_fields = True
         # mark_safe('<i class="uil-calculator-alt"></i>')
         # mark_safe('<i class="uil-pricetag-alt"></i>')
         # mark_safe('<i class="uil-euro"></i>')
@@ -266,7 +267,8 @@ class CustomerOrderPositionFormHelper(FormHelper):
 CustomerOrderPositionsFormset = inlineformset_factory(CustomerOrder,
                                                       CustomerOrderPosition,
                                                       form=CustomerOrderPositionForm,
-                                                      extra=0)
+                                                      can_delete=True,
+                                                      extra=1)
 
 
 class CustomerOrderPaymentForm(ModelForm):

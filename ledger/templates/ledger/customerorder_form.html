@@ -42,45 +42,10 @@
                     <label class="col-md-1">Date</label>
                     <label class="col-md-1">Action</label>
                 </div>
-                    {% crispy positions positions_helper %}
-<!--                <form class="repeater" enctype="multipart/form-data">-->
-<!--                    <div data-repeater-list="group-a">-->
-<!--                        <div data-repeater-item class="row">-->
-<!--                            <div  class="mb-3 col-lg-2">-->
-<!--                                <label class="form-label" for="name">Full Name:</label>-->
-<!--                                <input type="text" id="name" name="untyped-input" class="form-control" placeholder="Enter your full name" />-->
-<!--                            </div>-->
-
-<!--                            <div  class="mb-3 col-lg-2">-->
-<!--                                <label class="form-label" for="email">Email:</label>-->
-<!--                                <input type="email" id="email" class="form-control" placeholder="Enter your email address" />-->
-<!--                            </div>-->
-
-<!--                            <div  class="mb-3 col-lg-2">-->
-<!--                                <label class="form-label" for="subject">Subject:</label>-->
-<!--                                <input type="text" id="subject" class="form-control" placeholder="Enter your subject" />-->
-<!--                            </div>-->
-
-<!--                            <div class="mb-3 col-lg-2">-->
-<!--                                <label class="form-label" for="resume">Resume:</label>-->
-<!--                                <input class="form-control" type="file" id="formFile" />-->
-<!--                            </div>-->
-
-<!--                            <div class="mb-3 col-lg-2">-->
-<!--                                <label class="form-label" for="message">Message:</label>-->
-<!--                                <textarea id="message" class="form-control" placeholder="Enter your message"></textarea>-->
-<!--                            </div>-->
-
-<!--                            <div class="col-lg-2 align-self-center">-->
-<!--                                <div class="d-grid">-->
-<!--                                    <input data-repeater-delete type="button" class="btn btn-primary" value="Delete"/>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-
-<!--                    </div>-->
-<!--                    <input data-repeater-create type="button" class="btn btn-success mt-3 mt-lg-0" value="Add"/>-->
-<!--                </form>-->
+                <div id="empty_form" style="display:none">
+                    {% crispy positions.empty_form positions_helper %}
+                </div>
+                {% crispy positions positions_helper %}
             </div>
         </div>
     </div>
@@ -108,7 +73,6 @@
 {% block extra_javascript %}
 <script src="{% static 'libs/select2/dist/js/select2.min.js' %}"></script>
 <script src="{% static 'libs/flatpickr/dist/flatpickr.min.js' %}"></script>
-<script src="{% static 'libs/jquery.repeater/jquery.repeater.min.js' %}"></script>
 <!-- init js -->
 <script src="{% static 'ledger/order.init.js' %}"></script>
 {% endblock  %}
