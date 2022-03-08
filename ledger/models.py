@@ -86,6 +86,8 @@ class Counterparty(ModelIsDeletableMixin, models.Model):
                                help_text=_('Address (without city)'))
     City = models.CharField(max_length=50, blank=True, verbose_name=_('City Name'),
                             help_text=_('City name only'))
+    Coordinates = models.CharField(max_length=50, blank=True, verbose_name=_('Map Coordinates'),
+                            help_text=_('Coordinates (in digital form, separated by comma) to be shown on the map'))
     Memo = models.TextField(blank=True, verbose_name=_('Memo'),
                             help_text=_('Comment'))
 
@@ -218,7 +220,7 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
     Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name=_('Amount'),
                                  help_text=_('Amount to be paid by Customer'))
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, blank=True, null=True, verbose_name=_('Currency'),
-                                 help_text=_('Currency of Customer payment'))
+                                 help_text=_('Currency of all amounts in this Customer Order'))
 
     Memo = models.TextField(blank=True, verbose_name=_('Memo'),
                             help_text=_('Memo related to this Customer Order'))
@@ -326,8 +328,6 @@ class SupplierOrderPosition(OperationPosition):
 class CustomerOrderPosition(OperationPosition):
     Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False, verbose_name=_('Price'),
                                 help_text=_('Sell price per one Product'))
-    Currency = models.ForeignKey(Currency, on_delete=models.PROTECT, verbose_name=_('Currency'),
-                                 help_text=_('Currency of the sell price'))
     Discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name=_('Discount'),
                                    help_text=_('Discount applied to total amount for the position'))
     DiscountReason = models.CharField(max_length=50, blank=True, verbose_name=_('Discount Reason'),
@@ -348,7 +348,7 @@ class CustomerOrderPosition(OperationPosition):
                                                  'This field is available only if Detailed Deliver set in Order.'))
 
     def __str__(self):
-        return f'{self.Operation} / {self.Product} / {self.Quantity} / {self.Price} / {self.Currency}'
+        return f'{self.Operation} / {self.Product} / {self.Quantity} / {self.Price} / {self.Operation.customerorder.Currency}'
 
     class Meta:
         verbose_name_plural = "Customer Order Positions"

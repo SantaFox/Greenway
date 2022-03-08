@@ -45,7 +45,7 @@ def product_search(request):
     response_dict = [
         {"id": cp.pk,
          "text": cp.get_full_name(),
-         "price": cp.get_price_on_date(timezone.now()),
+         "price": cp.get_price_on_date(timezone.now()).Price,
          } for cp in qry.filter(qry_filter).order_by('SKU').distinct()
     ]
     return JsonResponse({'results': response_dict}, safe=False)

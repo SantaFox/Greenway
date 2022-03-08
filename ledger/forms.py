@@ -65,7 +65,10 @@ class CounterpartyForm(ModelForm):
                 PrependedText('Facebook', mark_safe('<i class="uil-facebook-messenger"></i>'), wrapper_class='col-md-4'),
                 PrependedText('City', mark_safe('<i class="uil-building"></i>'), wrapper_class='col-md-4'),
             ),
-            PrependedText('Address', mark_safe('<i class="uil-sign-alt"></i>')),
+            Row(
+                PrependedText('Address', mark_safe('<i class="uil-sign-alt"></i>'), wrapper_class='col-md-8'),
+                PrependedText('Coordinates', mark_safe('<i class="uil-map"></i>'), wrapper_class='col-md-4')
+            ),
             Field('Memo', rows=4),
             HTML('<label>A Customer may act as a Supplier or Customer, or both</label>'),
             Row(
@@ -95,8 +98,8 @@ class CounterpartyForm(ModelForm):
 
     class Meta:
         model = Counterparty
-        fields = ['Name', 'Phone', 'Email', 'Telegram', 'Instagram', 'Facebook', 'Address', 'City', 'Memo',
-                  'IsSupplier', 'IsCustomer', ]
+        fields = ['Name', 'Phone', 'Email', 'Telegram', 'Instagram', 'Facebook', 'Address', 'City', 'Coordinates',
+                  'Memo', 'IsSupplier', 'IsCustomer', ]
 
 
 class CustomerChoiceField(ModelChoiceField):
@@ -205,7 +208,7 @@ class CustomerOrderPositionForm(ModelForm):
 
     class Meta:
         model = CustomerOrderPosition
-        fields = ['Product', 'Quantity', 'Price', 'Currency', 'Discount', 'DiscountReason', 'Status', 'DateDelivered']
+        fields = ['Product', 'Quantity', 'Price', 'Discount', 'DiscountReason', 'Status', 'DateDelivered']
         field_classes = {
             'Product': ProductChoiceField,
         }

@@ -37,11 +37,11 @@ class CounterpartyCreate(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         context['heading'] = 'Ledger'
         return context
 
-    # def get_initial(self):
-    #     initial = super().get_initial()
-    #     initial = initial.copy()
-    #     initial['User_id'] = self.request.user.pk
-    #     return initial
+    def get_initial(self):
+        initial = super().get_initial()
+        initial = initial.copy()
+        initial['IsCustomer'] = True
+        return initial
 
     def form_valid(self, form):
         form.instance.User = self.request.user
