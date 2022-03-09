@@ -230,17 +230,15 @@ class CustomerOrderPositionFormHelper(FormHelper):
                       wrapper_class='col-md-3'),
                 Field('Quantity', wrapper_class='col-md-1', css_class='text-end'),
                 Field('Price', wrapper_class='col-md-1', css_class='text-end'),
-                # Field('Currency', wrapper_class='col-md-1'),
                 Field('Discount', wrapper_class='col-md-1', css_class='text-end'),
                 Field('DiscountReason', wrapper_class='col-md-2'),
                 Field('Status', wrapper_class='col-md-2'),
                 Field('DateDelivered', wrapper_class='col-md-1'),
-                # Hidden('DELETE', False),
+                Field('DELETE', type="hidden"),
                 Div(
-                    StrictButton(mark_safe('<i class="uil-trash-alt"></i>'), css_class='btn-danger'),
-                    css_class='col-md-1'
+                    # This DIV is a placeholder for Remove button added by JavaScript
+                    css_class='col-md-1 remove-placeholder'
                 ),
-                # css_class='form-control-sm'
             ),
         )
         # self.render_required_fields = True
@@ -268,7 +266,7 @@ CustomerOrderPositionsFormset = inlineformset_factory(CustomerOrder,
                                                       CustomerOrderPosition,
                                                       form=CustomerOrderPositionForm,
                                                       can_delete=True,
-                                                      extra=1)
+                                                      extra=0)
 
 
 class CustomerOrderPaymentForm(ModelForm):

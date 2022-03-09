@@ -35,17 +35,23 @@
                     </div>
                     <label class="col-md-1">Quantity</label>
                     <label class="col-md-1">Price ?</label>
-<!--                    <label class="col-md-1">Currency</label>-->
                     <label class="col-md-1">Discount</label>
                     <label class="col-md-2">Reason</label>
                     <label class="col-md-2">Status</label>
                     <label class="col-md-1">Date</label>
                     <label class="col-md-1">Action</label>
                 </div>
+                <div id="management_form" style="display:none">
+                    {{ positions.management_form|crispy }}
+                </div>
                 <div id="empty_form" style="display:none">
                     {% crispy positions.empty_form positions_helper %}
                 </div>
-                {% crispy positions positions_helper %}
+                {% for position_form in positions.forms %}
+                <div id="{{ position_form.prefix }}-row" class="position-form">
+                    {% crispy position_form positions_helper %}
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -73,6 +79,7 @@
 {% block extra_javascript %}
 <script src="{% static 'libs/select2/dist/js/select2.min.js' %}"></script>
 <script src="{% static 'libs/flatpickr/dist/flatpickr.min.js' %}"></script>
+<script src="{% static 'js/jquery.formset.js' %}"></script>
 <!-- init js -->
 <script src="{% static 'ledger/order.init.js' %}"></script>
 {% endblock  %}
