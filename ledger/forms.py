@@ -263,13 +263,6 @@ class CustomerOrderPositionFormHelper(FormHelper):
         self.disable_csrf = True
 
 
-CustomerOrderPositionsFormset = inlineformset_factory(CustomerOrder,
-                                                      CustomerOrderPosition,
-                                                      form=CustomerOrderPositionForm,
-                                                      can_delete=True,
-                                                      extra=0)
-
-
 class CustomerOrderPaymentForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user') if 'user' in kwargs else None # notice the .pop()

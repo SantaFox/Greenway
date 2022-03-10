@@ -5,6 +5,7 @@ Pillow==8.4
 django-crispy-forms>=1.14
 crispy-bootstrap5>=0.6
 # django-debug-toolbar>=3.2
+django-extra-views>=0.14
 django-filter>=21.0
 # django-google-analytics-app>=5.0.0
 django-imagekit>=4.1

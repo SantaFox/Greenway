@@ -41,6 +41,7 @@
                     <label class="col-md-1">Date</label>
                     <label class="col-md-1">Action</label>
                 </div>
+                {% with positions_formset=inlines|first %}
                 <div id="management_form" style="display:none">
                     {{ positions_formset.management_form|crispy }}
                 </div>
@@ -52,6 +53,7 @@
                     {% crispy positions_form positions_helper %}
                 </div>
                 {% endfor %}
+                {% endwith %}
             </div>
         </div>
     </div>

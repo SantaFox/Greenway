@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'imagekit',
     'crispy_forms',
     'crispy_bootstrap5',
+    'extra_views',
     'markdownx',
     'django_tables2',
     'django_filters',

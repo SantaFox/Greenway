@@ -2,19 +2,17 @@ from datetime import datetime, date
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
-from django.db import transaction
-from django.shortcuts import redirect
 from django.template.response import TemplateResponse
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import DeleteView
+from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSetFactory, SuccessMessageMixin
 
 from greensite.decorators import prepare_languages
 
-from ledger.models import CustomerOrder
-from ledger.forms import CustomerOrderForm, CustomerOrderPositionsFormset, CustomerOrderPositionFormHelper
+from ledger.models import CustomerOrder, CustomerOrderPosition
+from ledger.forms import CustomerOrderForm, CustomerOrderPositionForm, CustomerOrderPositionFormHelper
 
 
 @login_required
@@ -30,26 +28,27 @@ def table_customer_orders(request):
     })
 
 
-class CustomerOrderCreate(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class CustomerOrderPositionInline(InlineFormSetFactory):
+    model = CustomerOrderPosition
+    form_class = CustomerOrderPositionForm
+
+
+class CustomerOrderCreate(SuccessMessageMixin, LoginRequiredMixin, CreateWithInlinesView):
     model = CustomerOrder
     form_class = CustomerOrderForm
+    inlines = [CustomerOrderPositionInline, ]
     success_message = "Customer Order successfully created"
     success_url = reverse_lazy('ledger:customer_orders')
+    factory_kwargs = {'extra': 1, 'max_num': None, 'can_order': False, 'can_delete': True}
+    extra_context = {'title': 'Add Customer Order',
+                     'heading': 'Ledger',
+                     'positions_helper': CustomerOrderPositionFormHelper,
+                     }
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Add Customer Order'
-        context['heading'] = 'Ledger'
-
-        if self.request.POST:
-            context['positions_formset'] = CustomerOrderPositionsFormset(self.request.POST, instance=self.object)
-            context['positions_formset'].full_clean()
-            context['positions_helper'] = CustomerOrderPositionFormHelper()
-        else:
-            context['positions_formset'] = CustomerOrderPositionsFormset(instance=self.object)
-            context['positions_helper'] = CustomerOrderPositionFormHelper()
-
-        return context
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'user': self.request.user})  # We have a user-related filtering in the form
+        return kwargs
 
     def get_initial(self):
         initial = super().get_initial()
@@ -57,70 +56,23 @@ class CustomerOrderCreate(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         initial['DateOperation'] = date.today()
         return initial
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update({'user': self.request.user})
-        return kwargs
 
-    def form_valid(self, form):
-        context=self.get_context_data()
-        positions_formset = context['positions_formset']
-
-        form.instance.User = self.request.user
-        return super().form_valid(form)
-
-
-class CustomerOrderUpdate(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class CustomerOrderUpdate(SuccessMessageMixin, LoginRequiredMixin, UpdateWithInlinesView):
     model = CustomerOrder
     form_class = CustomerOrderForm
+    inlines = [CustomerOrderPositionInline, ]
     success_message = "Customer Order successfully updated"
     success_url = reverse_lazy('ledger:customer_orders')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Edit Customer Order'
-        context['heading'] = 'Ledger'
-
-        if self.request.POST:
-            context['positions_formset'] = CustomerOrderPositionsFormset(self.request.POST, instance=self.object)
-            context['positions_formset'].full_clean()
-            context['positions_helper'] = CustomerOrderPositionFormHelper()
-        else:
-            context['positions_formset'] = CustomerOrderPositionsFormset(instance=self.object)
-            context['positions_helper'] = CustomerOrderPositionFormHelper()
-
-        return context
+    factory_kwargs = {'extra': 1, 'max_num': None, 'can_order': False, 'can_delete': True}
+    extra_context = {'title': 'Edit Customer Order',
+                     'heading': 'Ledger',
+                     'positions_helper': CustomerOrderPositionFormHelper,
+                     }
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs.update({'user': self.request.user})
+        kwargs.update({'user': self.request.user})  # We have a user-related filtering in the form
         return kwargs
-
-    def form_valid(self, form):
-        context=self.get_context_data()
-        positions_formset = context['positions_formset']
-
-        if not form.has_changed() and not positions_formset.has_changed():
-            form.add_error(None, 'Order data and positions were not changed')
-            return super().form_invalid(form)
-
-        if form.is_valid() and positions_formset.is_valid():
-            with transaction.atomic():
-                if form.has_changed():
-                    self.object = form.save(commit=False)
-                    # We don't need to set User because this class is Update, not Create
-                    self.object.save()
-
-                if positions_formset.has_changed():
-                    positions_objects = positions_formset.save(commit=False)
-                    for position in positions_objects:
-                        # We don't need to set Operation here because InlineFormset already handled this
-                        position.save()
-                    for position in positions_formset.deleted_objects:
-                        # We can check for something here
-                        position.delete()
-
-        return super(SuccessMessageMixin, self).form_valid(form)
 
 
 class CustomerOrderDelete(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
