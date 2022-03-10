@@ -1,4 +1,4 @@
-from django.forms import ModelForm, inlineformset_factory, ModelChoiceField
+from django.forms import ModelForm, inlineformset_factory, ModelChoiceField, BaseInlineFormSet
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -256,6 +256,7 @@ class CustomerOrderPositionFormHelper(FormHelper):
         #             self.helper[fld.name].update_attributes(title=fld.help_text)
         #             self.helper[fld.name].update_attributes(data_toggle="tooltip")
 
+        self.render_hidden_fields = True
         self.form_show_labels = False
         self.use_custom_control = True
         self.form_tag = False

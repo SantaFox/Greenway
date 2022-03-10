@@ -42,14 +42,14 @@
                     <label class="col-md-1">Action</label>
                 </div>
                 <div id="management_form" style="display:none">
-                    {{ positions.management_form|crispy }}
+                    {{ positions_formset.management_form|crispy }}
                 </div>
                 <div id="empty_form" style="display:none">
-                    {% crispy positions.empty_form positions_helper %}
+                    {% crispy positions_formset.empty_form positions_helper %}
                 </div>
-                {% for position_form in positions.forms %}
+                {% for positions_form in positions_formset.forms %}
                 <div id="{{ position_form.prefix }}-row" class="position-form">
-                    {% crispy position_form positions_helper %}
+                    {% crispy positions_form positions_helper %}
                 </div>
                 {% endfor %}
             </div>
