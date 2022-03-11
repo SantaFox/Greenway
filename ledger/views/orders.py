@@ -50,6 +50,11 @@ class CustomerOrderCreate(SuccessMessageMixin, LoginRequiredMixin, CreateWithInl
         kwargs.update({'user': self.request.user})  # We have a user-related filtering in the form
         return kwargs
 
+    def form_valid(self, form):
+        # We update prepared (.save(commit=False)) form's instance with data not expected to be available in form itself
+        form.instance.User = self.request.user
+        return super().form_valid(form)
+
     def get_initial(self):
         initial = super().get_initial()
         initial = initial.copy()

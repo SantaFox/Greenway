@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Field, Layout, HTML, Row, Hidden
+from crispy_forms.layout import Div, Field, Layout, HTML, Row
 from crispy_forms.bootstrap import PrependedText, StrictButton
 
 from .models import Account, Counterparty, CustomerOrder, CustomerOrderPosition, Payment
@@ -120,34 +120,39 @@ class CustomerOrderForm(ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
-                PrependedText('DateOperation', mark_safe('<i class="uil-calendar-alt"></i>'), wrapper_class='col-md-4'),
+                PrependedText('DateOperation', mark_safe('<i class="uil-calendar-alt"></i>'), wrapper_class='col-md-3'),
+                Field('Currency',
+                      css_class='select2',
+                      data_placeholder=_('Order Currency'),
+                      data_minimum_results_for_search='Infinity',
+                      wrapper_class='col-md-2'),
                 Field('Customer',
                       css_class='select2',
                       data_ajax__url=reverse('ledger:counterparties_search'),
                       data_ajax__cache=True,
                       data_placeholder=_('Customer Name'),
-                      wrapper_class='col-md-8'),
+                      wrapper_class='col-md-7'),
             ),
             Row(
-                PrependedText('DateDispatched', mark_safe('<i class="uil-truck"></i>'), wrapper_class='col-md-4'),
-                PrependedText('TrackingNumber', mark_safe('<i class="uil-bug"></i>'), wrapper_class='col-md-4'),
-                PrependedText('CourierService', mark_safe('<i class="uil-post-stamp"></i>'), wrapper_class='col-md-4'),
+                PrependedText('DateDelivered', mark_safe('<i class="uil-gift"></i>'), wrapper_class='col-md-3'),
+                HTML('<div class="mb-3 col-md-2 d-flex align-items-center justify-content-end">'
+                     '<span>' +
+                     _('For Postal Delivery, please fill:') +
+                     '</span>'
+                     '</div>'),
+                PrependedText('DateDispatched', mark_safe('<i class="uil-truck"></i>'), wrapper_class='col-md-2'),
+                PrependedText('TrackingNumber', mark_safe('<i class="uil-bug"></i>'), wrapper_class='col-md-2'),
+                PrependedText('CourierService', mark_safe('<i class="uil-post-stamp"></i>'), wrapper_class='col-md-3'),
             ),
-            Row(
-                PrependedText('DateDelivered', mark_safe('<i class="uil-gift"></i>'), wrapper_class='col-md-4'),
-                Field('DetailedDelivery', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
-                # Field('DetailedDelivery', wrapper_class='col-md-4'),
-            ),
-            Row(
-                PrependedText('Amount', mark_safe('<i class="uil-bill"></i>'), wrapper_class='col-md-4',
-                              css_class="text-right"),
-                Field('Currency',
-                      css_class='select2',
-                      data_placeholder=_('Order Currency'),
-                      data_minimum_results_for_search='Infinity',
-                      wrapper_class='col-md-4'),
-            ),
-            Field('Memo', rows=4),
+            # Row(
+            #     Field('DetailedDelivery', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),
+            #     # Field('DetailedDelivery', wrapper_class='col-md-4'),
+            # ),
+            # Row(
+            #     PrependedText('Amount', mark_safe('<i class="uil-bill"></i>'), wrapper_class='col-md-4',
+            #                   css_class="text-right"),
+            # ),
+            Field('Memo', rows=3),
         )
 
         queryset_filters = dict(User=self.user)
@@ -179,7 +184,8 @@ class CustomerOrderForm(ModelForm):
     class Meta:
         model = CustomerOrder
         fields = ['DateOperation', 'Customer', 'DateDispatched', 'DateDelivered', 'TrackingNumber',
-                  'CourierService', 'DetailedDelivery', 'Amount', 'Currency', 'Memo', ]
+                  # 'CourierService', 'DetailedDelivery', 'Amount', 'Currency', 'Memo', ]
+                  'CourierService', 'Currency', 'Memo', ]
         field_classes = {
             'Customer': CustomerChoiceField,
         }

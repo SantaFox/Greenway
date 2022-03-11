@@ -1,5 +1,6 @@
 {% extends 'greensite/base.html' %}
 {% load static %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 
 {% block extra_css %}
@@ -13,10 +14,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Order Data</h4>
-                <p class="card-title-desc">Here are examples of <code>.form-control</code> applied to each
-                    textual HTML5 <code>&lt;input&gt;</code> <code>type</code>.</p>
-                    {% crispy form %}
+                {% crispy form %}
             </div>
         </div>
     </div>
@@ -25,7 +23,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Order Positions</h4>
+                <h4 class="card-title mb-3">{% translate "Positions" %}</h4>
                 <div class="row font-size-16">
                     <div class="col-md-3">
                         <div class="form-check-inline">
