@@ -164,9 +164,10 @@ class Product(models.Model):
         lang_code = translation.get_language() or settings.LANGUAGE_CODE
         try:
             product_info = ProductInfo.objects.get(Product=self, Language__Code=lang_code)
+            product_name = product_info.Name
         except (ProductInfo.DoesNotExist, ProductInfo.MultipleObjectsReturned):
-            product_info = _('No product name in this language')
-        return product_info.Name
+            product_name = _('No product name in this language')
+        return product_name
 
     def get_full_name(self):
         return f'{self.SKU}: {self.get_name()}'

@@ -1,4 +1,4 @@
-from django.forms import ModelForm, inlineformset_factory, ModelChoiceField, BaseInlineFormSet
+from django.forms import ModelForm, ModelChoiceField
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -150,7 +150,7 @@ class CustomerOrderForm(ModelForm):
         )
 
         queryset_filters = dict(User=self.user)
-        external_instance = kwargs['instance']
+        external_instance = kwargs.get('instance', None)
         if external_instance:
             queryset_filters['pk'] = external_instance.Customer.pk
 

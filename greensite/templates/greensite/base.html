@@ -40,21 +40,6 @@
     <!-- ============================================================== -->
     <div class="main-content">
 
-    {% if messages %}
-        {% for message in messages %}
-            {% if message.tags == 'success'%}
-            <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-            {% elif message.tags == 'info' %}
-            <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-            {% elif message.tags == 'warning' %}
-            <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-            {% elif message.tags == 'error' %}
-            <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-
-
         <div class="page-content">
             <div class="container-fluid">
 
@@ -95,7 +80,6 @@
 <script src="{% static 'libs/node-waves/dist/waves.min.js' %}"></script>
 <script src="{% static 'libs/waypoints/lib/jquery.waypoints.min.js' %}"></script>
 <script src="{% static 'libs/jquery.counterup/jquery.counterup.min.js' %}"></script>
-<!-- toastr plugin -->
 <script src="{% static 'libs/toastr/build/toastr.min.js' %}"></script>
 {% block extra_javascript %}
 {% endblock %}
@@ -120,7 +104,5 @@
 <script src="{% static 'js/app.js' %}"></script>
 {% endblock %}
 
-
 </body>
-
 </html>
