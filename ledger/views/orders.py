@@ -31,6 +31,7 @@ def table_customer_orders(request):
 class CustomerOrderPositionInline(InlineFormSetFactory):
     model = CustomerOrderPosition
     form_class = CustomerOrderPositionForm
+    factory_kwargs = {'extra': 1, 'max_num': None, 'can_order': False, 'can_delete': True}
 
 
 class CustomerOrderCreate(SuccessMessageMixin, LoginRequiredMixin, CreateWithInlinesView):
@@ -39,7 +40,6 @@ class CustomerOrderCreate(SuccessMessageMixin, LoginRequiredMixin, CreateWithInl
     inlines = [CustomerOrderPositionInline, ]
     success_message = "Customer Order successfully created"
     success_url = reverse_lazy('ledger:customer_orders')
-    factory_kwargs = {'extra': 1, 'max_num': None, 'can_order': False, 'can_delete': True}
     extra_context = {'title': 'Add Customer Order',
                      'heading': 'Ledger',
                      'positions_helper': CustomerOrderPositionFormHelper,

@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm, ModelChoiceField
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -187,6 +188,25 @@ class CustomerOrderForm(ModelForm):
 class ProductChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.get_full_name()
+
+    # We override this validation method to resolve situation when form is posted with updated value
+    # which absent in initial queryset; however, as selection works via AJAX, it is allowed
+    def to_python(self, value):
+        if value in self.empty_values:
+            return None
+        try:
+            key = self.to_field_name or 'pk'
+            if isinstance(value, self.queryset.model):
+                value = getattr(value, key)
+            # value = self.queryset.get(**{key: value})
+            value = self.queryset.model.objects.get(**{key: value})
+        except (ValueError, TypeError, self.queryset.model.DoesNotExist):
+            raise ValidationError(
+                self.error_messages['invalid_choice'],
+                code='invalid_choice',
+                params={'value': value},
+            )
+        return value
 
 
 class CustomerOrderPositionForm(ModelForm):
