@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, ModelChoiceField
+from django.forms import ModelForm, ModelChoiceField, DecimalField
+from django.forms.widgets import NumberInput
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -217,6 +218,11 @@ class ProductChoiceField(ModelChoiceField):
 
 
 class CustomerOrderPositionForm(ModelForm):
+    subtotal = DecimalField(
+        decimal_places=2,
+        widget=NumberInput
+    )
+
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user') if 'user' in kwargs else None # notice the .pop()
         super().__init__(*args, **kwargs)
@@ -233,9 +239,13 @@ class CustomerOrderPositionForm(ModelForm):
         )
         self.fields['Product'].empty_label = ''
 
+        self.fields['subtotal'].initial =\
+            (external_instance.Price * external_instance.Quantity) - (external_instance.Discount or 0)\
+            if external_instance else None
+
     class Meta:
         model = CustomerOrderPosition
-        fields = ['Product', 'Quantity', 'Price', 'Discount', 'DiscountReason', 'Status', 'DateDelivered']
+        fields = ['Product', 'Quantity', 'Price', 'Discount', 'subtotal', 'DiscountReason', 'Status', 'DateDelivered']
         field_classes = {
             'Product': ProductChoiceField,
         }
@@ -258,11 +268,7 @@ class CustomerOrderPositionFormHelper(FormHelper):
                 Field('Quantity', wrapper_class='col-md-1', css_class='text-end'),
                 Field('Price', wrapper_class='col-md-1', css_class='text-end', disabled=True),
                 Field('Discount', wrapper_class='col-md-1', css_class='text-end'),
-                # Field('Amount', wrapper_class='col-md-1', css_class='text-end', disabled=True),
-                HTML('<div class="mb-3 col-md-1">'
-                     '<input type="number" class="text-end form-control" disabled'
-                     ' id="id-{{ position_form.prefix }}-Amount">'
-                     '</div>'),
+                Field('subtotal', wrapper_class='col-md-1', css_class='text-end', disabled=True),
                 Field('DiscountReason', wrapper_class='col-md-2'),
                 Field('Status', wrapper_class='col-md-1'),
                 Field('DateDelivered', wrapper_class='col-md-1'),
