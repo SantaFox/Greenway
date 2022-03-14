@@ -19,8 +19,26 @@ function formatProduct (product) {
 $("select.select2[name='Customer']").select2();
 $("select.select2[name='Currency']").select2();
 $("div.position-form select.select2[name$='Product']").select2({
-    templateSelection: formatProduct
+    templateSelection: formatProduct,
+    ajax: {
+        data: function (params) {
+            var currencyData = $('select#id_Currency').select2('data');
+            var query = {
+                q: params.term,
+                cur: currencyData[0].text
+            }
+
+            // Query parameters will be ?q=[term]&type=public
+            return query;
+        }
+    }
+}).on("select2:select", function(event) {
+    var productData = event.params.data;
+    var priceElement = $(event.target).closest("div.row").find("input[name$='Price']");
+
+    priceElement.val(productData.price);
 });
+
 $("input.dateinput").flatpickr();
 $("div.position-form").formset({
     prefix: "customerorderposition_set",
@@ -28,6 +46,7 @@ $("div.position-form").formset({
     deleteContainerClass: "remove-placeholder",
     deleteCssClass: "btn btn-danger",
     deleteText: "<i class='uil-trash-alt'></i>",
+    addContainerClass: 'position-add-placeholder',
     addCssClass: "btn btn-warning",
     addText: "<i class='uil-link-add'></i> Add Position",
     added: function(row) {

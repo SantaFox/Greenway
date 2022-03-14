@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models import Q, F
 from django.template.defaultfilters import truncatechars  # or truncatewords
 from django.urls import reverse
-from django.utils import translation
+from django.utils import translation, timezone
 from django.utils.translation import gettext_lazy as _
 
 from imagekit.models import ImageSpecField
@@ -152,11 +152,20 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('products:product', args=(self.SKU,))
 
-    def get_price_on_date(self, date):
+    def get_price_on_date(self, date=timezone.now(), cur=''):
+        try:
+            currency = Currency.objects.get(Code=cur)
+        except Currency.DoesNotExist:
+            currency = None
+
         discounts = Discount.objects.filter(Product=self, Action__DateStart__lte=date, Action__DateEnd__gte=date)
+        if currency: discounts = discounts.filter(Currency=currency)
         discount = discounts.first()  # First or None
+
         prices = Price.objects.filter(Product=self, DateAdded__lte=date).order_by('-DateAdded')
+        if currency: prices = prices.filter(Currency=currency)
         price = prices.first()  # First or None
+
         return price if discount is None else discount
 
     def get_name(self):

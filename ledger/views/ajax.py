@@ -36,6 +36,8 @@ def counterparty_search(request):
 @require_GET
 # @permission_required('products.view_product', raise_exception=True)
 def product_search(request):
+    currency = request.GET.get('cur', '')
+
     qry = Product.objects.all()
     search = request.GET.get('q', '')
     qry_filter = Q(SKU__icontains=search) |\
@@ -45,7 +47,7 @@ def product_search(request):
     response_dict = [
         {"id": cp.pk,
          "text": cp.get_full_name(),
-         "price": cp.get_price_on_date(timezone.now()).Price,
+         "price": cp.get_price_on_date(cur=currency).Price,
          } for cp in qry.filter(qry_filter).order_by('SKU').distinct()
     ]
     return JsonResponse({'results': response_dict}, safe=False)

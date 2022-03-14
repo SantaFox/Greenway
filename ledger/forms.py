@@ -164,6 +164,7 @@ class CustomerOrderForm(ModelForm):
             **{k: v for k, v in queryset_filters.items() if v is not None}
         )
 
+        # Fields rendered as <select> are cleaned to show placeholders
         self.fields['Customer'].empty_label = ''
         self.fields['CourierService'].empty_label = ''
         self.fields['Currency'].empty_label = ''
@@ -255,7 +256,7 @@ class CustomerOrderPositionFormHelper(FormHelper):
                       data_dropdown_auto_width=True,
                       wrapper_class='col-md-3'),
                 Field('Quantity', wrapper_class='col-md-1', css_class='text-end'),
-                Field('Price', wrapper_class='col-md-1', css_class='text-end'),
+                Field('Price', wrapper_class='col-md-1', css_class='text-end', disabled=True),
                 Field('Discount', wrapper_class='col-md-1', css_class='text-end'),
                 Field('DiscountReason', wrapper_class='col-md-2'),
                 Field('Status', wrapper_class='col-md-2'),
