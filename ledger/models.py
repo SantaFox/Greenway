@@ -341,6 +341,9 @@ class CustomerOrderPosition(OperationPosition):
     def __str__(self):
         return f'{self.Operation} / {self.Product} / {self.Quantity} / {self.Price} / {self.Operation.customerorder.Currency}'
 
+    def get_amount(self):
+        return (self.Price * self.Quantity) - self.Discount
+
     class Meta:
         verbose_name_plural = "Customer Order Positions"
 

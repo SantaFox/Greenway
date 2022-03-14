@@ -43,10 +43,10 @@ $("input.dateinput").flatpickr();
 $("div.position-form").formset({
     prefix: "customerorderposition_set",
     formTemplate: "div#empty_form",
-    deleteContainerClass: "remove-placeholder",
+    deleteContainerClass: "remove-position-placeholder",
     deleteCssClass: "btn btn-danger",
     deleteText: "<i class='uil-trash-alt'></i>",
-    addContainerClass: 'position-add-placeholder',
+    addContainerClass: 'add-position-placeholder',
     addCssClass: "btn btn-warning",
     addText: "<i class='uil-link-add'></i> Add Position",
     added: function(row) {

@@ -258,13 +258,18 @@ class CustomerOrderPositionFormHelper(FormHelper):
                 Field('Quantity', wrapper_class='col-md-1', css_class='text-end'),
                 Field('Price', wrapper_class='col-md-1', css_class='text-end', disabled=True),
                 Field('Discount', wrapper_class='col-md-1', css_class='text-end'),
+                # Field('Amount', wrapper_class='col-md-1', css_class='text-end', disabled=True),
+                HTML('<div class="mb-3 col-md-1">'
+                     '<input type="number" class="text-end form-control" disabled'
+                     ' id="id-{{ position_form.prefix }}-Amount">'
+                     '</div>'),
                 Field('DiscountReason', wrapper_class='col-md-2'),
-                Field('Status', wrapper_class='col-md-2'),
+                Field('Status', wrapper_class='col-md-1'),
                 Field('DateDelivered', wrapper_class='col-md-1'),
                 Field('DELETE', type="hidden"),
                 Div(
                     # This DIV is a placeholder for Remove button added by JavaScript
-                    css_class='col-md-1 remove-placeholder'
+                    css_class='col-md-1 remove-position-placeholder'
                 ),
             ),
         )
