@@ -31,23 +31,28 @@ const select2ProductOptions = {
     }
 };
 
+function onProductSelect(event) {
+    var productData = event.params.data;
+    var parentRow = $(event.target).closest("div.position-form");
+    var elPrice = $(parentRow).find("input[name$='Price']");
+    // Update Price input in the same row after new selection
+    elPrice.val(productData.price).trigger('input');
+}
+
 // Initialize Select2 elements
 $("select.select2[name='Customer']").select2();
 $("select.select2[name='Currency']").select2();
-$("div.position-form select.select2[name$='Product']").select2(select2ProductOptions)
-    .on("select2:select", function(event) {
-        var productData = event.params.data;
-        var priceElement = $(event.target).closest("div.row").find("input[name$='Price']");
-        // Update Price input in the same row after new selection
-        priceElement.val(productData.price).trigger('input');
-    });
+$("div.position-form select.select2[name$='Product']")
+    .select2(select2ProductOptions)
+    .on("select2:select", onProductSelect);
 
 // Initialize FlatPickr elements
 $("input.dateinput").flatpickr();
 
 $("div.position-form").formset({
     prefix: "customerorderposition_set",
-    formTemplate: "div#empty_form",
+    formTemplate: "div#positions_empty_form",
+    formCssClass: "position-form",
     deleteContainerClass: "remove-position-placeholder",
     deleteCssClass: "btn btn-danger",
     deleteText: "<i class='uil-trash-alt'></i>",
@@ -60,12 +65,16 @@ $("div.position-form").formset({
         // all unnecessary handlers on the select box
         product.unbind();
         // And re-initialize it with a brand-new set of handlers:
-        product.select2(select2ProductOptions);
+        product
+            .select2(select2ProductOptions)
+            .on("select2:select", onProductSelect);
     }
 });
 
-$(".position-form").find("input[type='number']").on("input", function(event) {
-    var parentRow = $(event.target).closest("div.row");
+
+// This handler assignment is dynamic, based on permanent container and further element filtering
+$("div#positions-rows").on("input", "input[type='number']", function(event) {
+    var parentRow = $(event.target).closest("div.position-form");
 
     var valPrice = Number($(parentRow).find("input[name$='-Price']").val());
     var valQty = Number($(parentRow).find("input[name$='-Quantity']").val());
@@ -77,24 +86,10 @@ $(".position-form").find("input[type='number']").on("input", function(event) {
     elSubtotal.val(subtotal.toFixed(2)).trigger("change");
 });
 
-// I love this trick
-const elSubtotals = $(".position-form").find("input[name$='-subtotal']");
-$(elSubtotals).change(function() {
+$("div#positions-rows").on("change", "input[name$='-subtotal']", function() {
+    // I love this trick
+    const elSubtotals = $("div#positions-rows").find("input[name$='-subtotal']");
     const sum = $(elSubtotals).get().reduce((sum, el) => sum + +el.value, 0);
     var elTotal = $("#positions-total");
     $(elTotal).val(sum.toFixed(2));
 });
-
-
-//    show: function () {
-//        $(this).slideDown();
-//    },
-//    hide: function (deleteElement) {
-//        if(confirm('Are you sure you want to delete this element?')) {
-//            $(this).slideUp(deleteElement);
-//        }
-//    },
-
-
-// https://www.brennantymrak.com/articles/django-dynamic-formsets-javascript
-// https://stackoverflow.com/questions/15161982/how-to-submit-a-form-and-formset-at-the-same-time

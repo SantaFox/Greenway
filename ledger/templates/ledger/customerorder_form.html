@@ -43,19 +43,21 @@
                     <label class="col-md-1">Action</label>
                 </div>
                 {% with positions_formset=inlines|first %}
-                <div id="management_form" style="display:none">
+                <div id="positions-management_form" style="display:none">
                     {{ positions_formset.management_form|crispy }}
                 </div>
-                <div id="empty_form" style="display:none">
+                <div id="positions-empty_form" style="display:none">
                     {% crispy positions_formset.empty_form positions_helper %}
                 </div>
-                {% for position_form in positions_formset.forms %}
-                <div id="{{ position_form.prefix }}-row" class="position-form">
-                    {% crispy position_form positions_helper %}
+                <div id="positions-rows">
+                    {% for position_form in positions_formset.forms %}
+                    <div id="{{ position_form.prefix }}-row" class="position-form">
+                        {% crispy position_form positions_helper %}
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
                 {% endwith %}
-                <div class="row">
+                <div id="positions-footer" class="row">
                     <div class="col-md-5 add-position-placeholder"></div>
                     <div class="col-md-1 d-flex align-items-center justify-content-end">
                         <span>Total:</span>
