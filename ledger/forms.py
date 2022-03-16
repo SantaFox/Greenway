@@ -263,7 +263,7 @@ class CustomerOrderPositionFormHelper(FormHelper):
                       data_ajax__cache=True,
                       data_placeholder=_('Product'),
                       data_minimum_input_length=2,
-                      data_dropdown_auto_width=True,
+                      data_dropdown_auto_width='true',
                       wrapper_class='col-md-3'),
                 Field('Quantity', wrapper_class='col-md-1', css_class='text-end'),
                 Field('Price', wrapper_class='col-md-1', css_class='text-end', disabled=True),

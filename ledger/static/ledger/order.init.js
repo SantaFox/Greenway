@@ -14,10 +14,8 @@ function formatProduct (product) {
   return $product;
 };
 
-// Initialize Select2 elements
-$("select.select2[name='Customer']").select2();
-$("select.select2[name='Currency']").select2();
-$("div.position-form select.select2[name$='Product']").select2({
+// Prepare Select2 parameters (we need them twice to re-bind them in new row
+const select2ProductOptions = {
     templateSelection: formatProduct,
     ajax: {
         data: function (params) {
@@ -31,12 +29,18 @@ $("div.position-form select.select2[name$='Product']").select2({
             return query;
         }
     }
-}).on("select2:select", function(event) {
-    var productData = event.params.data;
-    var priceElement = $(event.target).closest("div.row").find("input[name$='Price']");
-    // Update Price input in the same row after new selection
-    priceElement.val(productData.price);
-});
+};
+
+// Initialize Select2 elements
+$("select.select2[name='Customer']").select2();
+$("select.select2[name='Currency']").select2();
+$("div.position-form select.select2[name$='Product']").select2(select2ProductOptions)
+    .on("select2:select", function(event) {
+        var productData = event.params.data;
+        var priceElement = $(event.target).closest("div.row").find("input[name$='Price']");
+        // Update Price input in the same row after new selection
+        priceElement.val(productData.price).trigger('input');
+    });
 
 // Initialize FlatPickr elements
 $("input.dateinput").flatpickr();
@@ -56,22 +60,29 @@ $("div.position-form").formset({
         // all unnecessary handlers on the select box
         product.unbind();
         // And re-initialize it with a brand-new set of handlers:
-        product.select2({
-            templateSelection: formatProduct
-        });
+        product.select2(select2ProductOptions);
     }
 });
 
-$(".position-form").find("input[type='number']").on("input", function() {
+$(".position-form").find("input[type='number']").on("input", function(event) {
     var parentRow = $(event.target).closest("div.row");
-    var elPrice = $(parentRow).find("input[name$='-Price']");
-    var elQty = $(parentRow).find("input[name$='-Quantity']");
-    var elDiscount = $(parentRow).find("input[name$='-Discount']");
-    var elSubtotal = $(parentRow).find("input[name$='-subtotal']");
 
-    const subtotal = (+elPrice * +elQty) - +elDiscount;
+    var valPrice = Number($(parentRow).find("input[name$='-Price']").val());
+    var valQty = Number($(parentRow).find("input[name$='-Quantity']").val());
+    var valDiscount = Number($(parentRow).find("input[name$='-Discount']").val());
+
+    const subtotal = (valPrice * valQty) - valDiscount;
     //const sum = $amount2.get().reduce((sum, el) => sum + +el.value, 0);
-    elSubtotal.text(subtotal);
+    var elSubtotal = $(parentRow).find("input[name$='-subtotal']");
+    elSubtotal.val(subtotal.toFixed(2)).trigger("change");
+});
+
+// I love this trick
+const elSubtotals = $(".position-form").find("input[name$='-subtotal']");
+$(elSubtotals).change(function() {
+    const sum = $(elSubtotals).get().reduce((sum, el) => sum + +el.value, 0);
+    var elTotal = $("#positions-total");
+    $(elTotal).val(sum.toFixed(2));
 });
 
 

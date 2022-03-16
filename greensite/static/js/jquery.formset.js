@@ -210,7 +210,14 @@
                     buttonRow = $($(this).parents('tr.' + options.formCssClass + '-add').get(0) || this),
                     delCssSelector = $.trim(options.deleteCssClass).replace(/\s+/g, '.');
                 applyExtraClasses(row, formCount);
-                row.insertBefore(buttonRow).show();
+
+                // row.insertBefore(buttonRow).show();
+                // I don't see any real reasons for such implementation, however I just can miss any non-logical
+                // behaviours. Following the realistic pattern, "adding new row in the end of table" means "adding
+                // new row immediately after previous last row", not "adding new row before the add button"
+                var lastRow = $('.' + options.formCssClass + ':last');
+                row.insertAfter(lastRow).show();
+
                 row.find(childElementSelector).each(function() {
                     updateElementIndex($(this), options.prefix, formCount);
                 });
