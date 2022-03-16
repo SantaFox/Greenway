@@ -35,8 +35,10 @@ function onProductSelect(event) {
     var productData = event.params.data;
     var parentRow = $(event.target).closest("div.position-form");
     var elPrice = $(parentRow).find("input[name$='Price']");
-    // Update Price input in the same row after new selection
-    elPrice.val(productData.price).trigger('input');
+    var elQty = $(parentRow).find("input[name$='-Quantity']");
+    // Update Price and Qty (if necessary) input in the same row after new selection
+    if (elQty.val() == "") { elQty.val(1); }
+    elPrice.val(productData.price).trigger('input');    // and then fire "input" event
 }
 
 // Initialize Select2 elements
@@ -51,7 +53,7 @@ $("input.dateinput").flatpickr();
 
 $("div.position-form").formset({
     prefix: "customerorderposition_set",
-    formTemplate: "div#positions_empty_form",
+    formTemplate: "div#positions-empty_form",
     formCssClass: "position-form",
     deleteContainerClass: "remove-position-placeholder",
     deleteCssClass: "btn btn-danger",
