@@ -36,7 +36,7 @@ def list_all(request, category=None, tag=None):
     if tag:
         ll = ll.filter(tags_of_product=tag)
 
-    return TemplateResponse(request, 'products/list_all.html', {
+    return TemplateResponse(request, 'products/ecommerce-products.html', {
         'products_list': ll,
     })
 
