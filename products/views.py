@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, Http404
 from django.template.loader import get_template
 from django.template.response import TemplateResponse
@@ -89,11 +90,17 @@ def list_products(request, category=None):
                  )
         )
 
+    # https://origin.tiltingatwindmills.dev/how-to-show-a-range-of-page-numbers-using-djangos-pagination
+    paginator = Paginator(final_set, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return TemplateResponse(request, 'products/ecommerce-products.html', {
         'title': 'Products',
         'heading': 'Catalogue',
-        'category': category,
-        'products_list': final_set,
+        # 'category': category,
+        # 'products_list': final_set,
+        'page_obj': page_obj,
     })
 
 
