@@ -43,23 +43,27 @@ def list_all(request, category=None, tag=None):
 
 @prepare_languages
 def list_products(request, category=None):
-    products = Product.objects.filter(Category=category).order_by('SKU')
+    # products = Product.objects.filter(Category=category).order_by('SKU')
+    products = Product.objects.all().order_by('SKU')
 
+    # ProductInfo.objects.filter(Product__Category=category, Language=request.language_instance)}
     dict_product_infos = {pi.Product: pi for pi in
-                          ProductInfo.objects.filter(Product__Category=category, Language=request.language_instance)}
+                          ProductInfo.objects.filter(Language=request.language_instance)}
 
-    dict_images = {im.Product: im for im in Image.objects.filter(Product__Category=category, IsPrimary=True)}
+    # dict_images = {im.Product: im for im in Image.objects.filter(Product__Category=category, IsPrimary=True)}
+    dict_images = {im.Product: im for im in Image.objects.filter(IsPrimary=True)}
 
     # And final step, we need tags for each product. It may be None or one or several Tags
     # We also need translations, as instances if possible
-    tags_distinct = Tag.objects.filter(Product__Category=category).distinct()
+    # tags_distinct = Tag.objects.filter(Product__Category=category).distinct()
+    tags_distinct = Tag.objects.filter().distinct()
 
     dict_tag_infos = {ti.Tag: ti for ti in TagInfo.objects.filter(Language=request.language_instance)}
 
     dict_tags = {}
     for t in tags_distinct:
         new_tag_instance = {'tag': t, 'tag_info': dict_tag_infos[t]}
-        for p in t.Product.filter(Category=category):
+        for p in t.Product.filter():        # Category=category
             if dict_tags.get(p):
                 dict_tags[p].append(new_tag_instance)
             else:
@@ -80,7 +84,7 @@ def list_products(request, category=None):
             dict(product=product,
                  product_info=dict_product_infos.get(product),
                  image=dict_images.get(product),
-                 price = product_price,
+                 price=product_price,
                  tags=dict_tags.get(product),
                  )
         )
