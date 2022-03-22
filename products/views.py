@@ -47,24 +47,30 @@ def list_products(request, category=None):
     # products = Product.objects.filter(Category=category).order_by('SKU')
     products = Product.objects.all().order_by('SKU')
 
+    # https://origin.tiltingatwindmills.dev/how-to-show-a-range-of-page-numbers-using-djangos-pagination
+    paginator = Paginator(products, 12)
+    page_number = request.GET.get('page')
+    products_page = paginator.get_page(page_number)
+    products_list = [p.pk for p in products_page]
+
     # ProductInfo.objects.filter(Product__Category=category, Language=request.language_instance)}
     dict_product_infos = {pi.Product: pi for pi in
-                          ProductInfo.objects.filter(Language=request.language_instance)}
+                          ProductInfo.objects.filter(Product__pk__in=products_list, Language=request.language_instance)}
 
     # dict_images = {im.Product: im for im in Image.objects.filter(Product__Category=category, IsPrimary=True)}
-    dict_images = {im.Product: im for im in Image.objects.filter(IsPrimary=True)}
+    dict_images = {im.Product: im for im in Image.objects.filter(Product__pk__in=products_list, IsPrimary=True)}
 
     # And final step, we need tags for each product. It may be None or one or several Tags
     # We also need translations, as instances if possible
     # tags_distinct = Tag.objects.filter(Product__Category=category).distinct()
-    tags_distinct = Tag.objects.filter().distinct()
+    tags_distinct = Tag.objects.filter(Product__pk__in=products_list).distinct()
 
     dict_tag_infos = {ti.Tag: ti for ti in TagInfo.objects.filter(Language=request.language_instance)}
 
     dict_tags = {}
     for t in tags_distinct:
         new_tag_instance = {'tag': t, 'tag_info': dict_tag_infos[t]}
-        for p in t.Product.filter():        # Category=category
+        for p in t.Product.filter(pk__in=products_list):        # Category=category
             if dict_tags.get(p):
                 dict_tags[p].append(new_tag_instance)
             else:
@@ -74,7 +80,7 @@ def list_products(request, category=None):
     sale_tag_instance = {'tag': sale_tag, 'tag_info': dict_tag_infos[sale_tag]}
 
     final_set = []
-    for product in products:
+    for product in products_page:
         product_price = product.get_price_on_date(timezone.now())
         if product_price._meta.model_name == 'discount':
             if dict_tags.get(product):
@@ -90,17 +96,13 @@ def list_products(request, category=None):
                  )
         )
 
-    # https://origin.tiltingatwindmills.dev/how-to-show-a-range-of-page-numbers-using-djangos-pagination
-    paginator = Paginator(final_set, 12)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
     return TemplateResponse(request, 'products/ecommerce-products.html', {
         'title': 'Products',
         'heading': 'Catalogue',
         # 'category': category,
-        # 'products_list': final_set,
-        'page_obj': page_obj,
+        'products_list': final_set,
+        'page_obj': products_page,
+        'page_range': paginator.get_elided_page_range(number=page_number),
     })
 
 

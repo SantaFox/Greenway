@@ -159,7 +159,7 @@
                 </ul>
 
                 <div class="row">
-                    {% for p in page_obj %}
+                    {% for p in products_list %}
                     <div class="col-xl-4 col-sm-6">
                         <div class="product-box">
                             <div class="product-img pt-4 px-4">
@@ -200,35 +200,47 @@
                             <ul class="pagination pagination-rounded mb-sm-0">
                                 {% if page_obj.has_previous %}
                                 <li class="page-item">
-                                    <a href="?page={{ page_obj.previous_page_number }}" class="page-link"><i class="mdi mdi-chevron-left"></i></a>
+                                    <a href="?page={{ page_obj.previous_page_number }}" class="page-link">
+                                        <i class="mdi mdi-chevron-left"></i>
+                                    </a>
                                 </li>
                                 {% else %}
                                 <li class="page-item disabled">
-                                    <a href="#" class="page-link"><i class="mdi mdi-chevron-left"></i></a>
+                                    <a href="#" class="page-link">
+                                        <i class="mdi mdi-chevron-left"></i>
+                                    </a>
                                 </li>
                                 {% endif %}
-                                <li class="page-item">
-                                    <a href="#" class="page-link">1</a>
-                                </li>
-                                <li class="page-item active">
-                                    <a href="#" class="page-link">2</a>
-                                </li>
-                                <li class="page-item">
-                                    <a href="#" class="page-link">3</a>
-                                </li>
-                                <li class="page-item">
-                                    <a href="#" class="page-link">4</a>
-                                </li>
-                                <li class="page-item">
-                                    <a href="#" class="page-link">5</a>
-                                </li>
+                                {% for i in page_range|default_if_none:page_obj.paginator.get_elided_page_range %}
+                                    {% if page_obj.number == i %}
+                                        <li class="active page-item">
+                                            <span class="page-link">{{ i }}
+                                                <span class="sr-only">(current)</span>
+                                            </span>
+                                        </li>
+                                    {% else %}
+                                        {% if i == page_obj.paginator.ELLIPSIS %}
+                                            <li class="page-item">
+                                                <span class="page-link">{{ i }}</span>
+                                            </li>
+                                        {% else %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
                                 {% if page_obj.has_next %}
                                 <li class="page-item">
-                                    <a href="?page={{ page_obj.next_page_number }}" class="page-link"><i class="mdi mdi-chevron-right"></i></a>
+                                    <a href="?page={{ page_obj.next_page_number }}" class="page-link">
+                                        <i class="mdi mdi-chevron-right"></i>
+                                    </a>
                                 </li>
                                 {% else %}
                                 <li class="page-item disabled">
-                                    <a href="#" class="page-link"><i class="mdi mdi-chevron-right"></i></a>
+                                    <a href="#" class="page-link">
+                                        <i class="mdi mdi-chevron-right"></i>
+                                    </a>
                                 </li>
                                 {% endif %}
                             </ul>
