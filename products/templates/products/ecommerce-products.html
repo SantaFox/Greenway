@@ -16,7 +16,7 @@
             <div class="card-header bg-transparent border-bottom">
                 <h5 class="mb-0">Filters</h5>
             </div>
-
+<!--    Categories accordion-->
             <div class="p-4">
                 <h5 class="font-size-14 mb-3">Categories</h5>
                 <div class="custom-accordion">
@@ -33,23 +33,25 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
+<!--    Price range-->
             <div class="p-4 border-top">
                 <div>
                     <h5 class="font-size-14 mb-4">Price</h5>
-
                     <input type="text" id="pricerange">
                 </div>
             </div>
 
             <div class="custom-accordion">
-
+<!--    Ratings accordion-->
                 <div class="p-4 border-top">
                     <div>
-                        <h5 class="font-size-14 mb-0"><a href="#filterproduct-color-collapse" class="text-dark d-block" data-bs-toggle="collapse">Customer Rating <i class="mdi mdi-chevron-up float-end accor-down-icon"></i></a></h5>
-
+                        <h5 class="font-size-14 mb-0">
+                            <a href="#filterproduct-color-collapse" class="text-dark d-block" data-bs-toggle="collapse">
+                                Customer Rating
+                                <i class="mdi mdi-chevron-up float-end accor-down-icon"></i>
+                            </a>
+                        </h5>
                         <div class="collapse show" id="filterproduct-color-collapse">
                             <div class="mt-4">
                                 <div class="form-check mt-2">
@@ -70,14 +72,17 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
+<!--    Discounts accordion-->
                 <div class="p-4 border-top">
                     <div>
-                        <h5 class="font-size-14 mb-0"><a href="#filterproduct-discount-collapse" class="collapsed text-dark d-block" data-bs-toggle="collapse">Discount <i class="mdi mdi-chevron-up float-end accor-down-icon"></i></a></h5>
-
+                        <h5 class="font-size-14 mb-0">
+                            <a href="#filterproduct-discount-collapse" class="collapsed text-dark d-block" data-bs-toggle="collapse">
+                                Discount
+                                <i class="mdi mdi-chevron-up float-end accor-down-icon"></i>
+                            </a>
+                        </h5>
                         <div class="collapse" id="filterproduct-discount-collapse">
                             <div class="mt-4">
                                 <div class="custom-control custom-radio mt-2">
@@ -106,12 +111,9 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </div>
-
         </div>
     </div>
 <!--    Product boxes column-->
@@ -163,9 +165,13 @@
                     <div class="col-xl-4 col-sm-6">
                         <div class="product-box">
                             <div class="product-img pt-4 px-4">
+                                {% if p.tags %}
+                                {% for tag in p.tags %}
                                 <div class="product-ribbon badge bg-warning">
-                                    Trending
+                                    {{ tag.tag_info.Name }}
                                 </div>
+                                {% endfor %}
+                                {% endif %}
                                 <div class="product-wishlist">
                                     <a href="#">
                                         <i class="mdi mdi-heart-outline"></i>
@@ -182,7 +188,12 @@
                                 <p class="text-muted font-size-13">
                                     {{ p.product_info.Name|default:_("< Product name not set >") }}
                                 </p>
-                                <h5 class="mt-3 mb-0"><span class="text-muted me-2"><del>$280</del></span> $260</h5>
+                                <h5 class="mt-3 mb-0">
+                                    <span class="text-muted me-2">
+                                        <del>$280</del>
+                                    </span>
+                                    {{ p.price.Price }}&nbsp;{{ p.price.Currency.Symbol }}
+                                </h5>
                             </div>
                         </div>
                     </div>
@@ -247,9 +258,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </div>
@@ -259,9 +267,8 @@
 {% endblock %}
 
 {% block extra_javascript %}
-		<!-- Ion Range Slider-->
-        <script src="{% static 'libs/ion-rangeslider/js/ion.rangeSlider.min.js' %}"></script>
-
-        <!-- init js -->
-        <script src="{% static 'js/pages/product-filter-range.init.js' %}"></script>
+    <!-- Ion Range Slider-->
+    <script src="{% static 'libs/ion-rangeslider/js/ion.rangeSlider.min.js' %}"></script>
+    <!-- init js -->
+    <script src="{% static 'products/product-filter-range.init.js' %}"></script>
 {% endblock  %}

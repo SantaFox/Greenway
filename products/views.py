@@ -49,7 +49,7 @@ def list_products(request, category=None):
 
     # https://origin.tiltingatwindmills.dev/how-to-show-a-range-of-page-numbers-using-djangos-pagination
     paginator = Paginator(products, 12)
-    page_number = request.GET.get('page')
+    page_number = request.GET.get('page') or 1
     products_page = paginator.get_page(page_number)
     products_list = [p.pk for p in products_page]
 
