@@ -46,8 +46,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'extra_views',
     'markdownx',
-    'django_tables2',
-    'django_filters',
+    # 'django_tables2',
+    # 'django_filters',
     # 'debug_toolbar',
 ]
 
@@ -165,11 +165,10 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
-DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
+# DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
 
 # GOOGLE_ANALYTICS = {
 #     'google_analytics_id': 'UA-196344421-1',

@@ -38,13 +38,14 @@
                 <li><a href="javascript: void(0);" class=" waves-effect"><i class="uil-tag-alt"></i><span>Tags</span></a></li>
                 <li><a href="javascript: void(0);" class=" waves-effect"><i class="uil-percentage"></i><span>Current Sales</span></a></li>
 
+                {% if user.is_authenticated %}
                 <li class="menu-title">Ledger</li>
 
                 <li><a href="{% url 'ledger:customer_orders' %}" class="waves-effect"><i class="uil-shopping-cart-alt"></i><span>Orders</span></a></li>
                 <li><a href="javascript: void(0);" class="waves-effect"><i class="uil-comments-alt"></i><span>Supply</span></a></li>
                 <li><a href="{% url 'ledger:accounts' %}" class="waves-effect"><i class="uil-university"></i><span>Accounts</span></a></li>
                 <li><a href="{% url 'ledger:counterparties' %}" class="waves-effect"><i class="uil-users-alt"></i><span>Counterparties</span></a></li>
-
+                {% endif %}
             </ul>
         </div>
         <!-- Sidebar -->

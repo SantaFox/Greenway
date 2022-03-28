@@ -6,11 +6,11 @@ django-crispy-forms>=1.14
 crispy-bootstrap5>=0.6
 # django-debug-toolbar>=3.2
 django-extra-views>=0.14
-django-filter>=21.0
+# django-filter>=21.0
 # django-google-analytics-app>=5.0.0
 django-imagekit>=4.1
 django-markdownx>=3.0
 django-model-utils>=4.2
-django-tables2>=2.4
+# django-tables2>=2.4
 
 python-decouple>=3.5

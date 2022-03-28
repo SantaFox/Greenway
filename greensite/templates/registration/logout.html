@@ -1,0 +1,32 @@
+{% extends 'registration/base_account.html' %}
+{% load static %}
+{% block title %}Logout{% endblock title %}
+
+{% block content %}
+<div class=" card-body">
+    <div class="text-center mt-2">
+        <h5 class="text-primary">Come back Soon!!!</h5>
+    </div>
+
+    <div class=" text-center p-2 mt-4">
+        <div class="alert alert-success text-center">
+            You are successfully logged out.
+        </div>
+
+        <div class="mt-4 ">
+            <a href="{% url 'login' %}" class="btn btn-primary w-100 waves-effect waves-light ">
+                Sign In Again
+            </a>
+        </div>
+    </div>
+
+    <div class="mt-5 text-center">
+        <p class="text-muted mb-0">
+            Don't have an account ?
+            <a href="" class="text-primary fw-semibold">
+                Signup
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock %}

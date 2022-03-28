@@ -33,11 +33,11 @@
                    style="border-collapse: collapse; border-spacing: 0 12px; width: 100%;">
                 <thead>
                 <tr class="bg-transparent">
-                    <th>Order Date</th>
+                    <th>Date</th>
                     <th>Customer</th>
-                    <th>Order Amount</th>
+                    <th>Amount</th>
                     <th>Paid Amount</th>
-                    <th>Order Currency</th>
+                    <th>Currency</th>
                     <th>Payments Status</th>
                     <th>Delivery Date</th>
                     <th>Comment</th>
@@ -47,7 +47,9 @@
                 <tbody>
                 {% for order in orders %}
                 <tr>
-                    <td data-sort="{{ order.DateOperation|date:'U' }}">{{ order.DateOperation }}</td>
+                    <td data-sort="{{ order.DateOperation|date:'U' }}">
+                        {{ order.DateOperation|date:'d.m.y' }}
+                    </td>
                     <td>{{ order.Customer.Name }}</td>
                     <td>{{ order.get_order_amount|floatformat:2 }}</td>
                     <td>{{ order.get_paid_amount|floatformat:2 }}</td>
@@ -61,7 +63,7 @@
                     {% elif order.get_paid_amount < order.get_order_amount %}
                     <td><div class="badge bg-soft-warning font-size-12">Partially Paid</div></td>
                     {% endif %}
-                    <td>{{ order.DateDelivered }}</td>
+                    <td>{{ order.DateDelivered|date:'d.m.y' }}</td>
                     <td>{{ order.Memo|truncatechars:30 }}</td>
                     <td>
                         <a href="{% url 'ledger:customer_order_print' order.pk %}" class="px-2 text-dark">

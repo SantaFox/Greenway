@@ -6,6 +6,19 @@
 {% block extra_css %}
 <link href="{% static 'libs/select2/dist/css/select2.min.css' %}" rel="stylesheet" type="text/css" />
 <link href="{% static 'libs/flatpickr/dist/flatpickr.min.css' %}" rel="stylesheet" type="text/css">
+<style>
+    /* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+</style>
 {% endblock  %}
 
 {% block content %}
@@ -63,7 +76,8 @@
                         <span>Total:</span>
                     </div>
                     <div class="col-md-1">
-                        <input type="number" class="text-end form-control" disabled id="positions-total" value="{{ object.get_order_amount|floatformat:2 }}">
+                        <input type="number" class="text-end form-control" readonly id="positions-total"
+                               value="{{ object.get_order_amount|floatformat:2 }}">
                     </div>
                     <div class="col-md-5"></div>
                 </div>
