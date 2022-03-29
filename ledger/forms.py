@@ -205,7 +205,7 @@ class CustomerOrderPositionForm(ModelForm):
 
     class Meta:
         model = CustomerOrderPosition
-        fields = ['Product', 'Quantity', 'Price', 'Currency', 'Discount', 'DiscountReason', 'Status', 'DateDelivered']
+        fields = ['Product', 'Quantity', 'Price', 'Discount', 'DiscountReason', 'Status', 'DateDelivered']
 
 
 class CustomerOrderPaymentForm(ModelForm):
