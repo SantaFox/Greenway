@@ -43,6 +43,12 @@
 
                 <li><a href="{% url 'ledger:customer_orders' %}" class="waves-effect"><i class="uil-shopping-cart-alt"></i><span>Orders</span></a></li>
                 <li><a href="javascript: void(0);" class="waves-effect"><i class="uil-comments-alt"></i><span>Supply</span></a></li>
+                <li><a href="{% url 'ledger:view_stock' %}" class="waves-effect"><i class="uil-bag"></i><span>Stocks</span></a></li>
+                <li><a href="{% url 'ledger:view_funds' %}" class="waves-effect"><i class="uil-abacus"></i><span>Cash</span></a></li>
+
+
+                <li class="menu-title">Record Book</li>
+
                 <li><a href="{% url 'ledger:accounts' %}" class="waves-effect"><i class="uil-university"></i><span>Accounts</span></a></li>
                 <li><a href="{% url 'ledger:counterparties' %}" class="waves-effect"><i class="uil-users-alt"></i><span>Counterparties</span></a></li>
                 {% endif %}

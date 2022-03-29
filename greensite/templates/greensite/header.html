@@ -193,20 +193,12 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <!-- item-->
+                    {% if user.is_authenticated %}
                     <a class="dropdown-item" href="#">
                         <i class="uil uil-user-circle font-size-18 align-middle text-muted me-1"></i>
                         <span class="align-middle">View Profile</span>
                     </a>
-                    <a class="dropdown-item" href="#">
-                        <i class="uil uil-wallet font-size-18 align-middle me-1 text-muted"></i>
-                        <span class="align-middle">My Wallet</span>
-                    </a>
-                    <a class="dropdown-item d-block" href="#">
-                        <i class="uil uil-cog font-size-18 align-middle me-1 text-muted"></i>
-                        <span class="align-middle">Settings</span>
-                        <span class="badge bg-soft-success rounded-pill mt-1 ms-2">03</span>
-                    </a>
-                    {% if user.is_authenticated %}
+
                     {% if user.has_usable_password %}
                     <a class="dropdown-item" href="{% url 'password_change' %}">
                         <i class="font-size-18 align-middle text-muted me-1 mdi mdi-key"></i>
@@ -218,12 +210,20 @@
                         Set Password
                     </a>
                     {% endif %}
+
+                    <a class="dropdown-item d-block" href="#">
+                        <i class="uil uil-cog font-size-18 align-middle me-1 text-muted"></i>
+                        <span class="align-middle">Settings</span>
+                        <span class="badge bg-soft-success rounded-pill mt-1 ms-2">03</span>
+                    </a>
+
                     {% if user.is_staff %}
                     <a class="dropdown-item" href="{% url 'admin:index' %}">
                         <i class="font-size-18 align-middle text-muted me-1 mdi mdi-skull-scan"></i>
                         Admin Area
                     </a>
                     {% endif %}
+
                     <a class="dropdown-item text-danger" href="{% url 'logout' %}">
                         <i class="font-size-18 align-middle text-muted me-1 mdi mdi-logout-variant"></i>
                         Log Out
