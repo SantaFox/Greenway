@@ -208,18 +208,18 @@
                     </a>
                     {% if user.is_authenticated %}
                     {% if user.has_usable_password %}
-                    <a class="dropdown-item" href="">
+                    <a class="dropdown-item" href="{% url 'password_change' %}">
                         <i class="font-size-18 align-middle text-muted me-1 mdi mdi-key"></i>
                         Change Password
                     </a>
                     {% else %}
-                    <a class="dropdown-item" href="">
+                    <a class="dropdown-item" href="{% url 'password_change' %}">
                         <i class="font-size-18 align-middle text-muted me-1 mdi mdi-key"></i>
                         Set Password
                     </a>
                     {% endif %}
                     {% if user.is_staff %}
-                    <a class="dropdown-item" href="/admin/">
+                    <a class="dropdown-item" href="{% url 'admin:index' %}">
                         <i class="font-size-18 align-middle text-muted me-1 mdi mdi-skull-scan"></i>
                         Admin Area
                     </a>
