@@ -225,7 +225,7 @@ class CustomerOrderPositionsTable(Table):
         model = CustomerOrderPosition
         empty_text = _('There are no Position for this Customer Order')
         fields = (
-            'ProductName', 'Product__SKU', 'ActualPrice', 'Price', 'Quantity', 'Currency', 'Discount',
+            'ProductName', 'Product__SKU', 'ActualPrice', 'Price', 'Quantity', 'Discount',
             'DiscountReason', 'Status', 'DateDelivered')
         attrs = {"class": "table table-hover table-sm small", "thead": {"class": ""}}
         row_attrs = {"class": "has_original"}

@@ -340,7 +340,7 @@ class CustomerOrderPosition(OperationPosition):
                                                  'This field is available only if Detailed Deliver set in Order.'))
 
     def __str__(self):
-        return f'{self.Operation} / {self.Product} / {self.Quantity} / {self.Price} / {self.Currency}'
+        return f'{self.Operation} / {self.Product} / {self.Quantity} / {self.Price}'
 
     class Meta:
         verbose_name_plural = "Customer Order Positions"

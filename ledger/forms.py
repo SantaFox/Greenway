@@ -177,7 +177,7 @@ class CustomerOrderPositionForm(ModelForm):
                               css_class="text-right"),
                 PrependedText('Price', '<i class="bi bi-cash-stack"></i>', wrapper_class='col-md-4',
                               css_class="text-right"),
-                PrependedText('Currency', '<i class="bi bi-currency-exchange"></i>', wrapper_class='col-md-4'),
+                # PrependedText('Currency', '<i class="bi bi-currency-exchange"></i>', wrapper_class='col-md-4'),
                 css_class='form-row'),
             Div(
                 PrependedText('Discount', '<i class="bi bi-piggy-bank"></i>', wrapper_class='col-md-4',

@@ -463,9 +463,9 @@ class CustomerOrderPositionAction(CrudActionView):
     def get_default_info(self, instance):
         # Usually we have only "model"."parent_id_field" and "model".User filled
         params = {}
-        if instance.Operation:
+        # if instance.Operation:
             # if we know order id, then we help with calculations
-            params['Currency'] = instance.Operation.Currency
+            # params['Currency'] = instance.Operation.Currency
         return {**params}
 
     def get_additional_info(self, instance):
