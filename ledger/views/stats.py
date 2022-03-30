@@ -120,12 +120,14 @@ def view_stock(request):
         list_in_stock = [i for i in list_in_stock
                          if (i["in_stock"] != 0) | (i["supp_not_delivered"] != 0) | (i["cust_not_delivered"] != 0)]
 
-    table = InStockTable(list_in_stock)
+    # table = InStockTable(list_in_stock)
 
-    RequestConfig(request, paginate=False).configure(table)
+    # RequestConfig(request, paginate=False).configure(table)
 
-    return TemplateResponse(request, 'ledger/table_stocks.html', {
-        'table': table,
+    return TemplateResponse(request, 'ledger/ecommerce-warehouse.html', {
+        'title': 'Warehouse',
+        'heading': 'Ledger',
+        'table': list_in_stock,
         'reportDate': date_report,
     })
 

@@ -1,0 +1,79 @@
+{% extends 'greensite/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+<!--Buttons-->
+<link href="{% static 'libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock  %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Default Datatable</h4>
+                <p class="card-title-desc">DataTables has most features enabled by
+                    default, so all you need to do to use it with your own tables is to call
+                    the construction function: <code>$().DataTable();</code>.
+                </p>
+
+<!--                table table-bordered dt-responsive nowrap-->
+                <table class="table table-centered datatable dt-responsive nowrap"
+                       style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>SKU</th>
+                            <th>Name</th>
+                            <th>In Stock</th>
+                            <th>Receivable</th>
+                            <th>Deliverable</th>
+                            <th>Reserved</th>
+                            <th>Available</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for row in table %}
+                        <tr>
+                            <td>{{ row.product_category }}</td>
+                            <td>{{ row.product_SKU }}</td>
+                            <td>{{ row.product_name }}</td>
+                            <td>{{ row.in_stock }}</td>
+                            <td>{{ row.supp_not_delivered }}</td>
+                            <td>{{ row.cust_not_delivered }}</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+<script src="{% static 'libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js' %}"></script>
+
+        <!-- Buttons examples -->
+<!--        <script src="{% static 'libs/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>-->
+<!--        <script src="{% static 'libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js' %}"></script>-->
+<!--        <script src="{% static 'libs/jszip/dist/jszip.min.js' %}"></script>-->
+<!--        <script src="{% static 'libs/pdfmake/build/pdfmake.min.js' %}"></script>-->
+<!--        <script src="{% static 'libs/pdfmake/build/vfs_fonts.js' %}"></script>-->
+<!--        <script src="{% static 'libs/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>-->
+<!--        <script src="{% static 'libs/datatables.net-buttons/js/buttons.print.min.js' %}"></script>-->
+<!--        <script src="{% static 'libs/datatables.net-buttons/js/buttons.colVis.min.js' %}"></script>-->
+
+        <!-- Datatable init js -->
+        <script src="{% static 'ledger/warehouse.init.js' %}"></script>
+{% endblock  %}
+
