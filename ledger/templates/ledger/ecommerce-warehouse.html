@@ -20,28 +20,28 @@
                     the construction function: <code>$().DataTable();</code>.
                 </p>
 
-<!--                table table-bordered dt-responsive nowrap-->
-                <table class="table table-centered datatable dt-responsive nowrap"
-                       style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                <table class="table table-centered datatable dt-responsive nowrap w-100"
+                       style="border-collapse: collapse; border-spacing: 0;"
+                       data-order='[[ 1, "asc" ]]'
+                       data-page-length='25'>
                     <thead>
                         <tr>
-                            <th>Category</th>
-                            <th>SKU</th>
-                            <th>Name</th>
-                            <th>In Stock</th>
-                            <th>Receivable</th>
-                            <th>Deliverable</th>
-                            <th>Reserved</th>
-                            <th>Available</th>
+                            <th data-priority="4" data-visible="false" class="d-none">Category</th>
+                            <th data-priority="1">SKU</th>
+                            <th data-priority="3">Name</th>
+                            <th data-priority="2">In Stock</th>
+                            <th data-priority="2">Receivable</th>
+                            <th data-priority="2">Deliverable</th>
+                            <th data-priority="2">Reserved</th>
+                            <th data-priority="2">Available</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         {% for row in table %}
                         <tr>
-                            <td>{{ row.product_category }}</td>
-                            <td>{{ row.product_SKU }}</td>
-                            <td>{{ row.product_name }}</td>
+                            <td class="d-none">{{ row.product_category }}</td>
+                            <td><a href="{% url 'products:product' row.product_SKU %}">{{ row.product_SKU }}</a></td>
+                            <td>{{ row.product_name|escape }}</td>
                             <td>{{ row.in_stock }}</td>
                             <td>{{ row.supp_not_delivered }}</td>
                             <td>{{ row.cust_not_delivered }}</td>

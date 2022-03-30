@@ -1,7 +1,14 @@
 // datatable
 $(document).ready(function() {
     var table = $('.datatable').DataTable( {
-        stateSave: true
+        "columnDefs": [ {
+            "targets": 2,
+            "render": function ( data, type, row, meta ) {
+                return type === 'display' && data.length > 40 ?
+                    '<span title="'+data+'">'+data.substr( 0, 38 )+'...</span>' :
+                    data;
+            }
+        } ]
     } );
 
     //Buttons examples
