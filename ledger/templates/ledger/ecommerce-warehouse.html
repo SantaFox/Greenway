@@ -4,8 +4,9 @@
 {% block extra_css %}
 <link href="{% static 'libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
 <link href="{% static 'libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="https://cdn.datatables.net/rowgroup/1.1.4/css/rowGroup.bootstrap5.min.css" rel="stylesheet" type="text/css" />
 <!--Buttons-->
-<link href="{% static 'libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+<!--<link href="{% static 'libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />-->
 {% endblock  %}
 
 {% block content %}
@@ -20,9 +21,9 @@
                     the construction function: <code>$().DataTable();</code>.
                 </p>
 
-                <table class="table table-centered datatable dt-responsive nowrap w-100"
+                <table class="table table-centered table-sm datatable dt-responsive nowrap w-100"
                        style="border-collapse: collapse; border-spacing: 0;"
-                       data-order='[[ 1, "asc" ]]'
+                       data-order='[[ 0, "asc" ], [ 1, "asc" ]]'
                        data-page-length='25'>
                     <thead>
                         <tr>
@@ -40,13 +41,13 @@
                         {% for row in table %}
                         <tr>
                             <td class="d-none">{{ row.product_category }}</td>
-                            <td><a href="{% url 'products:product' row.product_SKU %}">{{ row.product_SKU }}</a></td>
-                            <td>{{ row.product_name|escape }}</td>
+                            <td ><a href="{% url 'products:product' row.product_SKU %}" class="fw-bold">{{ row.product_SKU }}</a></td>
+                            <td>{{ row.product_name }}</td>
                             <td>{{ row.in_stock }}</td>
                             <td>{{ row.supp_not_delivered }}</td>
                             <td>{{ row.cust_not_delivered }}</td>
-                            <td>0</td>
-                            <td>0</td>
+                            <td>{{ row.reserved }}</td>
+                            <td>{{ row.available }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -62,6 +63,8 @@
 <script src="{% static 'libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
 <script src="{% static 'libs/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
 <script src="{% static 'libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js' %}"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.11.5/dataRender/ellipsis.js"></script>
+<script src="https://cdn.datatables.net/rowgroup/1.1.4/js/dataTables.rowGroup.min.js"></script>
 
         <!-- Buttons examples -->
 <!--        <script src="{% static 'libs/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>-->

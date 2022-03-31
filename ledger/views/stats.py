@@ -25,35 +25,17 @@ def view_stock(request):
         .values('Product__SKU') \
         .annotate(
             delivered=Sum(Case(
-                When(Q(Operation__customerorder__DetailedDelivery=True) &
-                     Q(DateDelivered__lte=date_report),
-                     Operation__DateOperation__lte=date_report,
-                     then=F('Quantity')),
-                When(Q(Operation__customerorder__DetailedDelivery=False) &
-                     Q(Operation__customerorder__DateDelivered__lte=date_report),
+                When(Q(DateDelivered__lte=date_report),
                      Operation__DateOperation__lte=date_report,
                      then=F('Quantity')),
                 default=0)),
             not_delivered=Sum(Case(
-                When(Q(Operation__customerorder__DetailedDelivery=True) &
-                     (Q(DateDelivered__isnull=True) | Q(DateDelivered__gt=date_report)),
-                     Operation__DateOperation__lte=date_report,
-                     then=F('Quantity')),
-                When(Q(Operation__customerorder__DetailedDelivery=False) &
-                     (Q(Operation__customerorder__DateDelivered__isnull=True) |
-                      Q(Operation__customerorder__DateDelivered__gt=date_report)),
+                When((Q(DateDelivered__isnull=True) | Q(DateDelivered__gt=date_report)),
                      Operation__DateOperation__lte=date_report,
                      then=F('Quantity')),
                 default=0)),
             not_delivered_4=Sum(Case(
-                When(Q(Operation__customerorder__DetailedDelivery=True) &
-                     (Q(DateDelivered__isnull=True) | Q(DateDelivered__gt=date_report)),
-                     Operation__DateOperation__lte=date_report,
-                     Status=4,
-                     then=F('Quantity')),
-                When(Q(Operation__customerorder__DetailedDelivery=False) &
-                     (Q(Operation__customerorder__DateDelivered__isnull=True) |
-                      Q(Operation__customerorder__DateDelivered__gt=date_report)),
+                When((Q(DateDelivered__isnull=True) | Q(DateDelivered__gt=date_report)),
                      Operation__DateOperation__lte=date_report,
                      Status=4,
                      then=F('Quantity')),
@@ -116,13 +98,11 @@ def view_stock(request):
     # Prepare sum values and filter positions not in stock if requested
     for p in list_in_stock:
         p["in_stock"] = p["supp_delivered"] - p["cust_delivered"] + p['break_received'] - p['break_removed']
-    if request.GET.get("collapse", "false") == "true":
-        list_in_stock = [i for i in list_in_stock
-                         if (i["in_stock"] != 0) | (i["supp_not_delivered"] != 0) | (i["cust_not_delivered"] != 0)]
+        p["reserved"] = 0
+        p["available"] = p["in_stock"] + p["supp_not_delivered"] - p["cust_not_delivered"] - p["reserved"]
 
-    # table = InStockTable(list_in_stock)
-
-    # RequestConfig(request, paginate=False).configure(table)
+    list_in_stock = [i for i in list_in_stock
+                     if (i["in_stock"] != 0) | (i["supp_not_delivered"] != 0) | (i["cust_not_delivered"] != 0)]
 
     return TemplateResponse(request, 'ledger/ecommerce-warehouse.html', {
         'title': 'Warehouse',

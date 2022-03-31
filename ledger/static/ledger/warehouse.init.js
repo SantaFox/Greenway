@@ -1,14 +1,25 @@
 // datatable
 $(document).ready(function() {
     var table = $('.datatable').DataTable( {
-        "columnDefs": [ {
-            "targets": 2,
-            "render": function ( data, type, row, meta ) {
-                return type === 'display' && data.length > 40 ?
-                    '<span title="'+data+'">'+data.substr( 0, 38 )+'...</span>' :
-                    data;
+        columnDefs: [ {
+            targets: 2,
+            render: DataTable.render.ellipsis( 40, true, true )
+        }, {
+            targets: [ 3, 4, 5, 6, 7 ],
+            createdCell: function (td, cellData, rowData, row, col) {
+                if (cellData < 0) {
+                    $(td).addClass('text-danger')
+                }
             }
-        } ]
+        } ],
+        rowGroup: {
+            dataSrc: 0
+        },
+        createdCell: function (td, cellData, rowData, row, col) {
+            if (cellData < 0) {
+                $(td).addClass('text-danger')
+            }
+        }
     } );
 
     //Buttons examples
