@@ -1,4 +1,3 @@
-/* Custom filtering function which will search data in column four between two values */
 $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
         var isCustomer = data[5].toLowerCase() == 'true' ? true : false;

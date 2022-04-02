@@ -13,6 +13,7 @@
 <div class="row">
     <div class="col-12">
 
+
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Default Datatable</h4>
@@ -21,10 +22,27 @@
                     the construction function: <code>$().DataTable();</code>.
                 </p>
 
+                <div class="row">
+                    <div class="float-end">
+                        <form class="d-inline-flex mb-3">
+                            <label class="form-check-label my-2 me-2" for="order-selectinput">Show&nbsp;Counterparties</label>
+                            <select class="form-select" id="order-selectinput">
+                                <option select value="0">All</option>
+                                <option value="1">Only In Stock</option>
+                                <option value="2">Only Receivables</option>
+                                <option value="3">Only Deliverables</option>
+                                <option value="4">Only Reserved</option>
+                                <option value="5">Only Available</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+
+<!--  data-order='[[ 0, "asc" ], [ 1, "asc" ]]' data-page-length='25'-->
                 <table class="table table-centered table-sm datatable dt-responsive nowrap w-100"
                        style="border-collapse: collapse; border-spacing: 0;"
-                       data-order='[[ 0, "asc" ], [ 1, "asc" ]]'
-                       data-page-length='25'>
+                       data-ordering="false"
+                       data-paging="false">
                     <thead>
                         <tr>
                             <th data-priority="4" data-visible="false" class="d-none">Category</th>
