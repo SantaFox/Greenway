@@ -171,7 +171,7 @@ def view_product(request, sku=None):
                  )
         )
 
-    return TemplateResponse(request, 'products/view_product.html', {
+    return TemplateResponse(request, 'products/ecommerce-productdetail.html', {
         'product': product,
         'product_prev': product_prev,
         'product_next': product_next,
