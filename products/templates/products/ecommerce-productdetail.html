@@ -1,5 +1,7 @@
 {% extends 'greensite/base.html' %}
+{% load i18n %}
 {% load static %}
+{% load imagekit %}
 
 {% block content %}
 <div class="row">
@@ -14,31 +16,13 @@
                                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
                                          aria-orientation="vertical">
 
-        {% for image in product.image_set.all %}
-            {% if image_primary == image %}
-            <div class="product-gallery-preview-item active" id="id{{ image.id }}">
-            {% else %}
-            <div class="product-gallery-preview-item" id="id{{ image.id }}">
-            {% endif %}
-            {% generateimage 'products:product_big_thumbnail' source=image.Image as img %}
-            <img class="image-zoom" src="{{ img.url }}" data-zoom="{{ image.Image.url }}" width="100%">
-            <div class="image-zoom-pane"></div>
-            </div>
-        {% empty %}
-            <div class="col">No images available</div>
+        {% for image in product.image_set.all|dictsortreversed:'IsPrimary' %}
+            <a class="nav-link {% if image_primary == image %}active{% endif %}"
+               id="product-{{ image.id }}-tab" data-bs-toggle="pill"
+               href="#product-{{ image.id }}" role="tab">
+{% generateimage 'products:product_small_thumbnail' source=image.Image -- class="img-fluid mx-auto d-block tab-img rounded" %}
+            </a>
         {% endfor %}
-
-                                        <a class="nav-link active" id="product-1-tab" data-bs-toggle="pill"
-                                           href="#product-1" role="tab">
-                                            <img src="{% static 'images/product/img-1.png' %}" alt=""
-                                                 class="img-fluid mx-auto d-block tab-img rounded">
-                                        </a>
-                                        <a class="nav-link" id="product-2-tab" data-bs-toggle="pill" href="#product-2"
-                                           role="tab">
-                                            <img src="{% static 'images/product/img-2.png' %}" alt=""
-                                                 class="img-fluid mx-auto d-block tab-img rounded">
-                                        </a>
-
                                     </div>
                                 </div>
 
@@ -50,31 +34,17 @@
                                                 <i class="mdi mdi-heart-outline"></i>
                                             </a>
                                         </div>
-                                        <div class="tab-pane fade show active" id="product-1" role="tabpanel">
-                                            <div class="product-img">
-                                                <img src="{% static 'images/product/img-1.png' %}" alt=""
-                                                     class="img-fluid mx-auto d-block"
-                                                     data-zoom="{% static 'images/product/img-1.png' %}">
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="product-2" role="tabpanel">
-                                            <div class="product-img">
-                                                <img src="{% static 'images/product/img-2.png' %}" alt=""
-                                                     class="img-fluid mx-auto d-block">
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="product-3" role="tabpanel">
-                                            <div class="product-img">
-                                                <img src="{% static 'images/product/img-3.png' %}" alt=""
-                                                     class="img-fluid mx-auto d-block">
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="product-4" role="tabpanel">
-                                            <div class="product-img">
-                                                <img src="{% static 'images/product/img-6.png' %}" alt=""
-                                                     class="img-fluid mx-auto d-block">
-                                            </div>
-                                        </div>
+
+        {% for image in product.image_set.all %}
+            <div class="tab-pane fade {% if image_primary == image %}show active{% endif %}"
+                 id="product-{{ image.id }}" role="tabpanel">
+                <div class="product-img">
+                    {% generateimage 'products:product_big_thumbnail' source=image.Image as img %}
+                    <img src="{{ img.url }}" alt="" class="img-fluid mx-auto d-block" data-zoom="{{ image.Image.url }}">
+                    <div class="image-zoom-pane"></div>
+                </div>
+            </div>
+        {% endfor %}
                                     </div>
                                     <div class="row text-center mt-2">
                                         <div class="col-sm-6">
@@ -88,7 +58,7 @@
                                         <div class="col-sm-6">
                                             <div class="d-grid">
                                                 <button type="button"
-                                                        class="btn btn-light waves-effect  mt-2 waves-light">
+                                                        class="btn btn-light waves-effect mt-2 waves-light">
                                                     <i class="uil uil-shopping-basket me-2"></i>Buy now
                                                 </button>
                                             </div>
@@ -100,11 +70,11 @@
                         </div>
                     </div>
 
-
+                    <!-- Product Details section-->
                     <div class="col-xl-7">
                         <div class="mt-4 mt-xl-3 ps-xl-4">
-                            <h5 class="font-size-14"><a href="#" class="text-muted">Nike</a></h5>
-                            <h4 class="font-size-20 mb-3">Nike N012 Running Shoes (Gray)</h4>
+                            <h5 class="font-size-14"><a href="#" class="text-muted">{{ product.Category.Name }}</a></h5>
+                            <h4 class="font-size-20 mb-3">{{ product_info.Name|default:_("No product name in this language") }}</h4>
 
                             <div class="text-muted">
                                 <span class="badge bg-success font-size-14 me-1"><i class="mdi mdi-star"></i> 4.2</span>
@@ -154,171 +124,64 @@
                                     </div>
                                 </div>
 
-                                <div class="mt-3">
-
-                                    <h5 class="font-size-14 mb-3"><i
-                                            class="uil uil-location-pin-alt font-size-20 text-primary align-middle me-2"></i>
-                                        Delivery location</h5>
-
-                                    <div class="d-inline-flex">
-
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control"
-                                                   placeholder="Enter Delivery pincode ">
-
-                                            <button class="btn btn-light" type="button">Check</button>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-7 col-sm-8">
-                                        <div class="product-desc-color mt-3">
-                                            <h5 class="font-size-14">Colors :</h5>
-                                            <ul class="list-inline">
-                                                <li class="list-inline-item">
-                                                    <a href="#" class="active" data-bs-toggle="tooltip"
-                                                       data-bs-placement="top" title="Gray">
-                                                        <div class="product-color-item">
-                                                            <img src="{% static 'images/product/img-1.png' %}" alt=""
-                                                                 class="avatar-md">
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                       title="Dark">
-                                                        <div class="product-color-item">
-                                                            <img src="{% static 'images/product/img-2.png' %}" alt=""
-                                                                 class="avatar-md">
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                       title="Purple">
-                                                        <div class="product-color-item">
-                                                            <img src="{% static 'images/product/img-3.png' %}" alt=""
-                                                                 class="avatar-md">
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <a href="#" class="text-primary border-0 p-1">
-                                                        2 + Colors
-                                                    </a>
-                                                </li>
-                                            </ul>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-5 col-sm-4">
-                                        <div class="mt-3">
-                                            <h5 class="font-size-14 mb-3">Select Sizes :</h5>
-
-                                            <div class="d-inline-flex">
-                                                <select class="form-select w-sm">
-                                                    <option value="1">3</option>
-                                                    <option value="2">4</option>
-                                                    <option value="3">5</option>
-                                                    <option value="4">6</option>
-                                                    <option value="5" selected>7</option>
-                                                    <option value="6">8</option>
-                                                    <option value="7">9</option>
-                                                    <option value="8">10</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- end row -->
 
+                <!-- Product tabs -->
                 <div class="mt-4">
                     <h5 class="font-size-14 mb-3">Product description: </h5>
                     <div class="product-desc">
+
                         <ul class="nav nav-tabs nav-tabs-custom" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link" id="desc-tab" data-bs-toggle="tab" href="#desc" role="tab">Description</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" id="specifi-tab" data-bs-toggle="tab" href="#specifi"
-                                   role="tab">Specifications</a>
-                            </li>
+        {% for tab in tabs %}
+            {% if forloop.first %}
+            <li class="nav-item">
+            <a class="nav-link active" id="nav-tab{{ tab.Order }}-tab"
+                data-bs-toggle="tab" href="#nav-tab{{ tab.Order }}" role="tab"
+                aria-controls="nav-tab{{ tab.Order }}" aria-selected="true">
+                {% if tab.Icon %}
+                    <i class="bi bi-{{ tab.Icon }}"></i>&nbsp;
+                {% endif %}
+                {{ tab.Name }}
+            </a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+            <a class="nav-link" id="nav-tab{{ tab.Order }}-tab"
+                data-bs-toggle="tab" href="#nav-tab{{ tab.Order }}" role="tab"
+                aria-controls="nav-tab{{ tab.Order }}" aria-selected="false">
+                {% if tab.Icon %}
+                    <i class="bi bi-{{ tab.Icon }}"></i>&nbsp;
+                {% endif %}
+                {{ tab.Name }}
+            </a>
+            </li>
+            {% endif %}
+        {% empty %}
+        {% endfor %}
                         </ul>
+
                         <div class="tab-content border border-top-0 p-4">
-                            <div class="tab-pane fade" id="desc" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-sm-3 col-md-2">
-                                        <div>
-                                            <img src="{% static 'images/product/img-6.png' %}" alt=""
-                                                 class="img-fluid mx-auto d-block">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-9 col-md-10">
-                                        <div class="text-muted p-2">
-                                            <p>If several languages coalesce, the grammar of the resulting language is
-                                                more simple and regular</p>
-                                            <p>Everyone realizes why a new common language would be desirable, one could
-                                                refuse to pay expensive translators.</p>
-                                            <p>It will be as simple as occidental in fact.</p>
 
-                                            <div>
-                                                <ul class="list-unstyled product-desc-list text-muted">
-                                                    <li><i class="mdi mdi-circle-medium me-1 align-middle"></i> Sed ut
-                                                        perspiciatis omnis iste
-                                                    </li>
-                                                    <li><i class="mdi mdi-circle-medium me-1 align-middle"></i> Neque
-                                                        porro quisquam est
-                                                    </li>
-                                                    <li><i class="mdi mdi-circle-medium me-1 align-middle"></i> Quis
-                                                        autem vel eum iure
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade show active" id="specifi" role="tabpanel">
-                                <div class="table-responsive">
-                                    <table class="table table-nowrap mb-0">
-                                        <tbody>
-                                        <tr>
-                                            <th scope="row" style="width: 20%;">Category</th>
-                                            <td>Shoes</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Brand</th>
-                                            <td>Nike</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Color</th>
-                                            <td>Gray</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Quality</th>
-                                            <td>High</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Material</th>
-                                            <td>Leather</td>
-                                        </tr>
+        {% for tab in tabs %}
+        {% if forloop.first %}
+        <div class="tab-pane fade show active" id="nav-tab{{ tab.Order }}" role="tabpanel"
+             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.formatted_markdown|safe }}
+        </div>
+        {% else %}
+        <div class="tab-pane fade" id="nav-tab{{ tab.Order }}" role="tabpanel"
+             aria-labelledby="nav-tab{{ tab.Order }}-tab">{{ tab.formatted_markdown|safe }}
+        </div>
+        {% endif %}
+        {% empty %}
+        {% endfor %}
 
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
-
+{% comment %}
                 <div class="mt-4">
                     <h5 class="font-size-14 mb-3">Reviews : </h5>
                     <div class="text-muted mb-3">
@@ -398,9 +261,16 @@
 
                     </div>
                 </div>
+{% endcomment %}
             </div>
         </div>
     </div>
 </div>
 <!-- end row -->
 {% endblock %}
+
+{% block extra_javascript %}
+    <script src="{% static 'products/drift.min.js' %}"></script>
+    <!-- init js -->
+    <script src="{% static 'products/product-detail.init.js' %}"></script>
+{% endblock  %}
