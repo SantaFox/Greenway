@@ -27,7 +27,7 @@
                 <li class="menu-title">News</li>
 
                 <li><a href="{% url 'dashboard:index' %}">
-                    <i class="uil-home-alt"></i>
+                    <i class="bi bi-speedometer2"></i>
                     <span class="badge rounded-pill bg-primary float-end">01</span>
                     <span>Dashboard</span>
                 </a></li>
@@ -35,22 +35,22 @@
                 <li class="menu-title">Catalogue</li>
 
                 <li><a href="{% url 'products:list_all' %}" class=" waves-effect"><i class="uil-cube"></i><span>Products</span></a></li>
-                <li><a href="javascript: void(0);" class=" waves-effect"><i class="uil-tag-alt"></i><span>Tags</span></a></li>
-                <li><a href="javascript: void(0);" class=" waves-effect"><i class="uil-percentage"></i><span>Current Sales</span></a></li>
+                <li><a href="javascript: void(0);" class=" waves-effect"><i class="bi bi-tags"></i><span>Tags</span></a></li>
+                <li><a href="javascript: void(0);" class=" waves-effect"><i class="bi bi-percent"></i><span>Current Sales</span></a></li>
 
                 {% if user.is_authenticated %}
                 <li class="menu-title">Ledger</li>
 
-                <li><a href="{% url 'ledger:customer_orders' %}" class="waves-effect"><i class="uil-shopping-cart-alt"></i><span>Orders</span></a></li>
-                <li><a href="javascript: void(0);" class="waves-effect"><i class="uil-comments-alt"></i><span>Supply</span></a></li>
-                <li><a href="{% url 'ledger:view_stock' %}" class="waves-effect"><i class="uil-bag"></i><span>Warehouse</span></a></li>
-                <li><a href="{% url 'ledger:view_funds' %}" class="waves-effect"><i class="uil-abacus"></i><span>Funds</span></a></li>
+                <li><a href="{% url 'ledger:customer_orders' %}" class="waves-effect"><i class="bi bi-bag-check"></i><span>Orders</span></a></li>
+                <li><a href="javascript: void(0);" class="waves-effect"><i class="bi bi-truck"></i><span>Supply</span></a></li>
+                <li><a href="{% url 'ledger:view_stock' %}" class="waves-effect"><i class="bi bi-boxes"></i><span>Warehouse</span></a></li>
+                <li><a href="{% url 'ledger:view_funds' %}" class="waves-effect"><i class="bi bi-piggy-bank"></i><span>Funds</span></a></li>
 
 
                 <li class="menu-title">Record Book</li>
 
                 <li><a href="{% url 'ledger:accounts' %}" class="waves-effect"><i class="uil-university"></i><span>Accounts</span></a></li>
-                <li><a href="{% url 'ledger:counterparties' %}" class="waves-effect"><i class="uil-users-alt"></i><span>Counterparties</span></a></li>
+                <li><a href="{% url 'ledger:counterparties' %}" class="waves-effect"><i class="bi bi-people"></i><span>Counterparties</span></a></li>
                 {% endif %}
             </ul>
         </div>

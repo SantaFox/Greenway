@@ -131,32 +131,31 @@
 
                 <!-- Product tabs -->
                 <div class="mt-4">
-                    <h5 class="font-size-14 mb-3">Product description: </h5>
                     <div class="product-desc">
 
                         <ul class="nav nav-tabs nav-tabs-custom" role="tablist">
         {% for tab in tabs %}
             {% if forloop.first %}
             <li class="nav-item">
-            <a class="nav-link active" id="nav-tab{{ tab.Order }}-tab"
-                data-bs-toggle="tab" href="#nav-tab{{ tab.Order }}" role="tab"
-                aria-controls="nav-tab{{ tab.Order }}" aria-selected="true">
-                {% if tab.Icon %}
-                    <i class="bi bi-{{ tab.Icon }}"></i>&nbsp;
-                {% endif %}
-                {{ tab.Name }}
-            </a>
+                <a class="nav-link active" id="nav-tab{{ tab.Order }}-tab"
+                    data-bs-toggle="tab" href="#nav-tab{{ tab.Order }}" role="tab"
+                    aria-controls="nav-tab{{ tab.Order }}" aria-selected="true">
+                    {% if tab.Icon %}
+                        <i class="bi bi-{{ tab.Icon }}"></i>&nbsp;
+                    {% endif %}
+                    {{ tab.Name }}
+                </a>
             </li>
             {% else %}
             <li class="nav-item">
-            <a class="nav-link" id="nav-tab{{ tab.Order }}-tab"
-                data-bs-toggle="tab" href="#nav-tab{{ tab.Order }}" role="tab"
-                aria-controls="nav-tab{{ tab.Order }}" aria-selected="false">
-                {% if tab.Icon %}
-                    <i class="bi bi-{{ tab.Icon }}"></i>&nbsp;
-                {% endif %}
-                {{ tab.Name }}
-            </a>
+                <a class="nav-link" id="nav-tab{{ tab.Order }}-tab"
+                    data-bs-toggle="tab" href="#nav-tab{{ tab.Order }}" role="tab"
+                    aria-controls="nav-tab{{ tab.Order }}" aria-selected="false">
+                    {% if tab.Icon %}
+                        <i class="bi bi-{{ tab.Icon }}"></i>&nbsp;
+                    {% endif %}
+                    {{ tab.Name }}
+                </a>
             </li>
             {% endif %}
         {% empty %}
