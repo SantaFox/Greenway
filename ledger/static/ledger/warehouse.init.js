@@ -48,11 +48,6 @@ $(document).ready(function() {
         } ],
         rowGroup: {
             dataSrc: 0
-        },
-        createdCell: function (td, cellData, rowData, row, col) {
-            if (cellData < 0) {
-                $(td).addClass('text-danger')
-            }
         }
     } );
 

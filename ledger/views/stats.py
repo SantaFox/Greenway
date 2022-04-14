@@ -6,8 +6,6 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Value, F, DecimalField, Case, When, Q, FilteredRelation
 from django.template.response import TemplateResponse
 
-from django_tables2 import RequestConfig
-
 from greensite.decorators import prepare_languages
 from products.models import Product
 
@@ -178,21 +176,21 @@ def view_funds(request):
 
     # modified https://stackoverflow.com/questions/21674331/group-by-multiple-keys-and-summarize-average-values-of-a-list-of-dictionaries
     qry_union = qry_payments.union(qry_transfers_debits, qry_transfers_credits)
-    grouper = itemgetter('account','currency')
+    grouper = itemgetter('account', 'currency')
     result = []
     for key, grp in groupby(sorted(qry_union, key=grouper), grouper):
         temp_list = [item for item in grp]
-        temp_dict = dict(zip(['account','currency'], key))
+        temp_dict = dict(zip(['account', 'currency'], key))
         temp_dict['initial'] = sum(item['initial'] for item in temp_list)
         temp_dict['debited'] = sum(item['debited'] for item in temp_list)
         temp_dict['credited'] = sum(item['credited'] for item in temp_list)
         temp_dict['final'] = temp_dict['initial'] - temp_dict['debited'] + temp_dict['credited']
         result.append(temp_dict)
 
-    table = FundsTable(result)
-
-    return TemplateResponse(request, 'ledger/table_cash.html', {
-        'table': table,
+    return TemplateResponse(request, 'ledger/ecommerce-funds.html', {
+        'title': 'Funds',
+        'heading': 'Ledger',
+        'table': result,
         'startDate': date_start,
         'endDate': date_end,
     })

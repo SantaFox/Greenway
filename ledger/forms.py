@@ -24,7 +24,7 @@ class AccountForm(ModelForm):
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            PrependedText('Name', mark_safe('<i class="uil-university"></i>'), autocomplete="off"),
+            PrependedText('Name', mark_safe('<i class="bi bi-cash-coin"></i>'), autocomplete="off"),
         )
 
         # loading Model descriptors from Meta subclass
@@ -56,20 +56,20 @@ class CounterpartyForm(ModelForm):
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            PrependedText('Name', mark_safe('<i class="uil-user-circle"></i>')),
+            PrependedText('Name', mark_safe('<i class="bi bi-person"></i>')),
             Row(
-                PrependedText('Phone', mark_safe('<i class="uil-phone"></i>'), wrapper_class='col-md-4'),
-                PrependedText('Email', mark_safe('<i class="uil-envelope"></i>'), wrapper_class='col-md-4'),
-                PrependedText('Telegram', mark_safe('<i class="uil-telegram-alt"></i>'), wrapper_class='col-md-4'),
+                PrependedText('Phone', mark_safe('<i class="bi bi-telephone-outbound"></i>'), wrapper_class='col-md-4'),
+                PrependedText('Email', mark_safe('<i class="bi bi-envelope"></i>'), wrapper_class='col-md-4'),
+                PrependedText('Telegram', mark_safe('<i class="bi bi-telegram"></i>'), wrapper_class='col-md-4'),
             ),
             Row(
-                PrependedText('Instagram', mark_safe('<i class="uil-instagram"></i>'), wrapper_class='col-md-4'),
-                PrependedText('Facebook', mark_safe('<i class="uil-facebook-messenger"></i>'), wrapper_class='col-md-4'),
-                PrependedText('City', mark_safe('<i class="uil-building"></i>'), wrapper_class='col-md-4'),
+                PrependedText('Instagram', mark_safe('<i class="bi bi-instagram"></i>'), wrapper_class='col-md-4'),
+                PrependedText('Facebook', mark_safe('<i class="bi bi-messenger"></i>'), wrapper_class='col-md-4'),
+                PrependedText('City', mark_safe('<i class="bi bi-building"></i>'), wrapper_class='col-md-4'),
             ),
             Row(
-                PrependedText('Address', mark_safe('<i class="uil-sign-alt"></i>'), wrapper_class='col-md-8'),
-                PrependedText('Coordinates', mark_safe('<i class="uil-map"></i>'), wrapper_class='col-md-4')
+                PrependedText('Address', mark_safe('<i class="bi bi-signpost-split"></i>'), wrapper_class='col-md-8'),
+                PrependedText('Coordinates', mark_safe('<i class="bi bi-geo"></i>'), wrapper_class='col-md-4')
             ),
             Field('Memo', rows=4),
             HTML('<label>A Customer may act as a Supplier or Customer, or both</label>'),
@@ -121,7 +121,7 @@ class CustomerOrderForm(ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
-                PrependedText('DateOperation', mark_safe('<i class="uil-calendar-alt"></i>'), wrapper_class='col-md-3'),
+                PrependedText('DateOperation', mark_safe('<i class="bi bi-calendar-date"></i>'), wrapper_class='col-md-3'),
                 Field('Currency',
                       css_class='select2',
                       data_placeholder=_('Order Currency'),
@@ -135,15 +135,15 @@ class CustomerOrderForm(ModelForm):
                       wrapper_class='col-md-7'),
             ),
             Row(
-                PrependedText('DateDelivered', mark_safe('<i class="uil-gift"></i>'), wrapper_class='col-md-3'),
+                PrependedText('DateDelivered', mark_safe('<i class="bi bi-gift"></i>'), wrapper_class='col-md-3'),
                 HTML('<div class="mb-3 col-md-2 d-flex align-items-center justify-content-end">'
                      '<span>' +
                      _('For Postal Delivery, please fill:') +
                      '</span>'
                      '</div>'),
-                PrependedText('DateDispatched', mark_safe('<i class="uil-truck"></i>'), wrapper_class='col-md-2'),
-                PrependedText('TrackingNumber', mark_safe('<i class="uil-bug"></i>'), wrapper_class='col-md-2'),
-                PrependedText('CourierService', mark_safe('<i class="uil-post-stamp"></i>'), wrapper_class='col-md-3'),
+                PrependedText('DateDispatched', mark_safe('<i class="bi bi-truck"></i>'), wrapper_class='col-md-2'),
+                PrependedText('TrackingNumber', mark_safe('<i class="bi bi-bug"></i>'), wrapper_class='col-md-2'),
+                PrependedText('CourierService', mark_safe('<i class="bi bi-postage-heart"></i>'), wrapper_class='col-md-3'),
             ),
             # Row(
             #     Field('DetailedDelivery', template='ledger/crispy_custom_checkbox.html', wrapper_class='col-md-6'),

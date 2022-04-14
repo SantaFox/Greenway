@@ -39,8 +39,8 @@
                     <th>Amount</th>
                     <th>Paid Amount</th>
                     <th>Currency</th>
-                    <th>Payments Status</th>
-                    <th>Delivery Date</th>
+                    <th>Payment</th>
+                    <th>Delivery</th>
                     <th>Comment</th>
                     <th style="width: 120px;">Action</th>
                 </tr>
@@ -68,13 +68,13 @@
                     <td>{{ order.Memo|truncatechars:30 }}</td>
                     <td>
                         <a href="{% url 'ledger:customer_order_print' order.pk %}" class="px-2 text-dark">
-                            <i class="uil uil-print font-size-18"></i>
+                            <i class="bi bi-printer font-size-18"></i>
                         </a>
                         <a href="{% url 'ledger:customer_order_edit' order.pk %}" class="px-2 text-primary">
-                            <i class="uil uil-pen font-size-18"></i>
+                            <i class="bi bi-pencil-square font-size-18"></i>
                         </a>
                         <a href="{% url 'ledger:customer_order_delete' order.pk %}" class="px-2 text-danger">
-                            <i class="uil uil-trash-alt font-size-18"></i>
+                            <i class="bi bi-trash font-size-18"></i>
                         </a>
                     </td>
                 </tr>

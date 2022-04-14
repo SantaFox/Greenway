@@ -21,22 +21,6 @@
                     the construction function: <code>$().DataTable();</code>.
                 </p>
 
-                <div class="row">
-                    <div class="float-end">
-                        <form class="d-inline-flex mb-3">
-                            <label class="form-check-label my-2 me-2" for="order-selectinput">Show&nbsp;Counterparties</label>
-                            <select class="form-select" id="order-selectinput">
-                                <option select value="0">All</option>
-                                <option value="1">Only In Stock</option>
-                                <option value="2">Only Receivables</option>
-                                <option value="3">Only Deliverables</option>
-                                <option value="4">Only Reserved</option>
-                                <option value="5">Only Available</option>
-                            </select>
-                        </form>
-                    </div>
-                </div>
-
 <!--  data-order='[[ 0, "asc" ], [ 1, "asc" ]]' data-page-length='25'-->
                 <table class="table table-centered table-sm datatable dt-responsive nowrap w-100"
                        style="border-collapse: collapse; border-spacing: 0;"
@@ -44,27 +28,23 @@
                        data-paging="false">
                     <thead>
                         <tr>
-                            <th data-priority="4" data-visible="false" class="d-none">Category</th>
-                            <th data-priority="1">SKU</th>
-                            <th data-priority="3">Name</th>
-                            <th data-priority="2">In Stock</th>
-                            <th data-priority="2">Receivable</th>
-                            <th data-priority="2">Deliverable</th>
-                            <th data-priority="2">Reserved</th>
-                            <th data-priority="2">Available</th>
+                            <th data-priority="4" data-visible="false" class="d-none">Currency</th>
+                            <th data-priority="3">Account</th>
+                            <th data-priority="2" class="text-end">Initial</th>
+                            <th data-priority="2" class="text-end">Debited</th>
+                            <th data-priority="2" class="text-end">Credited</th>
+                            <th data-priority="1" class="text-end">Final</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for row in table %}
+                        {% for row in table|dictsort:"currency" %}
                         <tr>
-                            <td class="d-none">{{ row.product_category }}</td>
-                            <td ><a href="{% url 'products:product' row.product_SKU %}" class="fw-bold">{{ row.product_SKU }}</a></td>
-                            <td>{{ row.product_name }}</td>
-                            <td>{{ row.in_stock }}</td>
-                            <td>{{ row.supp_not_delivered }}</td>
-                            <td>{{ row.cust_not_delivered }}</td>
-                            <td>{{ row.reserved }}</td>
-                            <td>{{ row.available }}</td>
+                            <td class="d-none">{{ row.currency }}</td>
+                            <td>{{ row.account }}</td>
+                            <td class="text-end">{{ row.initial|floatformat:2 }}</td>
+                            <td class="text-end">{{ row.debited|floatformat:2 }}</td>
+                            <td class="text-end">{{ row.credited|floatformat:2 }}</td>
+                            <td class="text-end">{{ row.final|floatformat:2 }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -81,7 +61,6 @@
 <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap5.js" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.1.4/js/dataTables.rowGroup.min.js" type="text/javascript"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.11.5/dataRender/ellipsis.js" type="text/javascript"></script>
 
         <!-- Buttons examples -->
 <!--        <script src="{% static 'libs/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>-->
@@ -94,6 +73,6 @@
 <!--        <script src="{% static 'libs/datatables.net-buttons/js/buttons.colVis.min.js' %}"></script>-->
 
         <!-- Datatable init js -->
-        <script src="{% static 'ledger/warehouse.init.js' %}"></script>
+        <script src="{% static 'ledger/funds.init.js' %}"></script>
 {% endblock  %}
 

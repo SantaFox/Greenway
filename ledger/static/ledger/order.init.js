@@ -57,10 +57,10 @@ $("div.position-form").formset({
     formCssClass: "position-form",
     deleteContainerClass: "remove-position-placeholder",
     deleteCssClass: "btn btn-danger",
-    deleteText: "<i class='uil-trash-alt'></i>",
+    deleteText: "<i class='bi bi-trash'></i>",
     addContainerClass: 'add-position-placeholder',
     addCssClass: "btn btn-warning",
-    addText: "<i class='uil-link-add'></i> Add Position",
+    addText: "<i class='bi bi-plus-square'></i> Add Position",
     added: function(row) {
         var product = row.find("select.select2[name$='Product']");
         // Event handlers are cloned with each new form, so we first unbind
