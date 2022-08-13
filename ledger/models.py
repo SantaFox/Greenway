@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from django.db.models import Q, Sum, Count
+from django.db.models import Q, Sum, Count, Case, When, F, DecimalField
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -18,6 +18,7 @@ TYPE_CHOICES = (
 POSTAL_CHOICES = (
     ('DHL', 'DHL Express'),
     ('AKIS', 'Akis Express'),
+    ('ACS', 'ACS Courier'),
     ('CZP', 'Czech Post'),
     ('POST', 'Ordinary Post'),
     ('GLS', 'GLS Post Service')
@@ -169,7 +170,14 @@ class SupplierOrder(ModelIsDeletableMixin, Operation):
 
     @property
     def get_paid_amount(self):
-        amount_queryset = Payment.objects.filter(ParentOperation=self).aggregate(TotalAmount=Sum('Amount'))
+        amount_queryset = Payment.objects.filter(ParentOperation=self).aggregate(
+            TotalAmount=Sum(Case(
+                When(TransactionType=CREDIT, then=F('Amount') * -1),
+                When(TransactionType=DEBIT, then=F('Amount') * 1),
+                default=0,
+                output_field=DecimalField()
+            ))
+        )
         amount = amount_queryset['TotalAmount']
         return 0 if amount is None else amount
 
@@ -226,7 +234,14 @@ class CustomerOrder(ModelIsDeletableMixin, Operation):
 
     @property
     def get_paid_amount(self):
-        amount_queryset = Payment.objects.filter(ParentOperation=self).aggregate(TotalAmount=Sum('Amount'))
+        amount_queryset = Payment.objects.filter(ParentOperation=self).aggregate(
+            TotalAmount=Sum(Case(
+                When(TransactionType=CREDIT, then=F('Amount') * 1),
+                When(TransactionType=DEBIT, then=F('Amount') * -1),
+                default=0,
+                output_field=DecimalField()
+            ))
+        )
         amount = amount_queryset['TotalAmount']
         return 0 if amount is None else amount
 
