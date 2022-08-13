@@ -7,7 +7,7 @@ django-crispy-forms>=1.14
 django-filter>=21.0
 # django-google-analytics-app>=5.0.0
 django-imagekit>=4.1
-django-markdownx>=3.0
+django-markdownx>=4.0.0b1
 django-model-utils>=4.2
 django-tables2>=2.4
 
