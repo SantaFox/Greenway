@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='discount',
             name='PriceType',
-            field=models.CharField(choices=[('C', 'Customer'), ('S', 'Supplier')], default='S', max_length=1),
+            field=models.CharField(choices=[('C', 'Customer'), ('S', 'Supplier')], default='P', max_length=1),
             preserve_default=False,
         ),
     ]

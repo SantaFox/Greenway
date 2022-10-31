@@ -16,7 +16,7 @@ PRICE_CUSTOMER = 'C'
 PRICE_PARTNER = 'P'
 TYPE_PRICES = (
     (PRICE_CUSTOMER, _('Customer')),
-    (PRICE_PARTNER, _('Supplier')),
+    (PRICE_PARTNER, _('Partner')),
 )
 
 # System classes below
