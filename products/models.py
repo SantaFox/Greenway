@@ -159,7 +159,7 @@ class Product(models.Model):
         return reverse('products:product', args=(self.SKU,))
 
     def get_price_on_date(self, date):
-        discounts = Discount.objects.filter(Product=self, Action__DateStart__lte=date, Action__DateEnd__gte=date)
+        discounts = Discount.objects.filter(Product=self, PriceType=PRICE_PARTNER, Action__DateStart__lte=date, Action__DateEnd__gte=date)
         discount = discounts.first()  # First or None
         prices = Price.objects.filter(Product=self, PriceType=PRICE_PARTNER, DateAdded__lte=date).order_by('-DateAdded')
         price = prices.first()  # First or None
