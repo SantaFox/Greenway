@@ -257,7 +257,7 @@ class Price(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['Product', 'Currency', 'DateAdded'], name='unique_Price')
+            models.UniqueConstraint(fields=['Product', 'Currency', 'PriceType', 'DateAdded'], name='unique_Price')
         ]
 
 
@@ -279,7 +279,7 @@ class Discount(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['Product', 'Action', 'Currency'], name='unique_Discount'),
+            models.UniqueConstraint(fields=['Product', 'Action', 'PriceType', 'Currency'], name='unique_Discount'),
         ]
 
 
