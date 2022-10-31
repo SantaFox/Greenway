@@ -12,6 +12,12 @@ from markdownx.utils import markdownify
 
 from .imagegenerators import AdminThumbnailSpec
 
+PRICE_CUSTOMER = 'C'
+PRICE_SUPPLIER = 'S'
+TYPE_PRICES = (
+    (PRICE_CUSTOMER, _('Customer')),
+    (PRICE_SUPPLIER, _('Supplier')),
+)
 
 # System classes below
 class Language(models.Model):
@@ -155,7 +161,7 @@ class Product(models.Model):
     def get_price_on_date(self, date):
         discounts = Discount.objects.filter(Product=self, Action__DateStart__lte=date, Action__DateEnd__gte=date)
         discount = discounts.first()  # First or None
-        prices = Price.objects.filter(Product=self, DateAdded__lte=date).order_by('-DateAdded')
+        prices = Price.objects.filter(Product=self, PriceType=PRICE_SUPPLIER, DateAdded__lte=date).order_by('-DateAdded')
         price = prices.first()  # First or None
         return price if discount is None else discount
 
@@ -235,6 +241,7 @@ class Tab(models.Model):
 class Price(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
 
+    PriceType = models.CharField(choices=TYPE_PRICES, max_length=1, blank=False)
     DateAdded = models.DateField(blank=True, null=True)
     Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
@@ -258,6 +265,7 @@ class Discount(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.PROTECT)
     Action = models.ForeignKey(Action, on_delete=models.PROTECT, blank = True, null = True)
 
+    PriceType = models.CharField(choices=TYPE_PRICES, max_length=1, blank=False)
     Price = models.DecimalField(max_digits=10, decimal_places=2, blank=False)
     Currency = models.ForeignKey(Currency, on_delete=models.PROTECT)
     PV = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
