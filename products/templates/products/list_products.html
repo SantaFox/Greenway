@@ -34,13 +34,21 @@
 
         <div class="card-footer text-muted">
             <div class="d-flex justify-content-between">
-                <span>{% translate "Price" %}</span>
-                <span>{{ p.price.Price }}&nbsp;{{ p.price.Currency.Symbol }}</span>
+                <span>{% translate "Customer Price" %}</span>
+                {% if p.price_customer %}
+                    <span>{{ p.price_customer.Price }}&nbsp;{{ p.price_customer.Currency.Symbol }}&nbsp;({{ p.price_customer.PV|floatformat:1 }}&nbsp;PV)</span>
+                {% else %}
+                    <span>&lt;No data&gt;</span>
+                {% endif %}
             </div>
             {% if user.is_authenticated %}
             <div class="d-flex justify-content-between">
-                <span>{% translate "Volume" %}</span>
-                <span>{{ p.price.PV }}&nbsp;PV</span>
+                <span>{% translate "Partner Price" %}</span>
+                {% if p.price_partner %}
+                    <span>{{ p.price_partner.Price }}&nbsp;{{ p.price_partner.Currency.Symbol }}&nbsp;({{ p.price_partner.PV|floatformat:1 }}&nbsp;PV)</span>
+                {% else %}
+                    <span>&lt;No data&gt;</span>
+                {% endif %}
             </div>
             {% endif %}
         </div>

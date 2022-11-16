@@ -13,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 
 from greensite.decorators import prepare_languages
 
-from .models import Language, Category, Product, ProductInfo, Tab, Price, Discount, Image, Tag, TagInfo
+from .models import Language, Category, Product, ProductInfo, Tab, Price, Discount, Image, Tag, TagInfo, PRICE_PARTNER, PRICE_CUSTOMER
 from .forms import ProductForm, ProductInfoForm, TabForm, TagForm, TabsFormset
 
 
@@ -70,8 +70,9 @@ def list_products(request, category=None):
 
     final_set = []
     for product in products:
-        product_price = product.get_price_on_date(timezone.now())
-        if product_price._meta.model_name == 'discount':
+        product_price_partner = product.get_price_on_date(timezone.now(), PRICE_PARTNER)
+        product_price_customer = product.get_price_on_date(timezone.now(), PRICE_CUSTOMER)
+        if product_price_partner and product_price_partner._meta.model_name == 'discount':
             if dict_tags.get(product):
                 dict_tags[product].append(sale_tag_instance)
             else:
@@ -80,7 +81,8 @@ def list_products(request, category=None):
             dict(product=product,
                  product_info=dict_product_infos.get(product),
                  image=dict_images.get(product),
-                 price = product_price,
+                 price_partner = product_price_partner,
+                 price_customer = product_price_customer,
                  tags=dict_tags.get(product),
                  )
         )
